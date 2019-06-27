@@ -60,12 +60,12 @@ public class sonicDatabaseCRUD {
     private final String TABLE_SINCRONIZACAO = sonicConstants.TB_SINCRONIZACAO;
     private final String TABLE_LOCALIZACAO = sonicConstants.TB_LOCALIZACAO;
     private final String TABLE_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
-    sonicDatabase DB;
-    sonicDatabaseLogCRUD DBCL;
-    sonicUtils util;
-    SharedPreferences prefs;
-    sonicConstants cons;
-    Context myCtx;
+    private sonicDatabase DB;
+    private sonicDatabaseLogCRUD DBCL;
+    private sonicUtils myUtil;
+    private SharedPreferences prefs;
+    private sonicConstants myCons;
+    private Context myCtx;
     private sonicSystem mySystem;
 
 
@@ -74,8 +74,8 @@ public class sonicDatabaseCRUD {
         this.DB = new sonicDatabase(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(myCtx);
-        this.util = new sonicUtils(myCtx);
-        this.cons = new sonicConstants();
+        this.myUtil = new sonicUtils(myCtx);
+        this.myCons = new sonicConstants();
         this.myCtx = myCtx;
         this.mySystem = new sonicSystem(myCtx);
 
@@ -245,9 +245,9 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                    cv.put("ftp", cons.FTP_SERVER);
-                    cv.put("user", cons.FTP_USER);
-                    cv.put("pass", cons.FTP_PASS);
+                    cv.put("ftp", myCons.FTP_SERVER);
+                    cv.put("user", myCons.FTP_USER);
+                    cv.put("pass", myCons.FTP_PASS);
 
 
             }catch (SQLiteException e){
@@ -424,15 +424,15 @@ public class sonicDatabaseCRUD {
             return  result;
         }
 
-        public List<go_empresas_holder> selectEmpresas(){
-            List<go_empresas_holder> empresas = new ArrayList<go_empresas_holder>();
+        public List<sonicEmpresasHolder> selectEmpresas(){
+            List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT * FROM "+TABLE_EMPRESAS , null);
 
             while(cursor.moveToNext()){
 
-                go_empresas_holder empresa = new go_empresas_holder();
+                sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
                 empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
                 empresa.setFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
@@ -445,8 +445,8 @@ public class sonicDatabaseCRUD {
             return empresas;
         }
 
-        public List<go_empresas_holder> empresasVendedor(){
-            List<go_empresas_holder> empresas = new ArrayList<go_empresas_holder>();
+        public List<sonicEmpresasHolder> empresasVendedor(){
+            List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             String query = "SELECT " +
                     "e.nome_fantasia, " +
@@ -462,7 +462,7 @@ public class sonicDatabaseCRUD {
 
             while(cursor.moveToNext()){
 
-                go_empresas_holder empresa = new go_empresas_holder();
+                sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
                 empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
                 empresa.setFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
@@ -829,8 +829,8 @@ public class sonicDatabaseCRUD {
 
             String where = "";
 
-            if(cons.GRUPO_CLIENTES != "TODOS"){
-                where+= " AND gc.nome = '"+cons.GRUPO_CLIENTES+"' ";
+            if(myCons.GRUPO_CLIENTES != "TODOS"){
+                where+= " AND gc.nome = '"+ myCons.GRUPO_CLIENTES+"' ";
             }
 
             switch (order){
@@ -1211,8 +1211,8 @@ public class sonicDatabaseCRUD {
 
             String where = "";
 
-            if(cons.GRUPO_CLIENTES_RANKING != "TODOS"){
-                where+= " AND gp.nome = '"+cons.GRUPO_CLIENTES_RANKING+"'";
+            if(myCons.GRUPO_CLIENTES_RANKING != "TODOS"){
+                where+= " AND gp.nome = '"+ myCons.GRUPO_CLIENTES_RANKING+"'";
             }
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
@@ -2106,7 +2106,7 @@ public class sonicDatabaseCRUD {
 
                     cv.put("codigo_produto", lista.get(0));
                     cv.put("codigo_alternativo", lista.get(1));
-                    cv.put("descricao",  util.Texto.UTF8toISO(lista.get(2)));
+                    cv.put("descricao",  myUtil.Texto.UTF8toISO(lista.get(2)));
                     cv.put("codigo_unidade", lista.get(3));
                     cv.put("codigo_grupo", lista.get(4));
                     cv.put("codigo_empresa", lista.get(5));
@@ -2217,8 +2217,8 @@ public class sonicDatabaseCRUD {
             if(estoque){
                 where+= " AND ep.estoque > 0 ";
             }
-            if(cons.GRUPO_PRODUTOS != "TODOS"){
-                where+= " AND grupo_produto = '"+cons.GRUPO_PRODUTOS+"' ";
+            if(myCons.GRUPO_PRODUTOS != "TODOS"){
+                where+= " AND grupo_produto = '"+ myCons.GRUPO_PRODUTOS+"' ";
             }
 
             switch (order){
@@ -2314,8 +2314,8 @@ public class sonicDatabaseCRUD {
 
             String where = "";
 
-            if(cons.GRUPO_PRODUTOS_RANKING != "TODOS"){
-                where+= " AND gp.nome = '"+cons.GRUPO_PRODUTOS_RANKING+"'";
+            if(myCons.GRUPO_PRODUTOS_RANKING != "TODOS"){
+                where+= " AND gp.nome = '"+ myCons.GRUPO_PRODUTOS_RANKING+"'";
             }
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
@@ -2464,9 +2464,9 @@ public class sonicDatabaseCRUD {
                     cv.put("limite_credito", lista.get(1));
                     cv.put("saldo", lista.get(2));
                     cv.put("maior_compra", lista.get(3));
-                    cv.put("data_maior_compra", util.Data.dataFotmatadaUS(lista.get(4)));
+                    cv.put("data_maior_compra", myUtil.Data.dataFotmatadaUS(lista.get(4)));
                     cv.put("ultima_compra", lista.get(5));
-                    cv.put("data_ultima_compra", util.Data.dataFotmatadaUS(lista.get(6)));
+                    cv.put("data_ultima_compra", myUtil.Data.dataFotmatadaUS(lista.get(6)));
 
                 }
 
@@ -2511,12 +2511,12 @@ public class sonicDatabaseCRUD {
 
                 financeiro.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
                 financeiro.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
-                financeiro.setLimiteCredito(util.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("limite_credito"))));
-                financeiro.setSaldo(util.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("saldo"))));
-                financeiro.setMaiorCompra(util.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("maior_compra"))));
-                financeiro.setDataMaiorCompra(util.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data_maior_compra"))));
-                financeiro.setUlltimaCompra(util.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("ultima_compra"))));
-                financeiro.setDataUltimaCompra(util.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data_ultima_compra"))));
+                financeiro.setLimiteCredito(myUtil.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("limite_credito"))));
+                financeiro.setSaldo(myUtil.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("saldo"))));
+                financeiro.setMaiorCompra(myUtil.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("maior_compra"))));
+                financeiro.setDataMaiorCompra(myUtil.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data_maior_compra"))));
+                financeiro.setUlltimaCompra(myUtil.Number.stringToMoeda(cursor.getString(cursor.getColumnIndex("ultima_compra"))));
+                financeiro.setDataUltimaCompra(myUtil.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data_ultima_compra"))));
 
                 financeiros.add(financeiro);
 
@@ -2747,127 +2747,127 @@ public class sonicDatabaseCRUD {
 
             switch (situacao){
                 case 1:
-                    switch (cons.RETORNO_PENDENTE_DATA){
+                    switch (myCons.RETORNO_PENDENTE_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 2:
-                    switch (cons.RETORNO_FATURADO_DATA){
+                    switch (myCons.RETORNO_FATURADO_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 3:
-                    switch (cons.RETORNO_EM_ROTA_DATA){
+                    switch (myCons.RETORNO_EM_ROTA_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 4:
-                    switch (cons.RETORNO_ENTREGUE_DATA){
+                    switch (myCons.RETORNO_ENTREGUE_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 5:
-                    switch (cons.RETORNO_CANCELADO_DATA){
+                    switch (myCons.RETORNO_CANCELADO_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
@@ -2969,127 +2969,127 @@ public class sonicDatabaseCRUD {
 
             switch (situacao){
                 case 1:
-                    switch (cons.RETORNO_PENDENTE_DATA){
+                    switch (myCons.RETORNO_PENDENTE_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 2:
-                    switch (cons.RETORNO_FATURADO_DATA){
+                    switch (myCons.RETORNO_FATURADO_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 3:
-                    switch (cons.RETORNO_EM_ROTA_DATA){
+                    switch (myCons.RETORNO_EM_ROTA_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 4:
-                    switch (cons.RETORNO_ENTREGUE_DATA){
+                    switch (myCons.RETORNO_ENTREGUE_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
                 case 5:
-                    switch (cons.RETORNO_CANCELADO_DATA){
+                    switch (myCons.RETORNO_CANCELADO_DATA){
                         case "HOJE":
-                            data = util.Data.hoje();
+                            data = myUtil.Data.hoje();
                             break;
                         case "ONTEM":
-                            data = util.Data.ontem();
+                            data = myUtil.Data.ontem();
                             break;
                         case "SEMANA ATUAL":
-                            data = util.Data.semanaAtual();
+                            data = myUtil.Data.semanaAtual();
                             break;
                         case "SEMANA ANTERIOR":
-                            data = util.Data.semanaAnterior();
+                            data = myUtil.Data.semanaAnterior();
                             break;
                         case "MÊS ATUAL":
-                            data = util.Data.mesAtual();
+                            data = myUtil.Data.mesAtual();
                             break;
                         case "MÊS ANTERIOR":
-                            data = util.Data.mesAnterior();
+                            data = myUtil.Data.mesAnterior();
                             break;
                         case "ÚLTIMOS TRÊS MÊSES":
-                            data = util.Data.tresMeses();
+                            data = myUtil.Data.tresMeses();
                             break;
                     }
                     break;
@@ -3618,8 +3618,8 @@ public class sonicDatabaseCRUD {
                 for(int i = 0; i < size; i++){
 
                     cv.put("codigo_vendedor", lista.get(0));
-                    cv.put("data", util.Data.dataFotmatadaUS(lista.get(1)));
-                    cv.put("hora", util.Data.horaFotmatadaBR(lista.get(2)));
+                    cv.put("data", myUtil.Data.dataFotmatadaUS(lista.get(1)));
+                    cv.put("hora", myUtil.Data.horaFotmatadaBR(lista.get(2)));
                     cv.put("latitude", lista.get(3));
                     cv.put("longitude", lista.get(4));
 
@@ -3667,7 +3667,7 @@ public class sonicDatabaseCRUD {
                 loc.setLogin(cursor.getString(cursor.getColumnIndex("login")));
                 loc.setNome(cursor.getString(cursor.getColumnIndex("nome")));
                 loc.setNivelAcesso(cursor.getString(cursor.getColumnIndex("nome_acesso")));
-                loc.setData(util.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data"))));
+                loc.setData(myUtil.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data"))));
                 loc.setHora(cursor.getString(cursor.getColumnIndex("hora")));
                 loc.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
                 loc.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
