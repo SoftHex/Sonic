@@ -37,7 +37,7 @@ public class sonicSplash extends AppCompatActivity {
 
     public void logar(){
 
-        if(DBC.Vendedor.vendedorAtivo()){
+        if(DBC.Usuarios.usuarioAtivo()){
             i  = new Intent(sonicSplash.this,sonicMain.class);
         }else{
             i  = new Intent(sonicSplash.this,sonicEmpresa.class);

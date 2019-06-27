@@ -61,6 +61,7 @@ public class sonicUtils {
     Feedback Feedback = new Feedback();
     Arquivo Arquivo = new Arquivo();
     Data Data = new Data();
+    Number Number = new Number();
 
     class Feedback{
 
@@ -117,8 +118,8 @@ public class sonicUtils {
 
                 String path = Environment.getExternalStorageDirectory().toString();
 
-                File sourceLocation = new File(path+go_constants.FOLDER_TMP+inputFile);
-                File targetLocation = new File (path+go_constants.FOLDER_DATA+inputFile);
+                File sourceLocation = new File(path+myCons.LOCAL_TMP+inputFile);
+                File targetLocation = new File (path+myCons.LOCAL_DATA+inputFile);
 
                 sourceLocation.renameTo(targetLocation);
 

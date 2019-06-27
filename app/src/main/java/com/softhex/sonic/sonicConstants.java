@@ -22,11 +22,11 @@ public class sonicConstants {
     public static final String DATABASE = "sonic";
     public static final String TB_SITE = "site";
     public static final String TB_FTP = "ftp";
-    public static final String TB_EMPRESA = "empresas";
-    public static final String TB_USUARIO = "usuarios";
-    public static final String TB_VENDEDOR = "vendedores";
-    public static final String TB_HISTORICO_VENDEDOR = "historico_vendedor";
-    public static final String TB_EMPRESAS_VENDEDORES = "empresas_vendedores";
+    public static final String TB_EMPRESAS = "empresas";
+    public static final String TB_USUARIOS = "usuarios";
+    public static final String TB_TIPO_USUARIO = "tipo_usuario";
+    public static final String TB_EMPRESAS_USUARIO = "empresas_usuario";
+    public static final String TB_HISTORICO_USUARIO = "historico_usuario";
     public static final String TB_CLIENTES = "clientes";
     public static final String TB_GRUPO_CLIENTES = "grupo_clientes";
     public static final String TB_RANKING_CLIENTES = "ranking_clientes";
@@ -55,6 +55,7 @@ public class sonicConstants {
     public static final String TB_FORMA_PAGAMENTO = "forma_pagamento";
     public static final String TB_PRAZO = "prazo";
     public static final String TB_FRETE = "frete";
+    public static final String TB_IMPRESSORAS = "impressoras";
     public static final String TB_AVISOS = "avisos";
     public static final String TB_AVISOS_LIDOS = "avisos_lidos";
     public static final String TB_LOCALIZACAO = "localizacao";

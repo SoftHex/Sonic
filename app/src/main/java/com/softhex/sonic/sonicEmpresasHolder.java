@@ -6,21 +6,25 @@ package com.softhex.sonic;
 
 public class sonicEmpresasHolder {
 
-    // variables
     int id;
-     String codigo;
-     String licenca;
-     String nome;
+    int codigo;
+    String licenca;
+    String nome_fantasia;
+    String razao_social;
 
-    public sonicEmpresasHolder(){
-
+    public sonicEmpresasHolder() {
     }
 
-    public sonicEmpresasHolder(Integer id, String codigo, String licenca, String nome){
+    public sonicEmpresasHolder(Integer id,
+                               int codigo,
+                               String licenca,
+                               String nome_fantasia,
+                               String razao_social){
         this.id = id;
         this.codigo = codigo;
         this.licenca = licenca;
-        this.nome = nome;
+        this.nome_fantasia = nome_fantasia;
+        this.razao_social = razao_social;
 
     }
 
@@ -28,7 +32,7 @@ public class sonicEmpresasHolder {
         return this.id;
     }
 
-    public String getCodigo(){
+    public int getCodigo(){
         return this.codigo;
     }
 
@@ -36,20 +40,26 @@ public class sonicEmpresasHolder {
         return this.licenca;
     }
 
-    public String getNome(){
-        return this.nome;
+    public String getNomeFantasia(){
+        return this.nome_fantasia;
+    }
+
+    public String getRazaoSocial(){
+        return this.razao_social;
     }
 
     public void setId(Integer id) { this.id = id; }
 
-    public void setCodigo(String codigo) { this.codigo = codigo; }
+    public void setCodigo(int codigo) { this.codigo = codigo; }
 
     public void setLicenca(String licenca) { this.licenca = licenca; }
 
-    public void setNome(String nome) { this.nome = nome; }
+    public void setNomeFantasia(String nome_fantasia) { this.nome_fantasia = nome_fantasia; }
+
+    public void setRazaoSocial(String razao_social){this.razao_social = razao_social;}
 
     public String toString(){
-        return codigo;
+        return razao_social;
     }
 
 }

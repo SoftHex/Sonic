@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+
+    <!-- DEFAULT APP COLORS -->
+    <color name="colorPrimaryDark">#192838</color>
+    <color name="colorPrimary">#2A3F54</color>
+    <color name="colorAccent">#73879C</color>
+    <color name="colorPrimaryDarkT">#90192838</color>
+    <color name="colorPrimaryT">#902A3F54</color>
+    <color name="colorAccentT">#9073879C</color>
+    <color name="colorPrimaryLight">#9EB4C8</color>
+    <color name="colorPrimaryLightT">#9EB4C8</color>
+    <color name="colorPrimaryOrangeDark">#DD4D0F</color>
+    <color name="colorPrimaryOrange">#FF8C00</color>
+    <color name="colorPrimaryOrangeLight">#FFD700</color>
+    <color name="colorPrimaryOrangeDarkT">#90DD4D0F</color>
+    <color name="colorPrimaryOrangeT">#90FF8C00</color>
+    <color name="colorPrimaryOrangeLightT">#90FFD700</color>
+    <color name="colorPrimaryGreeDark">#234B20</color>
+    <color name="colorPrimaryGreen">#3C9130</color>
+    <color name="colorPrimaryGreenLight">#32CD32</color>
+    <color name="colorPrimaryGreeDarkT">#90234B20</color>
+    <color name="colorPrimaryGreenT">#903C9130</color>
+    <color name="colorTextDark">#000</color>
+    <color name="colorTextPrimary">#363636</color>
+    <color name="colorTextAccent">#696969</color>
+    <color name="colorTextNoAccent">#C0C0C0</color>
+    <color name="colorTextDarkT">#90000000</color>
+    <color name="colorTextPrimaryT">#90363636</color>
+    <color name="colorTextAccentT">#90696969</color>
+    <color name="colorTextNoAccentT">#90C0C0C0</color>
+    <color name="colorPrimaryBlueDark">#002A73</color>
+    <color name="colorPrimaryBlue">#1850AE</color>
+    <color name="colorPrimaryBlueLight">#4688F7</color>
+    <color name="colorPrimaryBlueDarkT">#90002A73</color>
+    <color name="colorPrimaryBlueT">#901850AE</color>
+    <color name="colorPrimaryBlueLightT">#904688F7</color>
+    <color name="colorPrimaryWhite">#FFFFFF</color>
+    <color name="colorPrimaryGreen2">#00FF7F</color>
 
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#d1395c</color>

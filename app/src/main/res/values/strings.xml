@@ -1,3 +1,204 @@
 <resources>
     <string name="app_name">Sonic</string>
+
+    <!-- MENU DRAWER NAMES -->
+
+    <string name="inicioTitulo">Início</string>
+    <string name="extraTitulo">Extras</string>
+    <string name="sincronizarTitulo">Sincronizar</string>
+    <string name="sincronizarSubTitulo">Clientes, pedidos, catálogo</string>
+    <string name="avisosTitulo">Avisos</string>
+    <string name="avisosNaoLidos">NÃO LIDOS</string>
+    <string name="avisosLidos">LIDOS</string>
+    <string name="avisosSubTitulo">Mensagens, dicas, novidades</string>
+    <string name="clientesTitulo">Clientes</string>
+    <string name="clientesSubTitulo">Lista de clientes</string>
+    <string name="produtosTitulo">Produtos</string>
+    <string name="produtosSubTitulo">Lista de produtos</string>
+    <string name="pedidosTitulo">Pedidos</string>
+    <string name="pedidosSubTitulo">Pedidos enviados/enviar</string>
+    <string name="retornoTitulo">Retotno</string>
+    <string name="retornoSubTitulo">Situação dos pedidos enviados</string>
+    <string name="titulosTitulo">Títulos</string>
+    <string name="titulosSubTitulo">Títulos vencidos/vencer</string>
+    <string name="rotaTitulo">Rota</string>
+    <string name="rotaSubTitulo">Agenda de visitas</string>
+    <string name="vendedoresTitulo">Vendedores</string>
+    <string name="vendedoresSubTitulo">Lista de vendedores</string>
+    <string name="relatoriosTitulo">Relatórios</string>
+    <string name="relatoriosSubTitulo">Dados e estatísticas</string>
+    <string name="rankingTitulo">Ranking</string>
+    <string name="rankingProdutos">Ranking de Produtos</string>
+    <string name="rankingClientes">Ranking de Clientes</string>
+    <string name="clientesSemCompra">Clientes sem Compras</string>
+    <string name="premiacoes">Premiações</string>
+    <string name="sistemaTitulo">Sistema</string>
+    <string name="redefinirTitulo">Redefinir</string>
+
+    <!-- TABS NAME -->
+
+    <string name="tabSinronizarEnviar">ENVIAR</string>
+    <string name="tabSinronizarReceber">RECEBER</string>
+    <string name="tabClientesCNPJ">CNPJ</string>
+    <string name="tabClientesCPF">CPF</string>
+    <string name="tabClientesDetalhesCadastro">CADASTRO</string>
+    <string name="tabClientesDetalhesFinanceiro">FINANCEIRO</string>
+    <string name="tabClientesDetalhesTitulos">TÍTULOS</string>
+    <string name="tabClientesDetalhesPedidos">PEDIDOS</string>
+    <string name="tabProdutosLista">LISTA</string>
+    <string name="tabProdutosCatalogo">CATÁLOGO</string>
+    <string name="tabPedidosEnviar">ENVIAR</string>
+    <string name="tabPedidosEnviados">ENVIADOS</string>
+    <string name="tabRetornoPendente">PENDENTE</string>
+    <string name="tabRetornoFaturado">FATURADO</string>
+    <string name="tabRetornoEmRota">EM ROTA</string>
+    <string name="tabRetornoEntregue">ENTREGUE</string>
+    <string name="tabRetornoCancelado">CANCELADO</string>
+    <string name="tabSistemaSobre">SOBRE</string>
+    <string name="tabSistemaAjuda">AJUDA</string>
+    <string name="tabSistemaLog">LOG</string>
+    <string name="tabTitulosVencer">À VENCER</string>
+    <string name="tabTitulosVencido">VENCIDOS</string>
+    <string name="tabRankingCliente">POR CLIENTE</string>
+    <string name="tabRankingGrupo">POR GRUPO</string>
+
+    <!-- OTHERS -->
+    <string name="textPlaceholder">XXXX XXXX</string>
+    <string name="letterPlaceholder">X</string>
+    <string name="datePlaceholder">xx/xx/xxxx</string>
+    <string name="msgPerms">Permissões necessárias...</string>
+    <!-- MENSAGENS -->
+
+    <!-- SINCRONIZAÇÃO MENSAGENS-->
+    <string name="go_network_error">Verifique sua conexão com a internet...</string>
+    <string name="go_network_success">Conexão com a internet OK.</string>
+
+    <!-- SINCRONIZAÇÃO MENSAGENS-->
+    <string name="go_cod_vend">Digite o código do vendedor...</string>
+    <string name="go_sure">Todos os dados serão apagados. Será necessário realizar um novo sincronismo. Tem certeza?!</string>
+    <string name="go_new_login">Este usuário é diferente do último login. Todos os dados serão apagados. Deseja continuar?</string>
+    <string name="go_connecting">Conectando...</string>
+    <string name="go_sinc">Sincronizado!</string>
+    <string name="go_write_tabela">Gravando dados nas tabelas...</string>
+    <string name="go_erro_data">Dados não conferem...</string>
+    <string name="go_erro_conn">Erro ao tentar conexão com o servidor...</string>
+    <string name="go_erro_cod_inc">Código incompleto, digite novamente!</string>
+    <string name="go_erro_no_emp">Não existe empresa para este código!</string>
+    <string name="go_erro_tabela">Erro ao gravar dados nas tabelas...</string>
+    <string name="go_erro_file">Arquivo não encontrado...</string>
+
+    <!-- SINCRONIZAÇÃO UPLOAD/DOWNLOAD -->
+    <string name="sinc_cliente">CLIENTES</string>
+    <string name="sinc_cliente_info">CLIENTES, NOVOS, CRÉDITO, ENDEREÇO...</string>
+    <string name="sinc_produtos">PRODUTOS</string>
+    <string name="sinc_produtos_info">PRODUTOS NOVOS, PREÇO, DESCRIÇÃO...</string>
+    <string name="sinc_pedidos">PEDIDOS</string>
+    <string name="sinc_pedidos_info">STATUS DOS PEDIDOS EM PROCESSAMENTO.</string>
+    <string name="sinc_retorno">RETORNO</string>
+    <string name="sinc_retorno_info">RETORNO DAS VENDAS DO VENDEDOR.</string>
+    <string name="sinc_titulos">TÍTULOS</string>
+    <string name="sinc_titulos_info">TÍTULOS VENCIDOS E A VENCER.</string>
+    <string name="sinc_estoque">ESTOQUE</string>
+    <string name="sinc_estoque_info">ESTOQUE ATUAL, MÍNIMO E MÁXIMO.</string>
+    <string name="sinc_catalogo">CATÁLOGO</string>
+    <string name="sinc_catalogo_info">CATÁLOGO DE IMAGENS DOS PRODUTOS.</string>
+
+    <!-- PREFERENCES FOR CLIENTS -->
+    <string name="pref_title_clientes_open">Clientes em aberto</string>
+    <string name="pref_description_clientes_open">Permitir a vizualização de clientes que estejam com títulos em aberto.</string>
+    <string name="pref_title_order_cliente">Ordenar clientes por...</string>
+    <string-array name="pref_title_order_options">
+        <item>Nome</item>
+        <item>Ticket médio</item>
+        <item>Situação</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <!-- PREFERENCES FOR USUARIOS -->
+    <string name="pref_title_usuario_logado">Usuario Logado</string>
+    <string name="pref_description_usuario_logado">Exibir usuario logado no sistema.</string>
+    <string name="pref_title_order_usuario">Ordenar usuarios por...</string>
+    <string-array name="pref_title_order_usuario_options">
+        <item>Nome</item>
+        <item>Cargo</item>
+    </string-array>
+    <string-array name="pref_usuario_list_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <!-- PREFERENCES FOR TITULOS -->
+    <string name="pref_title_titulos_lock">Clientes bloqueados</string>
+    <string name="pref_description_titulos_lock">Permitir a vizualização de títulos de clientes que estejam bloqueados.</string>
+    <string name="pref_title_order_titulos">Ordenar títulos por...</string>
+    <string-array name="pref_title_order_options_tit">
+        <item>Data de emissão</item>
+        <item>Data de vencimento</item>
+        <item>Dias atraso -</item>
+        <item>Dias atraso +</item>
+    </string-array>
+    <string-array name="pref_example_list_values_tit">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- PREFERENCES FOR PRODUTOS -->
+    <string name="pref_title_produtos_zero">Produtos com estoque negativo</string>
+    <string name="pref_description_produtos_zero">Permitir a vizualização de produto que não possui saldo positivo em estoque.</string>
+    <string name="pref_title_order_produto">Ordenar produtos por...</string>
+    <string-array name="pref_title_order_options_prod">
+        <item>Nome</item>
+        <item>Código</item>
+        <item>Estoque -</item>
+        <item>Estoque +</item>
+    </string-array>
+    <string-array name="pref_example_list_values_prod">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <!-- PREFERENCES FOR CATÁLOGO -->
+    <string name="pref_title_grid_produto">Organizar grid em...</string>
+    <string-array name="pref_title_grid_options_prod">
+        <item>Duas colunas</item>
+        <item>Três colunas</item>
+        <item>Quatro colunas</item>
+    </string-array>
+    <string-array name="pref_example_grid_values_prod">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <!-- PREFERENCES FOR RETORNO -->
+    <string name="pref_title_retorno_cancelado">Retornos cancelados</string>
+    <string name="pref_description_retorno_cancelado">Permitir a vizualização de retornos de pedidos cancelados.</string>
+    <string name="pref_title_order_retorno">Ordenar produtos por...</string>
+    <string-array name="pref_title_order_options_retorno">
+        <item>Cliente</item>
+        <item>Situação</item>
+    </string-array>
+    <string-array name="pref_example_list_values_retorno">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+
+    <!-- GERAL CLIENTES -->
+    <string name="no_cliente">Sem cliente para ser exibido no momento. Vá até o menu no ícone</string>
+    <string name="no_cliente_continue">e faça um sincronização.</string>
+
+    <!--  BUTTONS SINC -->
+    <string name="button_sinc_iddle">Sincronizar.</string>
+    <string name="button_sinc_success">Sincronizado!</string>
+    <string name="button_sinc_error">Erro, tente novamente...</string>
+
 </resources>

@@ -1,5 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="android.support.multidex.MultiDexApplication"
     package="com.softhex.sonic">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -7,5 +21,37 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" />
+        android:theme="@style/SplashAppTheme" >
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBs4N0SSafiqiazp7mQQUaOI1q97TnXayw" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".sonicSplash"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/SplashAppTheme"/>
+        <activity
+            android:name=".sonicEmpresa"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/SplashAppTheme"/>
+        <activity
+            android:name=".sonicAvisos"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/SplashAppTheme"/>
+        <activity
+            android:name=".sonicMain"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/SplashAppTheme"/>
+    </application>
+
 </manifest>

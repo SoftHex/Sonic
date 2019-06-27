@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back6"
+    android:fitsSystemWindows="true"
+    android:theme="@style/IntroTheme"
+    android:gravity="top">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout"
+        android:padding="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryWhite"
+            android:text="CÓDIGO DA EMPRESA"/>
+
+        <EditText
+            android:id="@+id/code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginTop="10dp"
+            android:padding="6dp"
+            android:background="@drawable/border_bottom"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:layout_gravity="start"
+            android:textColor="#FFF" />
+
+        <Button
+            android:id="@+id/registrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:text="Registrar"
+            android:background="@drawable/border_round" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/colorPrimaryWhite"
+            android:text="Ainda não possui um código?"/>
+
+        <TextView
+            android:id="@+id/teste"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryWhite"
+            android:text="Clique e faça um teste..."/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -30,7 +30,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_go_empresa);
+        setContentView(R.layout.sonic_empresa);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
@@ -40,8 +40,8 @@ public class sonicEmpresa extends sonicRuntimePermission {
         myCtx = sonicEmpresa.this;
         verSite = new sonicVerificarSite(myCtx);
 
-        myRegister = (Button)findViewById(R.id.go_emp_btn_reg);
-        myCode = (EditText)findViewById(R.id.go_emp_txt_code);
+        myRegister = (Button)findViewById(R.id.registrar);
+        myCode = (EditText)findViewById(R.id.code);
         myTest = (TextView)findViewById(R.id.teste);
 
         myTest.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +107,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.WRITE_CONTACTS,
                 Manifest.permission.READ_PHONE_STATE
-                },R.string.msg_perms,REQUEST_PERMISSION);
+                },R.string.msgPerms,REQUEST_PERMISSION);
 
     }
 

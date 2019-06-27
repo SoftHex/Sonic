@@ -14,11 +14,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DATABASE = sonicConstants.DATABASE;
     private static final String DB_SITE = sonicConstants.TB_SITE;
     private static final String DB_FTP = sonicConstants.TB_FTP;
-    private static final String DB_EMPRESA = sonicConstants.TB_EMPRESA;
-    private static final String DB_USUARIO = sonicConstants.TB_USUARIO;
-    private static final String DB_VENDEDOR = sonicConstants.TB_VENDEDOR;
-    private static final String DB_HISTORICO_VENDEDOR = sonicConstants.TB_HISTORICO_VENDEDOR;
-    private static final String DB_EMPRESAS_VENDEDORES = sonicConstants.TB_EMPRESAS_VENDEDORES;
+    private static final String DB_EMPRESAS = sonicConstants.TB_EMPRESAS;
+    private static final String DB_TIPO_USUARIO = sonicConstants.TB_TIPO_USUARIO;
+    private static final String DB_USUARIOS = sonicConstants.TB_USUARIOS;
+    private static final String DB_EMPRESAS_USUARIO = sonicConstants.TB_EMPRESAS_USUARIO;
+    private static final String DB_HISTORICO_USUARIO = sonicConstants.TB_HISTORICO_USUARIO;
     private static final String DB_CLIENTES = sonicConstants.TB_CLIENTES;
     private static final String DB_GRUPO_CLIENTES = sonicConstants.TB_GRUPO_CLIENTES;
     private static final String DB_RANKING_CLIENTES = sonicConstants.TB_RANKING_CLIENTES;
@@ -46,6 +46,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_PRAZO = sonicConstants.TB_PRAZO;
     private static final String DB_TABELA_PRECO_CLIENTE = sonicConstants.TB_TABELA_PRECO_CLIENTE;
     private static final String DB_FRETE = sonicConstants.TB_FRETE;
+    private static final String DB_IMPRESSORAS = sonicConstants.TB_IMPRESSORAS;
     private static final String DB_AVISOS = sonicConstants.TB_AVISOS;
     private static final String DB_AVISOS_LIDOS = sonicConstants.TB_AVISOS_LIDOS;
     private static final String DB_SINCRONIZACAO = sonicConstants.TB_SINCRONIZACAO;
@@ -63,36 +64,38 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "user string not null, " +
             "pass string);";
 
-    private static final String CREATE_TABLE_EMPRESA = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESA+" (" +
+    private static final String CREATE_TABLE_EMPRESA = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_empresa int not null, " +
+            "codigo int not null, " +
             "razao_social string not null, " +
             "nome_fantasia string not null," +
             "selecionado int);";
-    private static final String CREATE_INDEX_TABLE_EMPRESA_CODIGO_EMPRESA = "CREATE INDEX index_empresa_codigo_empresa ON "+DB_EMPRESA+" (codigo_empresa);";
+    private static final String CREATE_INDEX_TABLE_EMPRESA_CODIGO = "CREATE INDEX index_empresa_codigo ON "+DB_EMPRESAS+" (codigo);";
+    private static final String CREATE_INDEX_TABLE_EMPRESA_SELECIONADO = "CREATE INDEX index_empresa_selecionado ON "+DB_EMPRESAS+" (selecionado);";
 
-    private static final String CREATE_TABLE_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_USUARIO+" (" +
+    private static final String CREATE_TABLE_TIPO_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_TIPO_USUARIO+" (" +
             "_id integer primary key autoincrement, " +
             "nivel_acesso int not null, " +
             "nome string not null);";
-    private static final String CREATE_INDEX_TABLE_USUARIO_NIVEL_ACESSO = "CREATE INDEX index_usuario_nivel_acesso ON "+DB_USUARIO+" (nivel_acesso);";
+    private static final String CREATE_INDEX_TABLE_TIPO_USUARIO_NIVEL_ACESSO = "CREATE INDEX index_tipo_usuario_nivel_acesso ON "+DB_USUARIOS+" (nivel_acesso);";
 
-    private static final String CREATE_TABLE_VENDEDOR = "CREATE TABLE IF NOT EXISTS "+DB_VENDEDOR+" (" +
+    private static final String CREATE_TABLE_USUARIOS = "CREATE TABLE IF NOT EXISTS "+DB_USUARIOS+" (" +
             "_id integer primary key autoincrement, "+
-            "codigo_vendedor int not null, " +
+            "codigo int not null, " +
             "nome string not null, " +
             "login string not null, " +
             "senha string, " +
             "nivel_acesso int not null, " +
-            "pessoa_superior int, " +
+            "usuario_superior int, " +
             "ativo bit);";
-    private static final String CREATE_INDEX_TABLE_VENDEDOR_CODIGO_VENDEDOR = "CREATE INDEX index_empresa_codigo_vendedor ON "+DB_VENDEDOR+" (codigo_vendedor);";
-    private static final String CREATE_INDEX_TABLE_VENDEDOR_PESSOA_SUPERIOR = "CREATE INDEX index_empresa_pessoa_superior ON "+DB_VENDEDOR+" (pessoa_superior);";
+    private static final String CREATE_INDEX_TABLE_USUARIOS_CODIGO = "CREATE INDEX index_usuario_codigo ON "+DB_USUARIOS+" (codigo);";
+    private static final String CREATE_INDEX_TABLE_USUARIOS_NIVEL_ACESSO = "CREATE INDEX index_usuario_nivel_acesso ON "+DB_USUARIOS+" (nivel_acesso);";
+    private static final String CREATE_INDEX_TABLE_USUARIOS_USUARIO_SUPERIOR = "CREATE INDEX index_usuario_usuario_superior ON "+DB_USUARIOS+" (usuario_superior);";
 
-    private static final String CREATE_TABLE_HISTORICO_VENDEDOR = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_VENDEDOR+" (" +
+    private static final String CREATE_TABLE_HISTORICO_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_USUARIO+" (" +
             "_id integer primary key autoincrement, "+
             "codigo_empresa int, " +
-            "codigo_vendedor int, " +
+            "codigo_usuario int, " +
             "mes1 string, " +
             "valor1 decimal(9,2), " +
             "mes2 string, " +
@@ -105,20 +108,20 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "valor5 decimal(9,2), " +
             "mes6 string, " +
             "valor6 decimal(9,2));";
-    private static final String CREATE_INDEX_TABLE_HISTORICO_VENDEDOR_CODIGO_EMPRESA = "CREATE INDEX index_historico_vendedor_codigo_empresa ON "+DB_HISTORICO_VENDEDOR+" (codigo_empresa);";
-    private static final String CREATE_INDEX_TABLE_HISTORICO_VENDEDOR_CODIGO_VENDEDOR = "CREATE INDEX index_historico_vendedor_codigo_vendedor ON "+DB_HISTORICO_VENDEDOR+" (codigo_vendedor);";
+    private static final String CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_EMPRESA = "CREATE INDEX index_historico_usuario_codigo_empresa ON "+DB_HISTORICO_USUARIO+" (codigo_empresa);";
+    private static final String CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_USUARIO = "CREATE INDEX index_historico_usuario_codigo_usuario ON "+DB_HISTORICO_USUARIO+" (codigo_usuario);";
 
-    private static final String CREATE_TABLE_EMPRESAS_VENDEDORES = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS_VENDEDORES+" (" +
+    private static final String CREATE_TABLE_EMPRESAS_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS_USUARIO+" (" +
             "_id integer primary key autoincrement, "+
-            "codigo_vendedor int, " +
+            "codigo_usuario int, " +
             "codigo_empresa int," +
 			"meta decimal(9,2));";
-    private static final String CREATE_INDEX_TABLE_EMPRESAS_VENDEDORES_CODIGO_VENDEDOR = "CREATE INDEX index_empresas_vendedores_codigo_vendedor ON "+DB_EMPRESAS_VENDEDORES+" (codigo_vendedor);";
-    private static final String CREATE_INDEX_TABLE_EMPRESAS_VENDEDORES_CODIGO_EMPRESA = "CREATE INDEX index_empresas_vendedores_codigo_empresa ON "+DB_EMPRESAS_VENDEDORES+" (codigo_empresa);";
+    private static final String CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_USUARIO = "CREATE INDEX index_empresas_usuario_codigo_usuario ON "+DB_EMPRESAS_USUARIO+" (codigo_usuario);";
+    private static final String CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_EMPRESA = "CREATE INDEX index_empresas_usuario_codigo_empresa ON "+DB_EMPRESAS_USUARIO+" (codigo_empresa);";
 
     private static final String CREATE_TABLE_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_CLIENTES+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_cliente int not null, " +
+            "codigo int not null, " +
             "tipo character(1) not null, " +
             "razao_social string not null, " +
             "nome_fantasia string not null, " +
@@ -137,14 +140,17 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_grupo int not null, " +
 			"situacao int, " +
             "selecionado int);";
-    private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO_CLIENTE = "CREATE INDEX index_clientes_codigo_cliente ON "+DB_CLIENTES+" (codigo_cliente);";
+    private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO = "CREATE INDEX index_clientes_codigo ON "+DB_CLIENTES+" (codigo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO = "CREATE INDEX index_clientes_codigo_grupo ON "+DB_CLIENTES+" (codigo_grupo);";
+    private static final String CREATE_INDEX_TABLE_CLIENTES_SITUACAO = "CREATE INDEX index_clientes_situacao ON "+DB_CLIENTES+" (situacao);";
+    private static final String CREATE_INDEX_TABLE_CLIENTES_SELECIONADO = "CREATE INDEX index_clientes_selecionado ON "+DB_CLIENTES+" (selecionado);";
+
 
     private static final String CREATE_TABLE_GRUPO_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_CLIENTES+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_grupo int, " +
+            "codigo int, " +
             "nome string);";
-    private static final String CREATE_INDEX_TABLE_GRUPO_CLIENTES_CODIGO_GRUPO = "CREATE INDEX index_grupo_clientes_codigo_grupo ON "+DB_GRUPO_CLIENTES+" (codigo_grupo);";
+    private static final String CREATE_INDEX_TABLE_GRUPO_CLIENTES_CODIGO = "CREATE INDEX index_grupo_clientes_codigo ON "+DB_GRUPO_CLIENTES+" (codigo);";
 
     private static final String CREATE_TABLE_RANKING_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_RANKING_CLIENTES+" (" +
             "_id integer primary key autoincrement, " +
@@ -165,23 +171,23 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+DB_PRODUTOS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_produto int, " +
+            "codigo int, " +
             "codigo_alternativo string, " +
             "descricao string, " +
             "codigo_unidade int, " +
             "codigo_grupo int," +
             "codigo_empresa int," +
             "selecionado int);";
-    private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_PRODUTO = "CREATE INDEX index_produtos_codigo_produto ON "+DB_PRODUTOS+" (codigo_produto);";
+    private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO = "CREATE INDEX index_produtos_codigo ON "+DB_PRODUTOS+" (codigo);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_UNIDADE = "CREATE INDEX index_produtos_codigo_unidade ON "+DB_PRODUTOS+" (codigo_unidade);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_GRUPO = "CREATE INDEX index_produtos_codigo_grupo ON "+DB_PRODUTOS+" (codigo_grupo);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_EMPRESA = "CREATE INDEX index_produtos_codigo_empresa ON "+DB_PRODUTOS+" (codigo_empresa);";
 
     private static final String CREATE_TABLE_GRUPO_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_PRODUTOS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_grupo int, " +
+            "codigo int, " +
             "nome string);";
-    private static final String CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO_GRUPO = "CREATE INDEX index_grupo_produtos_codigo_grupo ON "+DB_GRUPO_PRODUTOS+" (codigo_grupo);";
+    private static final String CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO = "CREATE INDEX index_grupo_produtos_codigo ON "+DB_GRUPO_PRODUTOS+" (codigo);";
 
     private static final String CREATE_TABLE_ESTOQUE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+DB_ESTOQUE_PRODUTOS+" (" +
             "_id integer primary key autoincrement, " +
@@ -269,7 +275,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_TIPO_COBRANCA = "CREATE TABLE IF NOT EXISTS "+DB_TIPO_COBRANCA+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_tipo int, " +
+            "codigo int, " +
             "nome string);";
 
     private static final String CREATE_TABLE_CONDICOES_PAGAMENTO = "CREATE TABLE IF NOT EXISTS "+DB_CONDICOES_PAGAMENTO+" (" +
@@ -279,7 +285,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_TABELA_PRECO = "CREATE TABLE IF NOT EXISTS "+DB_TABELA_PRECO+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_tabela int, " +
+            "codigo int, " +
             "nome string);";
 
     private static final String CREATE_TABLE_TABELA_PRECO_PRODUTO = "CREATE TABLE IF NOT EXISTS "+DB_TABELA_PRECO_PRODUTO+" (" +
@@ -300,13 +306,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_UNIDADE_MEDIDA = "CREATE TABLE IF NOT EXISTS "+DB_UNIDADE_MEDIDA+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_unidade int, " +
+            "codigo int, " +
             "nome string," +
             "sigla char(3));";
 
     private static final String CREATE_TABLE_TIPO_PEDIDO = "CREATE TABLE IF NOT EXISTS "+DB_TIPO_PEDIDO+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_tipo int, " +
+            "codigo int, " +
             "nome string);";
 
     private static final String CREATE_TABLE_TIPO_DOCUMENTO = "CREATE TABLE IF NOT EXISTS "+DB_TIPO_DOCUMENTO+" (" +
@@ -321,7 +327,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_PRAZO = "CREATE TABLE IF NOT EXISTS "+DB_PRAZO+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_prazo int, " +
+            "codigo int, " +
             "nome string, " +
             "prazo_venda int);";
 
@@ -330,9 +336,14 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_tabela int, " +
             "condicao_cliente);";
 
+    private static final String CREATE_TABLE_IMPRESSORAS = "CREATE TABLE IF NOT EXISTS "+DB_IMPRESSORAS+" (" +
+            "_id integer primary key autoincrement, " +
+            "codigo_tabela int, " +
+            "condicao_cliente);";
+
     private static final String CREATE_TABLE_AVISOS = "CREATE TABLE IF NOT EXISTS "+DB_AVISOS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_aviso int, " +
+            "codigo int, " +
             "autor string, " +
             "data string, " +
             "hora string, " +
@@ -389,33 +400,36 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_SITE);
         DB.execSQL(CREATE_TABLE_FTP);
         DB.execSQL(CREATE_TABLE_EMPRESA);
-        DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO_EMPRESA);
-        DB.execSQL(CREATE_TABLE_USUARIO);
-        DB.execSQL(CREATE_INDEX_TABLE_USUARIO_NIVEL_ACESSO);
-        DB.execSQL(CREATE_TABLE_VENDEDOR);
-        DB.execSQL(CREATE_INDEX_TABLE_VENDEDOR_CODIGO_VENDEDOR);
-        DB.execSQL(CREATE_INDEX_TABLE_VENDEDOR_PESSOA_SUPERIOR);
-        DB.execSQL(CREATE_TABLE_HISTORICO_VENDEDOR);
-        DB.execSQL(CREATE_TABLE_EMPRESAS_VENDEDORES);
-        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_VENDEDORES_CODIGO_EMPRESA);
-        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_VENDEDORES_CODIGO_VENDEDOR);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO);
+        DB.execSQL(CREATE_TABLE_TIPO_USUARIO);
+        DB.execSQL(CREATE_INDEX_TABLE_TIPO_USUARIO_NIVEL_ACESSO);
+        DB.execSQL(CREATE_TABLE_USUARIOS);
+        DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_CODIGO);
+        DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_NIVEL_ACESSO);
+        DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_USUARIO_SUPERIOR);
+        DB.execSQL(CREATE_TABLE_HISTORICO_USUARIO);
+        DB.execSQL(CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_USUARIO);
+        DB.execSQL(CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_TABLE_EMPRESAS_USUARIO);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_USUARIO);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_EMPRESA);
         DB.execSQL(CREATE_TABLE_CLIENTES);
-        DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO);
         DB.execSQL(CREATE_TABLE_GRUPO_CLIENTES);
-        DB.execSQL(CREATE_INDEX_TABLE_GRUPO_CLIENTES_CODIGO_GRUPO);
+        DB.execSQL(CREATE_INDEX_TABLE_GRUPO_CLIENTES_CODIGO);
         DB.execSQL(CREATE_TABLE_RANKING_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_RANKING_CLIENTES_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_TABLE_RANKING_CLIENTES_CODIGO_EMPRESA);
         DB.execSQL(CREATE_TABLE_CLIENTES_SEM_COMPRA);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_SEM_COMPRA_CODIGO_CLIENTE);
         DB.execSQL(CREATE_TABLE_PRODUTOS);
-        DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_PRODUTO);
+        DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_UNIDADE);
         DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_GRUPO);
         DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_EMPRESA);
         DB.execSQL(CREATE_TABLE_GRUPO_PRODUTOS);
-        DB.execSQL(CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO_GRUPO);
+        DB.execSQL(CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO);
         DB.execSQL(CREATE_TABLE_ESTOQUE_PRODUTOS);
         DB.execSQL(CREATE_TABLE_RANKING_PRODUTOS);
         DB.execSQL(CREATE_TABLE_TABELA_PRECO);

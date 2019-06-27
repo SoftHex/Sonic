@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.softhex.go.go_main_configuracoes">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_gravity="top"
+        android:id="@+id/go_main_configuracoes_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_configuracoes"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/admin"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SoftHex"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="50dp"/>
+                <TextView
+                    android:layout_marginTop="-10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="A simple way to make technology easier"
+                    android:textColor="@color/colorTextAccent"
+                    android:textSize="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC" />
+
+        <!-- SEGURANÇA -->
+
+        <LinearLayout
+            android:id="@+id/seguranca"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:drawableLeft="@mipmap/ic_vpn_key_white_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextAccent"
+                android:text="Segurança" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC"
+            android:layout_marginLeft="65dp"/>
+
+        <!-- PERSONALIZAÇÃO -->
+
+        <LinearLayout
+            android:id="@+id/personalizacao"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:drawableLeft="@mipmap/ic_phonelink_setup_white_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextAccent"
+                android:text="Personalização" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC"
+            android:layout_marginLeft="65dp"/>
+
+        <!-- NOTIFICAÇÕES -->
+
+        <LinearLayout
+            android:id="@+id/notificacoes"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:drawableLeft="@mipmap/ic_notifications_white_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextAccent"
+                android:text="Notificações" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC"
+            android:layout_marginLeft="65dp"/>
+
+        <!-- AJUDA -->
+
+        <LinearLayout
+            android:id="@+id/ajuda"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:drawableLeft="@mipmap/ic_help_white_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextAccent"
+                android:text="Ajuda" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC"
+            android:layout_marginLeft="65dp"/>
+
+        <!-- SOBRE -->
+
+        <LinearLayout
+            android:id="@+id/sobre"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?selectableItemBackground">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:drawableLeft="@mipmap/ic_info_white_24dp"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/colorAccent"
+                android:textSize="16dp"
+                android:textColor="@color/colorTextAccent"
+                android:text="Sobre" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:background="#DCDCDC"
+            android:layout_marginLeft="65dp"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
