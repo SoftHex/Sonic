@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,15 +35,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         DBC = new sonicDatabaseCRUD(getBaseContext());
         setContentView(R.layout.activity_main);
 
         DBC = new sonicDatabaseCRUD(getBaseContext());
-        //DBC.Ftp.saveFtpDefault();
-
-        pref = getSharedPreferences("GO_LOGIN", Context.MODE_PRIVATE);
-        boolean check =  pref.getBoolean("KEEP_PASS", false);
 
         if (DBC.Database.checkMinimumData()){
 
@@ -65,13 +59,11 @@ public class MainActivity extends Activity {
         skip=(Button)findViewById(R.id.btn_skip);
         next=(Button)findViewById(R.id.btn_next);
 
-        layouts = new int[]{R.layout.activity_slide_one,R.layout.activity_slide_two,R.layout.activity_slide_tree,R.layout.activity_slide_four};
+        layouts = new int[]{R.layout.sonic_slide_one,R.layout.sonic_slide_two,R.layout.sonic_slide_tree,R.layout.sonic_slide_four};
         addBottomDots(0);
         changeStatusBarColor();
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
-        //viewPager.setBackgroundColor(getResources().getColor(R.color.bg_screen2));
-        //viewPager.setBackgroundColors
         viewPager.addOnPageChangeListener(viewListener);
 
         skip.setOnClickListener(new View.OnClickListener() {
@@ -103,19 +95,17 @@ public class MainActivity extends Activity {
     private void addBottomDots(int position){
 
         dots = new TextView[layouts.length];
-        int[] colorActive = getResources().getIntArray(R.array.dot_active);
-        int[] colorInactive = getResources().getIntArray(R.array.dot_inactive);
         dotsLayout.removeAllViews();
         for(int i=0; i<dots.length; i++)
         {
             dots[i] = new TextView(this);
             dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(30);
-            dots[i].setTextColor(colorInactive[position]);
+            dots[i].setTextColor(getResources().getColor(R.color.dotInactive));
             dotsLayout.addView(dots[i]);
         }
         if(dots.length>0){
-            dots[position].setTextColor(colorActive[position]);
+            dots[position].setTextColor(getResources().getColor(R.color.dotActive));
         }
     }
 
@@ -135,11 +125,11 @@ public class MainActivity extends Activity {
             addBottomDots(position);
             if(position==layouts.length-1){
 
-                next.setText("INICIAR");
+                next.setText(R.string.textFinish);
                 skip.setVisibility(View.GONE);
             }
             else{
-                next.setText("Próximo");
+                next.setText(R.string.textNext);
                 skip.setVisibility(View.VISIBLE);
             }
 
