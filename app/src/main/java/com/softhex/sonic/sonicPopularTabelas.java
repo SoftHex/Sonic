@@ -93,10 +93,10 @@ public class sonicPopularTabelas {
 
                             }
 
-                            if ("[USUARIO]".equals(line)) {
+                            if ("[NIVEL_ACESSO]".equals(line)) {
 
-                                Log.d("USUARIO", "ENTROU");
-                                DBC.Usuario.cleanUsuario();
+                                Log.d("NIVEL_ACESSO", "ENTROU");
+                                DBC.NivelAcesso.nivelAcesso();
 
                                 line = reader.readLine();
 
@@ -107,11 +107,10 @@ public class sonicPopularTabelas {
                                     int len = str.length();
                                     String str2 = str.substring(pos, len);
                                     List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Usuario.saveUsuario(data);
+                                    result = DBC.NivelAcesso.saveNivelAcesso(data);
                                     line = reader.readLine();
 
                                 }
-
 
                             }
 
@@ -136,9 +135,9 @@ public class sonicPopularTabelas {
 
                             }
 
-                            if ("[VENDEDORES]".equals(line)) {
+                            if ("[USUARIOS]".equals(line)) {
 
-                                Log.d("VENDEDORES", "ENTROU");
+                                Log.d("USUARIOS", "ENTROU");
                                 DBC.Usuarios.cleanUsuarios();
 
                                 line = reader.readLine();
@@ -155,13 +154,12 @@ public class sonicPopularTabelas {
 
                                 }
 
-
                             }
 
-                            if ("[EMPRESAS_VENDEDORES]".equals(line)) {
+                            if ("[EMPRESAS_USUARIOS]".equals(line)) {
 
-                                Log.d("EMPRESAS_VENDEDORES", "ENTROU");
-                                DBC.EmpresasUsuario.cleanEmpresasUsuarios();
+                                Log.d("EMPRESAS_USUARIOS", "ENTROU");
+                                DBC.EmpresasUsuarios.cleanEmpresasUsuarios();
 
                                 line = reader.readLine();
 
@@ -172,7 +170,7 @@ public class sonicPopularTabelas {
                                     int len = str.length();
                                     String str2 = str.substring(pos, len);
                                     List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.EmpresasUsuario.saveEmpresasUsuarios(data);
+                                    result = DBC.EmpresasUsuarios.saveEmpresasUsuarios(data);
                                     line = reader.readLine();
 
 
@@ -199,7 +197,6 @@ public class sonicPopularTabelas {
                                     line = reader.readLine();
 
                                 }
-
 
                             }
 
@@ -313,7 +310,6 @@ public class sonicPopularTabelas {
 
                             }
 
-                            
                             if ("[PRODUTOS]".equals(line)) {
 
                                 Log.d("PRODUTOS", "ENTROU");

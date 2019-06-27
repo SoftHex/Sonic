@@ -6,7 +6,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="Configurações"
-        android:iconTint="@color/ic_white"
+        android:iconTint="@color/colorPrimaryWhite"
         app:showAsAction="never" />
 
 </menu>

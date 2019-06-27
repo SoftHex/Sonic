@@ -45,6 +45,10 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/SplashAppTheme"/>
         <activity
+            android:name=".sonicFirstAccess"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/SplashAppTheme"/>
+        <activity
             android:name=".sonicAvisos"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/SplashAppTheme"/>

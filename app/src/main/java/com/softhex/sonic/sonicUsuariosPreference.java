@@ -20,7 +20,7 @@ public class sonicUsuariosPreference extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.preference_toolbar, root, false);
+        toolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.sonic_preference_toolbar, root, false);
 
         root.addView(toolbar, 0);
 

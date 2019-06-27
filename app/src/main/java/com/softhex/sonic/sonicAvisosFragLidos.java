@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -61,7 +60,7 @@ public class sonicAvisosFragLidos extends Fragment{
     @Nullable
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         loadFragment();
 

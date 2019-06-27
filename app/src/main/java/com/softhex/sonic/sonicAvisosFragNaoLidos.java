@@ -1,6 +1,5 @@
 package com.softhex.sonic;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,7 +38,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
     @Nullable
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         loadFragment();
 

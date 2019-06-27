@@ -1,9 +1,7 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -119,7 +117,7 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-        View view = LayoutInflater.from(ctx).inflate(R.layout.layout_cards_list, parent, false);
+        View view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list, parent, false);
         avsHolder titulos = new avsHolder(view);
 
         return titulos;

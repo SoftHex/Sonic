@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class sonicFirstAccess extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class sonicFirstAccess extends AppCompatActivity {
     private ImageView myImage;
     private sonicConstants myCons;
     private Context myCtx;
+    private sonicThrowMessage myMessage;
     SharedPreferences pref;
     SharedPreferences.Editor pref_login;
 
@@ -41,6 +44,7 @@ public class sonicFirstAccess extends AppCompatActivity {
         myCtx = getApplicationContext();
         myCons = new sonicConstants();
         DBC = new sonicDatabaseCRUD(myCtx);
+        myMessage = new sonicThrowMessage(myCtx);
 
         myEmpresa = (TextView)findViewById(R.id.empresa);
         myUsuario = (TextView)findViewById(R.id.usuario);
@@ -76,14 +80,6 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         }
 
-        /*String url = "https://www.urbanarts.com.br/imagens/produtos/113487/0/Ampliada/mulher-de-perfil-preto-e-branco.jpg";
-            Glide.with(getApplicationContext())
-                    .load(url)
-                    .apply(new RequestOptions().override(300,300))
-                    .transition(GenericTransitionOptions.with(R.anim.activity_fade_in))
-                    .into(myImage);*/
-
-
     }
 
     public void myProgress(Context ctx){
@@ -99,35 +95,37 @@ public class sonicFirstAccess extends AppCompatActivity {
 
     }
 
-    class myAsyncTask  extends AsyncTask<Void, Void, Void>{
+    class  myAsyncTask  extends AsyncTask<Void, Void, Integer>{
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Integer doInBackground(Void... voids) {
+
+            List<sonicUsuariosHolder> lista = new ArrayList<sonicUsuariosHolder>();
+            lista = DBC.Usuarios.selectUsuarioAtivo();
 
             DBC.Usuarios.setAtivo(getIntent().getStringExtra("IMEI"));
             pref = getSharedPreferences("GO_LOGIN", Context.MODE_PRIVATE);
             pref_login  = pref.edit();
-            pref_login.putInt("VENDEDOR_ID", DBC.Usuarios.usuarioAtivoId());
-            pref_login.putString("VENDEDOR_NOME", DBC.Usuarios.usuarioAtivoNome());
-            pref_login.putString("VENDEDOR_CARGO", DBC.Usuarios.usuarioAtivoCargo());
-            pref_login.putString("VENDEDOR_EMPRESA", DBC.Usuarios.usuarioEmpresa());
-            pref_login.putInt("VENDEDOR_NIVEL_ACESSO", DBC.Usuarios.usuarioNivelAcesso());
-            pref_login.putInt("SISTEMA_MENU_ROTA", 1);
+            pref_login.putInt("VENDEDOR_ID", lista.get(0).getCodigo());
+            pref_login.putString("VENDEDOR_NOME", lista.get(0).getNome());
+            pref_login.putString("VENDEDOR_CARGO", lista.get(0).getCargo());
+            pref_login.putString("VENDEDOR_EMPRESA", lista.get(0).getEmpresa());
+            pref_login.putInt("VENDEDOR_NIVEL_ACESSO", lista.get(0).getNivelAcessoId());
             pref_login.apply();
-            return null;
+
+            return lista.size();
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Handler h = new Handler();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    myProgress.dismiss();
-                    startActivity();
-                }
-            }, 1000);
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+            myProgress.dismiss();
+            if(integer>0){
+                startActivity();
+            }else {
+                myMessage.showMessage("Atenção","Ocorreu um erro inerpedado ao tentar salvar as informações. Contate o administrador do sistema",myMessage.MSG_WARNING);
+            }
 
         }
     }

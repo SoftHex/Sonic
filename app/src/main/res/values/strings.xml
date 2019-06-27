@@ -67,6 +67,9 @@
     <string name="letterPlaceholder">X</string>
     <string name="datePlaceholder">xx/xx/xxxx</string>
     <string name="msgPerms">Permissões necessárias...</string>
+    <string name="textNext">PRÓXIMO</string>
+    <string name="textFinish">INICIAR</string>
+    <string name="textSkip">PULAR</string>
     <!-- MENSAGENS -->
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->

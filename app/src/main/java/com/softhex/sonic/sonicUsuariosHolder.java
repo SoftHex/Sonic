@@ -11,9 +11,12 @@ public class sonicUsuariosHolder {
      String nome;
      String login;
      String pass;
-     String  nivel_acesso;
-     int  pessoa_superior;
+     String imei;
+     String nivel_acesso_nome;
+     int nivel_acesso_id;
+     String  usuario_superior;
      String cargo;
+     String empresa;
      String meta;
      String  ativo;
      String  data;
@@ -31,9 +34,12 @@ public class sonicUsuariosHolder {
                                String nome,
                                String login,
                                String pass,
-                               String nivel_acesso,
-                               int pessoa_superior,
+                               String imei,
+                               String nivel_acesso_nome,
+                               int nivel_acesso_id,
+                               String usuario_superior,
                                String cargo,
+                               String empresa,
                                String meta,
                                String ativo,
                                String data,
@@ -45,9 +51,12 @@ public class sonicUsuariosHolder {
         this.nome = nome;
         this.login = login;
         this.pass = pass;
-        this.nivel_acesso = nivel_acesso;
-        this.pessoa_superior = pessoa_superior;
+        this.imei = imei;
+        this.nivel_acesso_nome = nivel_acesso_nome;
+        this.nivel_acesso_id = nivel_acesso_id;
+        this.usuario_superior = usuario_superior;
         this.cargo = cargo;
+        this.empresa = empresa;
         this.meta = meta;
         this.ativo = ativo;
         this.data = data;
@@ -76,15 +85,27 @@ public class sonicUsuariosHolder {
         return this.pass;
     }
 
-    public String getNivelAcesso(){
-        return this.nivel_acesso;
+    public String getImei() {
+        return imei;
     }
 
-    public int getPessoaSuperior(){
-        return this.pessoa_superior;
+    public String getNivelAcessoNome(){
+        return this.nivel_acesso_nome;
+    }
+
+    public int getNivelAcessoId() {
+        return nivel_acesso_id;
+    }
+
+    public String getUsuarioSuperior(){
+        return this.usuario_superior;
     }
 
     public String getCargo(){return this.cargo;}
+
+    public String getEmpresa() {
+        return empresa;
+    }
 
     public String getMeta(){
         return this.meta;
@@ -117,13 +138,25 @@ public class sonicUsuariosHolder {
 
     public void setPass(String pass) { this.pass = pass; }
 
-    public void setNivelAcesso(String  nivel_acesso) { this.nivel_acesso = nivel_acesso; }
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public void setNivelAcesso(String  nivel_acesso_nome) { this.nivel_acesso_nome = nivel_acesso_nome; }
+
+    public void setNivelAcessoId(int nivel_acesso_id) {
+        this.nivel_acesso_id = nivel_acesso_id;
+    }
 
     public void setMeta(String  meta) { this.meta = meta; }
 
-    public void setPessoaSuperior(int  pessoa_superior) { this.pessoa_superior = pessoa_superior; }
+    public void setUsuarioSuperior(String  usuario_superior) { this.usuario_superior = usuario_superior; }
 
     public void setCargo(String cargo){this.cargo = cargo;}
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
 
     public void setAtivo(String  ativo) { this.ativo = ativo; }
     public void setData(String  data) { this.data = data; }

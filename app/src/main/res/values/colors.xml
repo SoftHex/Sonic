@@ -36,32 +36,11 @@
     <color name="colorPrimaryBlueT">#901850AE</color>
     <color name="colorPrimaryBlueLightT">#904688F7</color>
     <color name="colorPrimaryWhite">#FFFFFF</color>
-    <color name="colorPrimaryGreen2">#00FF7F</color>
+    <color name="colorPrimaryGreen2">#00FA9A</color>
 
-    <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#d1395c</color>
-    <color name="dot_dark_screen2">#14a895</color>
-    <color name="dot_dark_screen3">#2278d4</color>
-    <color name="dot_dark_screen4">#a854d4</color>
+    <!-- dots colors -->
+    <color name="dotActive">#FFFFFF</color>
+    <color name="dotInactive">#90C0C0C0</color>
 
-    <!-- dots active colors -->
-    <color name="dot_light_screen1">#f98da5</color>
-    <color name="dot_light_screen2">#8cf9eb</color>
-    <color name="dot_light_screen3">#93c6fd</color>
-    <color name="dot_light_screen4">#e4b5fc</color>
-
-    <array name="dot_active">
-        <item>@color/dot_light_screen1</item>
-        <item>@color/dot_light_screen2</item>
-        <item>@color/dot_light_screen3</item>
-        <item>@color/dot_light_screen4</item>
-    </array>
-
-    <array name="dot_inactive">
-        <item>@color/dot_dark_screen1</item>
-        <item>@color/dot_dark_screen2</item>
-        <item>@color/dot_dark_screen3</item>
-        <item>@color/dot_dark_screen4</item>
-    </array>
 
 </resources>

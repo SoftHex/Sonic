@@ -24,8 +24,8 @@ public class sonicConstants {
     public static final String TB_FTP = "ftp";
     public static final String TB_EMPRESAS = "empresas";
     public static final String TB_USUARIOS = "usuarios";
-    public static final String TB_TIPO_USUARIO = "tipo_usuario";
-    public static final String TB_EMPRESAS_USUARIO = "empresas_usuario";
+    public static final String TB_NIVEL_ACESSO = "nivel_acesso";
+    public static final String TB_EMPRESAS_USUARIOS = "empresas_usuarios";
     public static final String TB_HISTORICO_USUARIO = "historico_usuario";
     public static final String TB_CLIENTES = "clientes";
     public static final String TB_GRUPO_CLIENTES = "grupo_clientes";

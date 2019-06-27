@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back3"
+    android:background="@drawable/back6"
     android:fitsSystemWindows="true">
 
 
@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/colorPrimaryGray"
+                    android:textColor="@color/colorTextAccent"
                     android:textSize="16dp"
                     android:text="EMPRESA"/>
 
@@ -83,7 +83,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textSize="10dp"
-                    android:textColor="@color/colorPrimaryGray"
+                    android:textColor="@color/colorTextAccent"
                     android:layout_marginTop="2dp"
                     android:text="CARGO"/>
 
@@ -107,10 +107,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:textColor="@color/colorPrimaryWhite"
-            android:text="Confirmar"
-            android:background="@drawable/rounded_buttom"
-            android:textStyle="bold"
-            android:backgroundTint="@color/colorPrimaryGreen" />
+            android:text="CONFIRMAR"
+            android:background="@drawable/border_round"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/adm"
