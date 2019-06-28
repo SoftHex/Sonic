@@ -35,6 +35,10 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(Build.VERSION.SDK_INT>=21){
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
         DBC = new sonicDatabaseCRUD(getBaseContext());
         setContentView(R.layout.activity_main);
 
@@ -46,10 +50,6 @@ public class MainActivity extends Activity {
             startActivity(i);
             finish();
 
-        }
-
-        if(Build.VERSION.SDK_INT>=21){
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
         setContentView(R.layout.activity_main);

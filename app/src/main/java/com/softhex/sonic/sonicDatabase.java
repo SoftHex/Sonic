@@ -73,11 +73,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TABLE_EMPRESA_CODIGO = "CREATE INDEX index_empresa_codigo ON "+DB_EMPRESAS+" (codigo);";
     private static final String CREATE_INDEX_TABLE_EMPRESA_SELECIONADO = "CREATE INDEX index_empresa_selecionado ON "+DB_EMPRESAS+" (selecionado);";
 
-    private static final String CREATE_TABLE_TIPO_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
+    private static final String CREATE_TABLE_NIVEL_ACESSO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
             "_id integer primary key autoincrement, " +
-            "nivel_acesso int not null, " +
+            "nivel int not null, " +
             "nome string not null);";
-    private static final String CREATE_INDEX_TABLE_TIPO_USUARIO_NIVEL_ACESSO = "CREATE INDEX index_tipo_usuario_nivel_acesso ON "+DB_NIVEL_ACESSO+" (nivel_acesso);";
+    private static final String CREATE_INDEX_TABLE_NIVEL_ACESSO = "CREATE INDEX index_nivel ON "+DB_NIVEL_ACESSO+" (nivel);";
 
     private static final String CREATE_TABLE_USUARIOS = "CREATE TABLE IF NOT EXISTS "+DB_USUARIOS+" (" +
             "_id integer primary key autoincrement, "+
@@ -201,7 +201,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_VENDAS = "CREATE TABLE IF NOT EXISTS "+DB_VENDAS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_venda int not null, " +
+            "codigo int not null, " +
             "codigo_empresa int not null, " +
             "codigo_cliente int not null, " +
             "codigo_tipo_cobranca int not null, " +
@@ -355,7 +355,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_AVISOS_LIDOS = "CREATE TABLE IF NOT EXISTS "+DB_AVISOS_LIDOS+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo_aviso int);";
+            "codigo int);";
 
     private static final String CREATE_TABLE_SINCRONIZACAO = "CREATE TABLE IF NOT EXISTS "+DB_SINCRONIZACAO+" (" +
             "_id integer primary key autoincrement, " +
@@ -387,7 +387,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "longitude string);";
 
     private static final String DROP_TABLE = " DROP TABLE [IF EXISTS] ";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public sonicDatabase(Context context) {
         //super(context, Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_DATA+DATABASE+".db" , null, DB_VERSION);
@@ -401,9 +401,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_SITE);
         DB.execSQL(CREATE_TABLE_FTP);
         DB.execSQL(CREATE_TABLE_EMPRESA);
-        DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO);
-        DB.execSQL(CREATE_TABLE_TIPO_USUARIO);
-        DB.execSQL(CREATE_INDEX_TABLE_TIPO_USUARIO_NIVEL_ACESSO);
+        //DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO);
+        DB.execSQL(CREATE_TABLE_NIVEL_ACESSO);
+        DB.execSQL(CREATE_INDEX_TABLE_NIVEL_ACESSO);
         DB.execSQL(CREATE_TABLE_USUARIOS);
         DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_NIVEL_ACESSO);

@@ -21,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,16 +79,11 @@ public class sonicMain extends AppCompatActivity{
     private sonicThrowMessage myMessage;
     private Drawer myDrawer;
     private boolean check;
-    private String vendedorNome;
-    private String vendedorCargo;
-    private int vendedorId;
-    private int vendedorNivelAcesso;
-    private int sistemaMenuAdmin;
-    private int sistemaMenuRota;
-    private int avisoNaoLido;
-    private int sincronizado;
-    private String badge;
-    private int teste = 0;
+    private String usuarioNome;
+    private String usuarioCargo;
+    private int usuarioId;
+    private int usuarioNivelAcesso;
+
 
     private boolean empSelecioanada;
     private Boolean allowHomeUpdate = false;
@@ -98,27 +94,24 @@ public class sonicMain extends AppCompatActivity{
         setContentView(R.layout.sonic_main);
 
         myCtx = this;
+        DBC = new sonicDatabaseCRUD(myCtx);
+        DBCL = new sonicDatabaseLogCRUD(myCtx);
 
         myToolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
         myActionBar.setTitle(R.string.app_name);
 
-        pref = getSharedPreferences("GO_LOGIN", Context.MODE_PRIVATE);
-        check =  pref.getBoolean("KEEP_PASS", false);
-        vendedorId = pref.getInt("VENDEDOR_ID", 0);
-        vendedorNome = pref.getString("VENDEDOR_NOME", "");
-        vendedorCargo = pref.getString("VENDEDOR_CARGO", "");
-        vendedorNivelAcesso = pref.getInt("VENDEDOR_NIVEL_ACESSO", 0);
-        sistemaMenuAdmin = pref.getInt("SISTEMA_MENU_ADMIN", 0);
-        sistemaMenuRota = pref.getInt("SISTEMA_MENU_ROTA", 0);
+        List<sonicUsuariosHolder> listaUser;
+        listaUser = DBC.Usuarios.selectUsuarioAtivo();
+        usuarioId = listaUser.get(0).getCodigo();
+        usuarioNome = listaUser.get(0).getNome();
+        usuarioCargo = listaUser.get(0).getCargo();
+        usuarioNivelAcesso = listaUser.get(0).getNivelAcessoId();
 
-        DBC = new sonicDatabaseCRUD(getApplicationContext());
-        DBCL = new sonicDatabaseLogCRUD(myCtx);
-        List<sonicEmpresasHolder> lista = new ArrayList<sonicEmpresasHolder>();
-        lista = DBC.Empresa.empresasVendedor();
-        //avisoNaoLido = DBC.Avisos.countNaoLidos();
-        //new myAssyncTask().execute(2,null,2);
+        List<sonicEmpresasHolder> listaEmpresa = new ArrayList<sonicEmpresasHolder>();
+        listaEmpresa = DBC.Empresa.empresasUsuarios();
+
         ImageView v = new ImageView(this);
 
         myHeader = new AccountHeaderBuilder()
@@ -166,30 +159,30 @@ public class sonicMain extends AppCompatActivity{
                 })
                 .build();
 
-        for (int i = 0; i< lista.size(); i++)
+        for (int i = 0; i< listaEmpresa.size(); i++)
 
             {
 
-                File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +lista.get(i).getCodigo()+"_"+vendedorId+".jpg");
+                File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
 
                 if(i<3){
 
                     if(file.exists()){
                         myHeader.addProfiles(
                                 new ProfileDrawerItem()
-                                        .withName(vendedorNome +" ("+ vendedorCargo +")")
-                                        .withEmail(lista.get(i).getNomeFantasia())
+                                        .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                        .withEmail(listaEmpresa.get(i).getNomeFantasia())
                                         .withIcon(file.toString())
-                                        .withIdentifier(lista.get(i).getCodigo())
+                                        .withIdentifier(listaEmpresa.get(i).getCodigo())
                                     );
                         }else{
 
                         myHeader.addProfiles(
                                 new ProfileDrawerItem()
-                                        .withName(vendedorNome +" ("+ vendedorCargo +")")
-                                        .withEmail(lista.get(i).getNomeFantasia())
+                                        .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                        .withEmail(listaEmpresa.get(i).getNomeFantasia())
                                         .withIcon(getResources().getDrawable(R.drawable.no_profile))
-                                        .withIdentifier(lista.get(i).getCodigo())
+                                        .withIdentifier(listaEmpresa.get(i).getCodigo())
                                     );
 
                         }
@@ -509,6 +502,18 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
+    class myUserAsyncTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -799,9 +804,9 @@ public class sonicMain extends AppCompatActivity{
 
                 long empresaId = myHeader.getActiveProfile().getIdentifier();
 
-                myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_PERFIL, empresaId, vendedorId);
+                myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_PERFIL, empresaId, usuarioId);
 
-                String url = Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+empresaId+"_"+vendedorId+".jpg";
+                String url = Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+empresaId+"_"+usuarioId+".jpg";
 
                 myHeader.getActiveProfile().withIcon(url);
 

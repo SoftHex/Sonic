@@ -14,18 +14,17 @@
         <item name="android:windowBackground">@color/colorPrimaryWhite</item>
         <item name="android:actionMenuTextColor">@color/colorPrimaryWhite</item>
     </style>
-    <style name="SplashAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="android:windowBackground">@drawable/back6</item>
     </style>
     <style name="IntroTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@drawable/back6</item>
     </style>
 
     <style name="NavigationDrawerStyle">
@@ -36,13 +35,6 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="go_cliente_listview" parent="@android:style/Widget.ListView">
-        <item name="android:cacheColorHint">@android:color/transparent</item>
-        <item name="android:divider">@android:color/transparent</item>
-        <item name="android:dividerHeight">20dp</item>
-        <item name="android:listSelector">@color/colorPrimaryBlue</item>
-    </style>
 
     <style name="splashProgress" parent="Widget.AppCompat.ProgressBar.Horizontal">
     </style>

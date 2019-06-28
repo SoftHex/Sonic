@@ -5,11 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +43,11 @@ public class sonicFirstAccess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_first_access);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         myCtx = getApplicationContext();
         myCons = new sonicConstants();
@@ -95,37 +103,21 @@ public class sonicFirstAccess extends AppCompatActivity {
 
     }
 
-    class  myAsyncTask  extends AsyncTask<Void, Void, Integer>{
+    class  myAsyncTask  extends AsyncTask<Void, Void, Void>{
 
         @Override
-        protected Integer doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids) {
 
-            List<sonicUsuariosHolder> lista = new ArrayList<sonicUsuariosHolder>();
-            lista = DBC.Usuarios.selectUsuarioAtivo();
+            DBC.Usuarios.setAtivo(getIntent().getIntExtra("ID",0));
+            return null;
 
-            DBC.Usuarios.setAtivo(getIntent().getStringExtra("IMEI"));
-            pref = getSharedPreferences("GO_LOGIN", Context.MODE_PRIVATE);
-            pref_login  = pref.edit();
-            pref_login.putInt("VENDEDOR_ID", lista.get(0).getCodigo());
-            pref_login.putString("VENDEDOR_NOME", lista.get(0).getNome());
-            pref_login.putString("VENDEDOR_CARGO", lista.get(0).getCargo());
-            pref_login.putString("VENDEDOR_EMPRESA", lista.get(0).getEmpresa());
-            pref_login.putInt("VENDEDOR_NIVEL_ACESSO", lista.get(0).getNivelAcessoId());
-            pref_login.apply();
-
-            return lista.size();
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
+        protected void onPostExecute(Void voids) {
+            super.onPostExecute(voids);
 
-            myProgress.dismiss();
-            if(integer>0){
                 startActivity();
-            }else {
-                myMessage.showMessage("Atenção","Ocorreu um erro inerpedado ao tentar salvar as informações. Contate o administrador do sistema",myMessage.MSG_WARNING);
-            }
 
         }
     }

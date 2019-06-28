@@ -67,7 +67,6 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        myProgress.setVisibility(View.VISIBLE);
         bindRecyclerView();
 
     }

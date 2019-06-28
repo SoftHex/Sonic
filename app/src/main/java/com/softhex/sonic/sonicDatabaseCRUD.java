@@ -89,7 +89,7 @@ public class sonicDatabaseCRUD {
     Usuarios Usuarios = new Usuarios();
     HistoricoUsuario HistoricoUsuario = new HistoricoUsuario();
     EmpresasUsuarios EmpresasUsuarios = new EmpresasUsuarios();
-    nivelAcesso NivelAcesso = new nivelAcesso();
+    sonicDatabaseCRUD.NivelAcesso NivelAcesso = new NivelAcesso();
     Clientes Clientes = new Clientes();
     Vendas Vendas = new Vendas();
     VendasItens VendasItens = new VendasItens();
@@ -284,12 +284,11 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result = false;
             ContentValues cv = new ContentValues();
-            //DB.getWritableDatabase().beginTransaction();
 
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_empresa", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("razao_social", lista.get(1));
                     cv.put("nome_fantasia", lista.get(2));
                     if(i==0){
@@ -346,10 +345,10 @@ public class sonicDatabaseCRUD {
             try{
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT codigo_empresa FROM "+TABLE_EMPRESAS+" LIMIT 1 " , null);
+                        "SELECT e.codigo FROM "+TABLE_EMPRESAS+" e LIMIT 1 " , null);
 
                 if(cursor.moveToFirst()) {
-                    empresa = cursor.getInt(cursor.getColumnIndex("codigo_empresa"));
+                    empresa = cursor.getInt(cursor.getColumnIndex("codigo"));
                 }
 
             }catch (SQLiteException e){
@@ -423,18 +422,19 @@ public class sonicDatabaseCRUD {
             return empresas;
         }
 
-        public List<sonicEmpresasHolder> empresasVendedor(){
+        public List<sonicEmpresasHolder> empresasUsuarios(){
             List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             String query = "SELECT " +
                     "e.nome_fantasia, " +
-                    "e.codigo_empresa " +
+                    "e.razao_social, " +
+                    "e.codigo " +
                     "FROM " + TABLE_EMPRESAS + " e " +
                     "JOIN " + TABLE_EMPRESAS_USUARIOS + " eu " +
-                    "ON eu.codigo_empresa = e.codigo_empresa " +
+                    "ON eu.codigo_empresa = e.codigo " +
                     "JOIN " + TABLE_USUARIOS + " u " +
-                    "ON u.codigo_usuario = eu.codigo_usuario " +
-                    "WHERE v.ativo = 1 ORDER BY e.selecionado DESC";
+                    "ON u.codigo = eu.codigo_usuario " +
+                    "WHERE u.ativo = 1 ORDER BY e.selecionado DESC";
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -442,8 +442,9 @@ public class sonicDatabaseCRUD {
 
                 sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
-                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                 empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                empresa.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
 
                 empresas.add(empresa);
 
@@ -515,7 +516,7 @@ public class sonicDatabaseCRUD {
         }
     }
 
-    class nivelAcesso {
+    class NivelAcesso {
 
         public boolean saveNivelAcesso(List<String> lista){
 
@@ -527,7 +528,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("nivel_acesso", lista.get(0));
+                    cv.put("nivel", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -569,9 +570,6 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        /**
-         *   Conta os Avisos não lidos.
-         */
         public int countNaoLidos() {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -579,7 +577,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                Cursor cursor = db.rawQuery("SELECT _id FROM "+TABLE_AVISOS+" WHERE codigo_aviso NOT IN (SELECT DISTINCT(codigo_aviso) FROM "+TABLE_AVISOS_LIDOS+")", null);;
+                Cursor cursor = db.rawQuery("SELECT _id FROM "+TABLE_AVISOS+" WHERE codigo NOT IN (SELECT DISTINCT(codigo) FROM "+TABLE_AVISOS_LIDOS+")", null);;
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                 DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -589,29 +587,26 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        /**
-        *   Seleciona os Avisos. OBS: Sem filtro.
-        */
         public List<sonicAvisosHolder> selectAvisos(){
             List<sonicAvisosHolder> avisos = new ArrayList<sonicAvisosHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "TA.codigo_aviso," +
-                            "TA.prioridade," +
-                            "TA.autor," +
-                            "TA.data," +
-                            "TA.hora," +
-                            "TA.titulo," +
-                            "TA.mensagem," +
-                            "CASE WHEN EXISTS(SELECT DISTINCT(TAL.codigo_aviso) FROM "+TABLE_AVISOS_LIDOS+" TAL WHERE TAL.codigo_aviso = TA.codigo_aviso) THEN 1 ELSE 0 END AS status" +
-                            " FROM " + TABLE_AVISOS + " TA ORDER BY TA.data DESC" , null);
+                            "a.codigo," +
+                            "a.prioridade," +
+                            "a.autor," +
+                            "a.data," +
+                            "a.hora," +
+                            "a.titulo," +
+                            "a.mensagem," +
+                            "CASE WHEN EXISTS(SELECT DISTINCT(al.codigo) FROM "+TABLE_AVISOS_LIDOS+" al WHERE al.codigo = a.codigo) THEN 1 ELSE 0 END AS status" +
+                            " FROM " + TABLE_AVISOS + " a ORDER BY a.data DESC" , null);
 
             while(cursor.moveToNext()){
 
                 sonicAvisosHolder aviso = new sonicAvisosHolder();
 
-                aviso.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_aviso")));
+                aviso.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                 aviso.setPrioridade(cursor.getInt(cursor.getColumnIndex("prioridade")));
                 aviso.setAutor(cursor.getString(cursor.getColumnIndex("autor")));
                 aviso.setData(cursor.getString(cursor.getColumnIndex("data")));
@@ -637,7 +632,7 @@ public class sonicDatabaseCRUD {
             try {
                 for (int i = 0; i < lista.size(); i++) {
 
-                    cv.put("codigo_aviso", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("autor", lista.get(1));
                     cv.put("data", lista.get(2));
                     cv.put("hora", lista.get(3));
@@ -668,7 +663,7 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                    cv.put("codigo_aviso", id);
+                    cv.put("codigo", id);
 
                 result = DB.getWritableDatabase().insert(TABLE_AVISOS_LIDOS, null, cv) > 0;
 
@@ -683,7 +678,7 @@ public class sonicDatabaseCRUD {
 
         public boolean deleteAvisosLidos(int id) {
 
-            return DB.getWritableDatabase().delete(TABLE_AVISOS, "codigo_aviso=?"+id, null) > 0;
+            return DB.getWritableDatabase().delete(TABLE_AVISOS, "codigo=?"+id, null) > 0;
         }
 
 
@@ -740,7 +735,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_cliente", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("tipo", lista.get(1));
                     cv.put("razao_social", lista.get(2));
                     cv.put("nome_fantasia", lista.get(3));
@@ -1018,7 +1013,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_venda", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("codigo_empresa", lista.get(1));
                     cv.put("codigo_cliente", lista.get(2));
                     cv.put("codigo_tipo_cobranca", lista.get(3));
@@ -1067,7 +1062,6 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result = false;
             ContentValues cv = new ContentValues();
-            //DB.getWritableDatabase().beginTransaction();
 
             try{
                 for(int i = 0; i < lista.size(); i++){
@@ -1127,7 +1121,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_grupo", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -1369,7 +1363,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_usuario", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
                     cv.put("login", lista.get(2));
                     cv.put("senha", lista.get(3));
@@ -1400,7 +1394,7 @@ public class sonicDatabaseCRUD {
             String order2 = "";
             String vsswitch = "";
             if(vswitch){
-                vsswitch = " OR v.codigo = "+usuario_superior;
+                vsswitch = " OR u.codigo = "+usuario_superior;
             }
 
 
@@ -1420,15 +1414,15 @@ public class sonicDatabaseCRUD {
                     "u.codigo, " +
                     "u.nome, " +
                     "u.login, " +
-                    "nu.nome AS nivel_acesso, " +
+                    "na.nome AS nivel_acesso, " +
                     "u.meta, " +
                     "u.ativo " +
                     "FROM "+TABLE_USUARIOS+" u " +
-                    "JOIN "+TABLE_NIVEL_ACESSO+" nu " +
-                    "ON u.nivel_acesso=nu.nivel_acesso " +
+                    "JOIN "+TABLE_NIVEL_ACESSO+" na " +
+                    "ON u.nivel_acesso = na.nivel " +
                     "WHERE u.usuario_superior IN " +
-                    "(SELECT u.codigo FROM "+TABLE_USUARIOS+" v WHERE v.pessoa_superior = "+usuario_superior+") " +
-                    "OR v.pessoa_superior = "+usuario_superior+vsswitch+" ORDER BY "+order2;
+                    "(SELECT u.codigo FROM "+TABLE_USUARIOS+" u WHERE u.usuaario_superior = "+usuario_superior+") " +
+                    "OR u.usuario_superior = "+usuario_superior+vsswitch+" ORDER BY "+order2;
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(MY_QUERY, null);
 
@@ -1465,7 +1459,7 @@ public class sonicDatabaseCRUD {
                                 "u.imei, " +
                                 "u.nivel_acesso, " +
                                 "(SELECT u2.nome FROM "+TABLE_USUARIOS+" u2 WHERE u2.codigo = u.usuario_superior) AS usuario_superior, " +
-                                "(SELECT nu.nome FROM "+TABLE_NIVEL_ACESSO+" nu WHERE tu.nivel_acesso = u.nivel_acesso) AS cargo, " +
+                                "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = u.nivel_acesso) AS cargo, " +
                                 "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = u.codigo)) AS empresa " +
                                 " FROM "+TABLE_USUARIOS+" u WHERE u.ativo=1 ", null);
 
@@ -1501,18 +1495,15 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicUsuariosHolder> usuarios = new ArrayList<sonicUsuariosHolder>();
 
-            String MY_QUERY = "" +
-                    "SELECT " +
-                    "u.codigo_vendedor, " +
-                    "u.nome, " +
-                    "nu.nome AS cargo " +
-                    "FROM "+TABLE_USUARIOS+" u " +
-                    "JOIN "+TABLE_NIVEL_ACESSO+" nu " +
-                    "ON u.nivel_acesso=nu.nivel_acesso WHERE v.senha = '"+imei+"'";
-
             try{
 
-                Cursor cursor = DB.getReadableDatabase().rawQuery(MY_QUERY, null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery(
+                        "SELECT " +
+                                "tu.codigo, " +
+                                "tu.nome, " +
+                                "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = tu.nivel_acesso) AS cargo, " +
+                                "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa " +
+                                " FROM "+TABLE_USUARIOS+" tu WHERE tu.imei = '"+imei+"'", null);
 
                 while(cursor.moveToNext()){
 
@@ -1521,7 +1512,9 @@ public class sonicDatabaseCRUD {
                     usuario.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                     usuario.setNome(cursor.getString(cursor.getColumnIndex("nome")));
                     usuario.setCargo(cursor.getString(cursor.getColumnIndex("cargo")));
+                    usuario.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                     usuarios.add(usuario);
+
 
                 }
                 cursor.close();
@@ -1530,7 +1523,6 @@ public class sonicDatabaseCRUD {
                 DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
-
 
             return usuarios;
         }
@@ -1551,7 +1543,7 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public void setAtivo(String senha){
+        public void setAtivo(int codigo){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues args = new ContentValues();
@@ -1559,7 +1551,7 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                DB.getWritableDatabase().update(TABLE_USUARIOS, args, " senha = ?", new String[]{senha});
+                DB.getWritableDatabase().update(TABLE_USUARIOS, args, " codigo = "+codigo, null);
 
             }catch (SQLiteException e){
                 DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1718,12 +1710,11 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result = false;
             ContentValues cv = new ContentValues();
-            //DB.getWritableDatabase().beginTransaction();
 
             try {
                 for (int i = 0; i < lista.size(); i++) {
 
-                    cv.put("codigo_vendedor", lista.get(0));
+                    cv.put("codigo_usuario", lista.get(0));
                     cv.put("codigo_empresa", lista.get(1));
 					cv.put("meta", lista.get(2));
 
@@ -1897,7 +1888,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_PRODUTOS+" p WHERE p.codigo_empresa = (SELECT e.codigo_empresa FROM "+TABLE_EMPRESAS+" e WHERE e.selecionado=1)", null);
+                Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_PRODUTOS+" p WHERE p.codigo = (SELECT e.codigo FROM "+TABLE_EMPRESAS+" e WHERE e.selecionado=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                 DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -2981,7 +2972,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_grupo", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -3059,7 +3050,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_tabela", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -3093,7 +3084,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_tipo", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -3199,7 +3190,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_unidade", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
                     cv.put("sigla", lista.get(2));
 
@@ -3235,7 +3226,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_tipo", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
 
                 }
@@ -3340,7 +3331,7 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_prazo", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("nome", lista.get(1));
                     cv.put("prazo_venda", lista.get(2));
 
@@ -3487,7 +3478,7 @@ public class sonicDatabaseCRUD {
                             "l.codigo_vendedor," +
                             "u.login," +
                             "u.nome," +
-                            "tu.nome_acesso," +
+                            "na.nome_acesso," +
                             "l.data," +
                             "l.hora," +
                             "l.latitude," +
@@ -3495,8 +3486,8 @@ public class sonicDatabaseCRUD {
                             " FROM "+TABLE_LOCALIZACAO+" l "+
                             " JOIN "+TABLE_USUARIOS+" u " +
                             " ON l.codigo_vendedor = u.codigo" +
-                            " JOIN "+TABLE_NIVEL_ACESSO+" tu " +
-                            " ON tu.nivel_acesso = u.nivel_acesso ", null);
+                            " JOIN "+TABLE_NIVEL_ACESSO+" na " +
+                            " ON na.nivel = u.nivel_acesso ", null);
 
             while(cursor.moveToNext()){
 

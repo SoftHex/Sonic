@@ -21,41 +21,40 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/SplashAppTheme" >
+        android:theme="@style/SplashTheme" >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBs4N0SSafiqiazp7mQQUaOI1q97TnXayw" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/IntroTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".sonicSplash"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashAppTheme"/>
+            android:theme="@style/SplashTheme"/>
         <activity
             android:name=".sonicEmpresa"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashAppTheme"/>
+            android:theme="@style/SplashTheme"/>
         <activity
             android:name=".sonicFirstAccess"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashAppTheme"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".sonicAvisos"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashAppTheme"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".sonicMain"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashAppTheme"/>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

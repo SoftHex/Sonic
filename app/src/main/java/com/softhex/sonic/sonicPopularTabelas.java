@@ -93,27 +93,6 @@ public class sonicPopularTabelas {
 
                             }
 
-                            if ("[NIVEL_ACESSO]".equals(line)) {
-
-                                Log.d("NIVEL_ACESSO", "ENTROU");
-                                DBC.NivelAcesso.nivelAcesso();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.NivelAcesso.saveNivelAcesso(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
                             if ("[EMPRESAS]".equals(line)) {
 
                                 Log.d("EMPRESAS", "ENTROU");
@@ -129,6 +108,27 @@ public class sonicPopularTabelas {
                                     String str2 = str.substring(pos, len);
                                     List<String> data = Arrays.asList(str2.split(";"));
                                     result = DBC.Empresa.saveEmpresa(data);
+                                    line = reader.readLine();
+
+                                }
+
+                            }
+
+                            if ("[NIVEL_ACESSO]".equals(line)) {
+
+                                Log.d("NIVEL_ACESSO", "ENTROU");
+                                DBC.NivelAcesso.nivelAcesso();
+
+                                line = reader.readLine();
+
+                                while (line != null && line.indexOf("[") != 0) {
+
+                                    String str = line;
+                                    int pos = str.indexOf("=") + 1;
+                                    int len = str.length();
+                                    String str2 = str.substring(pos, len);
+                                    List<String> data = Arrays.asList(str2.split(";"));
+                                    result = DBC.NivelAcesso.saveNivelAcesso(data);
                                     line = reader.readLine();
 
                                 }
