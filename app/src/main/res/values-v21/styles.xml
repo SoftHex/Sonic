@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- DEFFAULT APP THEME -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:actionMenuTextColor">@color/colorTextDark</item>
+        <item name="android:itemTextAppearance">@color/colorTextDark</item>
+    </style>
+    <style name="SearchTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimaryDark">@color/colorPrimaryOrange</item>
+    </style>
+    <style name="FragmentTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimaryDark">@color/colorPrimaryBlue</item>
+    </style>
+    <style name="PreferenceAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+        <item name="android:actionMenuTextColor">@color/colorPrimaryWhite</item>
+    </style>
+    <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="android:windowBackground">@drawable/back6</item>
+    </style>
+    <style name="IntroTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+    </style>
+
+    <style name="ToolBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/colorPrimaryWhite</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryWhite</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
+        <item name="android:itemTextAppearance">@color/colorTextDark</item>
+        <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">16dp</item>
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="splashProgress" parent="Widget.AppCompat.ProgressBar.Horizontal">
+    </style>
+
+    <style name="logoTextEffect">
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
+        <item name="android:shadowColor">@color/colorPrimaryDark</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">0</item>
+        <item name="android:shadowRadius">0</item>
+    </style>
+
+    <style name="ToolbarSubtitleAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+</resources>
