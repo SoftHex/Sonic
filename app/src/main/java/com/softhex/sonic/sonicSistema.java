@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,21 +18,18 @@ import java.util.List;
 
 public class sonicSistema extends AppCompatActivity {
 
-    private Toolbar myToolbar;
-    private AppBarLayout myAppBar;
-    private ViewPagerAdapter myAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_sistema);
 
-        myToolbar = findViewById(R.id.toolbar);
+        Context _this = this;
+
+        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+        Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sistema");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -47,7 +45,7 @@ public class sonicSistema extends AppCompatActivity {
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        myAppBar = findViewById(R.id.appbar);
+        AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -60,7 +58,7 @@ public class sonicSistema extends AppCompatActivity {
     }
 
     public void setUpViewPager(ViewPager viewpager){
-        myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicSistemaFragLog(), "Sobre");
         myAdapter.addFragment(new sonicSistemaFragLog(), "Ajuda");
         myAdapter.addFragment(new sonicSistemaFragLog(), "Log");
@@ -72,7 +70,7 @@ public class sonicSistema extends AppCompatActivity {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        private ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -86,7 +84,7 @@ public class sonicSistema extends AppCompatActivity {
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        private void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
