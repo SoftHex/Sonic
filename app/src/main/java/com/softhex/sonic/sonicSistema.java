@@ -1,57 +1,32 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class sonicSistema extends AppCompatActivity {
 
     private Toolbar myToolbar;
-    private PendingIntent p;
-    private ActionBar myActionBar;
-    private ViewPager myViewPager;
-    private TabLayout myTabLayout;
     private AppBarLayout myAppBar;
     private ViewPagerAdapter myAdapter;
-    private sonicDatabaseCRUD DBC;
-    private Context myCtx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_sistema);
 
-        DBC = new sonicDatabaseCRUD(getApplication());
-
-        myCtx = this;
-
-        DBC = new sonicDatabaseCRUD(getApplication());
-
-        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sistema");
@@ -61,28 +36,19 @@ public class sonicSistema extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        //ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPager viewPager = findViewById(R.id.pager);
+
         setUpViewPager(viewPager);
 
-        //adapter.addFragment(new sonicSistemaFragLog(), "SOBRE");
-        //adapter.addFragment(new sonicSistemaFragLog(), "AJUDA");
-
-        //viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
         tabLayout.setupWithViewPager(viewPager);
 
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        myAppBar = (AppBarLayout)findViewById(R.id.appbar);
+        myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
-        //tabLayout.getTabAt(0).setIcon(R.mipmap.ic_download_white_48dp);
-        //tabLayout.getTabAt(1).setIcon(R.mipmap.ic_upload_white_48dp);
-
-        //setUpTabText();
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,16 +61,10 @@ public class sonicSistema extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicAvisosFragLidos(), "Sobre");
+        myAdapter.addFragment(new sonicSistemaFragLog(), "Sobre");
         myAdapter.addFragment(new sonicSistemaFragLog(), "Ajuda");
         myAdapter.addFragment(new sonicSistemaFragLog(), "Log");
         viewpager.setAdapter(myAdapter);
-
-    }
-
-
-    public void retorno(View v){
-        //DBC.Retorno.selectRetornoPedido(2);
 
     }
 
