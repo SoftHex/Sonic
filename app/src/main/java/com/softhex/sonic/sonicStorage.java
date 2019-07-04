@@ -15,7 +15,20 @@ import java.io.IOException;
 
 public class sonicStorage {
 
-    public void createFolder(Context ctx, String path){
+    private Context myCtx;
+
+    public sonicStorage (Context ctx) {
+        this.myCtx = ctx;
+
+    }
+
+    public sonicStorage show(Context ctx, String m) {
+        this.myCtx = ctx;
+        return show(ctx, m);
+
+    }
+
+    public void createFolder(String path){
 
         try {
 
@@ -33,7 +46,7 @@ public class sonicStorage {
 
     }
 
-    public void deleteFolder(Context ctx, String path){
+    public void deleteFolder(String path){
 
         try {
 
@@ -41,7 +54,7 @@ public class sonicStorage {
 
             if (folder.isDirectory())
                 for (File child : folder.listFiles())
-                    deleteFolder(ctx, path);
+                    deleteFolder(path);
 
             folder.delete();
 

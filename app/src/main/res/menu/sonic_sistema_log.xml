@@ -4,11 +4,16 @@
     tools:context="br.com.softhex.go.sonic_sistema">
 
     <item
-        android:id="@+id/avisos_search"
+        android:id="@+id/search"
         android:icon="@mipmap/ic_search_white_24dp"
         android:title=""
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
+    <item
+        android:id="@+id/delete"
+        android:icon="@mipmap/ic_delete_forever_white_24dp"
+        android:title=""
+        app:showAsAction="ifRoom|collapseActionView"/>
 
 </menu>

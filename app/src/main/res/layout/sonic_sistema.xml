@@ -21,7 +21,14 @@
             app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
             app:collapseIcon="@mipmap/ic_arrow_left_black_24dp"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:theme="@style/ToolBarTheme" />
+            android:theme="@style/ToolBarTheme"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill" />
 
     </android.support.design.widget.AppBarLayout>
 

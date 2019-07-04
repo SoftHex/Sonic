@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamAdapter;
 import java.io.File;
@@ -57,7 +56,7 @@ public class sonicFtp {
 
         try{
 
-            ftpClient.setConnectTimeout(10*1000);
+            ftpClient.setDataTimeout(10*1000);
             ftpClient.connect(server, 21);
 
             try{
@@ -72,17 +71,17 @@ public class sonicFtp {
 
                 }catch (IOException e){
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
 
             }catch (Exception e){
                 e.printStackTrace();
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-            DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }
 
         return result;
@@ -99,7 +98,7 @@ public class sonicFtp {
 
         }catch (Exception e){
             e.printStackTrace();
-            DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }
 
         return false;
@@ -129,7 +128,7 @@ public class sonicFtp {
                     }
 
                 };
-                ftpClient.setCopyStreamListener(streamListener);
+                //ftpClient.setCopyStreamListener(streamListener);
                 result = true;
             }
 
@@ -137,7 +136,7 @@ public class sonicFtp {
 
         }catch (Exception e){
             e.printStackTrace();
-            DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             return false;
 
         }
@@ -171,10 +170,10 @@ public class sonicFtp {
 
                 try{
 
-                    FTPFile f = ftpClient.mlistFile(strings[0]);
-                    Long size = f.getSize();
-                    final Long percent = size/1024;
-                    String sufix;
+                    //FTPFile f = ftpClient.mlistFile(strings[0]);
+                    //Long size = f.getSize();
+                    //final Long percent = size/1024;
+                    //String sufix;
 
                     /*CopyStreamAdapter streamListener = new CopyStreamAdapter() {
 
@@ -221,7 +220,7 @@ public class sonicFtp {
 
                 }catch (IOException e){
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     return false;
                 }
 

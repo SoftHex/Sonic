@@ -46,13 +46,25 @@
         <activity
             android:name=".sonicFirstAccess"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/SplashTheme"/>
         <activity
             android:name=".sonicAvisos"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".sonicMain"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".sonicMainConfiguracoes"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/PreferenceAppTheme"/>
+        <activity
+            android:name=".sonicSincronizacao"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".sonicSistema"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/AppTheme"/>
     </application>

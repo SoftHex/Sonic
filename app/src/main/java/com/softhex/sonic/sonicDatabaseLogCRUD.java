@@ -33,9 +33,9 @@ public class sonicDatabaseLogCRUD {
     }
 
 
-    LogErro logerro = new LogErro();
+    sonicDatabaseLogCRUD.Log Log = new Log();
 
-    class LogErro{
+    class Log {
 
         public long count(){
 
@@ -50,7 +50,7 @@ public class sonicDatabaseLogCRUD {
             return count;
         }
 
-        public boolean saveLogErro(String erro, String activity, String classe, String metodo){
+        public boolean saveLog(String erro, String activity, String classe, String metodo){
 
             ContentValues cv = new ContentValues();
             //Date today = new Date();
@@ -84,7 +84,7 @@ public class sonicDatabaseLogCRUD {
             return DB.getWritableDatabase().insert(TABLE_LOG_ERRO, null, cv)>0;
         }
 
-        public List<sonicSistemaLogHolder> selectErros(){
+        public List<sonicSistemaLogHolder> selectLog(){
             List<sonicSistemaLogHolder> erros = new ArrayList<sonicSistemaLogHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
@@ -131,7 +131,7 @@ public class sonicDatabaseLogCRUD {
             return log;
         }
 
-        public boolean cleanLogErro(){
+        public boolean cleanLog(){
 
             return DB.getWritableDatabase().delete(TABLE_LOG_ERRO, null, null)>0;
         }

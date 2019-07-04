@@ -19,12 +19,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
     private static final int REQUEST_PERMISSION = 10;
     private Button myRegister;
     private EditText myCode;
-    private sonicStorage myPath = new sonicStorage();
-    private sonicUtils myUtil;
-    private Snackbar mySnackBar;
-    private Context myCtx;
     private TextView myTest;
-    private sonicVerificarSite verSite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +32,21 @@ public class sonicEmpresa extends sonicRuntimePermission {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
-        myCtx = sonicEmpresa.this;
-        verSite = new sonicVerificarSite(myCtx);
-
-        myRegister = (Button)findViewById(R.id.registrar);
-        myCode = (EditText)findViewById(R.id.code);
-        myTest = (TextView)findViewById(R.id.teste);
+        myRegister = findViewById(R.id.registrar);
+        myCode = findViewById(R.id.code);
+        myTest = findViewById(R.id.teste);
 
         myTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myCtx = sonicEmpresa.this;
-                myUtil = new sonicUtils(view.getContext());
-                if(myUtil.Feedback.statusNetwork(myCtx)){
 
-                    verSite.validar("EMPRESA_TESTE", true);
+                if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()){
+
+                    new sonicVerificarSite(sonicEmpresa.this).validar("EMPRESA_TESTE", true);
 
                 }else{
 
-                    mySnackBar = Snackbar.make(view,"Verifique sua conexão com a internet...", Snackbar.LENGTH_SHORT);
-                    View sbView = mySnackBar.getView();
-                    sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDarkT));
-                    mySnackBar.show();
+                    new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
 
                 }
             }
@@ -69,28 +57,22 @@ public class sonicEmpresa extends sonicRuntimePermission {
             public void onClick(View view) {
 
                 hideKeyboard(view);
-                myUtil = new sonicUtils(myCtx);
 
-                if(myUtil.Feedback.statusNetwork(myCtx)) {
+                if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()) {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().equals(""))) {
 
-                        mySnackBar = Snackbar.make(view,"Código inválido...", Snackbar.LENGTH_SHORT);
-                        View sbView = mySnackBar.getView();
-                        sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDarkT));
-                        mySnackBar.show();
+                        new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Código inválido...");
 
                     } else {
 
-                        verSite.validar(myCode.getText().toString(), false);
+                        new sonicVerificarSite(sonicEmpresa.this).validar(myCode.getText().toString(), false);
+
                     }
 
                 }else{
 
-                    mySnackBar = Snackbar.make(view,"Verifique sua conexão com a internet...", Snackbar.LENGTH_SHORT);
-                    View sbView = mySnackBar.getView();
-                    sbView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDarkT));
-                    mySnackBar.show();
+                    new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
 
                 }
 
@@ -114,12 +96,11 @@ public class sonicEmpresa extends sonicRuntimePermission {
     @Override
     public void onPermissionGaranted(int requestCode) {
 
-        // SE HOUVER PERMISSÕES DE ARMAZENAMENTO CRIA-SE OS DIRETÓRIOS PADRÕES DO APP
-        myPath.createFolder(getApplication(), sonicConstants.LOCAL_IMG_CATALOGO);
-        myPath.createFolder(getApplication(), sonicConstants.LOCAL_IMG_CLIENTES);
-        myPath.createFolder(getApplication(), sonicConstants.LOCAL_IMG_PERFIL);
-        myPath.createFolder(getApplication(), sonicConstants.LOCAL_DATA_BACKUP);
-        myPath.createFolder(getApplication(), sonicConstants.LOCAL_TMP);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CATALOGO);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CLIENTES);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_PERFIL);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_DATA_BACKUP);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_TMP);
 
     }
 

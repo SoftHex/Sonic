@@ -15,7 +15,6 @@ import java.io.IOException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -65,9 +64,9 @@ public class sonicUtils {
 
     class Feedback{
 
-            public  boolean statusNetwork(Context ctx) {
+            public  boolean statusNetwork() {
                 boolean conectado;
-                ConnectivityManager conectivtyManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager conectivtyManager = (ConnectivityManager) myCtx.getSystemService(Context.CONNECTIVITY_SERVICE);
                 if (conectivtyManager.getActiveNetworkInfo() != null
                         && conectivtyManager.getActiveNetworkInfo().isAvailable()
                         && conectivtyManager.getActiveNetworkInfo().isConnected()) {
@@ -99,7 +98,7 @@ public class sonicUtils {
 
 
             }catch (Exception e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -126,7 +125,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -146,7 +145,7 @@ public class sonicUtils {
             }
 
             catch (Exception e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -188,7 +187,7 @@ public class sonicUtils {
 
                 Log.e("tag", e.getMessage());
 
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     e.printStackTrace();
 
             }
@@ -248,7 +247,7 @@ public class sonicUtils {
                 zis.close();
 
             }catch (IOException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
                 result = false;
@@ -553,16 +552,16 @@ public class sonicUtils {
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 } catch (IOException e) {
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }finally {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                        DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     }
                 }
             }
@@ -591,7 +590,7 @@ public class sonicUtils {
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
             }
 
@@ -630,14 +629,14 @@ public class sonicUtils {
                     } while(bis.read(buf) != -1);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 } finally {
                     try {
                         if (bis != null) bis.close();
                         if (bos != null) bos.close();
                     } catch (IOException e) {
                         e.printStackTrace();
-                        DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                        DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     }
                 }
 
@@ -666,7 +665,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -699,7 +698,7 @@ public class sonicUtils {
 
 
             }catch (Exception e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -724,7 +723,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -751,7 +750,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -773,7 +772,7 @@ public class sonicUtils {
                 String ano = ano_.substring(4,8);
                 data_completa = ano+mes+dia;
             }catch (Exception e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -798,7 +797,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -824,7 +823,7 @@ public class sonicUtils {
             }catch (Exception e){
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -851,7 +850,7 @@ public class sonicUtils {
 
 
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }
@@ -986,7 +985,7 @@ public class sonicUtils {
 
             }catch (Exception e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 e.printStackTrace();
             }

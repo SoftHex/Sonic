@@ -645,7 +645,7 @@ public class sonicPopularTabelas {
                     }catch (Exception e){
 
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
 
                 }
 

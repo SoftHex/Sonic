@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.TextView;
+
 import cn.refactor.lib.colordialog.ColorDialog;
 import cn.refactor.lib.colordialog.PromptDialog;
 
@@ -23,11 +25,7 @@ public class sonicThrowMessage {
     public sonicThrowMessage(Context ctx){
         this.myCtx = ctx;
     }
-    /*
-    **  int type: 0 = DEFAULT, 1 = SUCCESS, 2 = INFO, 3 = WARNING, 4 = HELP, 5 = WRONG
-    **  string title:
-    **  string message:
-     */
+
     public void showMessage(final String title, final String msg, final int type){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -94,15 +92,18 @@ public class sonicThrowMessage {
 
     }
 
-    public void showSnackBar(final String msg, final View v){
+    public void showSnackBar( final View v, final String msg){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
 
-                mySnackBar = Snackbar.make(v,"Verifique sua conexão com a internet...", Snackbar.LENGTH_SHORT);
+                mySnackBar = Snackbar.make(v,msg, Snackbar.LENGTH_SHORT);
                 View sbView = mySnackBar.getView();
+                int snackbarTextId = android.support.design.R.id.snackbar_text;
+                TextView textView = (TextView)sbView.findViewById(snackbarTextId);
                 sbView.setBackgroundColor(myCtx.getResources().getColor(R.color.colorPrimaryDarkT));
+                textView.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryWhite));
                 mySnackBar.show();
 
             }

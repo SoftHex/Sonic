@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- DEFFAULT APP THEME -->
@@ -5,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorSecondary">@color/colorTextPrimary</item>
         <item name="android:windowBackground">@color/colorPrimaryWhite</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorTextDark</item>
@@ -69,5 +71,6 @@
         <item name="android:textColor">@color/colorPrimaryWhite</item>
         <item name="android:textSize">20sp</item>
     </style>
+
 
 </resources>

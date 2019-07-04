@@ -76,7 +76,7 @@ public class sonicConstants {
     public static String FTP_PASS = "@sonic@";
     public static final String FTP_PC_SONIC = "PC_SONIC/";
     public static final String FTP_SONIC_PC = "SONIC_PC/";
-    public static final String FTP_VENDEDORES = "PC_SONIC/VENDEDORES/";
+    public static final String FTP_USUARIOS = "PC_SONIC/USUARIOS/";
     public static final String FTP_IMAGENS = "PC_SONIC/IMAGENS/";
     public static final String FTP_ESTOQUE = "PC_SONIC/ESTOQUE/";
     public static final String FTP_LOCALIZACAO = "PC_SONIC/LOCALIZACAO/";

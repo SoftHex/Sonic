@@ -139,7 +139,7 @@ public class sonicDatabaseCRUD {
                     Log.d("TABLE_E_USUARIOS", result.toString());
                 }catch (SQLiteException e){
                     e.printStackTrace();
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
 
             return result;
@@ -163,7 +163,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -193,7 +193,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
 
@@ -230,7 +230,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -303,7 +303,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -330,7 +330,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -352,7 +352,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -371,7 +371,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -394,7 +394,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -467,7 +467,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESAS, args, null, null);
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -487,7 +487,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESAS, args, null, null);
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -508,7 +508,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESAS, args, "codigo_empresa="+codigo, null);
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -537,7 +537,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -563,7 +563,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_AVISOS);
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -580,7 +580,7 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = db.rawQuery("SELECT _id FROM "+TABLE_AVISOS+" WHERE codigo NOT IN (SELECT DISTINCT(codigo) FROM "+TABLE_AVISOS_LIDOS+")", null);;
                 count = cursor.getCount();
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -647,7 +647,7 @@ public class sonicDatabaseCRUD {
 
             } catch (SQLiteException e) {
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -668,7 +668,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_AVISOS_LIDOS, null, cv) > 0;
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -698,7 +698,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -718,7 +718,7 @@ public class sonicDatabaseCRUD {
                     Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_CLIENTES+" p WHERE p.codigo_empresa = (SELECT e.codigo_empresa FROM "+TABLE_EMPRESAS+" e WHERE e.selecionado=1)", null);
                     count = cursor.getCount();
                 } catch (SQLiteException e) {
-                    DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
 
@@ -761,7 +761,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -785,7 +785,7 @@ public class sonicDatabaseCRUD {
                     DB.getWritableDatabase().update(TABLE_CLIENTES, args, " codigo_cliente = "+codigo, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -803,7 +803,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_CLIENTES, args, null, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -821,7 +821,7 @@ public class sonicDatabaseCRUD {
                     result = true;
                 }
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -911,7 +911,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
             Log.v("LOG", clientes.size()+"");
@@ -979,7 +979,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1025,7 +1025,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_VENDAS, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1050,7 +1050,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_VENDAS_ITENS);
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1079,7 +1079,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_VENDAS_ITENS, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1105,7 +1105,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_GRUPO_CLIENTES);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1129,7 +1129,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_GRUPO_CLIENTES, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1177,7 +1177,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_CLIENTES);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1205,7 +1205,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_RANKING_CLIENTES, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1275,7 +1275,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES_SEM_COMPRA);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1299,7 +1299,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_CLIENTES_SEM_COMPRA, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1346,7 +1346,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_USUARIOS);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1376,7 +1376,7 @@ public class sonicDatabaseCRUD {
                 result =  DB.getWritableDatabase().insert(TABLE_USUARIOS, null, cv)>0;
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1483,7 +1483,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1520,7 +1520,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1536,7 +1536,7 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT u.codigo FROM "+TABLE_USUARIOS+" u WHERE u.ativo = 1", null);
                 result = cursor.moveToFirst();
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
             return result;
@@ -1554,7 +1554,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_USUARIOS, args, " codigo = "+codigo, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1571,7 +1571,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_USUARIOS, args, null, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1593,7 +1593,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_HITORICO_USUARIO);
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1628,7 +1628,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_HITORICO_USUARIO, null, cv) > 0;
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1723,7 +1723,7 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_EMPRESAS_USUARIOS, null, cv) > 0;
 
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1748,7 +1748,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_SINCRONIZACAO);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1774,7 +1774,7 @@ public class sonicDatabaseCRUD {
                 cv.put("hora_sinc", hora_atual);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1804,7 +1804,7 @@ public class sonicDatabaseCRUD {
 
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1827,7 +1827,7 @@ public class sonicDatabaseCRUD {
 
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1850,7 +1850,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1871,7 +1871,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_PRODUTOS);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1891,7 +1891,7 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_PRODUTOS+" p WHERE p.codigo = (SELECT e.codigo FROM "+TABLE_EMPRESAS+" e WHERE e.selecionado=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1906,7 +1906,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_PRODUTOS);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1937,7 +1937,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1969,7 +1969,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1998,7 +1998,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_PRODUTOS, args, " codigo_produto = "+codigo, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2016,7 +2016,7 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_PRODUTOS, args, null, null);
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2237,7 +2237,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2293,7 +2293,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2357,7 +2357,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULOS);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2372,7 +2372,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULOS, "codigo_cliente="+cliente+" AND situacao="+situacao);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2400,7 +2400,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2434,7 +2434,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2552,7 +2552,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RETORNO_PEDIDO);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2699,7 +2699,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RETORNO_PEDIDO, "situacao="+situacao+" AND data_pedido "+data);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2732,7 +2732,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2762,7 +2762,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -2981,7 +2981,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3029,7 +3029,7 @@ public class sonicDatabaseCRUD {
 
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -3059,7 +3059,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3093,7 +3093,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3128,7 +3128,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3164,7 +3164,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3200,7 +3200,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3235,7 +3235,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3270,7 +3270,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3305,7 +3305,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3341,7 +3341,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3376,7 +3376,7 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -3407,7 +3407,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -3431,7 +3431,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_LOCALIZACAO);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -3456,7 +3456,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -3521,7 +3521,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_LOG_ERRO);
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -3540,7 +3540,7 @@ public class sonicDatabaseCRUD {
                     log = cursor.getString(cursor.getColumnIndex("log"));
                 }
             }catch (SQLiteException e){
-                DBCL.logerro.saveLogErro(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
             return log;

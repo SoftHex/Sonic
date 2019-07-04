@@ -21,7 +21,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.ViewUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +31,8 @@ import android.widget.Toast;
 import com.flyco.dialog.entity.DialogMenuItem;
 import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalListDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -52,8 +53,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
+import co.mobiwise.materialintro.MaterialIntroConfiguration;
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.view.MaterialIntroView;
 import eu.long1.spacetablayout.SpaceTabLayout;
+
 
 public class sonicMain extends AppCompatActivity{
 
@@ -66,7 +71,6 @@ public class sonicMain extends AppCompatActivity{
     private Intent i;
     private Toolbar myToolbar;
     private ActionBar myActionBar;
-    private sonicStorage path = new sonicStorage();
     private ViewPager myViewPager;
     private ViewPagerAdapter myAdapter;
     private sonicConstants myCons;
@@ -83,10 +87,27 @@ public class sonicMain extends AppCompatActivity{
     private String usuarioCargo;
     private int usuarioId;
     private int usuarioNivelAcesso;
-
-
     private boolean empSelecioanada;
     private Boolean allowHomeUpdate = false;
+    private PrimaryDrawerItem myDrawerSincronizar;
+    private PrimaryDrawerItem myDrawerAvisos;
+    private PrimaryDrawerItem myDrawerClientes;
+    private PrimaryDrawerItem myDrawerProdutos;
+    private PrimaryDrawerItem myDrawerPedidos;
+    private PrimaryDrawerItem myDrawerRetorno;
+    private PrimaryDrawerItem myDrawerTitulos;
+    private PrimaryDrawerItem myDrawerRota;
+    private PrimaryDrawerItem myDrawerVendedores;
+    private ExpandableDrawerItem myDrawerRelatorios;
+    private PrimaryDrawerItem myDrawerSistema;
+    private PrimaryDrawerItem myDrawerRedefinir;
+    private PrimaryDrawerItem myDrawerExportar;
+    private SecondaryDrawerItem myDrawerRankingClientes;
+    private SecondaryDrawerItem myDrawerRankingProdutos;
+    private SecondaryDrawerItem myDrawerClientesSemCompraa;
+    private SecondaryDrawerItem myDrawerPremiacoes;
+    List<sonicEmpresasHolder> listaEmpresa;
+    MaterialIntroConfiguration config = new MaterialIntroConfiguration();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,349 +130,6 @@ public class sonicMain extends AppCompatActivity{
         usuarioCargo = listaUser.get(0).getCargo();
         usuarioNivelAcesso = listaUser.get(0).getNivelAcessoId();
 
-        List<sonicEmpresasHolder> listaEmpresa = new ArrayList<sonicEmpresasHolder>();
-        listaEmpresa = DBC.Empresa.empresasUsuarios();
-
-        ImageView v = new ImageView(this);
-
-        myHeader = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.company)
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-
-                        if(!currentProfile) {
-                            setEmpresa(profile.getIdentifier());
-                            // ATUALIZA A BADGE DE CLIENTES
-                            new myAssyncTask().execute(3);
-                            // ATUALIZA A BADGE DE PRODUTOS
-                            new myAssyncTask().execute(4);
-                            //refreshHomeFragment();
-                        }
-
-                        return true;
-                    }
-
-                })
-                .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
-                    @Override
-                    public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
-
-                        if(current){
-                            Intent i = new Intent(Intent.ACTION_PICK);
-                            File picture = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                            String path = picture.getPath();
-
-                            i.setDataAndType(Uri.parse(path), "image/*");
-
-                            startActivityForResult(i, IMAGE_GALLERY_REQUEST);
-                        }
-
-                        return false;
-                    }
-                })
-                .build();
-
-        for (int i = 0; i< listaEmpresa.size(); i++)
-
-            {
-
-                File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
-
-                if(i<3){
-
-                    if(file.exists()){
-                        myHeader.addProfiles(
-                                new ProfileDrawerItem()
-                                        .withName(usuarioNome +" ("+ usuarioCargo +")")
-                                        .withEmail(listaEmpresa.get(i).getNomeFantasia())
-                                        .withIcon(file.toString())
-                                        .withIdentifier(listaEmpresa.get(i).getCodigo())
-                                    );
-                        }else{
-
-                        myHeader.addProfiles(
-                                new ProfileDrawerItem()
-                                        .withName(usuarioNome +" ("+ usuarioCargo +")")
-                                        .withEmail(listaEmpresa.get(i).getNomeFantasia())
-                                        .withIcon(getResources().getDrawable(R.drawable.no_profile))
-                                        .withIdentifier(listaEmpresa.get(i).getCodigo())
-                                    );
-
-                        }
-
-                    }
-           }
-
-        // CRIAÇÃO DOS ITENS DO MENU
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem()
-                .withIdentifier(1)
-                .withName(R.string.sincronizarTitulo)
-                .withDescription(R.string.sincronizarSubTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_sync_grey600_24dp));
-
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem()
-                    .withIdentifier(2)
-                    .withName(R.string.avisosTitulo)
-                    .withDescription(R.string.avisosSubTitulo)
-                    .withSelectable(false)
-                    .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700).withCornersDp(20).withPadding(2))
-                    //.withBadge("100")//.withBadgeStyle(new BadgeStyle().withColor(sonicMain.this.getResources().getColor( R.color.chart_red)).withCornersDp(15).withPadding(2))
-                .withIcon(getResources().getDrawable(R.mipmap.ic_message_text_grey600_24dp));
-
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem()
-                .withIdentifier(3)
-                .withName(R.string.clientesTitulo)
-                .withDescription(R.string.clientesSubTitulo)
-                .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
-                .withIcon(getResources().getDrawable(R.mipmap.ic_account_multiple_grey600_24dp));
-
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem()
-                .withIdentifier(4)
-                .withName(R.string.produtosTitulo)
-                .withDescription(R.string.produtosSubTitulo)
-                .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
-                .withIcon(getResources().getDrawable(R.mipmap.ic_cube_grey600_24dp));
-
-        PrimaryDrawerItem item5 = new PrimaryDrawerItem()
-                .withIdentifier(5)
-                .withName(R.string.pedidosTitulo)
-                .withDescription(R.string.pedidosSubTitulo)
-                .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withPaddingTopBottomDp(10))
-                .withIcon(getResources().getDrawable(R.mipmap.ic_cart_grey600_24dp));
-
-        PrimaryDrawerItem item6 = new PrimaryDrawerItem()
-                .withIdentifier(6)
-                .withName(R.string.retornoTitulo)
-                .withDescription(R.string.relatoriosSubTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_rotate_3d_grey600_24dp));
-
-        PrimaryDrawerItem item7 = new PrimaryDrawerItem()
-                .withIdentifier(7)
-                .withName(R.string.titulosTitulo)
-                .withDescription(R.string.titulosSubTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable( R.mipmap.ic_coin_grey600_24dp));
-
-        PrimaryDrawerItem item8 = new PrimaryDrawerItem()
-                .withIdentifier(8)
-                .withName(R.string.rotaTitulo)
-                .withDescription(R.string.rotaSubTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_map_marker_radius_grey600_24dp));
-
-        PrimaryDrawerItem item9 = new PrimaryDrawerItem()
-                .withIdentifier(9)
-                .withName(R.string.vendedoresTitulo)
-                .withDescription(R.string.vendedoresSubTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_account_tie_grey600_24dp));
-
-        ExpandableDrawerItem item10 = new ExpandableDrawerItem()
-                .withIdentifier(10)
-                .withName(R.string.relatoriosTitulo)
-                .withDescription(R.string.relatoriosSubTitulo)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_finance_grey600_24dp))
-                .withIsExpanded(false)
-                .withSelectable(false)
-                .withSubItems(
-                        new SecondaryDrawerItem()
-                                .withIdentifier(14)
-                                .withSelectable(false)
-                                .withName(R.string.rankingClientes).withLevel(2)
-                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
-                        new SecondaryDrawerItem()
-                                .withIdentifier(15)
-                                .withSelectable(false)
-                                .withName(R.string.rankingProdutos).withLevel(2)
-                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
-                        new SecondaryDrawerItem()
-                                .withIdentifier(16)
-                                .withSelectable(false)
-                                .withName(R.string.clientesSemCompra).withLevel(2)
-                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
-                        new SecondaryDrawerItem()
-                                .withIdentifier(17)
-                                .withSelectable(false)
-                                .withName(R.string.premiacoes).withLevel(2)
-                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp)
-                                                /*.withIcon(getResources().getDrawable(R.mipmap.ic_settings_black_24dp))*/
-                                );
-
-        PrimaryDrawerItem item11 = new PrimaryDrawerItem()
-                .withIdentifier(11)
-                .withName(R.string.sistemaTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_information_grey600_24dp));
-
-        PrimaryDrawerItem item12 = new PrimaryDrawerItem()
-                .withIdentifier(12)
-                .withName(R.string.redefinirTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_wrench_grey600_24dp));
-
-        PrimaryDrawerItem item13 = new PrimaryDrawerItem()
-                .withIdentifier(13)
-                .withName("Sair")
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_power_grey600_24dp));
-
-        PrimaryDrawerItem item18 = new PrimaryDrawerItem()
-                .withIdentifier(18)
-                .withName("Exportar")
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_database_export_grey600_24dp));
-
-        myDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(myToolbar)
-                .withAccountHeader(myHeader)
-                .withSelectedItem(-1)
-                .withOnDrawerListener(new Drawer.OnDrawerListener() {
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-
-                        // AVISOS
-                        //new myAssyncTask().execute(2,null,2);
-                        // PRODUTOS
-                        //new myAssyncTask().execute(4,null,4);
-
-                        /*int result = DBC.Avisos.countNaoLidos();
-                        if(result != avisoNaoLido) {
-
-                            if(result>0){
-                                updateBadge(result + "", 2);
-                            }else{
-                                updateBadge(null, 2);
-                            }
-
-                        }
-
-                        avisoNaoLido = result;*/
-
-                    }
-
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-
-                    }
-
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                    }
-
-                })
-                //.addStickyDrawerItems(
-                //        item13
-                //)
-                .addDrawerItems(
-                        item1,
-                        item2,
-                        new SectionDrawerItem().withName(R.string.inicioTitulo),
-                        item3,
-                        item4,
-                        item5,
-                        item6,
-                        item7,
-                        item8,
-                        item9,
-                        new SectionDrawerItem().withName(R.string.relatoriosTitulo),
-                        item10,
-                        new SectionDrawerItem().withName(R.string.extraTitulo),
-                        item11,
-                        item12,
-                        item18
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        // do something with the clicked item :D
-                        switch (view.getId()){
-                            case 1:
-                                //i = new Intent(sonicMain.this, sonicSincronizacao.class);
-                                //startActivity(i);
-                                break;
-                            case 2:
-                                //i = new Intent(sonicMain.this, sonicAvisos.class);
-                                //startActivity(i);
-                                break;
-                            case 3:
-                                //i = new Intent(sonicMain.this, sonicClientes.class);
-                                //startActivity(i);
-                                break;
-                            case 4:
-                                //i = new Intent(sonicMain.this, sonicProdutos.class);
-                                //startActivity(i);
-                                break;
-                            case 5:
-                                //i = new Intent(sonicMain.this, go_pedido.class);
-                                //startActivity(i);
-                                break;
-                            case 6:
-                                //i = new Intent(sonicMain.this, sonicRetorno.class);
-                                //startActivity(i);
-                                break;
-                            case 7:
-                                //i = new Intent(sonicMain.this, sonicTitulos.class);
-                                //startActivity(i);
-                                break;
-                            case 9:
-                                //i = new Intent(sonicMain.this, sonicVendedores.class);
-                                //startActivity(i);
-                                //normalListDialogNoTitle("MENU");
-                                break;
-                            case 11:
-                                //i = new Intent(sonicMain.this, sonicSistema.class);
-                                //startActivity(i);
-                                //border_bottom();
-                                break;
-                            case 12:
-                                mensagem();
-                                //normalListDialogNoTitle("MENU");
-                                break;
-                            case 13:
-                                SharedPreferences.Editor check = pref.edit();
-                                check.putBoolean("KEEP_PASS", false);
-                                check.apply();
-                                finish();
-                                break;
-                            case 14:
-                                //i = new Intent(sonicMain.this, sonicRankingClientes.class);
-                                //startActivity(i);
-                                break;
-                            case 15:
-                                //i = new Intent(sonicMain.this, sonicRankingProdutos.class);
-                                //startActivity(i);
-                                break;
-                            case 16:
-                                //i = new Intent(sonicMain.this, sonicClientesSemCompra.class);
-                                //startActivity(i);
-                                break;
-                            case 18:
-                                exportDataBase();
-                                break;
-
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
-
-                })
-                .build();
 
         // ATUALIZA A BADGE DE AVISOS
         new myAssyncTask().execute(2);
@@ -499,6 +177,350 @@ public class sonicMain extends AppCompatActivity{
 
             }
         });
+
+        createDrawerMenu();
+
+    }
+
+    public void createDrawerMenu(){
+
+        listaEmpresa = DBC.Empresa.empresasUsuarios();
+
+        myHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.company)
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+
+                        if(!currentProfile) {
+                            setEmpresa(profile.getIdentifier());
+                            new myAssyncTask().execute(3);
+                            new myAssyncTask().execute(4);
+                        }
+
+                        return true;
+                    }
+
+                })
+                .withOnAccountHeaderProfileImageListener(new AccountHeader.OnAccountHeaderProfileImageListener() {
+                    @Override
+                    public boolean onProfileImageClick(View view, IProfile profile, boolean current) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onProfileImageLongClick(View view, IProfile profile, boolean current) {
+
+                        if(current){
+                            Intent i = new Intent(Intent.ACTION_PICK);
+                            File picture = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                            String path = picture.getPath();
+
+                            i.setDataAndType(Uri.parse(path), "image/*");
+
+                            startActivityForResult(i, IMAGE_GALLERY_REQUEST);
+                        }
+
+                        return false;
+                    }
+                })
+                .build();
+
+        for (int i = 0; i< listaEmpresa.size(); i++)
+
+        {
+
+            File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
+
+            if(i<3){
+
+                if(file.exists()){
+                    myHeader.addProfiles(
+                            new ProfileDrawerItem()
+                                    .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                    .withEmail(listaEmpresa.get(i).getNomeFantasia())
+                                    .withIcon(file.toString())
+                                    .withIdentifier(listaEmpresa.get(i).getCodigo())
+                    );
+                }else{
+
+                    myHeader.addProfiles(
+                            new ProfileDrawerItem()
+                                    .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                    .withEmail(listaEmpresa.get(i).getNomeFantasia())
+                                    .withIcon(getResources().getDrawable(R.drawable.no_profile))
+                                    .withIdentifier(listaEmpresa.get(i).getCodigo())
+                    );
+
+                }
+
+            }
+        }
+
+        myDrawerSincronizar = new PrimaryDrawerItem()
+                .withIdentifier(1)
+                .withName(R.string.sincronizarTitulo)
+                .withDescription(R.string.sincronizarSubTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_sync_grey600_24dp));
+
+        myDrawerAvisos = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.avisosTitulo)
+                .withDescription(R.string.avisosSubTitulo)
+                .withSelectable(false)
+                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700).withCornersDp(20).withPadding(2))
+                //.withBadge("100")//.withBadgeStyle(new BadgeStyle().withColor(sonicMain.this.getResources().getColor( R.color.chart_red)).withCornersDp(15).withPadding(2))
+                .withIcon(getResources().getDrawable(R.mipmap.ic_message_text_grey600_24dp));
+
+        myDrawerClientes = new PrimaryDrawerItem()
+                .withIdentifier(3)
+                .withName(R.string.clientesTitulo)
+                .withDescription(R.string.clientesSubTitulo)
+                .withSelectable(false)
+                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
+                .withIcon(getResources().getDrawable(R.mipmap.ic_account_multiple_grey600_24dp));
+
+        myDrawerProdutos = new PrimaryDrawerItem()
+                .withIdentifier(4)
+                .withName(R.string.produtosTitulo)
+                .withDescription(R.string.produtosSubTitulo)
+                .withSelectable(false)
+                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
+                .withIcon(getResources().getDrawable(R.mipmap.ic_cube_grey600_24dp));
+
+        myDrawerPedidos = new PrimaryDrawerItem()
+                .withIdentifier(5)
+                .withName(R.string.pedidosTitulo)
+                .withDescription(R.string.pedidosSubTitulo)
+                .withSelectable(false)
+                .withBadge("").withBadgeStyle(new BadgeStyle().withPaddingTopBottomDp(10))
+                .withIcon(getResources().getDrawable(R.mipmap.ic_cart_grey600_24dp));
+
+        myDrawerRetorno = new PrimaryDrawerItem()
+                .withIdentifier(6)
+                .withName(R.string.retornoTitulo)
+                .withDescription(R.string.relatoriosSubTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_rotate_3d_grey600_24dp));
+
+        myDrawerTitulos = new PrimaryDrawerItem()
+                .withIdentifier(7)
+                .withName(R.string.titulosTitulo)
+                .withDescription(R.string.titulosSubTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable( R.mipmap.ic_coin_grey600_24dp));
+
+        myDrawerRota = new PrimaryDrawerItem()
+                .withIdentifier(8)
+                .withName(R.string.rotaTitulo)
+                .withDescription(R.string.rotaSubTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_map_marker_radius_grey600_24dp));
+
+        myDrawerVendedores = new PrimaryDrawerItem()
+                .withIdentifier(9)
+                .withName(R.string.vendedoresTitulo)
+                .withDescription(R.string.vendedoresSubTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_account_tie_grey600_24dp));
+
+        myDrawerRelatorios = new ExpandableDrawerItem()
+                .withIdentifier(10)
+                .withName(R.string.relatoriosTitulo)
+                .withDescription(R.string.relatoriosSubTitulo)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_finance_grey600_24dp))
+                .withIsExpanded(false)
+                .withSelectable(false)
+                .withSubItems(
+                        myDrawerRankingClientes =  new SecondaryDrawerItem()
+                                .withIdentifier(14)
+                                .withSelectable(false)
+                                .withName(R.string.rankingClientes).withLevel(2)
+                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
+                        myDrawerRankingProdutos = new SecondaryDrawerItem()
+                                .withIdentifier(15)
+                                .withSelectable(false)
+                                .withName(R.string.rankingProdutos).withLevel(2)
+                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
+                        myDrawerClientesSemCompraa = new SecondaryDrawerItem()
+                                .withIdentifier(16)
+                                .withSelectable(false)
+                                .withName(R.string.clientesSemCompra).withLevel(2)
+                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
+                        myDrawerPremiacoes = new SecondaryDrawerItem()
+                                .withIdentifier(17)
+                                .withSelectable(false)
+                                .withName(R.string.premiacoes).withLevel(2)
+                                .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp)
+                        /*.withIcon(getResources().getDrawable(R.mipmap.ic_settings_black_24dp))*/
+                );
+
+        myDrawerSistema = new PrimaryDrawerItem()
+                .withIdentifier(11)
+                .withName(R.string.sistemaTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_information_grey600_24dp));
+
+        myDrawerRedefinir = new PrimaryDrawerItem()
+                .withIdentifier(12)
+                .withName(R.string.redefinirTitulo)
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_wrench_grey600_24dp));
+
+        PrimaryDrawerItem item13 = new PrimaryDrawerItem()
+                .withIdentifier(13)
+                .withName("Sair")
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_power_grey600_24dp));
+
+        myDrawerExportar = new PrimaryDrawerItem()
+                .withIdentifier(18)
+                .withName("Exportar")
+                .withSelectable(false)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_database_export_grey600_24dp));
+
+        myDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(myToolbar)
+                .withAccountHeader(myHeader)
+                .withSelectedItem(-1)
+                .withShowDrawerUntilDraggedOpened(false)
+                .withOnDrawerListener(new Drawer.OnDrawerListener() {
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+
+                        // AVISOS
+                        //new myAssyncTask().execute(2,null,2);
+                        // PRODUTOS
+                        //new myAssyncTask().execute(4,null,4);
+
+                        /*int result = DBC.Avisos.countNaoLidos();
+                        if(result != avisoNaoLido) {
+
+                            if(result>0){
+                                updateBadge(result + "", 2);
+                            }else{
+                                updateBadge(null, 2);
+                            }
+
+                        }
+
+                        avisoNaoLido = result;*/
+
+                    }
+
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+
+                    }
+
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    }
+
+                })
+                //.addStickyDrawerItems(
+                        //myDrawerAvisos
+                //)
+                .addDrawerItems(
+                        myDrawerSincronizar,
+                        myDrawerAvisos,
+                        new SectionDrawerItem().withName(R.string.inicioTitulo),
+                        myDrawerClientes,
+                        myDrawerProdutos,
+                        myDrawerPedidos,
+                        myDrawerRetorno,
+                        myDrawerTitulos,
+                        myDrawerRota,
+                        myDrawerVendedores,
+                        new SectionDrawerItem().withName(R.string.relatoriosTitulo),
+                        myDrawerRelatorios,
+                        new SectionDrawerItem().withName(R.string.extraTitulo),
+                        myDrawerSistema,
+                        myDrawerRedefinir,
+                        myDrawerExportar
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+                        switch (view.getId()){
+                            case 1:
+                                //i = new Intent(sonicMain.this, sonicSincronizacao.class);
+                                //startActivity(i);
+                                break;
+                            case 2:
+                                i = new Intent(sonicMain.this, sonicAvisos.class);
+                                startActivity(i);
+                                break;
+                            case 3:
+                                //i = new Intent(sonicMain.this, sonicClientes.class);
+                                //startActivity(i);
+                                break;
+                            case 4:
+                                //i = new Intent(sonicMain.this, sonicProdutos.class);
+                                //startActivity(i);
+                                break;
+                            case 5:
+                                //i = new Intent(sonicMain.this, go_pedido.class);
+                                //startActivity(i);
+                                break;
+                            case 6:
+                                //i = new Intent(sonicMain.this, sonicRetorno.class);
+                                //startActivity(i);
+                                break;
+                            case 7:
+                                //i = new Intent(sonicMain.this, sonicTitulos.class);
+                                //startActivity(i);
+                                break;
+                            case 9:
+                                //i = new Intent(sonicMain.this, sonicVendedores.class);
+                                //startActivity(i);
+                                //normalListDialogNoTitle("MENU");
+                                break;
+                            case 11:
+                                i = new Intent(sonicMain.this, sonicSistema.class);
+                                startActivity(i);
+                                //border_bottom();
+                                break;
+                            case 12:
+                                mensagem();
+                                //normalListDialogNoTitle("MENU");
+                                break;
+                            case 13:
+                                SharedPreferences.Editor check = pref.edit();
+                                check.putBoolean("KEEP_PASS", false);
+                                check.apply();
+                                finish();
+                                break;
+                            case 14:
+                                //i = new Intent(sonicMain.this, sonicRankingClientes.class);
+                                //startActivity(i);
+                                break;
+                            case 15:
+                                //i = new Intent(sonicMain.this, sonicRankingProdutos.class);
+                                //startActivity(i);
+                                break;
+                            case 16:
+                                //i = new Intent(sonicMain.this, sonicClientesSemCompra.class);
+                                //startActivity(i);
+                                break;
+                            case 18:
+                                exportDataBase();
+                                break;
+
+                            default:
+                                break;
+                        }
+                        return false;
+                    }
+
+                })
+                .build();
 
     }
 
@@ -567,7 +589,7 @@ public class sonicMain extends AppCompatActivity{
 
     public void updateBadge( int id, String badge){
 
-        myDrawer.updateBadge(id, new StringHolder(badge));
+        //myDrawer.updateBadge(id, new StringHolder(badge));
 
     }
 
@@ -599,9 +621,9 @@ public class sonicMain extends AppCompatActivity{
             super.onPostExecute(integers);
 
             if(integers[1]>0){
-                updateBadge(integers[0],integers[1]+"");
+                //updateBadge(integers[0],integers[1]+"");
             }else {
-                updateBadge(integers[0], null);
+                //updateBadge(integers[0], null);
             }
 
         }
@@ -667,9 +689,15 @@ public class sonicMain extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.sonic_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override
@@ -695,9 +723,9 @@ public class sonicMain extends AppCompatActivity{
 
 
     public void mensagem(){
-        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setIcon(@)
-        //builder.setMessage(R.string.go_sure).setPositiveButton(R.string.botaoSim, dialogClickListener).setNegativeButton(R.string.botaoNao, dialogClickListener).show();
+        builder.setMessage(R.string.go_sure).setPositiveButton("SIM", dialogClickListener).setNegativeButton("NÃO", dialogClickListener).show();
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -707,7 +735,7 @@ public class sonicMain extends AppCompatActivity{
                 case DialogInterface.BUTTON_POSITIVE:
                     sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(getApplicationContext());
                     DBC.Database.truncateAllTables();
-                    path.deleteFiles(sonicConstants.LOCAL_TMP);
+                    new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TMP);
                     clearPreferences();
                     deleteCache(getApplicationContext());
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
@@ -756,7 +784,7 @@ public class sonicMain extends AppCompatActivity{
         try {
 
             Runtime runtime = Runtime.getRuntime();
-            runtime.exec("pm clear br.com.softhex.go");
+            runtime.exec("pm clear com.softhex.sonic");
 
         } catch (Exception e) {
             e.printStackTrace();

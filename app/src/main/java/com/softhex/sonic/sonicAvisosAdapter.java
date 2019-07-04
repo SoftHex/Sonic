@@ -101,7 +101,6 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
     }
 
     public void clearList(){
-        //Avisos = list;
         notifyDataSetChanged();
     }
 
@@ -118,9 +117,9 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
 
 
         View view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list, parent, false);
-        avsHolder titulos = new avsHolder(view);
+        avsHolder avs = new avsHolder(view);
 
-        return titulos;
+        return avs;
 
     }
 

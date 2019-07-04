@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="cards main container">
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp"
+        android:background="?selectableItemBackground">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-5dp"
+            android:background="?selectableItemBackground">
+
+            <RelativeLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/codigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="25dp"
+                    android:layout_toRightOf="@+id/letra"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/manufacturer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/codigo"
+                    android:layout_below="@+id/codigo"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/model"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/manufacturer"
+                    android:layout_below="@+id/manufacturer"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/version"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/model"
+                    android:layout_below="@+id/model"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/version"
+                    android:layout_below="@+id/version"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/classe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/activity"
+                    android:layout_below="@+id/activity"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/erro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/classe"
+                    android:layout_below="@+id/classe"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:background="@color/colorPrimaryLight" />
+
+                <TextView
+                    android:id="@+id/data_hora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="8sp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_below="@+id/layout"
+                android:background="@drawable/separator_gradient_horizontal" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</LinearLayout>

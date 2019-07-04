@@ -2,12 +2,8 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    android:background="@color/colorPrimaryWhite">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,69 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-
+                android:theme="@style/ToolBarTheme"/>
 
         </android.support.design.widget.AppBarLayout>
-
-        <!--<android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:background="@color/colorPrimaryWhite"
-            app:itemBackground="@color/colorPrimaryWhite"
-            app:itemIconTint="@color/border_bottom"
-            app:itemTextColor="@color/border_bottom"
-            app:menu="@menu/menu_go_main_bottom_navigation"/>-->
-
-        <!--<com.iammert.library.readablebottombar.ReadableBottomBar
-            android:id="@+id/bottom"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            app:rbb_tabs="@xml/home_tabs"/>-->
-
-        <!--<ca.gcastle.bottomnavigation.view.BottomNavigationView
-            android:id="@+id/bottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/colorPrimary"
-            android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            app:layout_behavior="ca.gcastle.bottomnavigation.behaviour.BottomNavigationBehavior">
-
-            <ca.gcastle.bottomnavigation.view.BottomNavigationTabView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/tab1"
-                android:backgroundTint="@color/colorPrimaryWhite"
-                app:tabImage="@drawable/ic_home_black_24dp"
-                app:tabText="tab1"
-                app:tabColor="@color/colorPrimary"/>
-
-            <ca.gcastle.bottomnavigation.view.BottomNavigationTabView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/tab2"
-                android:backgroundTint="@color/colorPrimaryWhite"
-                app:tabImage="@drawable/ic_search_black_24dp"
-                app:tabText="tab2"
-                app:tabColor="@color/colorPrimary"/>
-
-            <ca.gcastle.bottomnavigation.view.BottomNavigationTabView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/tab3"
-                android:backgroundTint="@color/colorPrimaryWhite"
-                app:tabImage="@drawable/ic_info_black_24dp"
-                app:tabText="tab3"
-                app:tabColor="@color/colorPrimary"/>
-
-        </ca.gcastle.bottomnavigation.view.BottomNavigationView>-->
-
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
@@ -118,8 +54,6 @@
             app:icon_two="@mipmap/ic_map_marker_radius_white_24dp"
             app:icon_three="@mipmap/ic_bell_white_24dp"/>
 
-
     </RelativeLayout>
-
 
 </android.support.v4.widget.DrawerLayout>

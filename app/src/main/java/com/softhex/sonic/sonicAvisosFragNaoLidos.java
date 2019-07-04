@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,12 +10,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerFrameLayout;
+
 import java.util.List;
 
 /**
@@ -29,16 +36,20 @@ public class sonicAvisosFragNaoLidos extends Fragment{
     private List<sonicAvisosHolder> avisos;
     private sonicDatabaseCRUD DBC;
     private CoordinatorLayout myCoordinatorLayout;
-    private ProgressBar myProgress;
     private Boolean allowRefresh = false;
     private TextView myTextViewText;
     private View myView;
+    private ShimmerFrameLayout myShimmer;
+    private Toolbar myToolBar;
+    private Context _this;
 
 
     @Nullable
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+
+        _this = getContext();
 
         loadFragment();
 
@@ -54,19 +65,26 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
     public void loadFragment(){
 
+        setHasOptionsMenu(true);
+
+        myToolBar = (android.support.v7.widget.Toolbar)getActivity().findViewById(R.id.toolbar);
+
         myTextViewText = (TextView)myView.findViewById(R.id.text);
 
         myCoordinatorLayout = (CoordinatorLayout)myView.findViewById(R.id.layout_main);
+
+        myShimmer =  myView.findViewById(R.id.shimmer);
 
         myRecycler = (RecyclerView) myView.findViewById(R.id.recycler_list);
 
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        myLayout = new LinearLayoutManager(_this, LinearLayoutManager.VERTICAL, false);
         myRecycler.setLayoutManager(myLayout);
 
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
         bindRecyclerView();
 
     }
@@ -77,9 +95,8 @@ public class sonicAvisosFragNaoLidos extends Fragment{
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            DBC = new sonicDatabaseCRUD(getActivity());
-            avisos = DBC.Avisos.selectAvisos();
-            return avisos.size();
+            return new sonicDatabaseCRUD(_this).Avisos.selectAvisos().size();
+
         }
 
         @Override
@@ -88,12 +105,13 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
             final AlphaAnimation fadeOut;
             final AlphaAnimation fadeIn;
-            fadeIn = new AlphaAnimation(0,1); //fade in animation from 0 (transparent) to 1 (fully visible)
-            fadeOut = new AlphaAnimation(1,0); //fade out animation from 1 (fully visible) to 0 (transparent)
-            fadeIn.setDuration(500); //set duration in mill seconds
-            fadeOut.setDuration(500); //set duration in mill seconds
+            fadeIn = new AlphaAnimation(0,1);
+            fadeOut = new AlphaAnimation(1,0);
+            fadeIn.setDuration(500);
+            fadeOut.setDuration(500);
             fadeIn.setFillAfter(true);
             fadeOut.setFillAfter(true);
+            myShimmer.setAnimation(fadeOut);
 
             Handler handler = new Handler();
 
@@ -112,8 +130,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
                                             myTextViewText.startAnimation(fadeIn);
                                         }
 
-                                        //myProgress.startAnimation(fadeOut);
-                                        //myProgress.setVisibility(View.GONE);
+                                        myShimmer.setVisibility(View.GONE);
 
 
                                     }

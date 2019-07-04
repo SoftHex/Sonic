@@ -1,11 +1,7 @@
 package com.softhex.sonic;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,41 +10,47 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class sonicAvisos extends AppCompatActivity {
+public class sonicSincronizacao extends AppCompatActivity{
 
     private Toolbar myToolbar;
-    private ActionBar myActionBar;
     private ViewPagerAdapter myAdapter;
+    private ActionBar myActionBar;
     private ViewPager myViewPager;
-    private Context _this;
+    private TabLayout myTabLayout;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sonicAppearence.onActivityCreateSetTheme(this);
-        setContentView(R.layout.sonic_avisos);
+        setContentView(R.layout.sonic_sincronizacao);
 
-        _this = getApplicationContext();
+        prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
-        myActionBar.setTitle(R.string.avisosTitulo);
+        myActionBar.setTitle("Sincronizar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myViewPager = (ViewPager) findViewById(R.id.pager);
         setUpViewPager(myViewPager);
+
+        myTabLayout = (TabLayout) findViewById(R.id.tabs);
+        myTabLayout.setupWithViewPager(myViewPager);
+
+
+        setUpTabText();
+
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,9 +63,17 @@ public class sonicAvisos extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicAvisosFragLidos(), "");
-        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
+        myAdapter.addFragment(new sonicSincronizacaoFragDownload(), "");
+        myAdapter.addFragment(new sonicSincronizacaoFragUpload(), "");
         viewpager.setAdapter(myAdapter);
+
+    }
+
+    public void setUpTabText(){
+
+        myTabLayout.getTabAt(0).setText(R.string.tabSinronizarReceber);
+        myTabLayout.getTabAt(1).setText(R.string.tabSinronizarEnviar);
+
 
     }
 
@@ -96,5 +106,22 @@ public class sonicAvisos extends AppCompatActivity {
         }
 
     }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
 
 }
