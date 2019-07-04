@@ -25,7 +25,6 @@ public class sonicSistema extends AppCompatActivity {
 
         Context _this = this;
 
-        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
