@@ -6,13 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -36,6 +41,7 @@ import java.util.List;
 
 import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 /**
@@ -61,6 +67,8 @@ public class sonicSistemaFragLog extends Fragment{
     private boolean allowSearch;
     private ProgressDialog myProgressDialog;
     private Context _this;
+    private Fragment myFrag;
+    private ImageView myImage;
     SharedPreferences.OnSharedPreferenceChangeListener prefs;
     Intent i;
 
@@ -69,6 +77,7 @@ public class sonicSistemaFragLog extends Fragment{
         myView = inflater.inflate(R.layout.sonic_recycler_layout_log, container, false);
 
         _this = getActivity();
+        myFrag = this;
 
         loadFragment();
 
@@ -78,7 +87,7 @@ public class sonicSistemaFragLog extends Fragment{
 
     public void bindRecyclerView(){
 
-        new myAsyncTask(myRecycler).execute();
+        new myAsyncTask().execute();
 
     }
 
@@ -94,13 +103,15 @@ public class sonicSistemaFragLog extends Fragment{
 
         myTabLayout = getActivity().findViewById(R.id.tabs);
 
-        myTextView = (TextView)myView.findViewById(R.id.text);
+        myTextView = myView.findViewById(R.id.text);
 
-        myCoordinatorLayout = (CoordinatorLayout)myView.findViewById(R.id.layout_main);
+        myImage = myView.findViewById(R.id.imagem);
 
-        myShimmer = (ShimmerFrameLayout)myView.findViewById(R.id.shimmer);
+        myCoordinatorLayout = myView.findViewById(R.id.layout_main);
 
-        myRecycler = (RecyclerView) myView.findViewById(R.id.recycler_list);
+        myShimmer = myView.findViewById(R.id.shimmer);
+
+        myRecycler =  myView.findViewById(R.id.recycler_list);
 
         myRecycler.setHasFixedSize(true);
 
@@ -178,12 +189,6 @@ public class sonicSistemaFragLog extends Fragment{
 
     class myAsyncTask extends AsyncTask<Integer, Integer, Integer> {
 
-        RecyclerView myRecyclerView;
-
-        public  myAsyncTask(RecyclerView rview) {
-            this.myRecyclerView = rview;
-        }
-
         @Override
         protected Integer doInBackground(Integer... integers) {
 
@@ -222,8 +227,10 @@ public class sonicSistemaFragLog extends Fragment{
                                             ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
                                             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                                         }else{
+
                                             allowSearch = false;
-                                            myTextView.setText("No log");
+                                            //myFrag.getView().setBackgroundDrawable(getResources().getDrawable(R.drawable.back9));
+                                            myImage.setAnimation(fadeIn);
                                             myTextView.setVisibility(VISIBLE);
                                             myTextView.startAnimation(fadeIn);
 
@@ -239,6 +246,7 @@ public class sonicSistemaFragLog extends Fragment{
 
         }
     }
+
 
     private void dialogDelete() {
 
@@ -299,7 +307,7 @@ public class sonicSistemaFragLog extends Fragment{
             if(aBoolean){
 
                 myErros.clear();
-                myAdapter.updateList(null);
+                myAdapter.notifyDataSetChanged();
 
             }
         }

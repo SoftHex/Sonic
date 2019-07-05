@@ -8,10 +8,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
@@ -22,6 +27,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class sonicAppearence {
@@ -158,6 +164,36 @@ public class sonicAppearence {
             }
 
         }
+
+    }
+
+    public static Spanned getSpannedText(String text) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+        } else {
+            return Html.fromHtml(text);
+        }
+    }
+
+    public static void animateDrawable(View view, int drawable) {
+        ImageView v = (ImageView) view;
+
+        if(Build.VERSION.SDK_INT >= 21) {
+            AnimatedVectorDrawable d = (AnimatedVectorDrawable) view.getContext().getDrawable(drawable);
+            v.setImageDrawable(d);
+            d.start();
+        }
+
+        else
+            {
+                AnimatedVectorDrawableCompat d = (AnimatedVectorDrawableCompat) view.getResources().getDrawable(drawable);
+                if (d instanceof AnimatedVectorDrawableCompat) {
+                    v.setImageDrawable(d);
+                    d.start();
+                }
+
+
+            }
 
     }
 

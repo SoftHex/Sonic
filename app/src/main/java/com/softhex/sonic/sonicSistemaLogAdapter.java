@@ -1,10 +1,13 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +42,8 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
         TextView classe;
         TextView codigo;
         TextView log;
-        TextView data_hora;
+        TextView data;
+        TextView hora;
 
         public erroHolder(View view) {
             super(view);
@@ -51,7 +55,8 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
             classe = view.findViewById(R.id.classe);
             log = view.findViewById(R.id.log);
             codigo = view.findViewById(R.id.codigo);
-            data_hora = view.findViewById(R.id.data_hora);
+            data = view.findViewById(R.id.data);
+            hora = view.findViewById(R.id.hora);
 
         }
 
@@ -62,13 +67,6 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
         this.erros = erros;
         this.filtered_erros = erros;
         this.ctx = ctx;
-    }
-
-    public void updateList(List<sonicSistemaLogHolder> list){
-        erros = list;
-        list.clear();
-        notifyDataSetChanged();
-
     }
 
     @Override
@@ -97,14 +95,17 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
 
         String newWord = log.getManufaturer().replace(String.valueOf(log.getManufaturer().charAt(0)), String.valueOf(log.getManufaturer().charAt(0)).toUpperCase());
 
-        holder.codigo.setText("#"+log.getCodigo());
-        holder.fabricante.setText("Fabricante: " +newWord);
-        holder.modelo.setText("Modelo: "+log.getModel());
-        holder.versao.setText("Versão/SDK: "+log.getName()+" (SDK "+log.getSdk()+")");
-        holder.atividade.setText("Activity: "+log.getActivity());
-        holder.classe.setText("Classe/Método: "+log.getClasse());
-        holder.data_hora.setText(log.getData()+"/"+log.getHora());
-        holder.log.setText("Detalhe: "+log.getLog());
+        Resources res = ctx.getResources();
+
+        holder.codigo.setText(res.getString(R.string.placeholderHashtag)+log.getCodigo());
+        holder.fabricante.setText(res.getString(R.string.placeholderFabricante)+newWord);
+        holder.modelo.setText(res.getString(R.string.placeholderModelo)+log.getModel());
+        holder.versao.setText(res.getString(R.string.placeholderVersao)+log.getName()+" (SDK "+log.getSdk()+")");
+        holder.atividade.setText(res.getString(R.string.placeholderAtividade)+log.getActivity());
+        holder.classe.setText(res.getString(R.string.placeholderClasse)+log.getClasse());
+        holder.data.setText(log.getData());
+        holder.hora.setText(log.getHora());
+        holder.log.setText(res.getString(R.string.placeholderDetalhe)+log.getLog());
 
     }
 

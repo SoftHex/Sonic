@@ -33,7 +33,7 @@
                     android:layout_height="52dp"
                     android:textColor="@color/colorPrimaryWhite"
                     android:textSize="22sp"
-                    android:text="@string/letterPlaceholder"
+                    android:text="@string/placeholderLetter"
                     android:visibility="visible"
                     android:background="@drawable/circle_textview_shimmer"
                     android:gravity="center" />

@@ -53,10 +53,9 @@ public class sonicDatabaseLogCRUD {
         public boolean saveLog(String erro, String activity, String classe, String metodo){
 
             ContentValues cv = new ContentValues();
-            //Date today = new Date();
             Calendar cal = GregorianCalendar.getInstance();
             SimpleDateFormat formatD = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat formatH = new SimpleDateFormat("hh:mm:ss a");
+            SimpleDateFormat formatH = new SimpleDateFormat("HH:mm");
             String dateToStr = formatD.format(cal.getTime());
             String hourToStr = formatH.format(cal.getTime());
             Field[] fields = Build.VERSION_CODES.class.getFields();

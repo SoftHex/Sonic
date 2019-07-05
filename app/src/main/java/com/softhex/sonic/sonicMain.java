@@ -144,7 +144,7 @@ public class sonicMain extends AppCompatActivity{
         //setUpViewPager(myViewPager, savedInstanceState);
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new sonicAvisosFragNaoLidos());
+        fragmentList.add(new sonicMainHome());
         fragmentList.add(new sonicAvisosFragNaoLidos());
         fragmentList.add(new sonicAvisosFragNaoLidos());
 
@@ -362,7 +362,7 @@ public class sonicMain extends AppCompatActivity{
                 .withIdentifier(11)
                 .withName(R.string.sistemaTitulo)
                 .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_information_grey600_24dp));
+                .withIcon(getResources().getDrawable(R.mipmap.settings_24));
 
         myDrawerRedefinir = new PrimaryDrawerItem()
                 .withIdentifier(12)
@@ -551,7 +551,7 @@ public class sonicMain extends AppCompatActivity{
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
         myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
+        myAdapter.addFragment(new sonicMainHome(), "");
         viewpager.setAdapter(myAdapter);
 
     }

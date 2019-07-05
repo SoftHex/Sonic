@@ -4,27 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginTop="-100dp"
-        app:layout_anchorGravity="center"
-        android:foregroundGravity="center"
-        android:layout_gravity="center">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:elevation="1dp"
+        android:translationZ="1dp"
+        android:layout_marginTop="-50dp"
+        android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/no_item_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/imagem"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:gravity="center"
             android:visibility="gone"
-            android:contentDescription="No Result"
-            android:src="@null"/>
+            android:contentDescription="@string/placeholderText"
+            android:scaleType="center" />
 
         <TextView
             android:id="@+id/title"
@@ -32,10 +33,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/colorPrimaryWhite"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
-            android:layout_margin="20sp"
             android:visibility="gone"
+            android:layout_margin="20sp"
             android:padding="10sp"/>
 
         <TextView
@@ -43,13 +44,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
             android:gravity="center"
-            android:textColor="@color/colorPrimaryDarkT"
-            android:textSize="16sp"
-            android:text="No Log"
-            android:layout_margin="20sp"
+            android:padding="6sp"
             android:visibility="gone"
-            android:padding="6sp"/>
+            android:text="@string/placeholderLog"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -57,6 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/shimmer"
+
         android:background="@color/colorPrimaryWhite"
         app:shimmer_duration="1000"
         app:shimmer_tilt="0"
@@ -84,8 +87,7 @@
         android:id="@+id/recycler_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:visibility="gone"/>
+        android:scrollbars="vertical" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -63,9 +63,17 @@
     <string name="tabRankingGrupo">POR GRUPO</string>
 
     <!-- OTHERS -->
-    <string name="textPlaceholder">XXXX XXXX</string>
-    <string name="letterPlaceholder">X</string>
-    <string name="datePlaceholder">xx/xx/xxxx</string>
+    <string name="placeholderText">XXXX XXXX</string>
+    <string name="placeholderLetter">X</string>
+    <string name="placeholderDate">xx/xx/xxxx</string>
+    <string name="placeholderTime">xx:xx</string>
+    <string name="placeholderFabricante"><b>Fabricante: </b></string>
+    <string name="placeholderModelo"><b>Modelo: </b></string>
+    <string name="placeholderVersao"><b>Versao/SDK: </b></string>
+    <string name="placeholderAtividade"><b>Atividade: </b></string>
+    <string name="placeholderClasse"><b>Classe/Método: </b></string>
+    <string name="placeholderDetalhe"><b>Detalhe: </b></string>
+    <string name="placeholderHashtag">#</string>
     <string name="msgPerms">Permissões necessárias...</string>
     <string name="textNext">PRÓXIMO</string>
     <string name="textFinish">INICIAR</string>
@@ -73,6 +81,7 @@
     <!-- MENSAGENS -->
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
+    <string name="placeholderLog">Sem logs por enquanto...</string>
     <string name="go_network_error">Verifique sua conexão com a internet...</string>
     <string name="go_network_success">Conexão com a internet OK.</string>
 
