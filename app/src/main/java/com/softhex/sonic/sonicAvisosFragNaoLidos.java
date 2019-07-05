@@ -24,6 +24,8 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
+import static android.view.View.VISIBLE;
+
 /**
  * Created by Administrador on 21/07/2017.
  */
@@ -33,14 +35,12 @@ public class sonicAvisosFragNaoLidos extends Fragment{
     private RecyclerView myRecycler;
     private sonicAvisosAdapter myAdapter;
     private RecyclerView.LayoutManager myLayout;
-    private List<sonicAvisosHolder> avisos;
-    private sonicDatabaseCRUD DBC;
+    private List<sonicAvisosHolder> myAvisos;
     private CoordinatorLayout myCoordinatorLayout;
     private Boolean allowRefresh = false;
     private TextView myTextViewText;
     private View myView;
     private ShimmerFrameLayout myShimmer;
-    private Toolbar myToolBar;
     private Context _this;
 
 
@@ -67,15 +67,14 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
         setHasOptionsMenu(true);
 
-        myToolBar = (android.support.v7.widget.Toolbar)getActivity().findViewById(R.id.toolbar);
+        myTextViewText = myView.findViewById(R.id.text);
 
-        myTextViewText = (TextView)myView.findViewById(R.id.text);
-
-        myCoordinatorLayout = (CoordinatorLayout)myView.findViewById(R.id.layout_main);
+        myCoordinatorLayout = myView.findViewById(R.id.layout_main);
 
         myShimmer =  myView.findViewById(R.id.shimmer);
+        myShimmer.startShimmer();
 
-        myRecycler = (RecyclerView) myView.findViewById(R.id.recycler_list);
+        myRecycler = myView.findViewById(R.id.recycler_list);
 
         myRecycler.setHasFixedSize(true);
 
@@ -95,7 +94,8 @@ public class sonicAvisosFragNaoLidos extends Fragment{
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            return new sonicDatabaseCRUD(_this).Avisos.selectAvisos().size();
+            myAvisos =  new sonicDatabaseCRUD(_this).Avisos.selectAvisos();
+            return myAvisos.size();
 
         }
 
@@ -120,7 +120,9 @@ public class sonicAvisosFragNaoLidos extends Fragment{
                                     public void run() {
 
                                         if(result>0){
-                                            myAdapter = new sonicAvisosAdapter(avisos, getActivity());
+                                            myAdapter = new sonicAvisosAdapter(myAvisos, getActivity());
+                                            myRecycler.setVisibility(VISIBLE);
+                                            myRecycler.setAnimation(fadeIn);
                                             myRecycler.setAdapter(myAdapter);
                                             ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
                                             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -130,6 +132,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
                                             myTextViewText.startAnimation(fadeIn);
                                         }
 
+                                        myShimmer.stopShimmer();
                                         myShimmer.setVisibility(View.GONE);
 
 

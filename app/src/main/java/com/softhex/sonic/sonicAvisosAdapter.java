@@ -27,46 +27,37 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
     private List<sonicAvisosHolder> avisos;
     private List<sonicAvisosHolder> filtered_avisos;
     private AvisoFilter avsFilter;
-    private int lastPosition = -1;
-    private sonicUtils myUtil;
-    private sonicDatabaseCRUD DBC;
 
     public class avsHolder extends RecyclerView.ViewHolder {
 
         int codigo;
         int status;
-        TextView star_one;
-        TextView star_two;
-        TextView star_three;
+        TextView letterOne;
+        TextView letterTwo;
         TextView letra;
         TextView autor;
         TextView titulo;
         String hora;
         TextView data;
         TextView mensagem;
-        TextView close;
         CardView card;
 
         public avsHolder(View view) {
             super(view);
 
-            letra = (TextView)view.findViewById(R.id.letra);
-            autor = (TextView)view.findViewById(R.id.nome);
-            titulo = (TextView)view.findViewById(R.id.titulo);
-            data = (TextView)view.findViewById(R.id.data);
-            mensagem = (TextView)view.findViewById(R.id.mensagem);
-            card = (CardView)view.findViewById(R.id.cardView);
-
-            myUtil = new sonicUtils(view.getContext());
-
-            DBC = new sonicDatabaseCRUD(view.getContext());
+            letra = view.findViewById(R.id.letra);
+            autor = view.findViewById(R.id.autor);
+            titulo = view.findViewById(R.id.titulo);
+            data = view.findViewById(R.id.data);
+            mensagem = view.findViewById(R.id.mensagem);
+            card = view.findViewById(R.id.cardView);
 
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     if(status==0){
-                        DBC.Avisos.saveAvisosLidos(codigo);
+                        new sonicDatabaseCRUD(view.getContext()).Avisos.saveAvisosLidos(codigo);
                     }
 
                     TextView dados[] = {autor, titulo, mensagem, data};
@@ -77,10 +68,6 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
 
                 }
             });
-
-
-
-            //setAnimation(view, 0);
 
         }
     }
@@ -116,7 +103,7 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
-        View view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list, parent, false);
+        View view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_avisos, parent, false);
         avsHolder avs = new avsHolder(view);
 
         return avs;
@@ -135,16 +122,11 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
         holder.status = avs.getStatus();
         holder.hora = avs.getHora();
         holder.autor.setText(avs.getAutor());
-        //holder.data.setText(myUtil.Data.dataPorExtenso(avs.getData()));
         holder.titulo.setText(avs.getTitulo());
         holder.mensagem.setText(avs.getMensagem());
 
         holder.letra.setText(String.valueOf(avs.getAutor().charAt(0)).toUpperCase());
         holder.letra.setBackground((ctx).getResources().getDrawable(R.drawable.circle_textview));
-
-        //Drawable drawable = myCtx.getResources().getDrawable(R.mipmap.ic_star_outline_grey600_18dp);
-        //drawable = DrawableCompat.wrap(drawable);
-        //DrawableCompat.setTint(drawable, ContextCompat.getColor(myCtx,R.color.chart_yellow));
 
         if(avs.getStatus()==1){
             holder.autor.setTextColor(ctx.getResources().getColor(R.color.colorTextNoAccent));
@@ -153,40 +135,22 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
             holder.titulo.setTypeface(Typeface.DEFAULT);
             holder.data.setTextColor(ctx.getResources().getColor(R.color.colorTextNoAccent));
             holder.data.setTypeface(Typeface.DEFAULT);
-            //holder.star_one.setTextColor(ContextCompat.getColor(myCtx,R.color.chart_yellow));
-            //holder.star_one.setCompoundDrawables(drawable,drawable,drawable,drawable);
 
         }
 
         switch (avs.getPrioridade()){
             case 2:
-                holder.star_two.setVisibility(View.VISIBLE);
+                holder.letterOne.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                holder.star_two.setVisibility(View.VISIBLE);
-                holder.star_three.setVisibility(View.VISIBLE);
+                holder.letterTwo.setVisibility(View.VISIBLE);
                 break;
                 default:
         }
-        //holder.mensagem.setText(myUtil.Data.dataFotmatadaBarra(tit.getDataEmissao())+" "+Html.fromHtml("&#187;")+" "+myUtil.Data.dataFotmatadaBarra(tit.getDataVencimento())+" "+Html.fromHtml("&#187;")+" "+tit.getDiasAtraso());
-        //holder.valor.setText("R$ "+ String.format("%,.2f", Float.valueOf( tit.getValor().replace(',','.') )));
-        //holder.valor.setTextColor(Color.parseColor(tit.getSituacaoCor()));
 
-        setAnimation(holder.itemView, position);
 
     }
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.fade_in);
-            animation.setDuration(1000);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
-    }
 
     public void exibirItemInfo(TextView dados[], String _hora){
 

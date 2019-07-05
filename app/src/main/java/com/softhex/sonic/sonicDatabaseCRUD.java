@@ -505,7 +505,7 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, "codigo_empresa="+codigo, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, "codigo="+codigo, null);
 
             } catch (SQLiteException e) {
                 DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));

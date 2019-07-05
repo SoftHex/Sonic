@@ -31,83 +31,81 @@
                     android:id="@+id/codigo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="25dp"
-                    android:layout_toRightOf="@+id/letra"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_toLeftOf="@id/data_hora"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/manufacturer"
+                    android:id="@+id/fabricante"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/codigo"
                     android:layout_below="@+id/codigo"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/model"
+                    android:id="@+id/modelo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/manufacturer"
-                    android:layout_below="@+id/manufacturer"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_alignLeft="@+id/fabricante"
+                    android:layout_below="@+id/fabricante"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/version"
+                    android:id="@+id/versao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/model"
-                    android:layout_below="@+id/model"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_alignLeft="@+id/modelo"
+                    android:layout_below="@+id/modelo"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
 
                 <TextView
-                    android:id="@+id/activity"
+                    android:id="@+id/atividade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/version"
-                    android:layout_below="@+id/version"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_alignLeft="@+id/versao"
+                    android:layout_below="@+id/versao"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/classe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/activity"
-                    android:layout_below="@+id/activity"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_alignLeft="@+id/atividade"
+                    android:layout_below="@+id/atividade"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp"/>
 
                 <TextView
-                    android:id="@+id/erro"
+                    android:id="@+id/log"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/classe"
                     android:layout_below="@+id/classe"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:background="@color/colorPrimaryLight" />
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/data_hora"
-                    android:layout_width="match_parent"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/colorPrimaryLight"
-                    android:textSize="8sp"
-                    android:layout_marginTop="6dp"
-                    android:gravity="center" />
+                    android:textSize="13sp" />
 
             </RelativeLayout>
 

@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,7 +66,7 @@ public class sonicSistemaFragLog extends Fragment{
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_log, container, false);
 
         _this = getActivity();
 
@@ -312,13 +313,14 @@ public class sonicSistemaFragLog extends Fragment{
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("RESUME","");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        Log.d("PAUSE","");
 
     }
 

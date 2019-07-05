@@ -61,7 +61,7 @@ public class sonicAvisos extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicAvisosFragLidos(), "");
+        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
         //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
         viewpager.setAdapter(myAdapter);
 

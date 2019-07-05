@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,43 +29,32 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
     private List<sonicSistemaLogHolder> erros;
     private List<sonicSistemaLogHolder> filtered_erros;
     private UserFilter userFilter;
-    private int lastPosition = -1;
-    private sonicDatabaseCRUD DBC;
-    private sonicConstants myCons;
-    private GradientDrawable shape;
 
     public class erroHolder extends RecyclerView.ViewHolder {
 
-
-        TextView manufacturer;
-        TextView model;
-        TextView version;
-        TextView activity;
+        TextView fabricante;
+        TextView modelo;
+        TextView versao;
+        TextView atividade;
         TextView classe;
         TextView codigo;
         TextView log;
         TextView data_hora;
-        TextView hora;
-        CardView card;
-        View layout;
-        RelativeLayout back;
-
 
         public erroHolder(View view) {
             super(view);
 
-            card = (CardView)view.findViewById(R.id.card_view);
-            //manufacturer = (TextView)view.findViewById(R.id.manufacturer);
-            //model = (TextView)view.findViewById(R.id.model);
-            //version = (TextView)view.findViewById(R.id.version);
-            //activity = (TextView)view.findViewById(R.id.activity);
-            //classe = (TextView)view.findViewById(R.id.classe);
-            //log = (TextView)view.findViewById(R.id.erro);
-            //codigo = (TextView)view.findViewById(R.id.codigo);
-           // data_hora = (TextView)view.findViewById(R.id.data_hora);
-            DBC = new sonicDatabaseCRUD(view.getContext());
+            fabricante = view.findViewById(R.id.fabricante);
+            modelo = view.findViewById(R.id.modelo);
+            versao = view.findViewById(R.id.versao);
+            atividade = view.findViewById(R.id.atividade);
+            classe = view.findViewById(R.id.classe);
+            log = view.findViewById(R.id.log);
+            codigo = view.findViewById(R.id.codigo);
+            data_hora = view.findViewById(R.id.data_hora);
 
         }
+
     }
 
     public sonicSistemaLogAdapter(List<sonicSistemaLogHolder> erros, Context ctx) {
@@ -92,7 +82,7 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(ctx).inflate(R.layout.layout_cards_log_lista, parent, false);
+        View view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_log, parent, false);
         erroHolder log = new erroHolder(view);
         return log;
 
@@ -105,30 +95,17 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
         holder.setIsRecyclable(false);
         sonicSistemaLogHolder log = erros.get(position);
 
-        //String newWord = erro.getManufaturer().replace(String.valueOf(erro.getManufaturer().charAt(0)), String.valueOf(erro.getManufaturer().charAt(0)).toUpperCase());
+        String newWord = log.getManufaturer().replace(String.valueOf(log.getManufaturer().charAt(0)), String.valueOf(log.getManufaturer().charAt(0)).toUpperCase());
 
-        /*holder.codigo.setText("#"+erro.getCodigo());
-        holder.manufacturer.setText("Fabricante: " +newWord);
-        holder.model.setText("Modelo: "+erro.getModel());
-        holder.version.setText("Versão/SDK: "+erro.getName()+" (SDK "+erro.getSdk()+")");
-        holder.activity.setText("Activity: "+erro.getActivity());
-        holder.classe.setText("Classe/Método: "+erro.getClasse());
-        holder.data_hora.setText(erro.getData()+"/"+erro.getHora());
-        holder.log.setText("Detalhe: "+erro.getLog());*/
+        holder.codigo.setText("#"+log.getCodigo());
+        holder.fabricante.setText("Fabricante: " +newWord);
+        holder.modelo.setText("Modelo: "+log.getModel());
+        holder.versao.setText("Versão/SDK: "+log.getName()+" (SDK "+log.getSdk()+")");
+        holder.atividade.setText("Activity: "+log.getActivity());
+        holder.classe.setText("Classe/Método: "+log.getClasse());
+        holder.data_hora.setText(log.getData()+"/"+log.getHora());
+        holder.log.setText("Detalhe: "+log.getLog());
 
-
-    }
-
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > lastPosition)
-        {
-            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.fade_in);
-            animation.setDuration(1000);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     @Override
@@ -145,7 +122,6 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
     public int getItemCount() {
         return erros.size();
     }
-
 
     private static class UserFilter extends Filter {
 
@@ -167,8 +143,6 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
             filteredList.clear();
             final FilterResults results = new FilterResults();
 
-
-
             if (constraint.length() == 0) {
                 filteredList.addAll(originalList);
 
@@ -177,7 +151,7 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicSistemaLogHolder erro : originalList) {
-                    if (erro.getLog().contains(filterPattern) || erro.getData().contains(filterPattern)) {
+                    if (String.valueOf(erro.getCodigo()).contains(filterPattern) || erro.getLog().contains(filterPattern) || erro.getData().contains(filterPattern)) {
                         filteredList.add(erro);
 
                     }
