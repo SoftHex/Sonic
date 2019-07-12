@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="android.support.multidex.MultiDexApplication"
     package="com.softhex.sonic">
@@ -21,52 +22,67 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/SplashTheme" >
+        android:theme="@style/DefaultAppTheme">
+        <activity android:name=".sonicGraph">
+        </activity>
+
+        <provider android:authorities="com.softhex.sonic.FileProvider"
+            android:name="android.support.v4.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBs4N0SSafiqiazp7mQQUaOI1q97TnXayw" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/IntroTheme"
+            android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".sonicSplash"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicEmpresa"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicFirstAccess"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/SplashTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicAvisos"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicMain"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicMainConfiguracoes"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/PreferenceAppTheme"/>
+            android:theme="@style/PreferenceAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicSincronizacao"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicSistema"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
     </application>
 
 </manifest>

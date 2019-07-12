@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,23 +19,33 @@ import java.util.List;
 
 public class sonicSistema extends AppCompatActivity {
 
+    private Context _this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //sonicAppearence.onActivityCreateSetTheme(this, sonicAppearence.THEME_NIGHT);
         setContentView(R.layout.sonic_sistema);
 
-        Context _this = this;
+        _this = this;
+
+        createInterface();
+
+
+    }
+
+    private void createInterface(){
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Sistema");
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setElevation(0);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
         ViewPager viewPager = findViewById(R.id.pager);
-
         setUpViewPager(viewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs);

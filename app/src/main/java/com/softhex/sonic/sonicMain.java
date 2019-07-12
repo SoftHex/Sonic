@@ -138,27 +138,27 @@ public class sonicMain extends AppCompatActivity{
         // ATUALIZA A BADGE DE PRODUTOS
         new myAssyncTask().execute(4);
 
-        mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
+        //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
 
-        myViewPager = (ViewPager) findViewById(R.id.pager);
-        //setUpViewPager(myViewPager, savedInstanceState);
+        myViewPager = findViewById(R.id.pager);
+        setUpViewPager(myViewPager);
 
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new sonicMainHome());
-        fragmentList.add(new sonicAvisosFragNaoLidos());
-        fragmentList.add(new sonicAvisosFragNaoLidos());
+        //fragmentList.add(new sonicMainHome());
+        //fragmentList.add(new sonicAvisosFragNaoLidos());
+        //fragmentList.add(new sonicAvisosFragNaoLidos());
 
-        mySpaceTabLayout.initialize(myViewPager,getSupportFragmentManager(),fragmentList,savedInstanceState);
+        //mySpaceTabLayout.initialize(myViewPager,getSupportFragmentManager(),fragmentList,savedInstanceState);
 
-        mySpaceTabLayout.setTabOneOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        //mySpaceTabLayout.setTabOneOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View view) {
 
                 //Intent i = new Intent(sonicMain.this, sonicShimmer.class);
                 //startActivity(i);
 
-            }
-        });
+            //}
+        //});
 
         myViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -452,6 +452,9 @@ public class sonicMain extends AppCompatActivity{
                             case 1:
                                 //i = new Intent(sonicMain.this, sonicSincronizacao.class);
                                 //startActivity(i);
+                                new myAsyncStartActivity().execute(sonicSincronizacao.class);
+                                //i = new Intent(sonicMain.this, sonicSincronizacao.class);
+                                //startActivity(i);
                                 break;
                             case 2:
                                 i = new Intent(sonicMain.this, sonicAvisos.class);
@@ -483,8 +486,9 @@ public class sonicMain extends AppCompatActivity{
                                 //normalListDialogNoTitle("MENU");
                                 break;
                             case 11:
-                                i = new Intent(sonicMain.this, sonicSistema.class);
-                                startActivity(i);
+                                new myAsyncStartActivity().execute(sonicSistema.class);
+                                //i = new Intent(sonicMain.this, sonicSistema.class);
+                                //startActivity(i);
                                 //border_bottom();
                                 break;
                             case 12:
@@ -524,6 +528,17 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
+    class myAsyncStartActivity extends AsyncTask<Class, Void, Void>{
+
+
+        @Override
+        protected Void doInBackground(Class... classes) {
+            Intent i = new Intent(sonicMain.this, classes[0]);
+            startActivity(i);
+            return null;
+        }
+    }
+
     class myUserAsyncTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
@@ -539,19 +554,19 @@ public class sonicMain extends AppCompatActivity{
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mySpaceTabLayout.saveState(outState);
+        //mySpaceTabLayout.saveState(outState);
     }
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mySpaceTabLayout.saveState(savedInstanceState);
+        //mySpaceTabLayout.saveState(savedInstanceState);
     }
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
         myAdapter.addFragment(new sonicMainHome(), "");
+        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
+        //myAdapter.addFragment(new sonicMainHome(), "");
         viewpager.setAdapter(myAdapter);
 
     }

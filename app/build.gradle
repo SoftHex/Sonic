@@ -15,6 +15,10 @@ android {
     compileOptions {
         encoding "UTF-8"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
@@ -51,6 +55,10 @@ dependencies {
     implementation 'com.github.dimorinny:show-case-card-view:0.0.4'
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.7.0@aar'
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.highsoft.highcharts:highcharts:7.1.2'
+    implementation 'com.google.code.gson:gson:2.8.1'
     testImplementation 'junit:junit:4.13-beta-3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

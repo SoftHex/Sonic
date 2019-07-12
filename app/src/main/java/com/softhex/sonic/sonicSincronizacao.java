@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -32,39 +33,43 @@ public class sonicSincronizacao extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //sonicAppearence.onActivityCreateSetTheme(this, sonicAppearence.THEME_DEFAULT);
         setContentView(R.layout.sonic_sincronizacao);
+
+        createInterface();
+
+    }
+
+    private void createInterface(){
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
         myActionBar.setTitle("Sincronizar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        myViewPager = (ViewPager) findViewById(R.id.pager);
+        myViewPager = findViewById(R.id.pager);
         setUpViewPager(myViewPager);
 
-        myTabLayout = (TabLayout) findViewById(R.id.tabs);
+        myTabLayout = findViewById(R.id.tabs);
         myTabLayout.setupWithViewPager(myViewPager);
-
 
         setUpTabText();
 
+        myToolbar.setNavigationOnClickListener((View view)-> {
 
-        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 onBackPressed();
-            }
+
         });
 
     }
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicSincronizacaoFragDownload(), "");
-        myAdapter.addFragment(new sonicSincronizacaoFragUpload(), "");
+        myAdapter.addFragment(new sonicSincronizacaoFragDownloadTeste(), "");
+        myAdapter.addFragment(new sonicSincronizacaoFragDownloadTeste(), "");
         viewpager.setAdapter(myAdapter);
 
     }
@@ -106,7 +111,6 @@ public class sonicSincronizacao extends AppCompatActivity{
         }
 
     }
-
 
     @Override
     public void onResume() {

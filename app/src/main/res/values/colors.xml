@@ -16,11 +16,24 @@
     <color name="colorPrimaryOrangeDarkT">#90DD4D0F</color>
     <color name="colorPrimaryOrangeT">#90FF8C00</color>
     <color name="colorPrimaryOrangeLightT">#90FFD700</color>
-    <color name="colorPrimaryGreeDark">#234B20</color>
     <color name="colorPrimaryGreen">#3C9130</color>
-    <color name="colorPrimaryGreenLight">#32CD32</color>
-    <color name="colorPrimaryGreeDarkT">#90234B20</color>
     <color name="colorPrimaryGreenT">#903C9130</color>
+    <color name="colorPrimaryGreenDark">#234B20</color>
+    <color name="colorPrimaryGreenDarkT">#90234B20</color>
+    <color name="colorPrimaryGreenLight">#32CD32</color>
+    <color name="colorPrimaryGreenLightT">#9032CD32</color>
+    <color name="colorPrimaryBrown">#A0522D</color>
+    <color name="colorPrimaryBrownT">#90A0522D</color>
+    <color name="colorPrimaryBrownDark">#8B4513</color>
+    <color name="colorPrimaryBrownDarkT">#908B4513</color>
+    <color name="colorPrimaryBrownLight">#CD853F</color>
+    <color name="colorPrimaryBrownLightT">#90CD853F</color>
+    <color name="colorPrimaryBlackDark">#000000</color>
+    <color name="colorPrimaryBlackDarkT">#90000000</color>
+    <color name="colorPrimaryBlack">#363636</color>
+    <color name="colorPrimaryBlackT">#90363636</color>
+    <color name="colorPrimaryBlackLight">#696969</color>
+    <color name="colorPrimaryBlackLightT">#90696969</color>
     <color name="colorTextDark">#000</color>
     <color name="colorTextPrimary">#363636</color>
     <color name="colorTextAccent">#696969</color>
@@ -38,8 +51,26 @@
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryGreen2">#00FA9A</color>
 
+    <!-- WINE THEME -->
+
+    <color name="colorWinePrimaryDark">#610B0B</color>
+    <color name="colorWinePrimary">#8A0808</color>
+    <color name="colorWineAccent">#B43104</color>
+
+    <!-- NIGHT THEME -->
+
+    <color name="colorNightPrimaryDark">#1C1C1C</color>
+    <color name="colorNightPrimary">#424242</color>
+    <color name="colorNightAccent">#6E6E6E</color>
+
+    <!-- GREEN THEME -->
+
+    <color name="colorGreenPrimaryDark">#0B6138</color>
+    <color name="colorGreenPrimary">#04B45F</color>
+    <color name="colorGreenAccent">#01DFA5</color>
+
     <!-- dots colors -->
-    <color name="dotActive">#FFFFFF</color>
+    <color name="dotActive">@color/colorPrimary</color>
     <color name="dotInactive">#90C0C0C0</color>
 
 

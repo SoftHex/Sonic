@@ -76,7 +76,7 @@ public class sonicSincronizacaoFragUpload extends Fragment{
 
             myProgress = new ProgressDialog(getContext());
             myProgress.setCancelable(false);
-            //myProgress.setTitle("Sincronização");
+            //apagarLogs.setTitle("Sincronização");
             myProgress.setMessage("Conectando...");
             myProgress.setMax(1);
             myProgress.setProgressStyle(0);

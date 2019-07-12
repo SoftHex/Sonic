@@ -32,12 +32,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/appbar"
-            android:layout_marginBottom="55dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </android.support.v4.view.ViewPager>
 
-        <eu.long1.spacetablayout.SpaceTabLayout
+        <!--<eu.long1.spacetablayout.SpaceTabLayout
             android:id="@+id/spaceTabLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +51,7 @@
             app:text_three=""
             app:icon_one="@mipmap/ic_home_white_24dp"
             app:icon_two="@mipmap/ic_map_marker_radius_white_24dp"
-            app:icon_three="@mipmap/ic_bell_white_24dp"/>
+            app:icon_three="@mipmap/ic_bell_white_24dp"/>-->
 
     </RelativeLayout>
 

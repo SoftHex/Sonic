@@ -36,10 +36,16 @@ public class sonicAvisos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sonicAppearence.onActivityCreateSetTheme(this);
+        //sonicAppearence.onActivityCreateSetTheme(this, sonicAppearence.THEME_WINE);
         setContentView(R.layout.sonic_avisos);
 
-        _this = getApplicationContext();
+        _this = this;
+
+        createInterface();
+
+    }
+
+    private void createInterface(){
 
         myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -62,7 +68,6 @@ public class sonicAvisos extends AppCompatActivity {
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
         viewpager.setAdapter(myAdapter);
 
     }

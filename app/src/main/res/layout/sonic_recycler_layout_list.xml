@@ -23,8 +23,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:contentDescription="No Result"
-            android:src="@null"/>
+            android:contentDescription="No Result"/>
 
         <TextView
             android:id="@+id/title"
@@ -57,7 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/shimmer"
-        android:background="@color/colorPrimaryWhite"
         app:shimmer_duration="1000"
         app:shimmer_tilt="0"
         app:shimmer_direction="left_to_right">

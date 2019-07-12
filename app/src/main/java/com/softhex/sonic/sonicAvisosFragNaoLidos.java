@@ -19,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.GenericTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -40,6 +43,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
     private Boolean allowRefresh = false;
     private TextView myTextViewText;
     private View myView;
+    private ImageView myImage;
     private ShimmerFrameLayout myShimmer;
     private Context _this;
 
@@ -68,6 +72,8 @@ public class sonicAvisosFragNaoLidos extends Fragment{
         setHasOptionsMenu(true);
 
         myTextViewText = myView.findViewById(R.id.text);
+
+        myImage = myView.findViewById(R.id.image);
 
         myCoordinatorLayout = myView.findViewById(R.id.layout_main);
 
@@ -127,7 +133,13 @@ public class sonicAvisosFragNaoLidos extends Fragment{
                                             ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
                                             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                                         }else{
-                                            myTextViewText.setText("No Messages");
+                                            myImage.setVisibility(VISIBLE);
+                                            Glide.with(_this)
+                                                    .load(R.drawable.nomessage)
+                                                    .apply(new RequestOptions().override(300,300))
+                                                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                                                    .into(myImage);
+                                            myTextViewText.setText("Sem avisos por enquanto.");
                                             myTextViewText.setVisibility(View.VISIBLE);
                                             myTextViewText.startAnimation(fadeIn);
                                         }

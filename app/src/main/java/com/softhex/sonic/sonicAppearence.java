@@ -3,13 +3,8 @@ package com.softhex.sonic;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
@@ -19,7 +14,6 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -28,14 +22,15 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 public class sonicAppearence {
 
 
     public final static int THEME_DEFAULT = 0;
-    public final static int THEME_FRAGMENT = 1;
-    public final static int THEME_SEARCH = 2;
+    public final static int THEME_WINE = 1;
+    public final static int THEME_GREEN = 2;
+    public final static int THEME_NIGHT = 3;
+
     private static int sTheme;
     private Activity _activity;
 
@@ -55,30 +50,36 @@ public class sonicAppearence {
         {
             default:
             case THEME_DEFAULT:
-                fragment.getActivity().setTheme(R.style.AppTheme);
+                fragment.getActivity().setTheme(R.style.DefaultAppTheme);
                 break;
-            case THEME_FRAGMENT:
-                fragment.getActivity().setTheme(R.style.FragmentTheme);
+            case THEME_WINE:
+                fragment.getActivity().setTheme(R.style.WineAppTheme);
                 break;
-            case THEME_SEARCH:
-                fragment.getActivity().setTheme(R.style.SearchTheme);
+            case THEME_GREEN:
+                fragment.getActivity().setTheme(R.style.GreenAppTheme);
+                break;
+            case THEME_NIGHT:
+                fragment.getActivity().setTheme(R.style.NightAppTheme);
                 break;
         }
     }
 
-    public static void onActivityCreateSetTheme(Activity activity)
+    public static void onActivityCreateSetTheme(Activity activity, int theme)
     {
-        switch (sTheme)
+        switch (theme)
         {
             default:
             case THEME_DEFAULT:
-                activity.setTheme(R.style.AppTheme);
+                activity.setTheme(R.style.DefaultAppTheme);
                 break;
-            case THEME_FRAGMENT:
-                activity.setTheme(R.style.FragmentTheme);
+            case THEME_WINE:
+                activity.setTheme(R.style.WineAppTheme);
                 break;
-            case THEME_SEARCH:
-                activity.setTheme(R.style.SearchTheme);
+            case THEME_GREEN:
+                activity.setTheme(R.style.GreenAppTheme);
+                break;
+            case THEME_NIGHT:
+                activity.setTheme(R.style.NightAppTheme);
                 break;
         }
     }
@@ -113,7 +114,7 @@ public class sonicAppearence {
                 createCircularReveal.start();
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimary));
+                window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimaryBlackLight));
             } else {
                 TranslateAnimation translateAnimation = new TranslateAnimation(0.0f, 0.0f, (float) (-tool.getHeight()), 0.0f);
                 translateAnimation.setDuration(220);

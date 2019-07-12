@@ -60,7 +60,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()) {
 
-                    if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().equals(""))) {
+                    if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
                         new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Código inválido...");
 

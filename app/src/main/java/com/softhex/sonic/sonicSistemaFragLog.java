@@ -6,18 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -41,7 +35,6 @@ import java.util.List;
 
 import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
-import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 /**
@@ -51,13 +44,13 @@ import static android.view.View.VISIBLE;
 public class sonicSistemaFragLog extends Fragment{
 
     private View myView;
+    private View myHeader;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicSistemaLogAdapter myAdapter;
     private List<sonicSistemaLogHolder> myErros;
     private sonicDatabaseLogCRUD DBC;
     private MenuItem mySearch;
-    private MenuItem myDelete;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
     private CoordinatorLayout myCoordinatorLayout;
@@ -67,17 +60,16 @@ public class sonicSistemaFragLog extends Fragment{
     private boolean allowSearch;
     private ProgressDialog myProgressDialog;
     private Context _this;
-    private Fragment myFrag;
     private ImageView myImage;
     SharedPreferences.OnSharedPreferenceChangeListener prefs;
     Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        myHeader = inflater.inflate(R.layout.header, container, false);
         myView = inflater.inflate(R.layout.sonic_recycler_layout_log, container, false);
 
         _this = getActivity();
-        myFrag = this;
 
         loadFragment();
 
@@ -129,16 +121,13 @@ public class sonicSistemaFragLog extends Fragment{
 
     }
 
-    // MÉTODO PARA CRIAR UM MENU DE OPÇÕES PELO ID DA VIEW/OBJETO. MENU DEFINIDO NO LAYOUT INFLADO
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.sonic_sistema_log, menu);
-        mySearch = (MenuItem) menu.findItem(R.id.search);
-        myDelete = (MenuItem) menu.findItem(R.id.delete);
+        mySearch = menu.findItem(R.id.search);
 
         final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) mySearch.getActionView();
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
         searchView.setQueryHint("Pesquisar...");
         searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -229,7 +218,6 @@ public class sonicSistemaFragLog extends Fragment{
                                         }else{
 
                                             allowSearch = false;
-                                            //myFrag.getView().setBackgroundDrawable(getResources().getDrawable(R.drawable.back9));
                                             myImage.setAnimation(fadeIn);
                                             myTextView.setVisibility(VISIBLE);
                                             myTextView.startAnimation(fadeIn);
@@ -252,13 +240,13 @@ public class sonicSistemaFragLog extends Fragment{
 
         AlertDialog.Builder builder = new AlertDialog.Builder(_this);
         builder.setMessage("Deseja apagar todos os logs?")
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            .setPositiveButton("APAGAR", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    myProgress();
+                    apagarLogs();
                 }
             })
-            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -268,7 +256,7 @@ public class sonicSistemaFragLog extends Fragment{
 
     }
 
-    public void myProgress(){
+    public void apagarLogs(){
 
         myProgressDialog = new ProgressDialog(_this);
         myProgressDialog.setCancelable(false);

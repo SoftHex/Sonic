@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -62,7 +63,9 @@ public class sonicFirstAccess extends AppCompatActivity {
             }
         });
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_PERFIL+ new sonicDatabaseCRUD(_this)+"_"+getIntent().getIntExtra("VENDEDOR_ID",0)+".jpg");
+        String imagem = getIntent().getIntExtra("EMPRESA_ID",0)+"_"+getIntent().getIntExtra("ID",0)+".jpg";
+
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_PERFIL+imagem);
 
         if(file.exists()){
 

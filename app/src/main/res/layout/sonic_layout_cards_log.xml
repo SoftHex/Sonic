@@ -1,158 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:tag="cards main container">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="0dp"
-        android:background="?selectableItemBackground">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?selectableItemBackground">
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardElevation="0dp">
 
             <LinearLayout
-                android:id="@+id/layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="12dp">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?selectableItemBackground">
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:id="@+id/layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/codigo"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/placeholderLetter"
-                        android:textColor="@color/colorTextAccent"
-                        android:layout_weight="1"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/data"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:gravity="right"
-                        android:textSize="12sp"
-                        android:text="@string/placeholderDate" />
+                        <TextView
+                            android:id="@+id/codigo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/placeholderLetter"
+                            android:textColor="@color/colorTextAccent"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/data"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:gravity="right"
+                            android:text="@string/placeholderDate"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/fabricante"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:text="Manufacturer:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/hora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:gravity="right"
+                            android:textSize="12sp"
+                            android:text="@string/placeholderTime" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+
+                        <TextView
+                            android:id="@+id/modelo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/fabricante"
+                            android:layout_below="@+id/fabricante"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:text="Model:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/versao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/modelo"
+                            android:layout_below="@+id/modelo"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:text="Version:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/atividade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/versao"
+                            android:layout_below="@+id/versao"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:text="Activity:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/classe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/atividade"
+                            android:layout_below="@+id/atividade"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:text="Class:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/log"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/classe"
+                            android:layout_below="@+id/classe"
+                            android:textColor="@color/colorTextNoAccent"
+                            android:text="Error:"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/fabricante"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:text="Manufacturer:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/hora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="right"
-                        android:textSize="12sp"
-                        android:text="@string/placeholderTime" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-
-                    <TextView
-                        android:id="@+id/modelo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/fabricante"
-                        android:layout_below="@+id/fabricante"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:text="Model:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/versao"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/modelo"
-                        android:layout_below="@+id/modelo"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:text="Version:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/atividade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/versao"
-                        android:layout_below="@+id/versao"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:text="Activity:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/classe"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/atividade"
-                        android:layout_below="@+id/atividade"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:text="Class:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/log"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/classe"
-                        android:layout_below="@+id/classe"
-                        android:textColor="@color/colorTextNoAccent"
-                        android:text="Error:"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:layout_below="@+id/layout"
-                android:background="@drawable/separator_gradient_horizontal" />
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
 
 
+        </android.support.v7.widget.CardView>
+
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_below="@+id/layout"
+        android:background="@drawable/separator_gradient_horizontal" />
 
 </LinearLayout>

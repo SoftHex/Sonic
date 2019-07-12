@@ -102,7 +102,7 @@ public class sonicThrowMessage {
                 View sbView = mySnackBar.getView();
                 int snackbarTextId = android.support.design.R.id.snackbar_text;
                 TextView textView = (TextView)sbView.findViewById(snackbarTextId);
-                sbView.setBackgroundColor(myCtx.getResources().getColor(R.color.colorPrimaryDarkT));
+                sbView.setBackgroundColor(myCtx.getResources().getColor(R.color.colorPrimaryBlackDarkT));
                 textView.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryWhite));
                 mySnackBar.show();
 

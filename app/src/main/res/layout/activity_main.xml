@@ -27,7 +27,7 @@
         android:layout_marginBottom="10dp"
         android:alpha=".5"
         android:layout_above="@+id/layoutDots"
-        android:background="@android:color/white"/>
+        android:background="@color/colorPrimaryDark"/>
     
     <Button
         android:id="@+id/btn_next"
@@ -38,8 +38,7 @@
         android:background="@null"
         android:textSize="14sp"
         tools:ignore="RelativeOverlap"
-        android:text="@string/textNext"
-        android:textColor="@android:color/white"/>
+        android:text="@string/textNext" />
 
     <Button
         android:id="@+id/btn_skip"
@@ -50,8 +49,7 @@
         android:background="@null"
         android:textSize="14sp"
         tools:ignore="RelativeOverlap"
-        android:text="@string/textSkip"
-        android:textColor="@android:color/white"/>
+        android:text="@string/textSkip"/>
 
 
 </RelativeLayout>

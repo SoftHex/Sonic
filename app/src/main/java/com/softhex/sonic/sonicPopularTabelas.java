@@ -325,7 +325,7 @@ public class sonicPopularTabelas {
                                     int len = str.length();
                                     String str2 = str.substring(pos, len);
                                     List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Produto.saveProduto(data);
+                                    DBC.Produto.saveProduto(data);
                                     line = reader.readLine();
 
                                 }

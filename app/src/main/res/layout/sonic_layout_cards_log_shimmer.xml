@@ -5,19 +5,18 @@
     android:orientation="vertical"
     android:tag="cards main container">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="0dp"
-        android:background="?selectableItemBackground">
+        card_view:cardElevation="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-5dp"
-            android:background="?selectableItemBackground">
+            android:layout_marginTop="-5dp">
 
             <RelativeLayout
                 android:id="@+id/layout"
@@ -33,10 +32,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="0dp"
-                    android:layout_toLeftOf="@id/data_hora"
+                    android:layout_toLeftOf="@id/data"
                     android:background="@color/colorPrimaryLight"
                     android:textSize="13sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/data"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/fabricante"
@@ -44,6 +52,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/codigo"
                     android:layout_below="@+id/codigo"
+                    android:layout_toLeftOf="@id/hora"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorPrimaryLight"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/hora"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/data"
                     android:layout_marginTop="3dp"
                     android:background="@color/colorPrimaryLight"
                     android:textSize="10sp" />
@@ -98,14 +118,7 @@
                     android:background="@color/colorPrimaryLight"
                     android:textSize="10sp" />
 
-                <TextView
-                    android:id="@+id/data_hora"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="5dp"
-                    android:background="@color/colorPrimaryLight"
-                    android:textSize="13sp" />
+
 
             </RelativeLayout>
 

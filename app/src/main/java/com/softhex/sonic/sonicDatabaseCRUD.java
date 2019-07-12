@@ -1502,7 +1502,8 @@ public class sonicDatabaseCRUD {
                                 "tu.codigo, " +
                                 "tu.nome, " +
                                 "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = tu.nivel_acesso) AS cargo, " +
-                                "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa " +
+                                "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa, " +
+                                "(SELECT e.codigo FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa_id " +
                                 " FROM "+TABLE_USUARIOS+" tu WHERE tu.imei = '"+imei+"'", null);
 
                 while(cursor.moveToNext()){
@@ -1513,6 +1514,7 @@ public class sonicDatabaseCRUD {
                     usuario.setNome(cursor.getString(cursor.getColumnIndex("nome")));
                     usuario.setCargo(cursor.getString(cursor.getColumnIndex("cargo")));
                     usuario.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
+                    usuario.setEmpresaId(cursor.getInt(cursor.getColumnIndex("empresa_id")));
                     usuarios.add(usuario);
 
 
@@ -1918,12 +1920,11 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result = false;
             ContentValues cv = new ContentValues();
-            //DB.getWritableDatabase().beginTransaction();
 
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_produto", lista.get(0));
+                    cv.put("codigo", lista.get(0));
                     cv.put("codigo_alternativo", lista.get(1));
                     cv.put("descricao",  lista.get(2));
                     cv.put("codigo_unidade", lista.get(3));

@@ -17,6 +17,7 @@ public class sonicUsuariosHolder {
      String  usuario_superior;
      String cargo;
      String empresa;
+     int empresa_id;
      String meta;
      String  ativo;
      String  data;
@@ -40,6 +41,7 @@ public class sonicUsuariosHolder {
                                String usuario_superior,
                                String cargo,
                                String empresa,
+                               int empresa_id,
                                String meta,
                                String ativo,
                                String data,
@@ -57,6 +59,7 @@ public class sonicUsuariosHolder {
         this.usuario_superior = usuario_superior;
         this.cargo = cargo;
         this.empresa = empresa;
+        this.empresa_id = empresa_id;
         this.meta = meta;
         this.ativo = ativo;
         this.data = data;
@@ -105,6 +108,10 @@ public class sonicUsuariosHolder {
 
     public String getEmpresa() {
         return empresa;
+    }
+
+    public int getEmpresaId() {
+        return empresa_id;
     }
 
     public String getMeta(){
@@ -156,6 +163,10 @@ public class sonicUsuariosHolder {
 
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public void setEmpresaId(int empresa_id) {
+        this.empresa_id = empresa_id;
     }
 
     public void setAtivo(String  ativo) { this.ativo = ativo; }

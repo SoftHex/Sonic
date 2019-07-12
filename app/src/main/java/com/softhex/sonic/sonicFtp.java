@@ -9,6 +9,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamAdapter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileOutputStream;
 
@@ -115,24 +116,22 @@ public class sonicFtp {
             FileOutputStream file = new FileOutputStream(destino);
 
             if(ftpClient.retrieveFile(fileName, file)){
-                destino.createNewFile();
-                CopyStreamAdapter streamListener = new CopyStreamAdapter() {
 
-                    @Override
-                    public void bytesTransferred(long totalBytesTransferred, int bytesTransferred, long streamSize) {
-                        //this method will be called everytime some bytes are transferred
+                try{
+                    destino.createNewFile();
+                    return true;
+                }catch (FileNotFoundException e){
+                    e.printStackTrace();
+                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    return false;
+                }
 
-                        //int percent = (int)(totalBytesTransferred*100);
-                        //Log.d("FILE", totalBytesTransferred+"");
-                        //Log.d("FILE_TOTAL", files2[0].getSize()+"");
-                    }
 
-                };
-                //ftpClient.setCopyStreamListener(streamListener);
-                result = true;
+            }else{
+                file.close();
+                result =  false;
             }
 
-            file.close();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -167,33 +166,7 @@ public class sonicFtp {
 
                 publishProgress("Baixando arquivos...");
 
-
                 try{
-
-                    //FTPFile f = ftpClient.mlistFile(strings[0]);
-                    //Long size = f.getSize();
-                    //final Long percent = size/1024;
-                    //String sufix;
-
-                    /*CopyStreamAdapter streamListener = new CopyStreamAdapter() {
-
-                        int total;
-
-                        @Override
-                        public void bytesTransferred(long totalBytesTransferred, int bytesTransferred, long streamSize) {
-
-
-                           total+=bytesTransferred;
-
-                                Log.d("TOTAL", (float)(total/1024)+" MB");
-
-
-                            //publishProgress((totalBytesTransferred/1024)+" MB");
-                            //Log.d("TOTAL", (totalBytesTransferred/1024)+" MB");
-
-                        }
-
-                    };*/
 
                     File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
                     FileOutputStream file = new FileOutputStream(destino);
@@ -213,6 +186,8 @@ public class sonicFtp {
                         myPopTable.gravarDados(arquivo);
 
                        res = true;
+                    }else{
+                        new sonicThrowMessage(myCtx).showMessage("Ops,","Arquivo não encontrado. Verifique com o administrador do sistema.", sonicThrowMessage.MSG_WARNING);
                     }
 
                     file.close();
@@ -226,9 +201,9 @@ public class sonicFtp {
 
             } else {
 
-                myMessage.showMessage("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
+                new sonicThrowMessage(myCtx).showMessage("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
                 this.cancel(true);
-                myProgress.dismiss();
+                //apagarLogs.dismiss();
                 return false;
             }
 
@@ -250,6 +225,8 @@ public class sonicFtp {
             myProgress.dismiss();
 
             if(aBoolean){
+
+                new sonicThrowMessage(myCtx).showMessage("Pronto,","Arquivo sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
 
             }
 

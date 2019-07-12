@@ -46,7 +46,7 @@ public class sonicMainHome extends Fragment {
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicSistemaLogAdapter myAdapter;
+    private sonicMainAdapter myAdapter;
     private List<sonicSistemaLogHolder> myErros;
     private CoordinatorLayout myCoordinatorLayout;
     private Context _this;
@@ -110,7 +110,7 @@ public class sonicMainHome extends Fragment {
                                     public void run() {
 
                                         if(result>0){
-                                            myAdapter = new sonicSistemaLogAdapter(myErros, _this);
+                                            myAdapter = new sonicMainAdapter(myErros, _this);
                                             myRecycler.setVisibility(VISIBLE);
                                             myRecycler.setAdapter(myAdapter);
                                             ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();

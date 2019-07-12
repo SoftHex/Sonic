@@ -179,7 +179,7 @@ public class sonicVerificarSite{
                         lista = DBC.Usuarios.selectUsuarioImei(imei);
                         if(!lista.isEmpty()){
 
-                            startActivity(lista.get(0).getEmpresa(), lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
+                            startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
 
                         }else{
                             myMessage.showMessage("Atenção", "Seu aparelho não esta cadastrado para "+DBC.Empresa.empresaPadrao()+". Verifique se seu imei ("+imei+") foi cadastrado corretamente pelo administrador.", myMessage.MSG_WARNING);
@@ -204,12 +204,13 @@ public class sonicVerificarSite{
         }
     }
 
-    public void startActivity(String empresa, int id, String usuario, String cargo, String imei){
+    public void startActivity(String empresa, int empresa_id, int id, String usuario, String cargo, String imei){
 
         Intent i = new Intent(myCtx, sonicFirstAccess.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("ID", id);
         i.putExtra("EMPRESA", empresa);
+        i.putExtra("EMPRESA_ID", empresa_id);
         i.putExtra("USUARIO", usuario);
         i.putExtra("CARGO", cargo);
         i.putExtra("IMEI", imei);
