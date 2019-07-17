@@ -200,7 +200,7 @@ public class sonicPopularTabelas {
 
                             }
 
-                            if ("[GRUPO_CLIENTES]".equals(line)) {
+                            if ("[GRUPO_CLIENTES]".equals(line) || line.equals("[GRUPO_CLIENTES]")) {
 
                                 Log.d("GRUPO_CLIENTES", "ENTROU");
 

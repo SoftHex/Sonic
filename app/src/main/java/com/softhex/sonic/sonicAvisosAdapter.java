@@ -7,8 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -129,11 +127,11 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
         holder.letra.setBackground((ctx).getResources().getDrawable(R.drawable.circle_textview));
 
         if(avs.getStatus()==1){
-            holder.autor.setTextColor(ctx.getResources().getColor(R.color.colorTextNoAccent));
+            holder.autor.setTextColor(ctx.getResources().getColor(R.color.colorTextAccentLight));
             holder.autor.setTypeface(Typeface.DEFAULT);
-            holder.titulo.setTextColor(ctx.getResources().getColor(R.color.colorTextNoAccent));
+            holder.titulo.setTextColor(ctx.getResources().getColor(R.color.colorTextAccentLight));
             holder.titulo.setTypeface(Typeface.DEFAULT);
-            holder.data.setTextColor(ctx.getResources().getColor(R.color.colorTextNoAccent));
+            holder.data.setTextColor(ctx.getResources().getColor(R.color.colorTextAccentLight));
             holder.data.setTypeface(Typeface.DEFAULT);
 
         }

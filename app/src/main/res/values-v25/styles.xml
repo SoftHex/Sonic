@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@drawable/back14</item>
+        <item name="android:windowBackground">@drawable/back</item>
         <item name="android:colorSecondary">@color/colorTextPrimary</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorTextDark</item>
@@ -17,7 +17,7 @@
         <item name="colorPrimary">@color/colorWinePrimary</item>
         <item name="colorPrimaryDark">@color/colorWinePrimaryDark</item>
         <item name="colorAccent">@color/colorWineAccent</item>
-        <item name="android:windowBackground">@drawable/back13</item>
+        <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
@@ -27,7 +27,7 @@
         <item name="colorPrimary">@color/colorNightPrimary</item>
         <item name="colorPrimaryDark">@color/colorNightPrimaryDark</item>
         <item name="colorAccent">@color/colorNightAccent</item>
-        <item name="android:windowBackground">@drawable/back13</item>
+        <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
@@ -37,7 +37,7 @@
         <item name="colorPrimary">@color/colorGreenPrimary</item>
         <item name="colorPrimaryDark">@color/colorGreenPrimaryDark</item>
         <item name="colorAccent">@color/colorGreenAccent</item>
-        <item name="android:windowBackground">@drawable/back14</item>
+        <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
@@ -59,7 +59,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryWhite</item>
-        <item name="android:windowBackground">@drawable/back6</item>
+        <item name="android:windowBackground">@drawable/back</item>
     </style>
     <style name="IntroTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>

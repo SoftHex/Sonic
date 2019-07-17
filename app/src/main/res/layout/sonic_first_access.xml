@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/colorTextAccent"
+                    android:textColor="@color/colorTextAccentDark"
                     android:textSize="16dp"
                     android:text="EMPRESA"/>
 
@@ -79,7 +79,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textSize="10dp"
-                    android:textColor="@color/colorTextAccent"
+                    android:textColor="@color/colorTextAccentDark"
                     android:layout_marginTop="2dp"
                     android:text="CARGO"/>
 

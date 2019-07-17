@@ -95,13 +95,13 @@ public class sonicAppearence {
 
     }
 
-    public static void searchAppearence(final Activity act, final SearchView sv, final Toolbar tool, int numberOfMenuIcon, boolean containsOverflow, boolean show){
+    public static void searchAppearence(Activity act, SearchView sv, final Toolbar tool, int numberOfMenuIcon, boolean containsOverflow, boolean show){
 
         tool.setBackgroundColor(Color.WHITE);
-        final Window window = act.getWindow();
+        Window window = act.getWindow();
         EditText searchEditText = (EditText) sv.findViewById(android.support.v7.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(act.getResources().getColor(R.color.colorTextAccent));
-        searchEditText.setHintTextColor(act.getResources().getColor(R.color.colorTextNoAccent));
+        searchEditText.setTextColor(act.getResources().getColor(R.color.colorTextAccentDark));
+        searchEditText.setHintTextColor(act.getResources().getColor(R.color.colorTextAccentLight));
 
         if (show) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

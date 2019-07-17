@@ -36,8 +36,9 @@
     <color name="colorPrimaryBlackLightT">#90696969</color>
     <color name="colorTextDark">#000</color>
     <color name="colorTextPrimary">#363636</color>
-    <color name="colorTextAccent">#696969</color>
-    <color name="colorTextNoAccent">#C0C0C0</color>
+    <color name="colorTextAccent">#A9A9A9</color>
+    <color name="colorTextAccentDark">#696969</color>
+    <color name="colorTextAccentLight">#C0C0C0</color>
     <color name="colorTextDarkT">#90000000</color>
     <color name="colorTextPrimaryT">#90363636</color>
     <color name="colorTextAccentT">#90696969</color>

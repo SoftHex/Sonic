@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A simple way to make technology easier"
-                    android:textColor="@color/colorTextAccent"
+                    android:textColor="@color/colorTextAccentDark"
                     android:textSize="10dp"/>
 
             </LinearLayout>
@@ -85,7 +85,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:textSize="16dp"
-                android:textColor="@color/colorTextAccent"
+                android:textColor="@color/colorTextAccentDark"
                 android:text="Segurança" />
 
         </LinearLayout>
@@ -111,7 +111,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:textSize="16dp"
-                android:textColor="@color/colorTextAccent"
+                android:textColor="@color/colorTextAccentDark"
                 android:text="Personalização" />
 
         </LinearLayout>
@@ -137,7 +137,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:textSize="16dp"
-                android:textColor="@color/colorTextAccent"
+                android:textColor="@color/colorTextAccentDark"
                 android:text="Notificações" />
 
         </LinearLayout>
@@ -163,7 +163,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:textSize="16dp"
-                android:textColor="@color/colorTextAccent"
+                android:textColor="@color/colorTextAccentDark"
                 android:text="Ajuda" />
 
         </LinearLayout>
@@ -189,7 +189,7 @@
                 android:drawablePadding="20dp"
                 android:drawableTint="@color/colorAccent"
                 android:textSize="16dp"
-                android:textColor="@color/colorTextAccent"
+                android:textColor="@color/colorTextAccentDark"
                 android:text="Sobre" />
 
         </LinearLayout>

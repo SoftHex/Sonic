@@ -82,8 +82,10 @@
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>
-    <string name="go_network_error">Verifique sua conexão com a internet...</string>
-    <string name="go_network_success">Conexão com a internet OK.</string>
+    <string name="noLog">Sem logs por enquanto. Isso certamente é um bom sinal, :)</string>
+    <string name="noClientes">Estranho, não é normal a ausência de clientes por aqui. Tente fazer uma sincronização.</string>
+    <string name="networkError">Verifique sua conexão com a internet...</string>
+    <string name="networkSuccess">Conexão com a internet OK.</string>
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
     <string name="go_cod_vend">Digite o código do vendedor...</string>

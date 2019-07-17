@@ -1,11 +1,7 @@
 package com.softhex.sonic;
 
-import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +10,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,14 +27,10 @@ import android.widget.TextView;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
-import co.mobiwise.materialintro.animation.AnimationFactory;
-
-import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
@@ -47,15 +38,13 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicSistemaFragLog extends Fragment{
+public class sonicClientesCPF extends Fragment{
 
     private View myView;
-    private View myHeader;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicSistemaLogAdapter myAdapter;
-    private List<sonicSistemaLogHolder> myErros;
-    private sonicDatabaseLogCRUD DBC;
+    private sonicClientesAdapter myAdapter;
+    private List<sonicClientesHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
@@ -64,15 +53,13 @@ public class sonicSistemaFragLog extends Fragment{
     private TextView myTextView;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private ProgressDialog myProgressDialog;
     private Context _this;
     private ImageView myImage;
     Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myHeader = inflater.inflate(R.layout.header, container, false);
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_log, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         _this = getActivity();
 
@@ -93,8 +80,6 @@ public class sonicSistemaFragLog extends Fragment{
         setHasOptionsMenu(true);
 
         myCons = new sonicConstants();
-
-        DBC = new sonicDatabaseLogCRUD(getActivity());
 
         myToolBar = getActivity().findViewById(R.id.toolbar);
 
@@ -129,7 +114,7 @@ public class sonicSistemaFragLog extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.sonic_sistema_log, menu);
+        inflater.inflate(R.menu.sonic_clientes, menu);
         mySearch = menu.findItem(R.id.search);
 
         final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) mySearch.getActionView();
@@ -171,8 +156,8 @@ public class sonicSistemaFragLog extends Fragment{
         switch (item.getItemId()) {
             case R.id.search:
                 return false;
-            case R.id.delete:
-                dialogDelete();
+            case R.id.pref:
+                //dialogDelete();
                 return false;
             default:
                 break;
@@ -186,8 +171,8 @@ public class sonicSistemaFragLog extends Fragment{
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myErros =  new sonicDatabaseLogCRUD(_this).Log.selectLog();
-            return myErros.size();
+            myList =  new sonicDatabaseCRUD(_this).Clientes.selectCliente("F");
+            return myList.size();
 
         }
 
@@ -236,7 +221,7 @@ public class sonicSistemaFragLog extends Fragment{
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicSistemaLogAdapter(myErros, _this);
+        myAdapter = new sonicClientesAdapter(myList, _this);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -256,80 +241,14 @@ public class sonicSistemaFragLog extends Fragment{
         myImage.setVisibility(VISIBLE);
         myTextView.setVisibility(VISIBLE);
         myTextView.startAnimation(fadeIn);
-        myTextView.setText(R.string.noLog);
+        myTextView.setText(R.string.noClientes);
         Glide.with(_this)
-                .load(R.drawable.nolog)
+                .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                 .into(myImage);
 
-    }
-
-    private void dialogDelete() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(_this);
-        builder.setMessage("Deseja apagar todos os logs?")
-            .setPositiveButton("APAGAR", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    apagarLogs();
-                }
-            })
-            .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-
-                }
-            })
-            .show();
-
-    }
-
-    public void apagarLogs(){
-
-        myProgressDialog = new ProgressDialog(_this);
-        myProgressDialog.setCancelable(false);
-        myProgressDialog.setMessage("Apagando, aguarde...");
-        myProgressDialog.setMax(1);
-        myProgressDialog.setProgressStyle(0);
-        myProgressDialog.show();
-
-        Handler handler = new Handler();
-
-        handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    new myAsyncTaskDialog().execute();
-
-                                }
-                            }
-                , 500);
-
-
-    }
-
-    class myAsyncTaskDialog extends AsyncTask<Boolean, Boolean, Boolean>{
-        @Override
-        protected Boolean doInBackground(Boolean... booleans) {
-            return new sonicDatabaseLogCRUD(_this).Log.cleanLog();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-
-            myProgressDialog.cancel();
-
-            if(aBoolean){
-
-                myErros.clear();
-                myAdapter.notifyDataSetChanged();
-                showNoResult();
-
-            }
-        }
     }
 
     public void refreshFragment(){

@@ -41,7 +41,7 @@
             android:layout_margin="2dp"
             android:maxLines="2"
             android:ellipsize="end"
-            android:textColor="@color/colorTextNoAccent"
+            android:textColor="@color/colorTextAccentLight"
             android:text="Descrição da ação."/>
 
     </LinearLayout>

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -126,17 +127,22 @@ public class sonicAvisosFragNaoLidos extends Fragment{
                                     public void run() {
 
                                         if(result>0){
+
                                             myAdapter = new sonicAvisosAdapter(myAvisos, getActivity());
                                             myRecycler.setVisibility(VISIBLE);
                                             myRecycler.setAnimation(fadeIn);
                                             myRecycler.setAdapter(myAdapter);
                                             ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
                                             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
                                         }else{
+
                                             myImage.setVisibility(VISIBLE);
                                             Glide.with(_this)
                                                     .load(R.drawable.nomessage)
-                                                    .apply(new RequestOptions().override(300,300))
+                                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                                    .skipMemoryCache(true)
+                                                    //.apply(new RequestOptions().override(300,300))
                                                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                                                     .into(myImage);
                                             myTextViewText.setText("Sem avisos por enquanto.");
@@ -150,7 +156,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
                                     }
                                 }
-                    , 500);
+                    , 700);
 
 
         }

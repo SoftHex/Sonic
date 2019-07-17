@@ -79,6 +79,10 @@
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".sonicClientes"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".sonicSistema"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />

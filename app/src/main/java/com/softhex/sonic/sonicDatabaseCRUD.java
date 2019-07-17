@@ -411,7 +411,7 @@ public class sonicDatabaseCRUD {
 
                 sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
-                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                 empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
 
 
@@ -505,7 +505,7 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, "codigos="+codigo, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, "codigo="+codigo, null);
 
             } catch (SQLiteException e) {
                 DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -782,7 +782,7 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                    DB.getWritableDatabase().update(TABLE_CLIENTES, args, " codigo_cliente = "+codigo, null);
+                    DB.getWritableDatabase().update(TABLE_CLIENTES, args, " codigo = "+codigo, null);
 
             }catch (SQLiteException e){
                 DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -858,7 +858,7 @@ public class sonicDatabaseCRUD {
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
                         "SELECT " +
-                                "c.codigo_cliente as codigo, " +
+                                "c.codigo as codigo, " +
                                 "c.tipo as tipo, " +
                                 "c.razao_social as razao, " +
                                 "c.nome_fantasia as fantasia, " +
@@ -875,11 +875,11 @@ public class sonicDatabaseCRUD {
                                 "c.observacao as obs, " +
                                 "c.data_cadastro as cadastro, " +
                                 "gc.nome as grupo, " +
-                                "(SELECT COUNT(t._id) FROM " + TABLE_TITULOS + " t WHERE t.codigo_cliente = c.codigo_cliente) AS titulos, " +
+                                "(SELECT COUNT(t._id) FROM " + TABLE_TITULOS + " t WHERE t.codigo_cliente = c.codigo) AS titulos, " +
                                 "c.situacao as situacao" +
                                 " FROM " + TABLE_CLIENTES +
                                 " c LEFT JOIN " + TABLE_GRUPO_CLIENTES +
-                                " gc ON gc.codigo_grupo = c.codigo_grupo WHERE c.tipo= '" + tipo + "' " + where + orderby, null);
+                                " gc ON gc.codigo = c.codigo_grupo WHERE c.tipo= '" + tipo + "' " + where + orderby, null);
 
                 while (cursor.moveToNext()) {
 

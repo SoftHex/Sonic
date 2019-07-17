@@ -103,7 +103,7 @@
                             android:gravity="right"
                             android:drawableRight="@mipmap/ic_arrow_right_circle_grey600_18dp"
                             android:drawablePadding="2dp"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Relatório completo"/>
 
                     </LinearLayout>
@@ -136,7 +136,7 @@
                             android:textSize="12sp"
                             android:gravity="right"
                             android:textStyle="italic"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="atualizado hoje às 23:30"/>
 
                     </LinearLayout>
@@ -181,7 +181,7 @@
                                 android:gravity="center"
                                 android:drawablePadding="2dp"
                                 android:textStyle="bold"
-                                android:textColor="@color/colorTextAccent"
+                                android:textColor="@color/colorTextAccentDark"
                                 android:drawableLeft="@mipmap/ic_arrow_up_circle_grey600_24dp"
                                 android:text="0"/>
 
@@ -210,7 +210,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
                                 android:textSize="12sp"
-                                android:textColor="@color/colorTextNoAccent"
+                                android:textColor="@color/colorTextAccentLight"
                                 android:text="(De pedidos enviados no mês.)"/>
 
 

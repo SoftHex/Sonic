@@ -43,7 +43,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="@string/placeholderLetter"
-                            android:textColor="@color/colorTextAccent"
+                            android:textColor="@color/colorTextAccentDark"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -68,7 +68,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:maxLines="1"
                             android:ellipsize="end"
                             android:text="Manufacturer:"
@@ -98,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/fabricante"
                             android:layout_below="@+id/fabricante"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Model:"
                             android:textSize="12sp" />
 
@@ -108,7 +108,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/modelo"
                             android:layout_below="@+id/modelo"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Version:"
                             android:textSize="12sp" />
 
@@ -118,7 +118,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/versao"
                             android:layout_below="@+id/versao"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Activity:"
                             android:textSize="12sp" />
 
@@ -128,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/atividade"
                             android:layout_below="@+id/atividade"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Class:"
                             android:textSize="12sp" />
 
@@ -138,7 +138,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/classe"
                             android:layout_below="@+id/classe"
-                            android:textColor="@color/colorTextNoAccent"
+                            android:textColor="@color/colorTextAccentLight"
                             android:text="Error:"
                             android:textSize="12sp" />
 

@@ -234,6 +234,8 @@ public class sonicMain extends AppCompatActivity{
 
             File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
 
+            //String image = file.exists() ? file.toString() : getResources().getDrawable(R.drawable.no_profile).toString();
+
             if(i<3){
 
                 if(file.exists()){
@@ -461,10 +463,11 @@ public class sonicMain extends AppCompatActivity{
                                 startActivity(i);
                                 break;
                             case 3:
-                                //i = new Intent(sonicMain.this, sonicClientes.class);
-                                //startActivity(i);
+                                new myAsyncStartActivity().execute(sonicClientes.class);
                                 break;
                             case 4:
+                                i = new Intent(sonicMain.this, sonicClientes.class);
+                                startActivity(i);
                                 //i = new Intent(sonicMain.this, sonicProdutos.class);
                                 //startActivity(i);
                                 break;
