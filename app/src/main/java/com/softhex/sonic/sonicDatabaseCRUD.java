@@ -1756,7 +1756,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public boolean saveSincronizacao(String tabela, String tipo, String activity, String acao){
+        public boolean saveSincronizacao(String tabela, String tipo){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues cv = new ContentValues();

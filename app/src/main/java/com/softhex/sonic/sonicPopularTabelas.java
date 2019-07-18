@@ -819,6 +819,7 @@ public class sonicPopularTabelas {
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
                         new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","dados");
                         break;
                     case "ESTOQUE":
                         new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);

@@ -296,10 +296,12 @@ public class sonicFtp {
                     case "CATALOGO":
                         new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
                         Log.d("ARQUIVO", arquivo);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","catalogo");
                         break;
                     case "CLIENTES":
                         new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
                         Log.d("ARQUIVO", arquivo);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
                         break;
 
                 }
