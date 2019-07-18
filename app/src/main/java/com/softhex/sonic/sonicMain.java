@@ -31,8 +31,6 @@ import android.widget.Toast;
 import com.flyco.dialog.entity.DialogMenuItem;
 import com.flyco.dialog.listener.OnOperItemClickL;
 import com.flyco.dialog.widget.NormalListDialog;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -53,12 +51,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import co.mobiwise.materialintro.MaterialIntroConfiguration;
-import co.mobiwise.materialintro.shape.Focus;
-import co.mobiwise.materialintro.shape.FocusGravity;
-import co.mobiwise.materialintro.view.MaterialIntroView;
-import eu.long1.spacetablayout.SpaceTabLayout;
-
 
 public class sonicMain extends AppCompatActivity{
 
@@ -75,7 +67,6 @@ public class sonicMain extends AppCompatActivity{
     private ViewPagerAdapter myAdapter;
     private sonicConstants myCons;
     private BottomNavigationView myBottonNav;
-    private SpaceTabLayout mySpaceTabLayout;
     private SharedPreferences pref;
     private AccountHeader myHeader;
     private Context myCtx;
@@ -107,7 +98,6 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
     List<sonicEmpresasHolder> listaEmpresa;
-    MaterialIntroConfiguration config = new MaterialIntroConfiguration();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -35,11 +35,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
-
 import java.util.List;
-
-import co.mobiwise.materialintro.animation.AnimationFactory;
-
 import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;

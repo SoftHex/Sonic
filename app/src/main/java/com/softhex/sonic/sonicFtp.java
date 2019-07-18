@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.media.tv.TvContract;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
@@ -32,6 +33,7 @@ public class sonicFtp {
     private FTPClient ftpClient = new FTPClient();
     private Context myCtx;
     private ProgressDialog myProgress;
+    private ProgressDialog myProgress2;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
     private sonicThrowMessage myMessage;
@@ -41,12 +43,12 @@ public class sonicFtp {
 
     public sonicFtp(Context ctx){
         this.myCtx = ctx;
-        this.myProgress = new ProgressDialog(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.myMessage = new sonicThrowMessage(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.myPopTable = new sonicPopularTabelas(myCtx);
+        this.myProgress2 = new ProgressDialog(myCtx);
     }
 
     public Boolean ftpConnect(){
@@ -174,10 +176,8 @@ public class sonicFtp {
 
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
-                myProgress.setTitle("Sincronização");
                 myProgress.setMessage("Conectando...");
-                myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                //myProgress.setIndeterminate(true);
+                myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 myProgress.show();
                 new myAsyncTaskDownload().execute(fileName, localFile);
 
@@ -196,16 +196,21 @@ public class sonicFtp {
 
             if(ftpConnect()){
 
-                //try{
-                 //   myProgress.setIndeterminate(false);
-                ///}catch (Exception e){
-                //    e.printStackTrace();
-                //}
+                myProgress.dismiss();
+
+                new Handler(Looper.getMainLooper()).post(()-> {
+
+                    myProgress2.setCancelable(false);
+                    myProgress2.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                    myProgress2.setMessage("Fazendo download...");
+                    myProgress2.setProgress(0);
+                    myProgress2.show();
+
+                });
 
                 int fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
 
-                myProgress.setProgress(0);
-                myProgress.setMax(fileSize);
+                myProgress2.setMax(fileSize);
 
                 CopyStreamAdapter sa = new CopyStreamAdapter(){
 
@@ -213,7 +218,7 @@ public class sonicFtp {
                     public void bytesTransferred(long l, int i, long l1) {
 
                             if((l%(1024*2))==0)
-                            myProgress.setProgressNumberFormat((sonicUtils.bytes2String(l)) + " / " + (sonicUtils.bytes2String(fileSize)));
+                            myProgress2.setProgressNumberFormat((sonicUtils.bytes2String(l)) + " / " + (sonicUtils.bytes2String(fileSize)));
                             publishProgress("Fazendo download...",String.valueOf(l));
 
                     }
@@ -266,8 +271,8 @@ public class sonicFtp {
         @Override
         protected void onProgressUpdate(String... strings) {
             super.onProgressUpdate(strings);
-            myProgress.setMessage(String.valueOf(strings[0]));
-            myProgress.setProgress(Integer.parseInt(strings[1]));
+            myProgress2.setMessage(String.valueOf(strings[0]));
+            myProgress2.setProgress(Integer.parseInt(strings[1]));
         }
 
         @Override
@@ -279,7 +284,7 @@ public class sonicFtp {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
-            myProgress.dismiss();
+            myProgress2.dismiss();
 
             if(aBoolean){
 
@@ -298,8 +303,6 @@ public class sonicFtp {
                         break;
 
                 }
-
-
 
             }
 

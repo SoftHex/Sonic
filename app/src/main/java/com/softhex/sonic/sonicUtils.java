@@ -415,7 +415,6 @@ public class sonicUtils {
 
             myProgress = new ProgressDialog(myCtx);
             myProgress.setCancelable(false);
-            myProgress.setTitle("Sincronização");
             myProgress.setMessage("Extraindo...");
             myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             myProgress.setProgress(0);

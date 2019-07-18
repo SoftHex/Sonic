@@ -82,7 +82,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -109,7 +109,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -136,7 +136,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -163,7 +163,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -190,7 +190,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -217,7 +217,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -244,7 +244,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -818,10 +818,10 @@ public class sonicPopularTabelas {
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicThrowMessage(myCtx).showMessage("Tudo certo,","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
                         break;
                     case "ESTOQUE":
-                        new sonicThrowMessage(myCtx).showMessage("Tudo certo,","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
                         break;
                     case "SITE":
 
@@ -886,7 +886,6 @@ public class sonicPopularTabelas {
 
             myProgress = new ProgressDialog(myCtx);
             myProgress.setCancelable(false);
-            myProgress.setTitle("Sincronização");
             myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             myProgress.setMessage("Gravando na seção...\n\n");
             myProgress.setProgress(0);
