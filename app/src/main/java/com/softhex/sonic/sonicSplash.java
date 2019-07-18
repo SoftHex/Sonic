@@ -3,10 +3,13 @@ package com.softhex.sonic;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
+import static android.view.View.GONE;
 
 public class sonicSplash extends AppCompatActivity {
 
@@ -21,17 +24,12 @@ public class sonicSplash extends AppCompatActivity {
         DBC = new sonicDatabaseCRUD(sonicSplash.this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow(); // in Activity's onCreate() for instance
+            Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
-        Handler handle = new Handler();
-        handle.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                logar();
-            }
-        }, 3000);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(()->logar() ,sonicUtils.Randomizer.generate(1000,4000));
 
     }
 
@@ -45,8 +43,6 @@ public class sonicSplash extends AppCompatActivity {
 
         startActivity(i);
         finish();
-        //overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out);
-
     }
 
 }

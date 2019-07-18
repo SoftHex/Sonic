@@ -15,6 +15,7 @@ public class sonicSistemaLogHolder {
     String activity;
     String classe;
     String method;
+    int line;
     String log;
     String data;
     String hora;
@@ -31,6 +32,7 @@ public class sonicSistemaLogHolder {
                                  String activity,
                                  String classe,
                                  String method,
+                                 int line,
                                  String log,
                                  String data,
                                  String hora
@@ -45,6 +47,7 @@ public class sonicSistemaLogHolder {
         this.activity = activity;
         this.classe = classe;
         this.method = method;
+        this.line = line;
         this.log = log;
         this.data = data;
         this.hora = hora;
@@ -88,6 +91,10 @@ public class sonicSistemaLogHolder {
         return this.method;
     }
 
+    public int getLine() {
+        return line;
+    }
+
     public void setCodigo(int codigo){
         this.codigo = codigo;
     }
@@ -123,8 +130,9 @@ public class sonicSistemaLogHolder {
         this.method = method;
     }
 
-
-
+    public void setLine(int line) {
+        this.line = line;
+    }
 
     @Override
     public String toString(){

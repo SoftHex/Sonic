@@ -50,7 +50,7 @@ public class sonicDatabaseLogCRUD {
             return count;
         }
 
-        public boolean saveLog(String erro, String activity, String classe, String metodo){
+        public boolean saveLog(int linha, String erro, String activity, String classe, String metodo){
 
             ContentValues cv = new ContentValues();
             Calendar cal = GregorianCalendar.getInstance();
@@ -71,6 +71,7 @@ public class sonicDatabaseLogCRUD {
                 cv.put("activity", activity);
                 cv.put("class", classe);
                 cv.put("method", metodo);
+                cv.put("line", linha);
                 cv.put("log", erro);
                 cv.put("data", dateToStr);
                 cv.put("hora", hourToStr);
@@ -102,6 +103,7 @@ public class sonicDatabaseLogCRUD {
                 erro.setActivity(cursor.getString(cursor.getColumnIndex("activity")));
                 erro.setClasse(cursor.getString(cursor.getColumnIndex("class")));
                 erro.setMethod(cursor.getString(cursor.getColumnIndex("method")));
+                erro.setLine(cursor.getInt(cursor.getColumnIndex("line")));
                 erro.setLog(cursor.getString(cursor.getColumnIndex("log")));
                 erro.setData(cursor.getString(cursor.getColumnIndex("data")));
                 erro.setHora(cursor.getString(cursor.getColumnIndex("hora")));

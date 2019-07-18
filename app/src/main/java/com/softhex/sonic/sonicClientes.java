@@ -36,19 +36,19 @@ public class sonicClientes extends AppCompatActivity {
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Clientes");
+        ActionBar myActionBar = getSupportActionBar();
+        myActionBar.setTitle("Clientes");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        myActionBar.setDisplayHomeAsUpEnabled(true);
+        myActionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager viewPager = findViewById(R.id.pager);
-        setUpViewPager(viewPager);
+        ViewPager myViewPager = findViewById(R.id.pager);
+        setUpViewPager(myViewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout myTabLayout = findViewById(R.id.tabs);
+        myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+        myTabLayout.setupWithViewPager(myViewPager);
 
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);

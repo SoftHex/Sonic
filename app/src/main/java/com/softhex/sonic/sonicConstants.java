@@ -67,6 +67,7 @@ public class sonicConstants {
     public static String EMP_SITE = "";
     public static String USER_IMEI = "";
     public static Boolean EMP_TESTE = false;
+    public static String DOWNLOAD_TYPE = "";
 
     // FTP
     //public static String FTP_SERVER = "191.252.194.48";

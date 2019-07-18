@@ -4,14 +4,24 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamAdapter;
+import org.apache.commons.net.io.CopyStreamEvent;
+import org.apache.commons.net.io.CopyStreamListener;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * Created by Administrador on 26/07/2017.
@@ -27,6 +37,7 @@ public class sonicFtp {
     private sonicThrowMessage myMessage;
     private sonicSystem mySystem;
     private sonicPopularTabelas myPopTable;
+    private String arquivo;
 
     public sonicFtp(Context ctx){
         this.myCtx = ctx;
@@ -72,17 +83,17 @@ public class sonicFtp {
 
                 }catch (IOException e){
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
 
             }catch (Exception e){
                 e.printStackTrace();
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
-            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }
 
         return result;
@@ -99,7 +110,11 @@ public class sonicFtp {
 
         }catch (Exception e){
             e.printStackTrace();
-            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                    e.getMessage(),
+                    mySystem.System.getActivityName(),
+                    mySystem.System.getClassName(el),
+                    mySystem.System.getMethodNames(el));
         }
 
         return false;
@@ -122,7 +137,11 @@ public class sonicFtp {
                     return true;
                 }catch (FileNotFoundException e){
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     return false;
                 }
 
@@ -135,7 +154,11 @@ public class sonicFtp {
 
         }catch (Exception e){
             e.printStackTrace();
-            DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                    e.getMessage(),
+                    mySystem.System.getActivityName(),
+                    mySystem.System.getClassName(el),
+                    mySystem.System.getMethodNames(el));
             return false;
 
         }
@@ -145,45 +168,70 @@ public class sonicFtp {
 
     public void downloadFile2(String fileName, String localFile) {
 
-        myProgress = new ProgressDialog(myCtx);
-        myProgress.setCancelable(false);
-        myProgress.setMessage("Conectando...");
-        myProgress.setProgressStyle(0);
-        myProgress.setMax(1);
-        myProgress.show();
-        new myAsyncTaskDownload().execute(fileName, localFile);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+                myProgress = new ProgressDialog(myCtx);
+                myProgress.setCancelable(false);
+                myProgress.setTitle("Sincronização");
+                myProgress.setMessage("Conectando...");
+                myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                //myProgress.setIndeterminate(true);
+                myProgress.show();
+                new myAsyncTaskDownload().execute(fileName, localFile);
+
+
+            }
+        });
 
     }
 
     public class myAsyncTaskDownload extends AsyncTask<String, String, Boolean>{
         @Override
-        protected Boolean doInBackground(String... strings) {
+        public Boolean doInBackground(String... strings) {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean res = false;
 
             if(ftpConnect()){
 
-                publishProgress("Baixando arquivos...");
+                //try{
+                 //   myProgress.setIndeterminate(false);
+                ///}catch (Exception e){
+                //    e.printStackTrace();
+                //}
+
+                int fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
+
+                myProgress.setProgress(0);
+                myProgress.setMax(fileSize);
+
+                CopyStreamAdapter sa = new CopyStreamAdapter(){
+
+                    @Override
+                    public void bytesTransferred(long l, int i, long l1) {
+
+                            if((l%(1024*2))==0)
+                            myProgress.setProgressNumberFormat((sonicUtils.bytes2String(l)) + " / " + (sonicUtils.bytes2String(fileSize)));
+                            publishProgress("Fazendo download...",String.valueOf(l));
+
+                    }
+
+                };
+
+                ftpClient.setCopyStreamListener(sa);
 
                 try{
 
                     File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
                     FileOutputStream file = new FileOutputStream(destino);
 
-                    //ftpClient.setCopyStreamListener(streamListener);
                     if(ftpClient.retrieveFile(strings[0], file)){
 
                         destino.createNewFile();
 
-                        publishProgress("Gravando dados...");
-
-                        String arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
-
-                        myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        myProgress.setIndeterminate(true);
-                        myProgress.setMax(100);
-                        myPopTable.gravarDados(arquivo);
+                        arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
 
                        res = true;
                     }else{
@@ -195,7 +243,11 @@ public class sonicFtp {
 
                 }catch (IOException e){
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     return false;
                 }
 
@@ -203,7 +255,6 @@ public class sonicFtp {
 
                 new sonicThrowMessage(myCtx).showMessage("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
                 this.cancel(true);
-                //apagarLogs.dismiss();
                 return false;
             }
 
@@ -216,6 +267,12 @@ public class sonicFtp {
         protected void onProgressUpdate(String... strings) {
             super.onProgressUpdate(strings);
             myProgress.setMessage(String.valueOf(strings[0]));
+            myProgress.setProgress(Integer.parseInt(strings[1]));
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
         @Override
@@ -226,7 +283,23 @@ public class sonicFtp {
 
             if(aBoolean){
 
-                new sonicThrowMessage(myCtx).showMessage("Pronto,","Arquivo sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                switch (sonicConstants.DOWNLOAD_TYPE){
+                    case "DADOS":
+                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        Log.d("ARQUIVO", arquivo);
+                        break;
+                    case "CATALOGO":
+                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
+                        Log.d("ARQUIVO", arquivo);
+                        break;
+                    case "CLIENTES":
+                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
+                        Log.d("ARQUIVO", arquivo);
+                        break;
+
+                }
+
+
 
             }
 

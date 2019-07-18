@@ -374,6 +374,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "activity string,"+
             "class string,"+
             "method string,"+
+            "line int,"+
             "log string, " +
             "data string, " +
             "hora string);";

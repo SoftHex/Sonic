@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
@@ -201,29 +202,25 @@ public class sonicSistemaFragLog extends Fragment{
             fadeOut.setFillAfter(true);
             myShimmer.setAnimation(fadeOut);
 
-            Handler handler = new Handler();
 
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(() -> {
 
-                                        if(result>0){
+                        if(result>0){
 
-                                           showResult();
+                            showResult();
 
-                                        }else{
+                        }else{
 
-                                           showNoResult();
+                            showNoResult();
 
-                                        }
+                        }
 
-                                        myShimmer.stopShimmer();
-                                        myShimmer.setVisibility(GONE);
+                        myShimmer.stopShimmer();
+                        myShimmer.setVisibility(GONE);
 
-                                    }
-                                }
-                    , 700);
-
+                    }
+                    ,sonicUtils.Randomizer.generate(500,1500));
 
         }
     }

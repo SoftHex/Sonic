@@ -72,6 +72,7 @@
     <string name="placeholderVersao"><b>Versao/SDK: </b></string>
     <string name="placeholderAtividade"><b>Atividade: </b></string>
     <string name="placeholderClasse"><b>Classe/Método: </b></string>
+    <string name="placeholderLinha"><b>Linha: </b></string>
     <string name="placeholderDetalhe"><b>Detalhe: </b></string>
     <string name="placeholderHashtag">#</string>
     <string name="msgPerms">Permissões necessárias...</string>

@@ -1,7 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.io.File;
 import java.util.List;
 
 public class sonicSincronizacaoDownloadAdapter extends RecyclerView.Adapter<sonicSincronizacaoDownloadAdapter.myViewHolder> {
@@ -24,10 +21,12 @@ public class sonicSincronizacaoDownloadAdapter extends RecyclerView.Adapter<soni
     private Context myCtx;
     private List<sonicSincronizacaoDownloadHolder> myList;
     private List<sonicUsuariosHolder> myListUsers;
+    private sonicFtp myFtp;
 
     public sonicSincronizacaoDownloadAdapter(Context myCtx, List<sonicSincronizacaoDownloadHolder> mList) {
         this.myCtx = myCtx;
         this.myList = mList;
+        this.myFtp = new sonicFtp(myCtx);
         this.myListUsers = new sonicDatabaseCRUD(myCtx).Usuarios.selectUsuarioAtivo();
     }
 
@@ -54,23 +53,28 @@ public class sonicSincronizacaoDownloadAdapter extends RecyclerView.Adapter<soni
                 .into(myViewHolder.imagem);
 
 
-        myViewHolder.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        myViewHolder.card.setOnClickListener(View-> {
+
+                String file = "";
 
                 switch (i){
                     case 0:
-                        String file = String.format("%5s",myListUsers.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                        new sonicFtp(myCtx).downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
+                        sonicConstants.DOWNLOAD_TYPE = "DADOS";
+                        file = String.format("%5s",myListUsers.get(0).getCodigo()).replace(" ", "0")+".TXT";
+                        myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
                         break;
                     case 1:
+                        sonicConstants.DOWNLOAD_TYPE = "CATALOGO";
                         file = "CATALOGO.zip";
-                        //ftpFile = sonicConstants.FTP_IMAGENS+file;
-                        //myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +"CATALOGO.zip", sonicConstants.LOCAL_TMP+file);
-                        //myUtil.Arquivo.unzipFile(String.format(file));
+                        myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +"CATALOGO.zip", sonicConstants.LOCAL_TMP+file);
+                        break;
+                    case 2:
+                        sonicConstants.DOWNLOAD_TYPE = "CLIENTES";
+                        file = "CLIENTES.zip";
+                        myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +"CLIENTES.zip", sonicConstants.LOCAL_TMP+file);
+
                 }
 
-            }
         });
 
     }

@@ -183,34 +183,24 @@ public class sonicClientesCNPJ extends Fragment{
         protected void onPostExecute(final Integer result) {
             super.onPostExecute(result);
 
-            AlphaAnimation fadeOut;
-            fadeOut = new AlphaAnimation(1,0);
-            fadeOut.setDuration(500);
-            fadeOut.setFillAfter(true);
-            myShimmer.setAnimation(fadeOut);
-
             Handler handler = new Handler();
+            handler.postDelayed(() -> {
 
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                        if(result>0){
 
-                                        if(result>0){
+                            showResult();
 
-                                           showResult();
+                        }else{
 
-                                        }else{
+                            showNoResult();
 
-                                           showNoResult();
+                        }
 
-                                        }
+                        myShimmer.stopShimmer();
+                        myShimmer.setVisibility(GONE);
 
-                                        myShimmer.stopShimmer();
-                                        myShimmer.setVisibility(GONE);
-
-                                    }
-                                }
-                    , 700);
+                    }
+                    ,sonicUtils.Randomizer.generate(500,1500));
 
 
         }
@@ -249,7 +239,7 @@ public class sonicClientesCNPJ extends Fragment{
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(myImage);
 
     }

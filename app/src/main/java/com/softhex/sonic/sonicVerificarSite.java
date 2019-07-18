@@ -49,7 +49,7 @@ public class sonicVerificarSite{
     public Boolean validar(String site, Boolean test){
 
         if(test){
-            appTest = true;
+            sonicConstants.EMP_TESTE = true;
         }
 
         String fileName = "SITES/"+ site +".TXT";
@@ -86,6 +86,7 @@ public class sonicVerificarSite{
 
                         sonicConstants.EMP_SITE = strings[0];
                         sonicConstants.EMP_EXIST = "1";
+                        sonicConstants.DOWNLOAD_TYPE = "SITE";
 
                         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + strings[0] + ".TXT");
 
@@ -93,19 +94,10 @@ public class sonicVerificarSite{
 
                             publishProgress("Gravando dados...");
 
-                            if(myPopTable.gravarDados(strings[0]+".TXT")){
+                            sonicConstants.DOWNLOAD_TYPE = "SITE";
+                            new sonicPopularTabelas(myCtx).gravarDados(strings[0]+".TXT");
 
-                                myUtil.Arquivo.deleteFile(sonicConstants.LOCAL_TMP + strings[0] + ".TXT");
-
-                                res = true;
-
-                            }
-                            else
-                            {
-                                myMessage.showMessage("Atenção", "Não foi possível gravar os dados nas tabelas. Não há nenhuma seção obrigatória disponível.", myMessage.MSG_WARNING);
-                                res = false;
-
-                            }
+                            res = true;
 
                         }
 
@@ -121,9 +113,12 @@ public class sonicVerificarSite{
 
                 }
                 catch (Exception e){
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                    res = false;
                 }
 
 
@@ -150,72 +145,9 @@ public class sonicVerificarSite{
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
-            if(aBoolean){
-
-                if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
-
-
-                    if(DBC.Database.checkMinimumData()){
-
-
-                        String imei="";
-
-                        if (android.os.Build.VERSION.SDK_INT >= 26) {
-                            imei = myPhonyManager.getImei();
-                        }
-                        else
-                        {
-                            imei = myPhonyManager.getDeviceId();
-                        }
-
-                        if(appTest){
-                            imei = "123456789";
-                            sonicConstants.EMP_TESTE = true;
-                        }
-
-                        sonicConstants.USER_IMEI = imei;
-
-                        List<sonicUsuariosHolder> lista;
-                        lista = DBC.Usuarios.selectUsuarioImei(imei);
-                        if(!lista.isEmpty()){
-
-                            startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
-
-                        }else{
-                            myMessage.showMessage("Atenção", "Seu aparelho não esta cadastrado para "+DBC.Empresa.empresaPadrao()+". Verifique se seu imei ("+imei+") foi cadastrado corretamente pelo administrador.", myMessage.MSG_WARNING);
-
-                        }
-
-                    }else{
-
-                        myMessage.showMessage("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", myMessage.MSG_WARNING);
-
-                    }
-
-                }else{
-                    ActivityCompat.requestPermissions(((Activity) myCtx),
-                            new String[]{Manifest.permission.READ_PHONE_STATE},
-                            1);
-
-                }
-
-            }
-
         }
-    }
 
-    public void startActivity(String empresa, int empresa_id, int id, String usuario, String cargo, String imei){
 
-        Intent i = new Intent(myCtx, sonicFirstAccess.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putExtra("ID", id);
-        i.putExtra("EMPRESA", empresa);
-        i.putExtra("EMPRESA_ID", empresa_id);
-        i.putExtra("USUARIO", usuario);
-        i.putExtra("CARGO", cargo);
-        i.putExtra("IMEI", imei);
-        myCtx.startActivity(i);
-        ((Activity) myCtx).finish();
     }
 
 }

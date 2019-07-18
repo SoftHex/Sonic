@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Administrador on 07/07/2017.
  */
 
-public class sonicSincronizacaoFragUpload extends Fragment{
+public class sonicSincronizacaoUpload extends Fragment{
 
     private View myView;
     private ProgressDialog myProgress;

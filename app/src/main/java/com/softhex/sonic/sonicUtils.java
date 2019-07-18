@@ -1,11 +1,15 @@
 package com.softhex.sonic;
 
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Environment;
 
 import java.io.BufferedOutputStream;
@@ -19,6 +23,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -30,9 +37,11 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -41,12 +50,12 @@ import java.util.zip.ZipInputStream;
 
 public class sonicUtils {
 
-
     private Context myCtx;
     private sonicDatabaseLogCRUD DBCL;
     private sonicSystem mySystem;
     private sonicConstants myCons;
     private Date date = new Date();
+    ProgressDialog myProgress;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     Locale brasil = new Locale("pt", "BR");
 
@@ -61,6 +70,78 @@ public class sonicUtils {
     Arquivo Arquivo = new Arquivo();
     Data Data = new Data();
     Number Number = new Number();
+
+    public static class Randomizer {
+        public static int generate(int min,int max) {
+            return min + (int)(Math.random() * ((max - min) + 1));
+        }
+    }
+    public static int getFileSize(FTPClient ftpClient, String fileName)
+    {
+        int fileSize = 0;
+
+        try{
+            FTPFile files = ftpClient.mlistFile(fileName);
+            return (int)files.getSize();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return fileSize;
+    }
+
+    public static int countFileLines(File file) throws IOException {
+        int lines = 0;
+
+        FileInputStream fis = new FileInputStream(file);
+        byte[] buffer = new byte[8 * 1024]; // BUFFER_SIZE = 8 * 1024
+        int read;
+
+        while ((read = fis.read(buffer)) != -1) {
+            for (int i = 0; i < read; i++) {
+                if (buffer[i] == '\n') lines++;
+            }
+        }
+
+        fis.close();
+
+        return lines;
+    }
+
+    public static String humanReadableByteCount(long bytes, boolean si) {
+        int unit = si ? 1000 : 1024;
+        if (bytes < unit) return bytes + " B";
+        int exp = (int) (Math.log(bytes) / Math.log(unit));
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
+    }
+
+    public static String bytes2String(long sizeInBytes) {
+
+        double SPACE_KB = 1024;
+        double SPACE_MB = 1024 * SPACE_KB;
+        double SPACE_GB = 1024 * SPACE_MB;
+        double SPACE_TB = 1024 * SPACE_GB;
+
+        NumberFormat nf = new DecimalFormat();
+        nf.setMaximumFractionDigits(2);
+
+        try {
+            if ( sizeInBytes < SPACE_KB ) {
+                return nf.format(sizeInBytes) + " ";
+            } else if ( sizeInBytes < SPACE_MB ) {
+                return nf.format(sizeInBytes/SPACE_KB) + " KB";
+            } else if ( sizeInBytes < SPACE_GB ) {
+                return nf.format(sizeInBytes/SPACE_MB) + " MB";
+            } else if ( sizeInBytes < SPACE_TB ) {
+                return nf.format(sizeInBytes/SPACE_GB) + " GB";
+            } else {
+                return nf.format(sizeInBytes/SPACE_TB) + " TB";
+            }
+        } catch (Exception e) {
+            return sizeInBytes+" ";
+        }
+
+    }
 
     class Feedback{
 
@@ -81,6 +162,24 @@ public class sonicUtils {
 
     class Arquivo {
 
+        public int countLines(File file) throws IOException {
+            int lines = 0;
+
+            FileInputStream fis = new FileInputStream(file);
+            byte[] buffer = new byte[8 * 1024]; // BUFFER_SIZE = 8 * 1024
+            int read;
+
+            while ((read = fis.read(buffer)) != -1) {
+                for (int i = 0; i < read; i++) {
+                    if (buffer[i] == '\n') lines++;
+                }
+            }
+
+            fis.close();
+
+            return lines;
+        }
+
         public void createFile(String nome){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -98,7 +197,11 @@ public class sonicUtils {
 
 
             }catch (Exception e){
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -123,29 +226,30 @@ public class sonicUtils {
                 sourceLocation.renameTo(targetLocation);
 
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
         }
 
-
         public void deleteFile(String inputFile) {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            
 
             try {
-                // delete the original file
-
                 new File(inputFile).delete();
             }
 
             catch (Exception e) {
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -180,80 +284,144 @@ public class sonicUtils {
                     out.close();
                     out = null;
 
-                    }  catch (FileNotFoundException fnfe1) {
-                Log.e("tag", fnfe1.getMessage());
+                    }  catch (FileNotFoundException e) {
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
                 }
                 catch (Exception e) {
-
-                Log.e("tag", e.getMessage());
-
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
 
             }
         }
 
-        public boolean unzipFile(String arquivo) {
+        class myAsyncTaskUnzip extends AsyncTask<String, String, Boolean>{
+            @Override
+            protected Boolean doInBackground(String... strings) {
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            String path = (Environment.getExternalStorageDirectory().toString()+ sonicConstants.LOCAL_TMP);
-            String destination = (Environment.getExternalStorageDirectory().toString()+sonicConstants.LOCAL_IMG_CATALOGO);
+                String toFolder="";
 
-            String zipname = path+arquivo;
+                switch (sonicConstants.DOWNLOAD_TYPE){
+                    case "CATALOGO":
+                        toFolder = sonicConstants.LOCAL_IMG_CATALOGO;
+                        break;
+                    case "CLIENTES":
+                        toFolder = sonicConstants.LOCAL_IMG_CLIENTES;
+                        break;
 
-            InputStream is;
-            ZipInputStream zis;
-            try {
-                String filename;
-                is = new FileInputStream(zipname);
-                zis = new ZipInputStream(new BufferedInputStream(is));
-                ZipEntry ze;
-                byte[] buffer = new byte[1024];
-                int count;
-
-                while ((ze = zis.getNextEntry()) != null) {
-                    filename = ze.getName();
-
-                    if (ze.isDirectory()) {
-                        java.io.File fmd = new java.io.File(filename);
-                        fmd.mkdirs();
-                        continue;
-                    }
-                    //ADD THIS//
-                    if (filename.contains("/")) {
-                        String[] folders = filename.split("/");
-                        for (String item : folders) {
-                            java.io.File fmd = new java.io.File(path + item);
-                            if (!item.contains(".") && !fmd.exists()) {
-                                fmd.mkdirs();
-                                Log.d("created folder", item);
-                            }
-                        }
-                    }
-
-                    FileOutputStream fout = new FileOutputStream(destination + filename);
-                    Log.d("FILE_DEST", destination);
-                    Log.d("FILE_NAME", filename);
-
-                    while ((count = zis.read(buffer)) != -1) {
-                        fout.write(buffer, 0, count);
-                    }
-
-                    fout.close();
-                    zis.closeEntry();
                 }
-                result = true;
-                zis.close();
 
-            }catch (IOException e) {
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                String path = (Environment.getExternalStorageDirectory().toString()+ sonicConstants.LOCAL_TMP);
+                String destination = (Environment.getExternalStorageDirectory().toString()+toFolder);
+                String zipname = path+strings[0];
 
-                e.printStackTrace();
-                result = false;
+                InputStream is;
+                ZipInputStream zis;
+
+                try {
+
+                    is = new FileInputStream(zipname);
+                    zis = new ZipInputStream(new BufferedInputStream(is));
+                    ZipEntry ze;
+                    byte[] buffer = new byte[1024];
+                    FileOutputStream fout;
+                    ZipFile zipFile = new ZipFile(zipname);
+
+                    int count = 0;
+
+                    Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                    while (entries.hasMoreElements()) {
+                        entries.nextElement();
+                        count++;
+                    }
+
+                    myProgress.setMax(count);
+
+                    int count2=0;
+
+                    while ((ze = zis.getNextEntry()) != null) {
+
+                        count2++;
+                        publishProgress("Extraindo arquivos...",String.valueOf(count2));
+                        /*if (ze.isDirectory()) {
+                            java.io.File fmd = new java.io.File(filename);
+                            fmd.mkdirs();
+                            continue;
+                        }*/
+                        //ADD THIS//
+                        /*if (filename.contains("/")) {
+                            String[] folders = filename.split("/");
+                            for (String item : folders) {
+                                java.io.File fmd = new java.io.File(path + item);
+                                if (!item.contains(".") && !fmd.exists()) {
+                                    fmd.mkdirs();
+                                    Log.d("created folder", item);
+                                }
+                            }
+                        }*/
+
+                        fout = new FileOutputStream(destination + ze.getName());
+
+                        while ((count = zis.read(buffer)) != -1) {
+                            fout.write(buffer, 0, count);
+                        }
+
+                        fout.close();
+                        zis.closeEntry();
+                    }
+
+                    zis.close();
+
+                }catch (IOException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                    return false;
+                }
+
+                return true;
             }
 
-            return result;
+            @Override
+            protected void onProgressUpdate(String... values) {
+                super.onProgressUpdate(values);
+                myProgress.setMessage(values[0]);
+                myProgress.setProgress(Integer.valueOf(values[1]));
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                myProgress.dismiss();
+                if(aBoolean){
+                    new sonicThrowMessage(myCtx).showMessage("Pronto,","Imagens salvas com sucesso!",sonicThrowMessage.MSG_SUCCESS);
+                }
+            }
+        }
+
+        public void unzipFile(String arquivo) {
+
+            myProgress = new ProgressDialog(myCtx);
+            myProgress.setCancelable(false);
+            myProgress.setTitle("Sincronização");
+            myProgress.setMessage("Extraindo...");
+            myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            myProgress.setProgress(0);
+            myProgress.show();
+
+            new myAsyncTaskUnzip().execute(arquivo);
 
         }
 
@@ -551,17 +719,29 @@ public class sonicUtils {
                     filePath = photoFile.getPath();
 
                 } catch (FileNotFoundException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 } catch (IOException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }finally {
                     try {
                         inputStream.close();
                     } catch (IOException e) {
+                        DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                                e.getMessage(),
+                                mySystem.System.getActivityName(),
+                                mySystem.System.getClassName(el),
+                                mySystem.System.getMethodNames(el));
                         e.printStackTrace();
-                        DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     }
                 }
             }
@@ -589,8 +769,12 @@ public class sonicUtils {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
             }
 
@@ -628,15 +812,23 @@ public class sonicUtils {
                         bos.write(buf);
                     } while(bis.read(buf) != -1);
                 } catch (IOException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 } finally {
                     try {
                         if (bis != null) bis.close();
                         if (bos != null) bos.close();
                     } catch (IOException e) {
+                        DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                                e.getMessage(),
+                                mySystem.System.getActivityName(),
+                                mySystem.System.getClassName(el),
+                                mySystem.System.getMethodNames(el));
                         e.printStackTrace();
-                        DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     }
                 }
 
@@ -663,10 +855,11 @@ public class sonicUtils {
                 difference = ((int)((fim.getTime()/(24*60*60*1000)) - (int)(inicio.getTime()/(24*60*60*1000))));
 
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -698,8 +891,11 @@ public class sonicUtils {
 
 
             }catch (Exception e){
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -721,10 +917,11 @@ public class sonicUtils {
                 String ano = ano_.substring(4,8);
                 data_completa = dia+"/"+mes+"/"+ano;
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -748,9 +945,11 @@ public class sonicUtils {
                 String ano = ano_.substring(4,8);
                 data_completa = ano+"/"+mes+"/"+dia;
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -772,8 +971,11 @@ public class sonicUtils {
                 String ano = ano_.substring(4,8);
                 data_completa = ano+mes+dia;
             }catch (Exception e){
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -795,10 +997,11 @@ public class sonicUtils {
                 String dia = dia_.substring(8,10);
                 data_completa = dia+"/"+mes+"/"+ano;
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -821,10 +1024,11 @@ public class sonicUtils {
 
                 hora_completa = hora+":"+minuto;
             }catch (Exception e){
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -847,11 +1051,11 @@ public class sonicUtils {
                 data_final = convertedDate.toString();
 
             } catch (Exception e) {
-
-
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -984,9 +1188,11 @@ public class sonicUtils {
                 valor = Double.valueOf(numero_final);
 
             }catch (Exception e){
-
-                DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 

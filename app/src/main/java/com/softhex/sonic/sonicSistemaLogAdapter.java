@@ -40,6 +40,7 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
         TextView versao;
         TextView atividade;
         TextView classe;
+        TextView linha;
         TextView codigo;
         TextView log;
         TextView data;
@@ -53,6 +54,7 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
             versao = view.findViewById(R.id.versao);
             atividade = view.findViewById(R.id.atividade);
             classe = view.findViewById(R.id.classe);
+            linha = view.findViewById(R.id.linha);
             log = view.findViewById(R.id.log);
             codigo = view.findViewById(R.id.codigo);
             data = view.findViewById(R.id.data);
@@ -103,6 +105,7 @@ public class sonicSistemaLogAdapter extends RecyclerView.Adapter implements Filt
         holder.versao.setText(res.getString(R.string.placeholderVersao)+log.getName()+" (SDK "+log.getSdk()+")");
         holder.atividade.setText(res.getString(R.string.placeholderAtividade)+log.getActivity());
         holder.classe.setText(res.getString(R.string.placeholderClasse)+log.getClasse());
+        holder.linha.setText(res.getString(R.string.placeholderLinha)+log.getLine());
         holder.data.setText(log.getData());
         holder.hora.setText(log.getHora());
         holder.log.setText(res.getString(R.string.placeholderDetalhe)+log.getLog());

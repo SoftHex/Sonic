@@ -1,8 +1,6 @@
 package com.softhex.sonic;
 
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,10 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +28,6 @@ public class sonicSincronizacao extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sonicAppearence.onActivityCreateSetTheme(this, sonicAppearence.THEME_DEFAULT);
         setContentView(R.layout.sonic_sincronizacao);
 
         createInterface();
@@ -49,11 +43,15 @@ public class sonicSincronizacao extends AppCompatActivity{
         myActionBar = getSupportActionBar();
         myActionBar.setTitle("Sincronizar");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
+        myActionBar.setDisplayHomeAsUpEnabled(true);
+        myActionBar.setDisplayShowHomeEnabled(true);
 
         myViewPager = findViewById(R.id.pager);
         setUpViewPager(myViewPager);
 
         myTabLayout = findViewById(R.id.tabs);
+        myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
         myTabLayout.setupWithViewPager(myViewPager);
 
         setUpTabText();
@@ -68,8 +66,8 @@ public class sonicSincronizacao extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicSincronizacaoFragDownloadTeste(), "");
-        myAdapter.addFragment(new sonicSincronizacaoFragDownloadTeste(), "");
+        myAdapter.addFragment(new sonicSincronizacaoDownloadTeste(), "");
+        myAdapter.addFragment(new sonicSincronizacaoDownloadTeste(), "");
         viewpager.setAdapter(myAdapter);
 
     }

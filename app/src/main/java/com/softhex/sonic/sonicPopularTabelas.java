@@ -1,13 +1,27 @@
 package com.softhex.sonic;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
+import android.text.Html;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,639 +35,884 @@ public class sonicPopularTabelas {
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
+    private ProgressDialog myProgress;
 
-    sonicPopularTabelas(Context myCtx){
-        this.myCtx = myCtx;
+    sonicPopularTabelas(Context ctx){
+        this.myCtx = ctx;
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
     }
 
-    public Boolean gravarDados(String arquivo){
+    class myAsyncTaskGravar extends AsyncTask<String,String, Boolean>{
+        @Override
+        protected Boolean doInBackground(String... strings) {
 
-        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-
-        Boolean result = false;
-
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + arquivo);
-
-        if(file.exists()){
-
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             FileInputStream f;
             BufferedReader reader;
+            String arquivo = strings[0];
 
-            try {
+            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + arquivo);
 
-                f = new FileInputStream(file);
-                reader = new BufferedReader(new InputStreamReader(f));
+            if(file.exists()){
 
-                String line = reader.readLine();
+                try {
 
-                        while(line!=null) {
+                    f = new FileInputStream(file);
+                    reader = new BufferedReader(new InputStreamReader(f));
+                    int count=0;
+                    myProgress.setMax(sonicUtils.countFileLines(file));
+                    String tabela = "";
 
-                            if ("[SITE]".equals(line)) {
+                    String line = reader.readLine();
 
-                                Log.d("SITE", "ENTROU");
-                                DBC.Site.cleanSite();
+                    while(line!=null) {
 
-                                line = reader.readLine();
+                        if (line != null && ("[SITE]".equals(line) || line.equals("[SITE]"))) {
 
-                                while (line != null && line.indexOf("[") != 0) {
+                            Log.d("SITE", "ENTROU");
 
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Site.saveSite(data);
-                                    line = reader.readLine();
+                            tabela = line;
 
-                                }
+                            DBC.Site.cleanSite();
 
-                            }
-
-                            if ("[FTP]".equals(line)) {
-
-                                Log.d("FTP", "ENTROU");
-                                DBC.Ftp.cleanFtp();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Ftp.saveFtp(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[EMPRESAS]".equals(line)) {
-
-                                Log.d("EMPRESAS", "ENTROU");
-                                DBC.Empresa.cleanEmpresa();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Empresa.saveEmpresa(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[NIVEL_ACESSO]".equals(line)) {
-
-                                Log.d("NIVEL_ACESSO", "ENTROU");
-                                DBC.NivelAcesso.nivelAcesso();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.NivelAcesso.saveNivelAcesso(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[USUARIOS]".equals(line)) {
-
-                                Log.d("USUARIOS", "ENTROU");
-                                DBC.Usuarios.cleanUsuarios();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Usuarios.saveUsuario(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[EMPRESAS_USUARIOS]".equals(line)) {
-
-                                Log.d("EMPRESAS_USUARIOS", "ENTROU");
-                                DBC.EmpresasUsuarios.cleanEmpresasUsuarios();
-
-                                line = reader.readLine();
-
-                                 while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.EmpresasUsuarios.saveEmpresasUsuarios(data);
-                                    line = reader.readLine();
-
-
-                                }
-
-                            }
-
-                            if ("[CLIENTES]".equals(line)) {
-
-                                Log.d("CLIENTES", "ENTROU");
-
-                                DBC.Clientes.cleanCliente();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Clientes.saveCliente(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[GRUPO_CLIENTES]".equals(line) || line.equals("[GRUPO_CLIENTES]")) {
-
-                                Log.d("GRUPO_CLIENTES", "ENTROU");
-
-                                DBC.GrupoCliente.cleanGrupoCliente();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.GrupoCliente.saveGrupoCliente(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[RANKING_CLIENTES]".equals(line)) {
-
-                                Log.d("RANKING_CLIENTES", "ENTROU");
-
-                                DBC.RankingClientes.cleanRankingCliente();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.RankingClientes.saveRankingCliente(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[VENDAS]".equals(line)) {
-
-                                Log.d("VENDAS", "ENTROU");
-
-                                DBC.Vendas.cleanVendas();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Vendas.saveVendas(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[VENDAS_ITENS]".equals(line)) {
-
-                                Log.d("VENDAS_ITENS", "ENTROU");
-
-                                DBC.VendasItens.cleanVendasItens();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.VendasItens.saveVendasItens(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[CLIENTES_SEM_CROMPRA]".equals(line)) {
-
-                                Log.d("CLIENTES_SEM_COMPRA", "ENTROU");
-
-                                DBC.ClienteSemCompra.cleanClienteSemCompra();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.ClienteSemCompra.saveClienteSemCompra(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[PRODUTOS]".equals(line)) {
-
-                                Log.d("PRODUTOS", "ENTROU");
-
-                                DBC.Produto.cleanProduto();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    DBC.Produto.saveProduto(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[GRUPO_PRODUTOS]".equals(line)) {
-
-                                Log.d("GRUPO_PRODUTOS", "ENTROU");
-
-                                DBC.GrupoProduto.cleanGrupoProduto();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.GrupoProduto.saveGrupoProduto(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[ESTOQUE_PRODUTOS]".equals(line)) {
-
-                                Log.d("ESTOQUE_PRODUTOS", "ENTROU");
-
-                                DBC.Estoque.cleanEstoque();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Estoque.saveEstoque(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[RANKING_PRODUTOS]".equals(line)) {
-
-                                Log.d("RANKING_PRODUTOS", "ENTROU");
-
-                                DBC.Produto.cleanRankingProduto();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Produto.saveRankingProduto(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-							if ("[FINANCEIRO]".equals(line)) {
-
-                                Log.d("FINANCEIRO", "ENTROU");
-
-                                DBC.Financeiro.cleanFinanceiro();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Financeiro.saveFinanceiro(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-							
-							if ("[TITULOS]".equals(line)) {
-
-                                Log.d("TITULOS", "ENTROU");
-
-                                DBC.Titulos.cleanTitulos();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Titulos.saveTitulos(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[RETORNO_PEDIDO]".equals(line)) {
-
-                                Log.d("RETORNO_PEDIDO", "ENTROU");
-
-                                DBC.Retorno.cleanRetornoPedido();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Retorno.saveRetornoPedido(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-							
-							if ("[RETORNO_PEDIDO_ITENS]".equals(line)) {
-
-                                Log.d("RETORNO_PEDIDO_ITENS", "ENTROU");
-
-                                DBC.Retorno.cleanRetornoPedidoItens();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    //TODO //result = DBC.Retorno.saveRetornoPedidoItens(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[HISTORICO_VENDEDOR]".equals(line)) {
-
-                                Log.d("HOSTORICO_VENDEDOR", "ENTROU");
-
-                                DBC.HistoricoUsuario.cleanHistoricoUsuario();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.HistoricoUsuario.saveHistoricoUsuario(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[TIPO_PEDIDO]".equals(line)) {
-
-                                Log.d("TIPO_PEDIDO", "ENTROU");
-
-                                DBC.TipoPedido.cleanTipoPedido();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.TipoPedido.saveTipoPedido(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[UNIDADE_MEDIDA]".equals(line)) {
-
-                                Log.d("UNIDADE_MEDIDA", "ENTROU");
-
-                                DBC.UnidadeMedida.cleanUnidadeMedida();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.UnidadeMedida.saveUnidadeMedida(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[PRAZO]".equals(line)) {
-
-                                Log.d("PRAZO", "ENTROU");
-
-                                DBC.Prazo.cleanPrazo();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Prazo.savePrazo(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[TABELA_PRECO]".equals(line)) {
-
-                                Log.d("TABELA_PRECO", "ENTROU");
-
-                                DBC.TabelaPreco.cleanTabelaPreco();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.TabelaPreco.saveTabelaPreco(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[LOCALIZACAO]".equals(line)) {
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Localizacao.saveLocalizacao(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            if ("[AVISOS]".equals(line)) {
-
-                                Log.d("AVISOS", "ENTROU");
-
-                                DBC.Avisos.cleanAvisos();
-
-                                line = reader.readLine();
-
-                                while (line != null && line.indexOf("[") != 0) {
-
-                                    String str = line;
-                                    int pos = str.indexOf("=") + 1;
-                                    int len = str.length();
-                                    String str2 = str.substring(pos, len);
-                                    List<String> data = Arrays.asList(str2.split(";"));
-                                    result = DBC.Avisos.saveAvisos(data);
-                                    line = reader.readLine();
-
-                                }
-
-                            }
-
-                            //CONTINUA LENDO ATE ENTRAR NUMA DAS CONDIÇÕES
                             line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Site.saveSite(data);
+                                line = reader.readLine();
+
+                            }
 
                         }
 
+                        if (line != null && ("[FTP]".equals(line) || line.equals("[FTP]"))) {
 
-                    }catch (Exception e){
+                            Log.d("FTP", "ENTROU");
 
+                            tabela = line;
+
+                            DBC.Ftp.cleanFtp();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Ftp.saveFtp(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[EMPRESAS]".equals(line) || line.equals("[EMPRESAS]"))) {
+
+                            Log.d("EMPRESAS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Empresa.cleanEmpresa();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Empresa.saveEmpresa(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[NIVEL_ACESSO]".equals(line) || line.equals("[NIVEL_ACESSO]"))) {
+
+                            Log.d("NIVEL_ACESSO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.NivelAcesso.nivelAcesso();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.NivelAcesso.saveNivelAcesso(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[USUARIOS]".equals(line) || line.equals("[USUARIOS]"))) {
+
+                            Log.d("USUARIOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Usuarios.cleanUsuarios();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Usuarios.saveUsuario(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[EMPRESAS_USUARIOS]".equals(line) || line.equals("[EMPRESAS_USUARIOS]"))) {
+
+                            Log.d("EMPRESAS_USUARIOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.EmpresasUsuarios.cleanEmpresasUsuarios();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.EmpresasUsuarios.saveEmpresasUsuarios(data);
+                                line = reader.readLine();
+
+
+                            }
+
+                        }
+
+                        if (line != null && ("[CLIENTES]".equals(line) || line.equals("[CLIENTES]"))) {
+
+                            Log.d("CLIENTES", "ENTROU");
+                            tabela = line;
+
+                            DBC.Clientes.cleanCliente();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção de...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Clientes.saveCliente(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[GRUPO_CLIENTES]".equals(line) || line.equals("[GRUPO_CLIENTES]"))) {
+
+                            Log.d("GRUPO_CLIENTES", "ENTROU");
+                            tabela = line;
+
+                            DBC.GrupoCliente.cleanGrupoCliente();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.GrupoCliente.saveGrupoCliente(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[RANKING_CLIENTES]".equals(line) || line.equals("[RANKING_CLIENTES]"))) {
+
+                            Log.d("RANKING_CLIENTES", "ENTROU");
+                            tabela = line;
+
+                            DBC.RankingClientes.cleanRankingCliente();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+                                
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.RankingClientes.saveRankingCliente(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[VENDAS]".equals(line) || line.equals("[VENDAS]"))) {
+
+                            Log.d("VENDAS", "ENTROU");
+                            tabela = line;
+                            
+                            DBC.Vendas.cleanVendas();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Vendas.saveVendas(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[VENDAS_ITENS]".equals(line) || line.equals("[VENDAS_ITENS]"))) {
+
+                            Log.d("VENDAS_ITENS", "ENTROU");
+                            tabela = line;
+                            DBC.VendasItens.cleanVendasItens();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.VendasItens.saveVendasItens(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[CLIENTES_SEM_CROMPRA]".equals(line) || line.equals("[CLIENTES_SEM_COMPRA]"))) {
+
+                            Log.d("CLIENTES_SEM_COMPRA", "ENTROU");
+                            tabela = line;
+                            
+                            DBC.ClienteSemCompra.cleanClienteSemCompra();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.ClienteSemCompra.saveClienteSemCompra(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[PRODUTOS]".equals(line) || line.equals("[PRODUTOS]"))) {
+
+                            Log.d("PRODUTOS", "ENTROU");
+                            tabela = line;
+                            
+                            DBC.Produto.cleanProduto();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Produto.saveProduto(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[GRUPO_PRODUTOS]".equals(line) || line.equals("[GRUPO_PRODUTOS]"))) {
+
+                            Log.d("GRUPO_PRODUTOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.GrupoProduto.cleanGrupoProduto();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.GrupoProduto.saveGrupoProduto(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[ESTOQUE_PRODUTOS]".equals(line) || line.equals("[ESTOQUE_PRODUTOS]"))) {
+
+                            Log.d("ESTOQUE_PRODUTOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Estoque.cleanEstoque();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Estoque.saveEstoque(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[RANKING_PRODUTOS]".equals(line) || line.equals("[RANKING_PRODUTOS]"))) {
+
+                            Log.d("RANKING_PRODUTOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Produto.cleanRankingProduto();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Produto.saveRankingProduto(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[FINANCEIRO]".equals(line) || line.equals("[FINANCEIRO]"))) {
+
+                            Log.d("FINANCEIRO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Financeiro.cleanFinanceiro();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Financeiro.saveFinanceiro(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[TITULOS]".equals(line) || line.equals("[TITULOS]"))) {
+
+                            Log.d("TITULOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Titulos.cleanTitulos();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Titulos.saveTitulos(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[RETORNO_PEDIDO]".equals(line) || line.equals("[RETORNO_PEDIDO]"))) {
+
+                            Log.d("RETORNO_PEDIDO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Retorno.cleanRetornoPedido();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Retorno.saveRetornoPedido(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[RETORNO_PEDIDO_ITENS]".equals(line) || line.equals("[RETORNO_PEDIDO_ITENS]"))) {
+
+                            Log.d("RETORNO_PEDIDO_ITENS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Retorno.cleanRetornoPedidoItens();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                //TODO //result = DBC.Retorno.saveRetornoPedidoItens(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[HISTORICO_VENDEDOR]".equals(line) || line.equals("[HISTORICO_VENDEDOR]"))) {
+
+                            Log.d("HOSTORICO_VENDEDOR", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.HistoricoUsuario.cleanHistoricoUsuario();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.HistoricoUsuario.saveHistoricoUsuario(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[TIPO_PEDIDO]".equals(line) || line.equals("[TIPO_PEDIDO]"))) {
+
+                            Log.d("TIPO_PEDIDO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.TipoPedido.cleanTipoPedido();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.TipoPedido.saveTipoPedido(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[UNIDADE_MEDIDA]".equals(line) || line.equals("[UNIDADE_MEDIDA]"))) {
+
+                            Log.d("UNIDADE_MEDIDA", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.UnidadeMedida.cleanUnidadeMedida();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.UnidadeMedida.saveUnidadeMedida(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[PRAZO]".equals(line) || line.equals("[PRAZO]"))) {
+
+                            Log.d("PRAZO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Prazo.cleanPrazo();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Prazo.savePrazo(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[TABELA_PRECO]".equals(line) || line.equals("[TABELA_PRECO]"))) {
+
+                            Log.d("TABELA_PRECO", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.TabelaPreco.cleanTabelaPreco();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.TabelaPreco.saveTabelaPreco(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[LOCALIZACAO]".equals(line))) {
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Localizacao.saveLocalizacao(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[AVISOS]".equals(line) || line.equals("[AVISOS]"))) {
+
+                            Log.d("AVISOS", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Avisos.cleanAvisos();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Avisos.saveAvisos(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        //CONTINUA LENDO ATE ENTRAR NUMA DAS CONDIÇÕES
+                        line = reader.readLine();
+
+                    }
+
+
+                }catch (Exception e){
                     e.printStackTrace();
-                    DBCL.Log.saveLog(e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    return false;
                 }
 
+                return true;
 
             }
 
-        return result;
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            myProgress.setMessage(values[0]);
+            myProgress.setProgress(Integer.parseInt(values[1]));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            myProgress.dismiss();
+            if(aBoolean){
+                switch (sonicConstants.DOWNLOAD_TYPE){
+                    case "DADOS":
+                        new sonicThrowMessage(myCtx).showMessage("Tudo certo,","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        break;
+                    case "ESTOQUE":
+                        new sonicThrowMessage(myCtx).showMessage("Tudo certo,","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        break;
+                    case "SITE":
+
+                        TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
+
+                        if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
+
+
+                            if(new sonicDatabaseCRUD(myCtx).Database.checkMinimumData()){
+
+
+                                String imei="";
+
+                                if (android.os.Build.VERSION.SDK_INT >= 26) {
+                                    imei = myPhoneManager.getImei();
+                                }
+                                else
+                                {
+                                    imei = myPhoneManager.getDeviceId();
+                                }
+
+                                if(sonicConstants.EMP_TESTE){
+                                    imei = "123456789";
+                                }
+
+                                sonicConstants.USER_IMEI = imei;
+
+                                List<sonicUsuariosHolder> lista;
+                                lista = DBC.Usuarios.selectUsuarioImei(imei);
+                                if(!lista.isEmpty()){
+
+                                    startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
+
+                                }else{
+                                    new sonicThrowMessage(myCtx).showMessage("Atenção", "Seu aparelho não esta cadastrado para "+DBC.Empresa.empresaPadrao()+". Verifique se seu imei ("+imei+") foi cadastrado corretamente pelo administrador.", sonicThrowMessage.MSG_WARNING);
+
+                                }
+
+                            }else{
+
+                                new sonicThrowMessage(myCtx).showMessage("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicThrowMessage.MSG_WARNING);
+
+                            }
+
+                        }else{
+                            ActivityCompat.requestPermissions(((Activity) myCtx),
+                                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                                    1);
+
+                        }
+                        break;
+
+
+                }
+            }
+        }
     }
+
+    public void gravarDados(String arquivo){
+
+        new Handler(Looper.getMainLooper()).post(()-> {
+
+            myProgress = new ProgressDialog(myCtx);
+            myProgress.setCancelable(false);
+            myProgress.setTitle("Sincronização");
+            myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            myProgress.setMessage("Gravando na seção...\n\n");
+            myProgress.setProgress(0);
+            myProgress.show();
+            new myAsyncTaskGravar().execute(arquivo);
+
+        });
+
+
+
+    }
+
+    public void startActivity(String empresa, int empresa_id, int id, String usuario, String cargo, String imei){
+
+        Intent i = new Intent(myCtx, sonicFirstAccess.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.putExtra("ID", id);
+        i.putExtra("EMPRESA", empresa);
+        i.putExtra("EMPRESA_ID", empresa_id);
+        i.putExtra("USUARIO", usuario);
+        i.putExtra("CARGO", cargo);
+        i.putExtra("IMEI", imei);
+        myCtx.startActivity(i);
+        ((Activity) myCtx).finish();
+    }
+
 
 
 }

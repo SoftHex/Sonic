@@ -6,11 +6,7 @@
     android:orientation="vertical"
     android:tag="cards main container">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,11 +129,21 @@
                             android:textSize="12sp" />
 
                         <TextView
-                            android:id="@+id/log"
+                            android:id="@+id/linha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignLeft="@+id/classe"
                             android:layout_below="@+id/classe"
+                            android:textColor="@color/colorTextAccentLight"
+                            android:text="Line:"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/log"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/linha"
+                            android:layout_below="@+id/linha"
                             android:textColor="@color/colorTextAccentLight"
                             android:text="Error:"
                             android:textSize="12sp" />
@@ -149,13 +155,7 @@
 
             </LinearLayout>
 
-
-
         </android.support.v7.widget.CardView>
-
-
-
-    </LinearLayout>
 
     <View
         android:id="@+id/view"

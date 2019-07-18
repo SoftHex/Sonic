@@ -1,15 +1,10 @@
 package com.softhex.sonic;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +14,11 @@ import android.widget.GridView;
 
 import java.util.List;
 
-import cn.refactor.lib.colordialog.PromptDialog;
-
 /**
  * Created by Administrador on 07/07/2017.
  */
 
-public class sonicSincronizacaoFragDownload extends Fragment{
+public class sonicSincronizacaoDownload extends Fragment{
 
     private View myView;
     private ProgressDialog myProgress;
@@ -72,12 +65,12 @@ public class sonicSincronizacaoFragDownload extends Fragment{
                 switch (i){
                     case 0:
                         String file = String.format("%5s",list.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                        myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
+                        myFtp.downloadFile(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
                         break;
                     case 1:
                         file = "CATALOGO.zip";
                         ftpFile = sonicConstants.FTP_IMAGENS+file;
-                        myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +"CATALOGO.zip", sonicConstants.LOCAL_TMP+file);
+                        myFtp.downloadFile(sonicConstants.FTP_IMAGENS +"CATALOGO.zip", sonicConstants.LOCAL_TMP+file);
                         myUtil.Arquivo.unzipFile(String.format(file));
                 }
 
@@ -118,15 +111,15 @@ public class sonicSincronizacaoFragDownload extends Fragment{
             if(new sonicFtp(_this).ftpConnect()){
 
                 this.publishProgress("Baixando arquivos...",String.valueOf(integers[1]));
-                //Boolean res = myFtp.downloadFile(ftpFile, sonicConstants.LOCAL_TMP+file);
+                //Boolean res = myFtp.downloadFile2(ftpFile, sonicConstants.LOCAL_TMP+file);
 
                 switch (integers[1]){
                     case 0:
                         file = String.format("%5s",list.get(0).getCodigo()).replace(" ", "0")+".TXT";
                         ftpFile = sonicConstants.FTP_USUARIOS+file;
 
-                        Boolean d = myFtp.downloadFile(ftpFile, sonicConstants.LOCAL_TMP+file);
-                        Boolean g = popularTabelas.gravarDados(file);
+                        Boolean d = true;//myFtp.downloadFile2(ftpFile, sonicConstants.LOCAL_TMP+file);
+                        Boolean g = true;//popularTabelas.gravarDados(file);
                         //File f = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TMP+file);
                         if(d){
                             this.publishProgress("Gravando dados...",String.valueOf(integers[1]));
@@ -150,8 +143,8 @@ public class sonicSincronizacaoFragDownload extends Fragment{
                         file = "CATALOGO.zip";
                         ftpFile = sonicConstants.FTP_IMAGENS+file;
 
-                        Boolean d1 = myFtp.downloadFile(ftpFile, sonicConstants.LOCAL_TMP+file);
-                        Boolean u = myUtil.Arquivo.unzipFile(String.format(file));
+                        Boolean d1 = true;//myFtp.downloadFile2(ftpFile, sonicConstants.LOCAL_TMP+file);
+                        Boolean u = true;//myUtil.Arquivo.unzipFile(String.format(file));
 
                         if(d1){
                             this.publishProgress("Salvando imagens...",String.valueOf(integers[1]));
@@ -173,8 +166,8 @@ public class sonicSincronizacaoFragDownload extends Fragment{
                     case 2:
                         file = String.format("%5s",list.get(0).getCodigo()).replace(" ", "0")+".zip";
                         ftpFile = sonicConstants.FTP_IMAGENS+file;
-                        Boolean d2 = myFtp.downloadFile(ftpFile, sonicConstants.LOCAL_TMP+file);
-                        Boolean u2 = myUtil.Arquivo.unzipFile(String.format(sonicConstants.LOCAL_IMG_CATALOGO+file).replace(".zip",""));
+                        Boolean d2 = true;//myFtp.downloadFile2(ftpFile, sonicConstants.LOCAL_TMP+file);
+                        Boolean u2 = true;//myUtil.Arquivo.unzipFile(String.format(sonicConstants.LOCAL_IMG_CATALOGO+file).replace(".zip",""));
 
                         if(d2){
                             this.publishProgress("Salvando imagens...",String.valueOf(integers[1]));

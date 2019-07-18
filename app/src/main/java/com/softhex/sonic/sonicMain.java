@@ -743,7 +743,7 @@ public class sonicMain extends AppCompatActivity{
     public void mensagem(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //builder.setIcon(@)
-        builder.setMessage(R.string.go_sure).setPositiveButton("SIM", dialogClickListener).setNegativeButton("NÃO", dialogClickListener).show();
+        builder.setMessage(R.string.go_sure).setPositiveButton("REDEFINIR", dialogClickListener).setNegativeButton("CANCELAR", dialogClickListener).show();
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

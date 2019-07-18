@@ -40,6 +40,12 @@ public class MainActivity extends Activity {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+            Window w = getWindow();
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(Color.TRANSPARENT);
+        }
+
         DBC = new sonicDatabaseCRUD(getBaseContext());
         setContentView(R.layout.activity_main);
 
@@ -55,14 +61,13 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager)findViewById(R.id.view_pager);
-        dotsLayout=(LinearLayout)findViewById(R.id.layoutDots);
-        skip=(Button)findViewById(R.id.btn_skip);
-        next=(Button)findViewById(R.id.btn_next);
+        viewPager = findViewById(R.id.view_pager);
+        dotsLayout = findViewById(R.id.layoutDots);
+        skip = findViewById(R.id.btn_skip);
+        next = findViewById(R.id.btn_next);
 
         layouts = new int[]{R.layout.sonic_slide_one,R.layout.sonic_slide_two,R.layout.sonic_slide_tree,R.layout.sonic_slide_four};
         addBottomDots(0);
-        changeStatusBarColor();
         viewPagerAdapter = new ViewPagerAdapter();
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewListener);
@@ -141,15 +146,6 @@ public class MainActivity extends Activity {
 
         }
     };
-
-    public void changeStatusBarColor()
-    {
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        }
-    }
 
     public class ViewPagerAdapter extends PagerAdapter {
 

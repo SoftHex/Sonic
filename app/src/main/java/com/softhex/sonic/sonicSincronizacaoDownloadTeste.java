@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
@@ -32,11 +33,10 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 07/07/2017.
  */
 
-public class sonicSincronizacaoFragDownloadTeste extends Fragment{
+public class sonicSincronizacaoDownloadTeste extends Fragment{
 
     private View myView;
     private ShimmerFrameLayout myShimmer;
-    private LinearLayout myClose;
     private LinearLayout myLinearLayout;
     private List<sonicSincronizacaoDownloadHolder> myList;
     private sonicSincronizacaoDownloadAdapter myAdapter;
@@ -61,19 +61,10 @@ public class sonicSincronizacaoFragDownloadTeste extends Fragment{
 
     public void loadFragment(View view){
 
-
         myRecycler = view.findViewById(R.id.recycler);
         myShimmer = view.findViewById(R.id.shimmer);
         myShimmer.startShimmer();
-
         myLinearLayout = myView.findViewById(R.id.sync);
-        /*myClose = myView.findViewById(R.id.close);
-        myClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myLinearLayout.setVisibility(View.GONE);
-            }
-        });*/
 
         bindRecyclerView();
 
@@ -99,46 +90,46 @@ public class sonicSincronizacaoFragDownloadTeste extends Fragment{
         protected void onPostExecute(final Integer result) {
             super.onPostExecute(result);
 
-            final AlphaAnimation fadeOut;
-            final AlphaAnimation fadeIn;
-            fadeIn = new AlphaAnimation(0,1);
+            AlphaAnimation fadeOut;
             fadeOut = new AlphaAnimation(1,0);
-            fadeIn.setDuration(1000);
             fadeOut.setDuration(1000);
-            fadeIn.setFillAfter(true);
             fadeOut.setFillAfter(true);
             myShimmer.setAnimation(fadeOut);
 
-            Handler handler = new Handler();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(() -> {
 
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                        if(result>0){
 
-                                        if(result>0){
+                            showResult();
 
-                                            myAdapter = new sonicSincronizacaoDownloadAdapter(getActivity(), myList);
-                                            myRecycler.setVisibility(VISIBLE);
-                                            myRecycler.setAnimation(fadeIn);
-                                            myRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-                                            myRecycler.setAdapter(myAdapter);
-                                            myLinearLayout.setVisibility(VISIBLE);
-                                            myLinearLayout.setAnimation(fadeIn);
+                        }
 
-                                        }else{
+                        myShimmer.stopShimmer();
+                        myShimmer.setVisibility(GONE);
 
-
-                                        }
-
-                                        myShimmer.stopShimmer();
-                                        myShimmer.setVisibility(GONE);
-
-                                    }
-                                }
-                    , 700);
+                    }
+                    ,sonicUtils.Randomizer.generate(500,1500));
 
 
         }
+    }
+
+    public void showResult(){
+
+        AlphaAnimation fadeIn;
+        fadeIn = new AlphaAnimation(0,1);
+        fadeIn.setDuration(1000);
+        fadeIn.setFillAfter(true);
+
+        myAdapter = new sonicSincronizacaoDownloadAdapter(getActivity(), myList);
+        myRecycler.setVisibility(VISIBLE);
+        myRecycler.setAnimation(fadeIn);
+        myRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        myRecycler.setAdapter(myAdapter);
+        myLinearLayout.setVisibility(VISIBLE);
+        myLinearLayout.setAnimation(fadeIn);
+
     }
 
 }
