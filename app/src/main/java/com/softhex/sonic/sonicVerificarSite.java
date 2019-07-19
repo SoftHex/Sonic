@@ -52,7 +52,7 @@ public class sonicVerificarSite{
             sonicConstants.EMP_TESTE = true;
         }
 
-        String fileName = "SITES/"+ site +".TXT";
+        String fileName = "sites/"+ site +".TXT";
         String fileFull = sonicConstants.LOCAL_TMP + site +".TXT";
 
         myProgress = new ProgressDialog(myCtx);

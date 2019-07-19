@@ -818,14 +818,17 @@ public class sonicPopularTabelas {
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
+                        sonicConstants.DOWNLOAD_TYPE = "";
                         new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","dados");
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","geral");
                         break;
                     case "ESTOQUE":
+                        sonicConstants.DOWNLOAD_TYPE = "";
                         new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","estoque");
                         break;
                     case "SITE":
-
+                        sonicConstants.DOWNLOAD_TYPE = "";
                         TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
 
                         if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){

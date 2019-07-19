@@ -66,8 +66,8 @@ public class sonicSincronizacao extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicSincronizacaoDownloadTeste(), "");
-        myAdapter.addFragment(new sonicSincronizacaoDownloadTeste(), "");
+        myAdapter.addFragment(new sonicSincronizacaoDownload(), "");
+        myAdapter.addFragment(new sonicSincronizacaoDownload(), "");
         viewpager.setAdapter(myAdapter);
 
     }

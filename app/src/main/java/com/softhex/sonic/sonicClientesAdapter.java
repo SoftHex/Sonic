@@ -8,13 +8,16 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
@@ -53,19 +56,19 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         TextView titulos;
         TextView pedidos;
         CardView card;
-        View layout;
         CircleImageView imagem;
         RelativeLayout back;
         int codigo;
         String order;
         Boolean exibir_titulos;
         Boolean situacao;
+        LinearLayout item;
 
         public cliHolder(View view) {
             super(view);
 
             card = view.findViewById(R.id.cardView);
-            layout = view.findViewById(R.id.layout);
+            item = view.findViewById(R.id.item);
             cliente = view.findViewById(R.id.nome);
             letra = view.findViewById(R.id.letra);
             grupo = view.findViewById(R.id.grupo);
@@ -74,7 +77,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             pedidos = view.findViewById(R.id.letterTwo);
             titulos = view.findViewById(R.id.letterThree);
             imagem = view.findViewById(R.id.imagem);
-            back = view.findViewById(R.id.layout);
+            //back = view.findViewById(R.id.layout);
             order = myPrefs.getString("show_name", "0");
             exibir_titulos = myPrefs.getBoolean("exibir_titulos", true);
             situacao = myPrefs.getBoolean("situacao", true);
@@ -82,13 +85,14 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             DBC = new sonicDatabaseCRUD(myCtx);
 
-            card.setOnClickListener(View ->{
+            item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                    DBC.Clientes.setNaoSelecionado();
-                    DBC.Clientes.setSelecionado(codigo);
 
-                    //((sonicClientes)ctx).openClienteDetalhes();
 
+
+                }
             });
 
         }
@@ -178,10 +182,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         if(file.exists()){
 
-            //RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            //params.addRule(RelativeLayout.RIGHT_OF, R.id.imagem);
-            //params.setMargins(24,0,0,0);
-            //holder.cliente.setLayoutParams(params);
             holder.imagem.setVisibility(View.VISIBLE);
             holder.letra.setVisibility(View.GONE);
             Glide.with(myCtx)

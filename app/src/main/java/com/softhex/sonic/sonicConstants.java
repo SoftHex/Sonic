@@ -71,16 +71,17 @@ public class sonicConstants {
 
     // FTP
     //public static String FTP_SERVER = "191.252.194.48";
-    public static String FTP_SERVER = "192.168.0.80";
+    public static String FTP_SERVER = "45.234.150.253";
     public static int FTP_PORT = 21;
     public static String FTP_USER = "sonic";
-    public static String FTP_PASS = "@sonic@";
-    public static final String FTP_PC_SONIC = "PC_SONIC/";
-    public static final String FTP_SONIC_PC = "SONIC_PC/";
-    public static final String FTP_USUARIOS = "PC_SONIC/USUARIOS/";
-    public static final String FTP_IMAGENS = "PC_SONIC/IMAGENS/";
-    public static final String FTP_ESTOQUE = "PC_SONIC/ESTOQUE/";
-    public static final String FTP_LOCALIZACAO = "PC_SONIC/LOCALIZACAO/";
+    public static String FTP_PASS = "463215S0n1c";
+    public static final String FTP_SITE = "sites/";
+    public static final String FTP_SERVER_SONIC = "server_sonic/";
+    public static final String FTP_SONIC_SERVER = "sonic_server/";
+    public static final String FTP_USUARIOS = "server_sonic/usuarios/";
+    public static final String FTP_IMAGENS = "server_sonic/imagens/";
+    public static final String FTP_ESTOQUE = "server_sonic/estoque/";
+    public static final String FTP_LOCALIZACAO = "server_sonic/localizacao/";
 
     // CONSTANTES DE FRAGMENTOS - RETORNO
     public static String RETORNO_PENDENTE_DATA = "HOJE";

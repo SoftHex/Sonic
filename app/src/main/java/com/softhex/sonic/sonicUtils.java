@@ -24,7 +24,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPCmd;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
@@ -76,13 +78,22 @@ public class sonicUtils {
             return min + (int)(Math.random() * ((max - min) + 1));
         }
     }
-    public static int getFileSize(FTPClient ftpClient, String fileName)
+    public static long getFileSize(FTPClient ftpClient, String fileName)
     {
-        int fileSize = 0;
+        long fileSize = 0;
+        FTPFile file;
+        FTPFile[] files;
 
         try{
-            FTPFile files = ftpClient.mlistFile(fileName);
-            return (int)files.getSize();
+
+            if(FTPReply.isPositiveCompletion(ftpClient.sendCommand(FTPCmd.MLST, fileName))){
+                file = ftpClient.mlistFile(fileName);
+                return file.getSize();
+            }else{
+                files = ftpClient.listFiles(fileName);
+                return files[0].getSize();
+            }
+
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -311,9 +322,11 @@ public class sonicUtils {
 
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "CATALOGO":
+                        sonicConstants.DOWNLOAD_TYPE = "";
                         toFolder = sonicConstants.LOCAL_IMG_CATALOGO;
                         break;
                     case "CLIENTES":
+                        sonicConstants.DOWNLOAD_TYPE = "";
                         toFolder = sonicConstants.LOCAL_IMG_CLIENTES;
                         break;
 

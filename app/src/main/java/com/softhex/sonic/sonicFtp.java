@@ -2,12 +2,15 @@ package com.softhex.sonic;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.tv.TvContract;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.util.Log;
+import android.view.Window;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -170,6 +173,8 @@ public class sonicFtp {
 
     public void downloadFile2(String fileName, String localFile) {
 
+        Log.d("CONSTANT", sonicConstants.DOWNLOAD_TYPE);
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -200,32 +205,36 @@ public class sonicFtp {
 
                 new Handler(Looper.getMainLooper()).post(()-> {
 
-                    myProgress2.setCancelable(false);
                     myProgress2.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     myProgress2.setMessage("Fazendo download...");
                     myProgress2.setProgress(0);
+                    myProgress2.setCancelable(false);
+                    myProgress2.setIcon(R.drawable.arrow_down_circle);
                     myProgress2.show();
 
                 });
 
-                int fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
 
-                myProgress2.setMax(fileSize);
+                    long fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
 
-                CopyStreamAdapter sa = new CopyStreamAdapter(){
+                    myProgress2.setMax((int)fileSize);
 
-                    @Override
-                    public void bytesTransferred(long l, int i, long l1) {
+                    myProgress2.setProgressNumberFormat("");
 
-                            if((l%(1024*2))==0)
-                            myProgress2.setProgressNumberFormat((sonicUtils.bytes2String(l)) + " / " + (sonicUtils.bytes2String(fileSize)));
-                            publishProgress("Fazendo download...",String.valueOf(l));
 
-                    }
+                    CopyStreamAdapter sa = new CopyStreamAdapter(){
 
-                };
+                        @Override
+                        public void bytesTransferred(long l, int i, long l1) {
 
-                ftpClient.setCopyStreamListener(sa);
+                                myProgress2.setProgressNumberFormat((sonicUtils.bytes2String(fileSize)));
+                                publishProgress("Fazendo download...",String.valueOf(l));
+
+                        }
+
+                    };
+
+                    ftpClient.setCopyStreamListener(sa);
 
                 try{
 
@@ -276,11 +285,6 @@ public class sonicFtp {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
 
@@ -290,18 +294,22 @@ public class sonicFtp {
 
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
-                        Log.d("ARQUIVO", arquivo);
+                        //new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        Log.d("DADOS", arquivo);
                         break;
                     case "CATALOGO":
-                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
-                        Log.d("ARQUIVO", arquivo);
+                        //new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
+                        Log.d("CATALOGO", arquivo);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","catalogo");
                         break;
                     case "CLIENTES":
-                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
-                        Log.d("ARQUIVO", arquivo);
+                        //new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
+                        Log.d("CLIENTES", arquivo);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
+                        break;
+                    case "ESTOQUE":
+                        //new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        Log.d("ESTOQUE", arquivo);
                         break;
 
                 }
