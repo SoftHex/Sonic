@@ -2,10 +2,8 @@ package com.softhex.sonic;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -46,7 +44,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
+                    new sonicTM(sonicEmpresa.this).showSB(view,"Verifique sua conexão com a internet...");
 
                 }
             }
@@ -62,7 +60,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
-                        new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Código inválido...");
+                        new sonicTM(sonicEmpresa.this).showSB(view,"Código inválido...");
 
                     } else {
 
@@ -72,7 +70,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    new sonicThrowMessage(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
+                    new sonicTM(sonicEmpresa.this).showSB(view,"Verifique sua conexão com a internet...");
 
                 }
 

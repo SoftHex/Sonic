@@ -12,7 +12,7 @@ import android.widget.TextView;
 import cn.refactor.lib.colordialog.ColorDialog;
 import cn.refactor.lib.colordialog.PromptDialog;
 
-public class sonicThrowMessage {
+public class sonicTM {
 
     public Context myCtx;
     public Snackbar mySnackBar;
@@ -22,11 +22,34 @@ public class sonicThrowMessage {
     public static final int MSG_WARNING = PromptDialog.DIALOG_TYPE_WARNING;
     public static final int MSG_WRONG = PromptDialog.DIALOG_TYPE_WRONG;
 
-    public sonicThrowMessage(Context ctx){
+    public sonicTM(Context ctx){
         this.myCtx = ctx;
     }
 
-    public void showMessage(final String title, final String msg, final int type){
+    public void showMS(final String title, final String msg, final int type){
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+                new PromptDialog(myCtx)
+                        .setDialogType(type)
+                        .setAnimationEnable(true)
+                        .setTitleText(title)
+                        .setContentText(msg)
+                        .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                            @Override
+                            public void onClick(PromptDialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+
+            }
+        });
+
+    }
+
+    public void showMI(final int title, final int msg, final int type){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -92,7 +115,7 @@ public class sonicThrowMessage {
 
     }
 
-    public void showSnackBar( final View v, final String msg){
+    public void showSB(final View v, final String msg){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override

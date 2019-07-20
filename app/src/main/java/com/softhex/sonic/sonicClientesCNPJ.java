@@ -200,7 +200,7 @@ public class sonicClientesCNPJ extends Fragment{
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1500));
+                    ,sonicUtils.Randomizer.generate(500,1000));
 
 
         }

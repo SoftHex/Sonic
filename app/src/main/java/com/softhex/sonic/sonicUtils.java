@@ -57,6 +57,7 @@ public class sonicUtils {
     private sonicSystem mySystem;
     private sonicConstants myCons;
     private Date date = new Date();
+    private String zipName;
     ProgressDialog myProgress;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     Locale brasil = new Locale("pt", "BR");
@@ -91,6 +92,7 @@ public class sonicUtils {
                 return file.getSize();
             }else{
                 files = ftpClient.listFiles(fileName);
+                if(files.length>0)
                 return files[0].getSize();
             }
 
@@ -152,6 +154,25 @@ public class sonicUtils {
             return sizeInBytes+" ";
         }
 
+    }
+
+    public void deleteFile(String inputFile) {
+
+        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+
+        try {
+            new File(Environment.getExternalStorageDirectory(),inputFile).delete();
+        }
+
+        catch (Exception e) {
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                    e.getMessage(),
+                    mySystem.System.getActivityName(),
+                    mySystem.System.getClassName(el),
+                    mySystem.System.getMethodNames(el));
+            e.printStackTrace();
+
+        }
     }
 
     class Feedback{
@@ -252,7 +273,7 @@ public class sonicUtils {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
 
             try {
-                new File(inputFile).delete();
+                new File(Environment.getExternalStorageDirectory(),inputFile).delete();
             }
 
             catch (Exception e) {
@@ -335,19 +356,19 @@ public class sonicUtils {
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 String path = (Environment.getExternalStorageDirectory().toString()+ sonicConstants.LOCAL_TMP);
                 String destination = (Environment.getExternalStorageDirectory().toString()+toFolder);
-                String zipname = path+strings[0];
+                zipName = path+strings[0];
 
                 InputStream is;
                 ZipInputStream zis;
 
                 try {
 
-                    is = new FileInputStream(zipname);
+                    is = new FileInputStream(zipName);
                     zis = new ZipInputStream(new BufferedInputStream(is));
                     ZipEntry ze;
                     byte[] buffer = new byte[1024];
                     FileOutputStream fout;
-                    ZipFile zipFile = new ZipFile(zipname);
+                    ZipFile zipFile = new ZipFile(zipName);
 
                     int count = 0;
 
@@ -419,7 +440,9 @@ public class sonicUtils {
                 super.onPostExecute(aBoolean);
                 myProgress.dismiss();
                 if(aBoolean){
-                    new sonicThrowMessage(myCtx).showMessage("Pronto,","Imagens salvas com sucesso!",sonicThrowMessage.MSG_SUCCESS);
+                    new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.imagesSaved, sonicTM.MSG_SUCCESS);
+                }else{
+                    new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
                 }
             }
         }

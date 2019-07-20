@@ -12,16 +12,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
-import android.text.Html;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +32,7 @@ public class sonicPopularTabelas {
     private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
     private ProgressDialog myProgress;
+    private String arquivo;
 
     sonicPopularTabelas(Context ctx){
         this.myCtx = ctx;
@@ -51,7 +48,7 @@ public class sonicPopularTabelas {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             FileInputStream f;
             BufferedReader reader;
-            String arquivo = strings[0];
+            arquivo = strings[0];
 
             File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + arquivo);
 
@@ -82,7 +79,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -109,7 +106,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -136,7 +133,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -163,7 +160,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -190,7 +187,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -217,7 +214,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -244,7 +241,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -270,7 +267,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -296,7 +293,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
                                 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -322,7 +319,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -347,7 +344,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -373,7 +370,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -399,7 +396,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -426,7 +423,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -453,7 +450,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
                                 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -480,7 +477,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -507,7 +504,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -534,7 +531,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -561,7 +558,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -588,7 +585,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -615,7 +612,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -642,7 +639,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -669,7 +666,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -696,7 +693,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -723,7 +720,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -744,7 +741,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -771,7 +768,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na seção...\n\n"+tabela, String.valueOf(count));
+                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -815,20 +812,18 @@ public class sonicPopularTabelas {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
+            new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TMP+arquivo);
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        sonicConstants.DOWNLOAD_TYPE = "";
-                        new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Dados sincronizados com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.dadosSincronizados, sonicTM.MSG_SUCCESS);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","geral");
                         break;
                     case "ESTOQUE":
-                        sonicConstants.DOWNLOAD_TYPE = "";
-                        new sonicThrowMessage(myCtx).showMessage("Tudo certo.","Estoque sincronizado com sucesso!", sonicThrowMessage.MSG_SUCCESS);
+                        new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.estoqueSincronizado, sonicTM.MSG_SUCCESS);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","estoque");
                         break;
                     case "SITE":
-                        sonicConstants.DOWNLOAD_TYPE = "";
                         TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
 
                         if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
@@ -860,13 +855,13 @@ public class sonicPopularTabelas {
                                     startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
 
                                 }else{
-                                    new sonicThrowMessage(myCtx).showMessage("Atenção", "Seu aparelho não esta cadastrado para "+DBC.Empresa.empresaPadrao()+". Verifique se seu imei ("+imei+") foi cadastrado corretamente pelo administrador.", sonicThrowMessage.MSG_WARNING);
+                                    new sonicTM(myCtx).showMS(myCtx.getResources().getString(R.string.headerWarning) , R.string.deviceUnknow+DBC.Empresa.empresaPadrao()+R.string.deviceImei1+imei+R.string.deviceImei2, sonicTM.MSG_WARNING);
 
                                 }
 
                             }else{
 
-                                new sonicThrowMessage(myCtx).showMessage("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicThrowMessage.MSG_WARNING);
+                                new sonicTM(myCtx).showMI(R.string.headerWarning, R.string.formatWrong, sonicTM.MSG_WARNING);
 
                             }
 
@@ -886,19 +881,24 @@ public class sonicPopularTabelas {
 
     public void gravarDados(String arquivo){
 
-        new Handler(Looper.getMainLooper()).post(()-> {
+        File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TMP+arquivo);
 
-            myProgress = new ProgressDialog(myCtx);
-            myProgress.setCancelable(false);
-            myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            myProgress.setMessage("Gravando na seção...\n\n");
-            myProgress.setProgress(0);
-            myProgress.show();
-            new myAsyncTaskGravar().execute(arquivo);
+        if(file.exists()){
 
-        });
+            new Handler(Looper.getMainLooper()).post(()-> {
 
+                myProgress = new ProgressDialog(myCtx);
+                myProgress.setCancelable(false);
+                myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                myProgress.setMessage(myCtx.getResources().getString(R.string.gravandoDados));
+                myProgress.setProgress(0);
+                myProgress.show();
+                new myAsyncTaskGravar().execute(arquivo);
 
+            });
+        }else {
+            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
+        }
 
     }
 

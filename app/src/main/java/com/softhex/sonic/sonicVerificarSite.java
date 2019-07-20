@@ -1,18 +1,12 @@
 package com.softhex.sonic;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Created by Administrador on 14/12/2017.
@@ -23,7 +17,7 @@ public class sonicVerificarSite{
     private Context myCtx;
     private ProgressDialog myProgress;
     private sonicFtp myFtp;
-    private sonicThrowMessage myMessage;
+    private sonicTM myMessage;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
@@ -36,7 +30,7 @@ public class sonicVerificarSite{
         this.myCtx = ctx;
         this.myProgress = new ProgressDialog(myCtx);
         this.myFtp = new sonicFtp(myCtx);
-        this.myMessage = new sonicThrowMessage(myCtx);
+        this.myMessage = new sonicTM(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
@@ -106,7 +100,7 @@ public class sonicVerificarSite{
                         File delete = new File(Environment.getExternalStorageDirectory(), strings[2]);
                         delete.delete();
                         sonicConstants.EMP_EXIST = "0";
-                        myMessage.showMessage("Atenção", "Empresa não encontrada.", myMessage.MSG_WARNING);
+                        myMessage.showMS("Atenção", "Empresa não encontrada.", myMessage.MSG_WARNING);
                         res = false;
 
                     }
@@ -124,7 +118,7 @@ public class sonicVerificarSite{
 
             }else{
 
-                myMessage.showMessage("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
+                myMessage.showMS("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
                 myProgress.dismiss();
                 res = false;
 

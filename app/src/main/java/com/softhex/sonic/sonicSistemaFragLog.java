@@ -192,13 +192,6 @@ public class sonicSistemaFragLog extends Fragment{
         protected void onPostExecute(final Integer result) {
             super.onPostExecute(result);
 
-            AlphaAnimation fadeOut;
-            fadeOut = new AlphaAnimation(1,0);
-            fadeOut.setDuration(500);
-            fadeOut.setFillAfter(true);
-            myShimmer.setAnimation(fadeOut);
-
-
             Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(() -> {
 
@@ -216,7 +209,7 @@ public class sonicSistemaFragLog extends Fragment{
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1500));
+                    ,sonicUtils.Randomizer.generate(500,1000));
 
         }
     }

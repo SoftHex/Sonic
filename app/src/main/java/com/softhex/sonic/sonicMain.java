@@ -36,7 +36,6 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
-import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -71,7 +70,7 @@ public class sonicMain extends AppCompatActivity{
     private AccountHeader myHeader;
     private Context myCtx;
     private sonicUtils myUtil;
-    private sonicThrowMessage myMessage;
+    private sonicTM myMessage;
     private Drawer myDrawer;
     private boolean check;
     private String usuarioNome;

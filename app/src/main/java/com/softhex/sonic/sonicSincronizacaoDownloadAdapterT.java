@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
@@ -24,13 +25,6 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
     private List<sonicSincronizacaoDownloadHolder> myList;
     private List<sonicUsuariosHolder> myListUsers;
     private sonicFtp myFtp;
-
-    public sonicSincronizacaoDownloadAdapterT(Context myCtx, List<sonicSincronizacaoDownloadHolder> mList) {
-        this.myCtx = myCtx;
-        this.myList = mList;
-        this.myFtp = new sonicFtp(myCtx);
-        this.myListUsers = new sonicDatabaseCRUD(myCtx).Usuarios.selectUsuarioAtivo();
-    }
 
     public class sincHolder extends RecyclerView.ViewHolder {
 
@@ -53,39 +47,32 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
                     String file = "";
 
-                    switch (getPosition()){
+                    switch (v.getId()){
                         case 0:
-                            Log.d("ID",getPosition()+"");
                             sonicConstants.DOWNLOAD_TYPE = "DADOS";
                             file = String.format("%5s",myListUsers.get(0).getCodigo()).replace(" ", "0")+".TXT";
                             myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
-                            //Toast.makeText(myCtx,"ID="+i,Toast.LENGTH_SHORT).show();
                             break;
                         case 1:
-                            Log.d("ID",getPosition()+"");
                             sonicConstants.DOWNLOAD_TYPE = "CATALOGO";
                             file = "CATALOGO.zip";
                             myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TMP+file);
-                            //Toast.makeText(myCtx,"ID="+i,Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            Log.d("ID",v.getId()+"");
                             sonicConstants.DOWNLOAD_TYPE = "CLIENTES";
-                            //file = "CLIENTES.zip";
-                            //myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TMP+file);
-                            //Toast.makeText(myCtx,"ID="+i,Toast.LENGTH_SHORT).show();
+                            file = "CLIENTES.zip";
+                            myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TMP+file);
+                            break;
                         case 3:
-                            Log.d("ID",getPosition()+"");
                             sonicConstants.DOWNLOAD_TYPE = "ESTOQUE";
                             file = "ESTOQUE.TXT";
                             myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TMP+file);
-                            //Toast.makeText(myCtx,"ID="+i,Toast.LENGTH_SHORT).show();
+                            break;
                         case 4:
-                            Log.d("ID",getPosition()+"");
                             sonicConstants.DOWNLOAD_TYPE = "LOCAL";
-                            //file = "ESTOQUE.TXT";
-                            //myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TMP+file);
-                            //Toast.makeText(myCtx,"ID="+i,Toast.LENGTH_SHORT).show();
+                            file = "LOCAL.TXT";
+                            myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TMP+file);
+                            break;
                     }
 
 
@@ -94,6 +81,15 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
         }
     }
+
+
+    public sonicSincronizacaoDownloadAdapterT(Context myCtx, List<sonicSincronizacaoDownloadHolder> mList) {
+        this.myCtx = myCtx;
+        this.myList = mList;
+        this.myFtp = new sonicFtp(myCtx);
+        this.myListUsers = new sonicDatabaseCRUD(myCtx).Usuarios.selectUsuarioAtivo();
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

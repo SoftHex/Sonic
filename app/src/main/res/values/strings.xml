@@ -2,7 +2,6 @@
     <string name="app_name">Sonic</string>
 
     <!-- MENU DRAWER NAMES -->
-
     <string name="inicioTitulo">Início</string>
     <string name="extraTitulo">Extras</string>
     <string name="sincronizarTitulo">Sincronizar</string>
@@ -36,7 +35,6 @@
     <string name="redefinirTitulo">Redefinir</string>
 
     <!-- TABS NAME -->
-
     <string name="tabSinronizarEnviar">ENVIAR</string>
     <string name="tabSinronizarReceber">RECEBER</string>
     <string name="tabClientesCNPJ">CNPJ</string>
@@ -62,7 +60,7 @@
     <string name="tabRankingCliente">POR CLIENTE</string>
     <string name="tabRankingGrupo">POR GRUPO</string>
 
-    <!-- OTHERS -->
+    <!-- PLACEHOLDERS -->
     <string name="placeholderText">XXXX XXXX</string>
     <string name="placeholderLetter">X</string>
     <string name="placeholderDate">xx/xx/xxxx</string>
@@ -75,11 +73,36 @@
     <string name="placeholderLinha"><b>Linha: </b></string>
     <string name="placeholderDetalhe"><b>Detalhe: </b></string>
     <string name="placeholderHashtag">#</string>
+
+    <!-- OTHERS -->
     <string name="msgPerms">Permissões necessárias...</string>
     <string name="textNext">PRÓXIMO</string>
     <string name="textFinish">INICIAR</string>
     <string name="textSkip">PULAR</string>
-    <!-- MENSAGENS -->
+
+    <!-- HEADER DIALOGS -->
+    <string name="headerDefault">Aviso.</string>
+    <string name="headerSuccess">Tudo certo.</string>
+    <string name="headerInfo">Informativo.</string>
+    <string name="headerWarning">Atenção.</string>
+    <string name="headerWrong">Erro.</string>
+
+    <!-- MESSAGE DIALOGS -->
+    <string name="gravandoDados">Gravando na tabela</string>
+    <string name="dadosSincronizados">Dados sincronizados com sucesso.</string>
+    <string name="estoqueSincronizado">Estoque sincronizado com sucesso.</string>
+    <string name="imagesSaved">Imagens salvas com sucesso.</string>
+    <string name="catalogoSaved">Catálogo salvo com sucesso.</string>
+
+    <!-- ERROR MESSAGE -->
+    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o administrador do sistema.</string>
+    <string name="fileNotFound">Arquivo não encontrado. Contate o responsável pela administração do sistema.</string>
+    <string name="fileDownloadedNotFound">O arquivo foi baixado mas não foi encontrado no dispositivo. Contate o administrador do sistema.</string>
+    <string name="deviceUnknow">Seu aparelho não esta cadastrado para a empresa (</string>
+    <string name="deviceImei1">). Verifique se o imei (</string>
+    <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
+    <string name="failToConnect">Não foi possível conectar ao servidor no momento.</string>>
+    <string name="formatWrong">Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.</string>>
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>
