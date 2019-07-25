@@ -1,6 +1,8 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.GradientDrawable;
@@ -89,7 +91,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onClick(View v) {
 
-
+                    Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                    v.getContext().startActivity(i);
 
 
                 }

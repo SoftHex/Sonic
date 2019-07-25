@@ -173,7 +173,16 @@ public class sonicFtp {
                 myProgress.setMessage("Conectando...");
                 myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 myProgress.show();
-                new myAsyncTaskDownload().execute(fileName, localFile);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new myAsyncTaskDownload().execute(fileName, localFile);
+                    }
+                }, sonicUtils.Randomizer.generate(500,1000));
+
+
 
 
             }
@@ -188,9 +197,9 @@ public class sonicFtp {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             boolean res = true;
 
-            myProgress.dismiss();
-
             if(ftpConnect()){
+
+                myProgress.dismiss();
 
                 new Handler(Looper.getMainLooper()).post(()-> {
 

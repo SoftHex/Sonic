@@ -102,7 +102,8 @@
     <string name="deviceImei1">). Verifique se o imei (</string>
     <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
     <string name="failToConnect">Não foi possível conectar ao servidor no momento.</string>>
-    <string name="formatWrong">Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.</string>>
+    <string name="formatWrong">Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.</string>
+    >
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>

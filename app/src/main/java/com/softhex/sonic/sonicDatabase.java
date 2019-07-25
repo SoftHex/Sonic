@@ -3,7 +3,6 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 
 /**
  * Created by Administrador on 10/07/2017.
@@ -26,7 +25,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_PRODUTOS = sonicConstants.TB_PRODUTOS;
     private static final String DB_GRUPO_PRODUTOS = sonicConstants.TB_GRUPO_PRODUTOS;
     private static final String DB_RANKING_PRODUTOS = sonicConstants.TB_RANKING_PRODUTOS;
-    private static final String DB_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE_PRODUTOS;
+    private static final String DB_ESTOQUE = sonicConstants.TB_ESTOQUE;
     private static final String DB_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
     private static final String DB_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
     private static final String DB_TITTULOS = sonicConstants.TB_TITULOS;
@@ -190,7 +189,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "nome string);";
     private static final String CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO = "CREATE INDEX index_grupo_produtos_codigo ON "+DB_GRUPO_PRODUTOS+" (codigo);";
 
-    private static final String CREATE_TABLE_ESTOQUE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+DB_ESTOQUE_PRODUTOS+" (" +
+    private static final String CREATE_TABLE_ESTOQUE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+ DB_ESTOQUE +" (" +
             "_id integer primary key autoincrement, " +
             "codigo_empresa int, " +
             "codigo_produto int, " +

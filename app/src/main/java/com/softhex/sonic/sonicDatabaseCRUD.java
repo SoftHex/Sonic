@@ -34,7 +34,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
     private final String TABLE_PRODUTOS = sonicConstants.TB_PRODUTOS;
     private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTOS;
-    private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE_PRODUTOS;
+    private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE;
     private final String TABLE_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
     private final String TABLE_TITULOS = sonicConstants.TB_TITULOS;
     private final String TABLE_RETORNO_PEDIDO = sonicConstants.TB_RETORNO_PEDIDO;
