@@ -171,7 +171,7 @@ public class sonicClientesCPF extends Fragment{
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Clientes.selectCliente("F");
+            myList =  new sonicDatabaseCRUD(_this).Clientes.selectClienteTipo("F");
             return myList.size();
 
         }

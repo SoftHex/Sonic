@@ -74,6 +74,10 @@ public class sonicUtils {
     Data Data = new Data();
     Number Number = new Number();
 
+    public static String getURLForResource (int resourceId) {
+        return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
+    }
+
     public static class Randomizer {
         public static int generate(int min,int max) {
             return min + (int)(Math.random() * ((max - min) + 1));

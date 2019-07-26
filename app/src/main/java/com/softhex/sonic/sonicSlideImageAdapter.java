@@ -1,9 +1,11 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +20,7 @@ public class sonicSlideImageAdapter extends PagerAdapter {
 
     private Context myCtx;
     private String[] myImages;
+    private Drawable image;
 
     public sonicSlideImageAdapter(Context myCtx, String[] myImages) {
         this.myCtx = myCtx;
@@ -37,16 +40,21 @@ public class sonicSlideImageAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
         ImageView imageView = new ImageView(myCtx);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + myImages[position]);
-        Glide.with(myCtx)
-                .load(file)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(imageView);
+
+            Glide.with(myCtx)
+                    .load(myImages[position])
+                    //.placeholder(R.mipmap.loader)
+                    .override(600,400)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                    .into(imageView);
+
         container.addView(imageView);
+
         return imageView;
     }
 

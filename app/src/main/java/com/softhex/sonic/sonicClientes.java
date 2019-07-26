@@ -43,7 +43,7 @@ public class sonicClientes extends AppCompatActivity {
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager myViewPager = findViewById(R.id.pager);
+        ViewPager myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
         TabLayout myTabLayout = findViewById(R.id.tabs);

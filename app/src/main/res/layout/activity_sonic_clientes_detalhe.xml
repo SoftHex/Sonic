@@ -13,14 +13,17 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
+            app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
+            app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance"
             app:title="@string/app_name">
 
            <android.support.v4.view.ViewPager
-               android:id="@+id/pager"
+               android:id="@+id/pagerSlide"
                android:layout_width="match_parent"
                android:layout_height="250dp">
 
@@ -38,43 +41,79 @@
 
             <LinearLayout
                 android:id="@+id/layoutDots"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:minWidth="60dp"
                 android:layout_height="26dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginLeft="100dp"
                 android:gravity="right"
                 app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
-                android:layout_gravity="top"
+                android:layout_gravity="top|right"
                 android:orientation="horizontal"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_white_24dp"
-        android:tint="@color/colorPrimaryBlueLight"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        android:layout_margin="16dp"/>
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pagerContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="Texto"
-            android:lineSpacingExtra="8sp"
-            android:padding="16dp"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </android.support.v4.view.ViewPager>
 
     </android.support.v4.widget.NestedScrollView>
 
+    <com.github.clans.fab.FloatingActionMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorPrimaryWhite"
+        app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+        android:layout_margin="16dp">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorPrimaryGreenLight"
+            fab:fab_colorPressed="@color/colorPrimaryWhite"
+            android:src="@mipmap/ic_add_shopping_cart_white_24dp"
+            fab:backgroundTint="@color/colorPrimaryWhite"
+            fab:fab_size="mini"
+            fab:fab_label="Novo Pedido" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorPrimaryRed"
+            fab:fab_colorPressed="@color/colorPrimaryWhite"
+            android:src="@mipmap/ic_email_plus_white_24dp"
+            fab:fab_size="mini"
+            fab:fab_label="Novo E-mail" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorPrimaryBlueLight"
+            fab:fab_colorPressed="@color/colorPrimaryWhite"
+            android:src="@mipmap/ic_phone_plus_white_24dp"
+            fab:fab_size="mini"
+            fab:fab_label="Ligar" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

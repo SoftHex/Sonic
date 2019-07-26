@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -36,6 +35,7 @@ import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
+import com.mikepenz.materialdrawer.holder.StringHolder;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -64,8 +64,6 @@ public class sonicMain extends AppCompatActivity{
     private ActionBar myActionBar;
     private ViewPager myViewPager;
     private ViewPagerAdapter myAdapter;
-    private sonicConstants myCons;
-    private BottomNavigationView myBottonNav;
     private SharedPreferences pref;
     private AccountHeader myHeader;
     private Context myCtx;
@@ -129,7 +127,7 @@ public class sonicMain extends AppCompatActivity{
 
         //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
 
-        myViewPager = findViewById(R.id.pager);
+        myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
         List<Fragment> fragmentList = new ArrayList<>();
@@ -221,7 +219,7 @@ public class sonicMain extends AppCompatActivity{
 
         {
 
-            File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
+            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
 
             //String image = file.exists() ? file.toString() : getResources().getDrawable(R.drawable.no_profile).toString();
 
@@ -596,7 +594,7 @@ public class sonicMain extends AppCompatActivity{
 
     public void updateBadge( int id, String badge){
 
-        //myDrawer.updateBadge(id, new StringHolder(badge));
+        myDrawer.updateBadge(id, new StringHolder(badge));
 
     }
 
@@ -613,7 +611,7 @@ public class sonicMain extends AppCompatActivity{
                     break;
                 case 3:
                     result[0] = integers[0];
-                    result[1] = (int)DBC.Clientes.count();
+                    result[1] = DBC.Clientes.countPorEmpresa();
                     break;
                 case 4:
                     result[0] = integers[0];
@@ -628,9 +626,9 @@ public class sonicMain extends AppCompatActivity{
             super.onPostExecute(integers);
 
             if(integers[1]>0){
-                //updateBadge(integers[0],integers[1]+"");
+                updateBadge(integers[0],integers[1]+"");
             }else {
-                //updateBadge(integers[0], null);
+                updateBadge(integers[0], null);
             }
 
         }
@@ -662,9 +660,6 @@ public class sonicMain extends AppCompatActivity{
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("dbBackup:", e.getMessage());
-            //output.flush();
-            //output.close();
         }
     }
 

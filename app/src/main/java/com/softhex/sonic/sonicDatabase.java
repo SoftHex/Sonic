@@ -19,6 +19,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_EMPRESAS_USUARIOS = sonicConstants.TB_EMPRESAS_USUARIOS;
     private static final String DB_HISTORICO_USUARIO = sonicConstants.TB_HISTORICO_USUARIO;
     private static final String DB_CLIENTES = sonicConstants.TB_CLIENTES;
+    private static final String DB_EMPRESAS_CLIENTES = sonicConstants.TB_EMPRESAS_CLIENTES;
     private static final String DB_GRUPO_CLIENTES = sonicConstants.TB_GRUPO_CLIENTES;
     private static final String DB_RANKING_CLIENTES = sonicConstants.TB_RANKING_CLIENTES;
     private static final String DB_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
@@ -144,6 +145,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO = "CREATE INDEX index_clientes_codigo_grupo ON "+DB_CLIENTES+" (codigo_grupo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_SITUACAO = "CREATE INDEX index_clientes_situacao ON "+DB_CLIENTES+" (situacao);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_SELECIONADO = "CREATE INDEX index_clientes_selecionado ON "+DB_CLIENTES+" (selecionado);";
+
+    private static final String CREATE_TABLE_EMPRESAS_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS_CLIENTES+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_cliente int, " +
+            "codigo_empresa int);";
+    private static final String CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE = "CREATE INDEX index_empresas_clientes_codigo_cliente ON "+DB_EMPRESAS_CLIENTES+" (codigo_cliente);";
+    private static final String CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_EMPRESA = "CREATE INDEX index_empresas_clientes_codigo_empresa ON "+DB_EMPRESAS_CLIENTES+" (codigo_empresa);";
 
 
     private static final String CREATE_TABLE_GRUPO_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_CLIENTES+" (" +
@@ -417,6 +425,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO);
+        DB.execSQL(CREATE_TABLE_EMPRESAS_CLIENTES);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_EMPRESA);
         DB.execSQL(CREATE_TABLE_GRUPO_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_GRUPO_CLIENTES_CODIGO);
         DB.execSQL(CREATE_TABLE_RANKING_CLIENTES);

@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -45,7 +44,7 @@ public class sonicSistema extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager viewPager = findViewById(R.id.pager);
+        ViewPager viewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(viewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs);

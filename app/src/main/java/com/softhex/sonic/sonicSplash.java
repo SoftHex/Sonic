@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
+import java.util.List;
 
 import static android.view.View.GONE;
 
@@ -36,7 +39,13 @@ public class sonicSplash extends AppCompatActivity {
     public void logar(){
 
         if(DBC.Usuarios.usuarioAtivo()){
+            List<sonicUsuariosHolder> listaUser;
+            listaUser = DBC.Usuarios.selectUsuarioAtivo();
             i  = new Intent(sonicSplash.this,sonicMain.class);
+            i.putExtra(sonicConstants.LOGED_USER_ID, listaUser.get(0).getCodigo());
+            i.putExtra(sonicConstants.LOGED_USER_NAME, listaUser.get(0).getNome());
+            i.putExtra(sonicConstants.LOGED_USER_NIVEL, listaUser.get(0).getNivelAcessoId());
+            i.putExtra(sonicConstants.LOGED_USER_CARGO, listaUser.get(0).getCargo());;
         }else{
             i  = new Intent(sonicSplash.this,sonicEmpresa.class);
         }

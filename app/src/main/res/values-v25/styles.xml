@@ -103,5 +103,14 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="CollapsedTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ExpandedTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
+        <item name="android:textSize">32sp</item>
+    </style>
 
 </resources>

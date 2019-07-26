@@ -47,7 +47,7 @@ public class sonicSincronizacao extends AppCompatActivity{
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
 
-        myViewPager = findViewById(R.id.pager);
+        myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
         myTabLayout = findViewById(R.id.tabs);

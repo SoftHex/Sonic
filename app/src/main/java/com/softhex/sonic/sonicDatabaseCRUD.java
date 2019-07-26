@@ -689,23 +689,23 @@ public class sonicDatabaseCRUD {
         }
         class Clientes {
 
-        public long count(){
+            public long count() {
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            long count=0;
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES);
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                long count = 0;
+                SQLiteDatabase db = DB.getReadableDatabase();
+                try {
+                    count = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES);
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+
+                return count;
             }
 
-            return count;
-        }
-
             /**
-             *   Conta os produtos por Empresa.
+             * Conta os clientes por Empresa.
              */
             public int countPorEmpresa() {
 
@@ -714,209 +714,281 @@ public class sonicDatabaseCRUD {
 
                 SQLiteDatabase db = DB.getReadableDatabase();
                 try {
-                    Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_CLIENTES+" p WHERE p.codigo_empresa = (SELECT e.codigo_empresa FROM "+TABLE_EMPRESAS+" e WHERE e.selecionado=1)", null);
+                    Cursor cursor = db.rawQuery("SELECT c._id FROM " + TABLE_CLIENTES + " c WHERE c.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESAS + " e WHERE e.selecionado=1)", null);
                     count = cursor.getCount();
                 } catch (SQLiteException e) {
-                                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
 
                 return count;
             }
 
-        public boolean saveCliente(List<String> lista){
+            public boolean saveCliente(List<String> lista) {
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-            //DB.getWritableDatabase().beginTransaction();
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                Boolean result = false;
+                ContentValues cv = new ContentValues();
 
-            try{
-                for(int i = 0; i < lista.size(); i++){
+                try {
+                    for (int i = 0; i < lista.size(); i++) {
 
-                    cv.put("codigo", lista.get(0));
-                    cv.put("tipo", lista.get(1));
-                    cv.put("razao_social", lista.get(2));
-                    cv.put("nome_fantasia", lista.get(3));
-                    cv.put("cpf_cnpj", lista.get(4));
-                    cv.put("insc_estadual", lista.get(5));
-                    cv.put("endereco", lista.get(6));
-                    cv.put("bairro", lista.get(7));
-                    cv.put("municipio", lista.get(8));
-                    cv.put("uf", lista.get(9));
-                    cv.put("cep", lista.get(10));
-                    cv.put("fone", lista.get(11));
-                    cv.put("contato", lista.get(12));
-                    cv.put("email", lista.get(13));
-                    cv.put("observacao", lista.get(14));
-                    cv.put("data_cadastro", lista.get(15));
-                    cv.put("codigo_grupo", lista.get(16));
-					cv.put("situacao", lista.get(17));
-                    cv.put("selecionado", 0);
+                        cv.put("codigo", lista.get(0));
+                        cv.put("tipo", lista.get(1));
+                        cv.put("razao_social", lista.get(2));
+                        cv.put("nome_fantasia", lista.get(3));
+                        cv.put("cpf_cnpj", lista.get(4));
+                        cv.put("insc_estadual", lista.get(5));
+                        cv.put("endereco", lista.get(6));
+                        cv.put("bairro", lista.get(7));
+                        cv.put("municipio", lista.get(8));
+                        cv.put("uf", lista.get(9));
+                        cv.put("cep", lista.get(10));
+                        cv.put("fone", lista.get(11));
+                        cv.put("contato", lista.get(12));
+                        cv.put("email", lista.get(13));
+                        cv.put("observacao", lista.get(14));
+                        cv.put("data_cadastro", lista.get(15));
+                        cv.put("codigo_grupo", lista.get(16));
+                        cv.put("situacao", lista.get(17));
+                        cv.put("selecionado", 0);
+
+                    }
+
+                    result = DB.getWritableDatabase().insert(TABLE_CLIENTES, null, cv) > 0;
+
+                } catch (SQLiteException e) {
+
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+
+                }
+
+                return result;
+            }
+
+            public boolean cleanCliente() {
+
+                return DB.getWritableDatabase().delete(TABLE_CLIENTES, null, null) > 0;
+            }
+
+            public void setSelecionado(int codigo) {
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                ContentValues args = new ContentValues();
+                args.put("selecionado", 1);
+
+                try {
+
+                    DB.getWritableDatabase().update(TABLE_CLIENTES, args, " codigo = " + codigo, null);
+
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
 
                 }
 
-                result = DB.getWritableDatabase().insert(TABLE_CLIENTES, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
             }
 
-            return result;
-        }
+            public void setNaoSelecionado() {
 
-        public boolean cleanCliente(){
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                ContentValues args = new ContentValues();
+                args.put("selecionado", 0);
 
-            return DB.getWritableDatabase().delete(TABLE_CLIENTES, null, null)>0;
-        }
+                try {
 
-        public void setSelecionado(int codigo){
+                    DB.getWritableDatabase().update(TABLE_CLIENTES, args, null, null);
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            ContentValues args = new ContentValues();
-            args.put("selecionado", 1);
-
-            try{
-
-                    DB.getWritableDatabase().update(TABLE_CLIENTES, args, " codigo = "+codigo, null);
-
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-        }
-
-        public void setNaoSelecionado(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            ContentValues args = new ContentValues();
-            args.put("selecionado", 0);
-
-            try{
-
-                DB.getWritableDatabase().update(TABLE_CLIENTES, args, null, null);
-
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-        }
-
-        public Boolean selecionadoExiste(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_CLIENTES+" c WHERE  c.selecionado = 1 ", null);
-                if(cursor!=null && cursor.getCount()>0){
-                    result = true;
-                }
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-
-        public List<sonicClientesHolder> selectCliente(String tipo){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicClientesHolder> clientes = new ArrayList<sonicClientesHolder>();
-
-            String order = prefs.getString("show_name", "0");
-            String orderby = "";
-
-            String where = "";
-
-            if(myCons.GRUPO_CLIENTES != "TODOS"){
-                where+= " AND gc.nome = '"+ myCons.GRUPO_CLIENTES+"' ";
-            }
-
-            switch (order){
-                case "0":
-                    orderby = " ORDER BY razao_social";
-                    break;
-                case "1":
-                    orderby = " ORDER BY nome_fantasia";
-                    break;
-                default:
-                    orderby = " ORDER BY razao_social";
-            }
-
-            try {
-
-                Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT " +
-                                "c.codigo as codigo, " +
-                                "c.tipo as tipo, " +
-                                "c.razao_social as razao, " +
-                                "c.nome_fantasia as fantasia, " +
-                                "c.cpf_cnpj as cpf_cnpj, " +
-                                "c.insc_estadual as ie, " +
-                                "c.endereco as endereco, " +
-                                "c.bairro as bairro, " +
-                                "c.municipio as municipio, " +
-                                "c.uf as uf, " +
-                                "c.cep as cep, " +
-                                "c.fone as fone, " +
-                                "c.contato as contato, " +
-                                "c.email as email, " +
-                                "c.observacao as obs, " +
-                                "c.data_cadastro as cadastro, " +
-                                "gc.nome as grupo, " +
-                                "(SELECT COUNT(t._id) FROM " + TABLE_TITULOS + " t WHERE t.codigo_cliente = c.codigo) AS titulos, " +
-                                "c.situacao as situacao" +
-                                " FROM " + TABLE_CLIENTES +
-                                " c LEFT JOIN " + TABLE_GRUPO_CLIENTES +
-                                " gc ON gc.codigo = c.codigo_grupo WHERE c.tipo= '" + tipo + "' " + where + orderby, null);
-
-                while (cursor.moveToNext()) {
-
-                    sonicClientesHolder cliente = new sonicClientesHolder();
-
-
-                    cliente.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    cliente.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
-                    cliente.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao")));
-                    cliente.setNomeFantasia(cursor.getString(cursor.getColumnIndex("fantasia")));
-                    cliente.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
-                    cliente.setInscEstadual(cursor.getString(cursor.getColumnIndex("ie")));
-                    cliente.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
-                    cliente.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                    cliente.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
-                    cliente.setUf(cursor.getString(cursor.getColumnIndex("uf")));
-                    cliente.setCep(cursor.getString(cursor.getColumnIndex("cep")));
-                    cliente.setFone(cursor.getString(cursor.getColumnIndex("fone")));
-                    cliente.setContato(cursor.getString(cursor.getColumnIndex("contato")));
-                    cliente.setEmail(cursor.getString(cursor.getColumnIndex("email")));
-                    cliente.setObservacao(cursor.getString(cursor.getColumnIndex("obs")));
-                    cliente.setDataCadastro(cursor.getString(cursor.getColumnIndex("cadastro")));
-                    cliente.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
-                    cliente.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
-                    cliente.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                    clientes.add(cliente);
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
 
                 }
-                cursor.close();
 
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
             }
-            Log.v("LOG", clientes.size()+"");
-            return clientes;
 
-        }
+            public Boolean selecionadoExiste() {
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                Boolean result = false;
+
+                try {
+                    Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_CLIENTES + " c WHERE  c.selecionado = 1 ", null);
+                    if (cursor != null && cursor.getCount() > 0) {
+                        result = true;
+                    }
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+
+                return result;
+            }
+
+
+            public List<sonicClientesHolder> selectClienteTipo(String tipo) {
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                List<sonicClientesHolder> clientes = new ArrayList<sonicClientesHolder>();
+
+                String order = prefs.getString("show_name", "0");
+                String orderby = "";
+
+                String where = "";
+
+                if (myCons.GRUPO_CLIENTES != "TODOS") {
+                    where += " AND gc.nome = '" + myCons.GRUPO_CLIENTES + "' ";
+                }
+
+                switch (order) {
+                    case "0":
+                        orderby = " ORDER BY razao_social";
+                        break;
+                    case "1":
+                        orderby = " ORDER BY nome_fantasia";
+                        break;
+                    default:
+                        orderby = " ORDER BY razao_social";
+                }
+
+                try {
+
+                    Cursor cursor = DB.getReadableDatabase().rawQuery(
+                            "SELECT " +
+                                    "c.codigo as codigo, " +
+                                    "c.tipo as tipo, " +
+                                    "c.razao_social as razao, " +
+                                    "c.nome_fantasia as fantasia, " +
+                                    "c.cpf_cnpj as cpf_cnpj, " +
+                                    "c.insc_estadual as ie, " +
+                                    "c.endereco as endereco, " +
+                                    "c.bairro as bairro, " +
+                                    "c.municipio as municipio, " +
+                                    "c.uf as uf, " +
+                                    "c.cep as cep, " +
+                                    "c.fone as fone, " +
+                                    "c.contato as contato, " +
+                                    "c.email as email, " +
+                                    "c.observacao as obs, " +
+                                    "c.data_cadastro as cadastro, " +
+                                    "gc.nome as grupo, " +
+                                    "(SELECT COUNT(t._id) FROM " + TABLE_TITULOS + " t WHERE t.codigo_cliente = c.codigo) AS titulos, " +
+                                    "c.situacao as situacao" +
+                                    " FROM " + TABLE_CLIENTES +
+                                    " c LEFT JOIN " + TABLE_GRUPO_CLIENTES +
+                                    " gc ON gc.codigo = c.codigo_grupo WHERE c.tipo= '" + tipo + "' " + where + orderby, null);
+
+                    while (cursor.moveToNext()) {
+
+                        sonicClientesHolder cliente = new sonicClientesHolder();
+
+
+                        cliente.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        cliente.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
+                        cliente.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao")));
+                        cliente.setNomeFantasia(cursor.getString(cursor.getColumnIndex("fantasia")));
+                        cliente.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
+                        cliente.setInscEstadual(cursor.getString(cursor.getColumnIndex("ie")));
+                        cliente.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                        cliente.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                        cliente.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                        cliente.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                        cliente.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+                        cliente.setFone(cursor.getString(cursor.getColumnIndex("fone")));
+                        cliente.setContato(cursor.getString(cursor.getColumnIndex("contato")));
+                        cliente.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+                        cliente.setObservacao(cursor.getString(cursor.getColumnIndex("obs")));
+                        cliente.setDataCadastro(cursor.getString(cursor.getColumnIndex("cadastro")));
+                        cliente.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
+                        cliente.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
+                        cliente.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        clientes.add(cliente);
+
+                    }
+                    cursor.close();
+
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+                Log.v("LOG", clientes.size() + "");
+                return clientes;
+
+            }
+
+            public List<sonicClientesHolder> selectClienteID(int id) {
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                List<sonicClientesHolder> clientes = new ArrayList<sonicClientesHolder>();
+
+                try {
+
+                    Cursor cursor = DB.getReadableDatabase().rawQuery(
+                            "SELECT " +
+                                    "c.codigo," +
+                                    "c.tipo," +
+                                    "c.razao_social," +
+                                    "c.nome_fantasia," +
+                                    "c.cpf_cnpj," +
+                                    "c.insc_estadual," +
+                                    "c.endereco," +
+                                    "c.bairro," +
+                                    "c.municipio," +
+                                    "c.uf," +
+                                    "c.cep," +
+                                    "c.fone," +
+                                    "c.contato," +
+                                    "c.email," +
+                                    "c.situacao," +
+                                    "c.observacao," +
+                                    "c.data_cadastro" +
+
+                                    " FROM " + TABLE_CLIENTES +
+
+                                    " c WHERE c.codigo = "+id, null);
+
+                    while (cursor.moveToNext()) {
+
+                        sonicClientesHolder cliente = new sonicClientesHolder();
+
+
+                        cliente.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        cliente.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
+                        cliente.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        cliente.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                        cliente.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
+                        cliente.setInscEstadual(cursor.getString(cursor.getColumnIndex("insc_estadual")));
+                        cliente.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                        cliente.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                        cliente.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                        cliente.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                        cliente.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+                        cliente.setFone(cursor.getString(cursor.getColumnIndex("fone")));
+                        cliente.setContato(cursor.getString(cursor.getColumnIndex("contato")));
+                        cliente.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+                        cliente.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        cliente.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+                        cliente.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
+                        clientes.add(cliente);
+
+                    }
+
+                    cursor.close();
+
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+
+                return clientes;
+
+            }
+
 
         public List<sonicClientesHolder> selectClienteSelecionado(){
 
@@ -927,7 +999,7 @@ public class sonicDatabaseCRUD {
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "c.codigo_cliente," +
+                            "c.codigo," +
                             "c.tipo," +
                             "c.razao_social," +
                             "c.nome_fantasia," +
@@ -954,7 +1026,7 @@ public class sonicDatabaseCRUD {
                 sonicClientesHolder cliente = new sonicClientesHolder();
 
 
-                cliente.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                cliente.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                 cliente.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
                 cliente.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
                 cliente.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
@@ -978,7 +1050,11 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 

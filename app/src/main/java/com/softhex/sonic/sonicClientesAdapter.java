@@ -91,7 +91,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onClick(View v) {
 
+                    DBC.Clientes.setNaoSelecionado();
+                    DBC.Clientes.setSelecionado(codigo);
+
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                    i.putExtra(sonicConstants.PUT_EXTRA_CLIENTE_NOME, cliente.getText());
+                    i.putExtra(sonicConstants.PUT_EXTRA_CLIENTE_ID, codigo);
                     v.getContext().startActivity(i);
 
 
@@ -141,6 +146,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         holder.setIsRecyclable(false);
         sonicClientesHolder cli = clientes.get(position);
 
+        holder.codigo = cli.getCodigo();
+
         switch (holder.order){
             case "0":
                 holder.cliente.setText(cli.getRazaoSocial());
@@ -163,7 +170,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             holder.grupo.setBackground(shape);
         }
 
-        holder.codigo = cli.getCodigo();
         holder.grupo.setText("GRUPO: "+cli.getGrupo());
         holder.endereco.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
 
@@ -181,7 +187,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             holder.sit.setVisibility(View.VISIBLE);
         }
 
-        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES +cli.getCodigo()+".jpg");
+        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES +cli.getCodigo()+"_1.jpg");
 
         if(file.exists()){
 

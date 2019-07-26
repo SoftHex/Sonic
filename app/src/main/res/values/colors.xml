@@ -30,6 +30,7 @@
     <color name="colorPrimaryBrownLightT">#90CD853F</color>
     <color name="colorPrimaryBlackDark">#000000</color>
     <color name="colorPrimaryBlackDarkT">#90000000</color>
+    <color name="colorPrimaryBlackDarkT2">#10363636</color>
     <color name="colorPrimaryBlack">#363636</color>
     <color name="colorPrimaryBlackT">#90363636</color>
     <color name="colorPrimaryBlackLight">#696969</color>
@@ -49,8 +50,19 @@
     <color name="colorPrimaryBlueDarkT">#90002A73</color>
     <color name="colorPrimaryBlueT">#901850AE</color>
     <color name="colorPrimaryBlueLightT">#904688F7</color>
+    <color name="colorPrimaryRedDark">#8B0000</color>
+    <color name="colorPrimaryRed">#FF0000</color>
+    <color name="colorPrimaryRedLight">#FF6347</color>
+    <color name="colorPrimaryRedDarkT">#908B0000</color>
+    <color name="colorPrimaryRedT">#90FF0000</color>
+    <color name="colorPrimaryRedLightT">#90FF6347</color>
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryGreen2">#00FA9A</color>
+    <color name="colorTypeInfo">#79b3e4</color>
+    <color name="colorTypeHelp">#e8bd4b</color>
+    <color name="colorTypeWrong">#ed7861</color>
+    <color name="colorTypeWarning">#e8bd4b</color>
+    <color name="colorTypeSuccess">#90b06e</color>
 
     <!-- WINE THEME -->
 
@@ -73,6 +85,8 @@
     <!-- dots colors -->
     <color name="dotActive">@color/colorPrimary</color>
     <color name="dotInactive">#90C0C0C0</color>
+    <color name="dotSlideActive">#FFFFFF</color>
+    <color name="dotSlideInactive">#363636</color>
 
 
 </resources>
