@@ -3,6 +3,7 @@ package com.softhex.sonic;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +22,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,10 +45,6 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,6 +177,8 @@ public class sonicMain extends AppCompatActivity{
 
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+
+                        sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
 
                         if(!currentProfile) {
                             setEmpresa(profile.getIdentifier());
@@ -482,7 +481,7 @@ public class sonicMain extends AppCompatActivity{
                                 //border_bottom();
                                 break;
                             case 12:
-                                mensagem();
+                                dialogRedefinir();
                                 //normalListDialogNoTitle("MENU");
                                 break;
                             case 13:
@@ -504,7 +503,7 @@ public class sonicMain extends AppCompatActivity{
                                 //startActivity(i);
                                 break;
                             case 18:
-                                exportDataBase();
+                                dialogBackup();
                                 break;
 
                             default:
@@ -634,33 +633,53 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
-    protected void exportDataBase() {
-        OutputStream output=null;
-        try {
-            File dbFile = new File(Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_DATA+"sonic.db");
-            FileInputStream fis = new FileInputStream(dbFile);
+    private void dialogBackup() {
 
-            String outFileName = sonicConstants.LOCAL_DATA + "sonic.db";
-            File bk = new File(outFileName);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(myCtx);
+        builder.setMessage("O backup será salvo no diretório: "+ sonicConstants.LOCAL_DATA_BACKUP)
+                .setPositiveButton("FAZER BACKUP", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        salvarBackup();
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-            // Open the empty db as the output stream
-            output = new FileOutputStream(outFileName);
+                    }
+                })
+                .show();
 
-            // Transfer bytes from the inputfile to the outputfile
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = fis.read(buffer)) > 0) {
-                output.write(buffer, 0, length);
-            }
-            // Close the streams
-            fis.close();
-            output.flush();
-            output.close();
+    }
+
+    public void salvarBackup(){
+
+        ProgressDialog myProgressDialog = new ProgressDialog(myCtx);
+        myProgressDialog.setCancelable(false);
+        myProgressDialog.setMessage("Salvando, aguarde...");
+        myProgressDialog.setMax(1);
+        myProgressDialog.setProgressStyle(0);
+        myProgressDialog.show();
+
+        String result = new sonicDatabase(myCtx).exportDb();
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    myProgressDialog.dismiss();
+
+                                    new sonicTM(myCtx).showMS("Informação.",result, sonicTM.MSG_INFO);
+
+                                }
+                            }
+                , 1000);
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void setEmpresa(long empresa){
@@ -675,7 +694,7 @@ public class sonicMain extends AppCompatActivity{
         }
 
 
-        //refreshHomeFragment();
+        refreshHomeFragment();
 
     }
 
@@ -724,9 +743,8 @@ public class sonicMain extends AppCompatActivity{
     }
 
 
-    public void mensagem(){
+    public void dialogRedefinir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setIcon(@)
         builder.setMessage(R.string.go_sure).setPositiveButton("REDEFINIR", dialogClickListener).setNegativeButton("CANCELAR", dialogClickListener).show();
     }
 
@@ -785,40 +803,13 @@ public class sonicMain extends AppCompatActivity{
 
         try {
 
-            Runtime runtime = Runtime.getRuntime();
-            runtime.exec("pm clear com.softhex.sonic");
+            Intent intent = new Intent("android.intent.action.DELETE");
+            intent.setData(Uri.parse("package: com.softhex.sonic"));
+            startActivity(intent);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void normalListDialogNoTitle(final String content) {
-        final ArrayList<DialogMenuItem> testItems = new ArrayList<>();
-//        testItems.add(new DialogMenuItem("??", R.mipmap.ic_winstyle_copy));
-//        testItems.add(new DialogMenuItem("??", R.mipmap.ic_winstyle_delete));
-        testItems.add(new DialogMenuItem("ITEM", R.mipmap.ic_add_shopping_cart_black_24dp));
-        final NormalListDialog dialog = new NormalListDialog(sonicMain.this, testItems);
-        dialog.title("TITULO")//
-                .isTitleShow(true)//
-                .itemPressColor(Color.parseColor("#85D3EF"))//
-                .itemTextColor(Color.parseColor("#303030"))//
-                .itemTextSize(15)//
-                .cornerRadius(2)//
-                .widthScale(0.75f)
-                .show();
-        dialog.setOnOperItemClickL(new OnOperItemClickL() {
-            @Override
-            public void onOperItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0://??
-                        Toast.makeText(sonicMain.this,"ITEM", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                dialog.dismiss();
-            }
-        });
-
     }
 
     @Override
@@ -835,6 +826,8 @@ public class sonicMain extends AppCompatActivity{
                 long empresaId = myHeader.getActiveProfile().getIdentifier();
 
                 myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_PERFIL, empresaId, usuarioId);
+
+
 
                 String url = Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+empresaId+"_"+usuarioId+".jpg";
 

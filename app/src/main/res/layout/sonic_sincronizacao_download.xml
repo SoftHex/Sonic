@@ -26,7 +26,6 @@
                 android:padding="16dp"
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/colorPrimary"
-                android:drawableLeft="@mipmap/ic_history_black_24dp"
                 android:drawablePadding="4dp"
                 android:text="Sincronizado hoje às 21:30"/>
 

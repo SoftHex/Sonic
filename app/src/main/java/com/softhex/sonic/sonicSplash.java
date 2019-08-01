@@ -40,12 +40,15 @@ public class sonicSplash extends AppCompatActivity {
 
         if(DBC.Usuarios.usuarioAtivo()){
             List<sonicUsuariosHolder> listaUser;
+            List<sonicEmpresasHolder> listaEmpresa;
             listaUser = DBC.Usuarios.selectUsuarioAtivo();
+            listaEmpresa = DBC.Empresa.empresasUsuarios();
             i  = new Intent(sonicSplash.this,sonicMain.class);
             i.putExtra(sonicConstants.LOGED_USER_ID, listaUser.get(0).getCodigo());
             i.putExtra(sonicConstants.LOGED_USER_NAME, listaUser.get(0).getNome());
             i.putExtra(sonicConstants.LOGED_USER_NIVEL, listaUser.get(0).getNivelAcessoId());
-            i.putExtra(sonicConstants.LOGED_USER_CARGO, listaUser.get(0).getCargo());;
+            i.putExtra(sonicConstants.LOGED_USER_CARGO, listaUser.get(0).getCargo());
+            i.putExtra(sonicConstants.EMPRESA_SELECIONADA_NOME, listaEmpresa.get(0).getNomeFantasia());
         }else{
             i  = new Intent(sonicSplash.this,sonicEmpresa.class);
         }

@@ -29,6 +29,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_EMPRESAS_USUARIOS = sonicConstants.TB_EMPRESAS_USUARIOS;
     private final String TABLE_HITORICO_USUARIO = sonicConstants.TB_HISTORICO_USUARIO;
     private final String TABLE_CLIENTES = sonicConstants.TB_CLIENTES;
+    private final String TABLE_EMPRESAS_CLIENTES = sonicConstants.TB_EMPRESAS_CLIENTES;
     private final String TABLE_GRUPO_CLIENTES = sonicConstants.TB_GRUPO_CLIENTES;
     private final String TABLE_RANKING_CLIENTES = sonicConstants.TB_RANKING_CLIENTES;
     private final String TABLE_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
@@ -90,6 +91,7 @@ public class sonicDatabaseCRUD {
     EmpresasUsuarios EmpresasUsuarios = new EmpresasUsuarios();
     sonicDatabaseCRUD.NivelAcesso NivelAcesso = new NivelAcesso();
     Clientes Clientes = new Clientes();
+    EmpresasClientes EmpresasClientes = new EmpresasClientes();
     Vendas Vendas = new Vendas();
     VendasItens VendasItens = new VendasItens();
     GrupoCliente GrupoCliente = new GrupoCliente();
@@ -192,7 +194,12 @@ public class sonicDatabaseCRUD {
 
             }catch (SQLiteException e){
 
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
 
@@ -515,6 +522,67 @@ public class sonicDatabaseCRUD {
         }
     }
 
+    class EmpresasClientes{
+
+        public long count() {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            long count = 0;
+
+            SQLiteDatabase db = DB.getReadableDatabase();
+            try {
+                count = DatabaseUtils.queryNumEntries(db, TABLE_EMPRESAS_CLIENTES);
+            } catch (SQLiteException e) {
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return count;
+        }
+
+
+        public boolean saveEmpresasClientes(List<String> lista){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+            ContentValues cv = new ContentValues();
+
+            try{
+                for(int i = 0; i < lista.size(); i++){
+
+                    cv.put("codigo_empresa", lista.get(0));
+                    cv.put("codigo_cliente", lista.get(1));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_EMPRESAS_CLIENTES, null, cv)>0;
+
+            }catch (SQLiteException e){
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+            return result;
+        }
+
+        public boolean cleanEmpresasClientes() {
+
+            return DB.getWritableDatabase().delete(TABLE_EMPRESAS_CLIENTES, null, null) > 0;
+        }
+
+    }
+
     class NivelAcesso {
 
         public boolean saveNivelAcesso(List<String> lista){
@@ -611,7 +679,7 @@ public class sonicDatabaseCRUD {
                 aviso.setData(cursor.getString(cursor.getColumnIndex("data")));
                 aviso.setHora(cursor.getString(cursor.getColumnIndex("hora")));
                 aviso.setTitulo(cursor.getString(cursor.getColumnIndex("titulo")));
-                aviso.setMensagem(cursor.getString(cursor.getColumnIndex("mensagem")));
+                aviso.setMensagem(cursor.getString(cursor.getColumnIndex("dialogRedefinir")));
                 aviso.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
 
                 avisos.add(aviso);
@@ -637,7 +705,7 @@ public class sonicDatabaseCRUD {
                     cv.put("hora", lista.get(3));
                     cv.put("prioridade", lista.get(4));
                     cv.put("titulo", lista.get(5));
-                    cv.put("mensagem", lista.get(6));
+                    cv.put("dialogRedefinir", lista.get(6));
                     cv.put("status", 0);
 
                 }
@@ -714,7 +782,7 @@ public class sonicDatabaseCRUD {
 
                 SQLiteDatabase db = DB.getReadableDatabase();
                 try {
-                    Cursor cursor = db.rawQuery("SELECT c._id FROM " + TABLE_CLIENTES + " c WHERE c.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESAS + " e WHERE e.selecionado=1)", null);
+                    Cursor cursor = db.rawQuery("SELECT c.codigo FROM " + TABLE_CLIENTES + " c WHERE c.codigo IN (SELECT ec.codigo_cliente FROM " + TABLE_EMPRESAS_CLIENTES + " ec WHERE ec.codigo_empresa = (SELECT e.codigo FROM "+ TABLE_EMPRESAS +" e WHERE e.selecionado = 1))", null);
                     count = cursor.getCount();
                 } catch (SQLiteException e) {
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -751,6 +819,7 @@ public class sonicDatabaseCRUD {
                         cv.put("data_cadastro", lista.get(15));
                         cv.put("codigo_grupo", lista.get(16));
                         cv.put("situacao", lista.get(17));
+                        // POSIÇÃO 18 VENDEDOR, IGNORAR
                         cv.put("selecionado", 0);
 
                     }
@@ -877,7 +946,11 @@ public class sonicDatabaseCRUD {
                                     "c.situacao as situacao" +
                                     " FROM " + TABLE_CLIENTES +
                                     " c LEFT JOIN " + TABLE_GRUPO_CLIENTES +
-                                    " gc ON gc.codigo = c.codigo_grupo WHERE c.tipo= '" + tipo + "' " + where + orderby, null);
+                                    " gc ON gc.codigo = c.codigo_grupo " +
+                                    " LEFT JOIN " + TABLE_EMPRESAS_CLIENTES +
+                                    " ec ON ec.codigo_cliente = c.codigo " +
+                                    " WHERE ec.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESAS + " e WHERE e.selecionado = 1)" +
+                                    " AND c.tipo= '" + tipo + "' " + where + orderby, null);
 
                     while (cursor.moveToNext()) {
 
@@ -2494,15 +2567,16 @@ public class sonicDatabaseCRUD {
             try{
                 for(int i = 0; i < lista.size(); i++){
 
-                    cv.put("codigo_cliente", lista.get(0));
-                    cv.put("numero", lista.get(1));
-                    cv.put("data_emissao", lista.get(2));
-                    cv.put("data_vencimento", lista.get(3));
-                    cv.put("dias_atraso", lista.get(4));
-                    cv.put("valor", lista.get(5));
-					cv.put("saldo", lista.get(6));
-                    cv.put("situacao", lista.get(7));
-					cv.put("situacao_cor", lista.get(8));
+                    cv.put("codigo", lista.get(0));
+                    cv.put("codigo_cliente", lista.get(1));
+                    cv.put("numero", lista.get(2));
+                    cv.put("data_emissao", lista.get(3));
+                    cv.put("data_vencimento", lista.get(4));
+                    cv.put("dias_atraso", lista.get(5));
+                    cv.put("valor", lista.get(6));
+					cv.put("saldo", lista.get(7));
+                    cv.put("situacao", lista.get(8));
+                    // POSIÇÃO 9 VENDEDOR, IGNORAR
 
                 }
 
@@ -3478,7 +3552,7 @@ public class sonicDatabaseCRUD {
                 for(int i = 0; i < size; i++){
 
                     cv.put("codigo", lista.get(0));
-                    cv.put("mensagem", lista.get(1));
+                    cv.put("dialogRedefinir", lista.get(1));
 
                 }
 

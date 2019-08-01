@@ -3,6 +3,16 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrador on 10/07/2017.
@@ -52,6 +62,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_SINCRONIZACAO = sonicConstants.TB_SINCRONIZACAO;
     private static final String DB_LOCALIZACAO = sonicConstants.TB_LOCALIZACAO;
     private static final String DB_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
+    private Context myCtx;
 
     private static final String CREATE_TABLE_SITE = "CREATE TABLE IF NOT EXISTS "+DB_SITE+" (" +
             "_id integer primary key autoincrement, " +
@@ -92,6 +103,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TABLE_USUARIOS_CODIGO = "CREATE INDEX index_usuario_codigo ON "+DB_USUARIOS+" (codigo);";
     private static final String CREATE_INDEX_TABLE_USUARIOS_NIVEL_ACESSO = "CREATE INDEX index_usuario_nivel_acesso ON "+DB_USUARIOS+" (nivel_acesso);";
     private static final String CREATE_INDEX_TABLE_USUARIOS_USUARIO_SUPERIOR = "CREATE INDEX index_usuario_usuario_superior ON "+DB_USUARIOS+" (usuario_superior);";
+    private static final String CREATE_INDEX_TABLE_USUARIOS_ATIVO = "CREATE INDEX index_usuario_ativo ON "+DB_USUARIOS+" (ativo);";
 
     private static final String CREATE_TABLE_HISTORICO_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_USUARIO+" (" +
             "_id integer primary key autoincrement, "+
@@ -148,11 +160,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_EMPRESAS_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS_CLIENTES+" (" +
             "_id integer primary key autoincrement, "+
-            "codigo_cliente int, " +
-            "codigo_empresa int);";
-    private static final String CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE = "CREATE INDEX index_empresas_clientes_codigo_cliente ON "+DB_EMPRESAS_CLIENTES+" (codigo_cliente);";
+            "codigo_empresa int, " +
+            "codigo_cliente int);";
     private static final String CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_EMPRESA = "CREATE INDEX index_empresas_clientes_codigo_empresa ON "+DB_EMPRESAS_CLIENTES+" (codigo_empresa);";
-
+    private static final String CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE = "CREATE INDEX index_empresas_clientes_codigo_cliente ON "+DB_EMPRESAS_CLIENTES+" (codigo_cliente);";
 
     private static final String CREATE_TABLE_GRUPO_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_CLIENTES+" (" +
             "_id integer primary key autoincrement, " +
@@ -249,6 +260,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_TITULOS = "CREATE TABLE IF NOT EXISTS "+DB_TITTULOS+" (" +
             "_id integer primary key autoincrement, " +
+            "codigo int, " +
             "codigo_cliente int, " +
             "numero string, " +
             "data_emissao string, " +
@@ -256,8 +268,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "dias_atraso int, " +
             "valor decimal(9,2), " +
 			"saldo decimal(9,2), " +
-            "situacao int, " +
-			"situacao_cor string);";
+            "situacao int);";
 
     private static final String CREATE_TABLE_RETORNO_PEDIDO = "CREATE TABLE IF NOT EXISTS "+DB_RETORNO_PEDIDO+" (" +
             "_id integer primary key autoincrement, " +
@@ -400,6 +411,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     public sonicDatabase(Context context) {
         //super(context, Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_DATA+DATABASE+".db" , null, DB_VERSION);
         super(context, DATABASE , null, DB_VERSION);
+        this.myCtx = context;
 
     }
 
@@ -409,13 +421,15 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_SITE);
         DB.execSQL(CREATE_TABLE_FTP);
         DB.execSQL(CREATE_TABLE_EMPRESA);
-        //DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_CODIGO);
+        DB.execSQL(CREATE_INDEX_TABLE_EMPRESA_SELECIONADO);
         DB.execSQL(CREATE_TABLE_NIVEL_ACESSO);
         DB.execSQL(CREATE_INDEX_TABLE_NIVEL_ACESSO);
         DB.execSQL(CREATE_TABLE_USUARIOS);
         DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_NIVEL_ACESSO);
         DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_USUARIO_SUPERIOR);
+        DB.execSQL(CREATE_INDEX_TABLE_USUARIOS_ATIVO);
         DB.execSQL(CREATE_TABLE_HISTORICO_USUARIO);
         DB.execSQL(CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_USUARIO);
         DB.execSQL(CREATE_INDEX_TABLE_HISTORICO_USUARIO_CODIGO_EMPRESA);
@@ -425,6 +439,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO);
+        DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_SELECIONADO);
+        DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_SITUACAO);
         DB.execSQL(CREATE_TABLE_EMPRESAS_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_EMPRESA);
@@ -504,6 +520,48 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(DROP_TABLE+DB_LOCALIZACAO);
         DB.execSQL(DROP_TABLE+DB_LOG_ERRO);*/
         onCreate(DB);
+    }
+
+    public String exportDb() {
+
+        String result = "";
+
+        File externalStorageDirectory = Environment.getExternalStorageDirectory();
+        File dataDirectory = Environment.getDataDirectory();
+
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        String currentDBPath = "/data/" + myCtx.getApplicationInfo().packageName + "/databases/"+DATABASE;
+        String backupDBPath = sonicConstants.LOCAL_DATA_BACKUP+"Sonic-bkp-"+(new SimpleDateFormat("dd-MM-yyy-HHmm").format(new Date()))+".db";
+        File currentDB = new File(dataDirectory, currentDBPath);
+        File backupDB = new File(externalStorageDirectory, backupDBPath);
+
+        try {
+            source = new FileInputStream(currentDB).getChannel();
+            destination = new FileOutputStream(backupDB).getChannel();
+            destination.transferFrom(source, 0, source.size());
+
+           result = "Backup salvo em: "+backupDBPath;
+
+        } catch (IOException e) {
+            result = e.getMessage();
+            e.printStackTrace();
+        } finally {
+            try {
+                if (source != null) source.close();
+            } catch (IOException e) {
+                result = e.getMessage();
+                e.printStackTrace();
+            }
+            try {
+                if (destination != null) destination.close();
+            } catch (IOException e) {
+                result = e.getMessage();
+                e.printStackTrace();
+            }
+        }
+        return  result;
     }
 
 }

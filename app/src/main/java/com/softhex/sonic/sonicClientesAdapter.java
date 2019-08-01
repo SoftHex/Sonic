@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -133,7 +135,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(myCtx).inflate(R.layout.sonic_layout_cards_list, parent, false);
+        View view = LayoutInflater.from(myCtx).inflate(R.layout.layout_cards_clientes, parent, false);
         cliHolder clientes = new cliHolder(view);
         return clientes;
 
@@ -269,7 +271,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicClientesHolder cli : originalList) {
-                    if (cli.getRazaoSocial().contains(filterPattern) || cli.getNomeFantasia().contains(filterPattern)) {
+                    if (cli.getRazaoSocial().contains(filterPattern) || cli.getNomeFantasia().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern)) {
                         filteredList.add(cli);
 
                     }

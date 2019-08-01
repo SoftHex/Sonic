@@ -160,11 +160,11 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
         final AlertDialog.Builder dialog = new AlertDialog.Builder(ctx);
         TextView autor = (TextView)view.findViewById(R.id.autor);
         TextView titulo = (TextView)view.findViewById(R.id.titulo);
-        TextView mensagem = (TextView)view.findViewById(R.id.mensagem);
+        TextView dialogRedefinir = (TextView)view.findViewById(R.id.dialogRedefinir);
         TextView hora = (TextView)view.findViewById(R.id.hora);
         autor.setText("De: "+dados[0].getText().toString());
         titulo.setText("Assunto: "+dados[1].getText().toString());
-        mensagem.setText(dados[2].getText().toString());
+        dialogRedefinir.setText(dados[2].getText().toString());
         hora.setText(_hora);
 
         dialog.setView(view);

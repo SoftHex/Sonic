@@ -281,114 +281,11 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[RANKING_CLIENTES]".equals(line) || line.equals("[RANKING_CLIENTES]"))) {
-
-                            Log.d("RANKING_CLIENTES", "ENTROU");
-                            tabela = line;
-
-                            DBC.RankingClientes.cleanRankingCliente();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-                                
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.RankingClientes.saveRankingCliente(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[VENDAS]".equals(line) || line.equals("[VENDAS]"))) {
-
-                            Log.d("VENDAS", "ENTROU");
-                            tabela = line;
-                            
-                            DBC.Vendas.cleanVendas();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Vendas.saveVendas(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[VENDAS_ITENS]".equals(line) || line.equals("[VENDAS_ITENS]"))) {
-
-                            Log.d("VENDAS_ITENS", "ENTROU");
-                            tabela = line;
-                            DBC.VendasItens.cleanVendasItens();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.VendasItens.saveVendasItens(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[CLIENTES_SEM_CROMPRA]".equals(line) || line.equals("[CLIENTES_SEM_COMPRA]"))) {
-
-                            Log.d("CLIENTES_SEM_COMPRA", "ENTROU");
-                            tabela = line;
-                            
-                            DBC.ClienteSemCompra.cleanClienteSemCompra();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.ClienteSemCompra.saveClienteSemCompra(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
                         if (line != null && ("[PRODUTOS]".equals(line) || line.equals("[PRODUTOS]"))) {
 
                             Log.d("PRODUTOS", "ENTROU");
                             tabela = line;
-                            
+
                             DBC.Produto.cleanProduto();
 
                             line = reader.readLine();
@@ -397,7 +294,7 @@ public class sonicPopularTabelas {
 
                                 count+=1;
                                 publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
+
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
                                 int len = str.length();
@@ -424,7 +321,7 @@ public class sonicPopularTabelas {
 
                                 count+=1;
                                 publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
+
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
                                 int len = str.length();
@@ -451,67 +348,13 @@ public class sonicPopularTabelas {
 
                                 count+=1;
                                 publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-                                
+
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
                                 DBC.Estoque.saveEstoque(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[RANKING_PRODUTOS]".equals(line) || line.equals("[RANKING_PRODUTOS]"))) {
-
-                            Log.d("RANKING_PRODUTOS", "ENTROU");
-
-                            tabela = line;
-
-                            DBC.Produto.cleanRankingProduto();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Produto.saveRankingProduto(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[FINANCEIRO]".equals(line) || line.equals("[FINANCEIRO]"))) {
-
-                            Log.d("FINANCEIRO", "ENTROU");
-
-                            tabela = line;
-
-                            DBC.Financeiro.cleanFinanceiro();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Financeiro.saveFinanceiro(data);
                                 line = reader.readLine();
 
                             }
@@ -545,13 +388,13 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[RETORNO_PEDIDO]".equals(line) || line.equals("[RETORNO_PEDIDO]"))) {
+                        if (line != null && ("[EMPRESAS_CLIENTES]".equals(line) || line.equals("[EMPRESAS_CLIENTES]"))) {
 
-                            Log.d("RETORNO_PEDIDO", "ENTROU");
+                            Log.d("EMPRESAS_CLIENTES", "ENTROU");
 
                             tabela = line;
 
-                            DBC.Retorno.cleanRetornoPedido();
+                            DBC.EmpresasClientes.cleanEmpresasClientes();
 
                             line = reader.readLine();
 
@@ -565,20 +408,21 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Retorno.saveRetornoPedido(data);
+                                DBC.EmpresasClientes.saveEmpresasClientes(data);
                                 line = reader.readLine();
 
                             }
 
                         }
 
-                        if (line != null && ("[RETORNO_PEDIDO_ITENS]".equals(line) || line.equals("[RETORNO_PEDIDO_ITENS]"))) {
 
-                            Log.d("RETORNO_PEDIDO_ITENS", "ENTROU");
+                        if (line != null && ("[FINANCEIRO]".equals(line) || line.equals("[FINANCEIRO]"))) {
+
+                            Log.d("FINANCEIRO", "ENTROU");
 
                             tabela = line;
 
-                            DBC.Retorno.cleanRetornoPedidoItens();
+                            DBC.Financeiro.cleanFinanceiro();
 
                             line = reader.readLine();
 
@@ -592,34 +436,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                //TODO //result = DBC.Retorno.saveRetornoPedidoItens(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[HISTORICO_VENDEDOR]".equals(line) || line.equals("[HISTORICO_VENDEDOR]"))) {
-
-                            Log.d("HOSTORICO_VENDEDOR", "ENTROU");
-
-                            tabela = line;
-
-                            DBC.HistoricoUsuario.cleanHistoricoUsuario();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.HistoricoUsuario.saveHistoricoUsuario(data);
+                                DBC.Financeiro.saveFinanceiro(data);
                                 line = reader.readLine();
 
                             }
@@ -701,54 +518,6 @@ public class sonicPopularTabelas {
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
                                 DBC.Prazo.savePrazo(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[TABELA_PRECO]".equals(line) || line.equals("[TABELA_PRECO]"))) {
-
-                            Log.d("TABELA_PRECO", "ENTROU");
-
-                            tabela = line;
-
-                            DBC.TabelaPreco.cleanTabelaPreco();
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.TabelaPreco.saveTabelaPreco(data);
-                                line = reader.readLine();
-
-                            }
-
-                        }
-
-                        if (line != null && ("[LOCALIZACAO]".equals(line))) {
-
-                            line = reader.readLine();
-
-                            while (line != null && line.indexOf("[") != 0) {
-
-                                count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
-
-                                String str = line;
-                                int pos = str.indexOf("=") + 1;
-                                int len = str.length();
-                                String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Localizacao.saveLocalizacao(data);
                                 line = reader.readLine();
 
                             }

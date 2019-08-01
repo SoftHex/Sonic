@@ -1,6 +1,8 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -52,6 +54,7 @@ public class sonicSlideImageAdapter extends PagerAdapter {
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(imageView);
+            imageView.setColorFilter(myCtx.getResources().getColor(R.color.colorPrimaryBlackExtraLightT), PorterDuff.Mode.MULTIPLY);
 
         container.addView(imageView);
 

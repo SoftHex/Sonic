@@ -83,7 +83,7 @@
     <!-- HEADER DIALOGS -->
     <string name="headerDefault">Aviso.</string>
     <string name="headerSuccess">Tudo certo.</string>
-    <string name="headerInfo">Informativo.</string>
+    <string name="headerInfo">Informação.</string>
     <string name="headerWarning">Atenção.</string>
     <string name="headerWrong">Erro.</string>
 
@@ -93,6 +93,7 @@
     <string name="estoqueSincronizado">Estoque sincronizado com sucesso.</string>
     <string name="imagesSaved">Imagens salvas com sucesso.</string>
     <string name="catalogoSaved">Catálogo salvo com sucesso.</string>
+    <string name="databaseBackupSaved">Backup salvo com sucesso.</string>
 
     <!-- ERROR MESSAGE -->
     <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o administrador do sistema.</string>
