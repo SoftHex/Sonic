@@ -179,6 +179,8 @@ public class sonicMain extends AppCompatActivity{
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
 
                         sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
+                        sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
+
 
                         if(!currentProfile) {
                             setEmpresa(profile.getIdentifier());
@@ -690,7 +692,7 @@ public class sonicMain extends AppCompatActivity{
             DBC.Empresa.marcarEmpresas();
         }else{
             DBC.Empresa.desmarcarEmpresas();
-            DBC.Empresa.setSelecionado((int)empresa);
+            DBC.Empresa.setSelecionada((int)empresa);
         }
 
 

@@ -12,8 +12,6 @@ import android.view.WindowManager;
 
 import java.util.List;
 
-import static android.view.View.GONE;
-
 public class sonicSplash extends AppCompatActivity {
 
     private Intent i;
@@ -31,30 +29,74 @@ public class sonicSplash extends AppCompatActivity {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(()->logar() ,sonicUtils.Randomizer.generate(1000,4000));
+        new myAsyncTaskLogar().execute();
 
     }
 
-    public void logar(){
+    class myAsyncTaskLogar extends AsyncTask<Integer, Integer, Boolean> {
 
-        if(DBC.Usuarios.usuarioAtivo()){
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+
+            Boolean res = DBC.Usuarios.usuarioAtivo();
             List<sonicUsuariosHolder> listaUser;
             List<sonicEmpresasHolder> listaEmpresa;
             listaUser = DBC.Usuarios.selectUsuarioAtivo();
             listaEmpresa = DBC.Empresa.empresasUsuarios();
-            i  = new Intent(sonicSplash.this,sonicMain.class);
-            i.putExtra(sonicConstants.LOGED_USER_ID, listaUser.get(0).getCodigo());
-            i.putExtra(sonicConstants.LOGED_USER_NAME, listaUser.get(0).getNome());
-            i.putExtra(sonicConstants.LOGED_USER_NIVEL, listaUser.get(0).getNivelAcessoId());
-            i.putExtra(sonicConstants.LOGED_USER_CARGO, listaUser.get(0).getCargo());
-            i.putExtra(sonicConstants.EMPRESA_SELECIONADA_NOME, listaEmpresa.get(0).getNomeFantasia());
-        }else{
-            i  = new Intent(sonicSplash.this,sonicEmpresa.class);
+
+            if(res){
+
+                i  = new Intent(sonicSplash.this,sonicMain.class);
+                sonicConstants.USUARIO_ATIVO_ID = listaUser.get(0).getCodigo();
+                sonicConstants.USUARIO_ATIVO_NOME = listaUser.get(0).getNome();
+                sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
+                sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
+                sonicConstants.EMPRESA_SELECIONADA_NOME = listaEmpresa.get(0).getNomeFantasia();
+                sonicConstants.EMPRESA_SELECIONADA_ID = listaEmpresa.get(0).getCodigo();
+                sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
+                sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
+            }else{
+                res = false;
+            }
+
+            return res;
         }
 
-        startActivity(i);
-        finish();
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if(result){
+
+                i  = new Intent(sonicSplash.this,sonicMain.class);
+
+            }else{
+
+                i  = new Intent(sonicSplash.this,sonicEmpresa.class);
+            }
+
+           logar(i);
+
+        }
+    }
+
+    private void logar(Intent i){
+
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    startActivity(i);
+                                    finish();
+
+                                }
+                            }
+                , sonicUtils.Randomizer.generate(1000, 4000));
+
+
     }
 
 }

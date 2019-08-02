@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -49,6 +50,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -84,6 +86,22 @@ public class sonicUtils {
     Arquivo Arquivo = new Arquivo();
     Data Data = new Data();
     Number Number = new Number();
+
+    public static String salutation(){
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        String message="";
+
+        if(timeOfDay >= 0 && timeOfDay < 12){
+            message =  "Bom dia,";
+        }else if(timeOfDay >= 12 && timeOfDay < 18){
+            message =  "Boa tarde,";
+        }else if(timeOfDay >= 18 && timeOfDay < 23){
+            message =  "Boa noite,";
+        }
+        return message;
+    }
 
     public static Bitmap getCircleBitmap(Bitmap bitmap) {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
@@ -1249,17 +1267,46 @@ public class sonicUtils {
 
             }
 
-        public String stringToMoeda(String number) {
-
-
+        public String stringToMoeda2(String number){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String sem_virgula = number.replace(',','.');
+
+            NumberFormat format = NumberFormat.getCurrencyInstance();
+
+            if(number.length()<2 || number.equals(null)){
+                number+="00";
+            }
+            Float res = Float.valueOf(number);
+
+                try{
+
+                    format.setMaximumFractionDigits(sonicConstants.CURRENCY_DIGITS);
+                    format.setCurrency(Currency.getInstance(sonicConstants.CURRENCY));
+
+                }catch (Exception e){
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+
+            return format.format(res).replace("R$","R$ ");
+        }
+
+        public String stringToMoeda(String number) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
 
             Locale BRAZIL = new Locale("pt","BR");
             DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
             DecimalFormat DINHEIRO_REAL = new DecimalFormat("¤ #,##0.00",REAL);
             Double valor = 0d;
+
+            if(number.length()==1){
+                number+="00";
+            }
 
             int tamanho = number.length();
 

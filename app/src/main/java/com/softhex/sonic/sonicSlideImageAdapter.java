@@ -54,7 +54,7 @@ public class sonicSlideImageAdapter extends PagerAdapter {
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(imageView);
-            imageView.setColorFilter(myCtx.getResources().getColor(R.color.colorPrimaryBlackExtraLightT), PorterDuff.Mode.MULTIPLY);
+            imageView.setColorFilter(myCtx.getResources().getColor(R.color.colorPrimaryBlackExtraLightT), PorterDuff.Mode.DARKEN);
 
         container.addView(imageView);
 

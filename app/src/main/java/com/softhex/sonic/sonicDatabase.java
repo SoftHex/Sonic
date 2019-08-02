@@ -80,9 +80,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int not null, " +
             "razao_social string not null, " +
             "nome_fantasia string not null," +
-            "selecionado int);";
+            "selecionada int);";
     private static final String CREATE_INDEX_TABLE_EMPRESA_CODIGO = "CREATE INDEX index_empresa_codigo ON "+DB_EMPRESAS+" (codigo);";
-    private static final String CREATE_INDEX_TABLE_EMPRESA_SELECIONADO = "CREATE INDEX index_empresa_selecionado ON "+DB_EMPRESAS+" (selecionado);";
+    private static final String CREATE_INDEX_TABLE_EMPRESA_SELECIONADO = "CREATE INDEX index_empresa_selecionada ON "+DB_EMPRESAS+" (selecionada);";
 
     private static final String CREATE_TABLE_NIVEL_ACESSO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
             "_id integer primary key autoincrement, " +
@@ -128,7 +128,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "_id integer primary key autoincrement, "+
             "codigo_usuario int, " +
             "codigo_empresa int," +
-			"meta decimal(9,2));";
+            "mvenda string," +
+			"mvisita int);";
     private static final String CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_USUARIO = "CREATE INDEX index_empresas_usuario_codigo_usuario ON "+DB_EMPRESAS_USUARIOS+" (codigo_usuario);";
     private static final String CREATE_INDEX_TABLE_EMPRESAS_USUARIO_CODIGO_EMPRESA = "CREATE INDEX index_empresas_usuario_codigo_empresa ON "+DB_EMPRESAS_USUARIOS+" (codigo_empresa);";
 
@@ -412,7 +413,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
         //super(context, Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_DATA+DATABASE+".db" , null, DB_VERSION);
         super(context, DATABASE , null, DB_VERSION);
         this.myCtx = context;
-
     }
 
     @Override
@@ -521,6 +521,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(DROP_TABLE+DB_LOG_ERRO);*/
         onCreate(DB);
     }
+
 
     public String exportDb() {
 

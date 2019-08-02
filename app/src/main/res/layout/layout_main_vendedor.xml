@@ -59,20 +59,23 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/pedidos"
+                            android:id="@+id/saudacao"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="0"
-                            android:textColor="@color/colorPrimaryWhite"
+                            android:text="Bem vindo,"
+                            android:textColor="@color/colorAccent"
                             android:textSize="18sp"
                             android:gravity="center_vertical"/>
 
                         <TextView
+                            android:id="@+id/usuario"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="12dp"
-                            android:text="Pedidos"
-                            android:textColor="@color/colorAccent"
+                            android:text="Usuario"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorPrimaryWhite"
                             android:textSize="18sp"
                             android:gravity="center_vertical"/>
 
@@ -87,118 +90,177 @@
                     android:layout_gravity="center"
                     android:layout_weight="0">
 
-                        <!--<com.jackandphantom.circularprogressbar.CircleProgressbar
-                            android:id="@+id/progress"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:layout_width="65dp"
-                            android:layout_height="65dp"
-                            android:background="@drawable/no_profile_circle"
-                            app:cpb_progress="0"
-                            app:cpb_roundedCorner="true"
-                            app:cpb_foregroundProgressWidth="12"
-                            app:cpb_backgroundProgressColor="@color/colorPrimaryWhite"
-                            app:cpb_foregroundProgressColor="@color/colorPrimaryGreen"
-                            app:cpb_touchEnabled="false">
-
-                        </com.jackandphantom.circularprogressbar.CircleProgressbar>-->
-
-                    <com.hookedonplay.decoviewlib.DecoView
-                        xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    <com.softhex.view.ProgressProfileView
+                        android:id="@+id/myProgressProfile"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
-                        android:id="@+id/arcView"
-                        custom:dv_lineWidth="12dp"
-                        android:background="@drawable/no_profile_circle"
-                        custom:dv_arc_gravity_horizontal="Fill"
-                        custom:dv_arc_gravity_vertical="Bottom"
-                        android:layout_margin="8dp"/>
+                        android:scaleType="centerCrop"
+                        app:progress="0"
+                        app:max="100"
+                        app:progressRingSize="4dp"
+                        app:progressRingCorner="ROUND"
+                        app:progressRingOutline="true"
+                        app:progressRingColor="@color/colorPrimaryGreenLight"
+                        app:backgroundRingColor="@android:color/transparent"
+                        android:src="@drawable/no_profile"/>
+
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_weight="1">
 
                 <LinearLayout
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left|center"
-                    android:layout_weight="3">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorAccent"
-                        android:text="Realizado"/>
+                        android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp"
+                            android:text="Pedidos"/>
+
+                        <TextView
+                            android:id="@+id/pedidos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryWhite"
+                            android:textSize="18sp"
+                            android:text="0"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorPrimaryWhite"
-                        android:text="R$ 00,00"/>
+                        android:layout_gravity="left"
+                        android:gravity="left"
+                        android:layout_weight="1">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="16sp"
+                            android:text="Total"/>
+
+                        <TextView
+                            android:id="@+id/totalPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimaryWhite"
+                            android:textSize="18sp"
+                            android:text="0,00%"/>
+
+
+                    </LinearLayout>
+
+
 
                 </LinearLayout>
+
+
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left|center"
-                    android:layout_weight="3">
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorAccent"
-                        android:text="Meta"/>
+                     <LinearLayout
+                         android:orientation="vertical"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:gravity="left|center"
+                         android:layout_weight="3">
 
-                    <TextView
-                        android:id="@+id/meta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorPrimaryWhite"
-                        android:text="R$ 00,00"/>
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="16sp"
+                             android:textColor="@color/colorAccent"
+                             android:text="Vendido"/>
+
+                         <TextView
+                             android:id="@+id/vendaRealizada"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="18sp"
+                             android:textColor="@color/colorPrimaryWhite"
+                             android:text="R$ 0,00"/>
+
+                     </LinearLayout>
+
+                     <LinearLayout
+                         android:orientation="vertical"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:gravity="left|center"
+                         android:layout_weight="3">
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="16sp"
+                             android:textColor="@color/colorAccent"
+                             android:text="Meta"/>
+
+                         <TextView
+                             android:id="@+id/metaVenda"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="18sp"
+                             android:textColor="@color/colorPrimaryWhite"
+                             android:text="R$ 0,00"/>
 
 
-                </LinearLayout>
+                     </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left|center"
-                    android:layout_weight="4">
+                     <!--<LinearLayout
+                         android:orientation="vertical"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:gravity="left|center"
+                         android:layout_weight="4">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textColor="@color/colorAccent"
-                        android:text="Total"/>
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="16sp"
+                             android:textColor="@color/colorAccent"
+                             android:text="Total"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:textColor="@color/colorPrimaryWhite"
-                        android:text="0,00%"/>
+                         <TextView
+                             android:id="@+id/totalPercent"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="18sp"
+                             android:textColor="@color/colorPrimaryWhite"
+                             android:text="0,00%"/>
 
 
-                </LinearLayout>
+                     </LinearLayout>-->
 
+                 </LinearLayout>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

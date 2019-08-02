@@ -53,9 +53,7 @@ dependencies {
     implementation 'com.highsoft.highcharts:highcharts:7.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.clans:fab:1.6.4'
-    implementation 'com.jackandphantom.android:circularprogressbar:1.2.0'
-    implementation 'com.jackandphantom.android:circularimageview:1.2.0'
-    implementation 'com.github.bmarrdev:android-DecoView-charting:v1.2'
+    implementation project(':progressprofile')
     testImplementation 'junit:junit:4.13-beta-3'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
