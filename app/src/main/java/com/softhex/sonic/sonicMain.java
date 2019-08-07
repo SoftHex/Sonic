@@ -178,6 +178,7 @@ public class sonicMain extends AppCompatActivity{
                         sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
                         sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
 
+                        refreshHomeFragment();
 
                         if(!currentProfile) {
                             setEmpresa(profile.getIdentifier());
