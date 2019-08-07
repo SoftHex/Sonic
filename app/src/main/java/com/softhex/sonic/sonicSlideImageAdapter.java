@@ -1,13 +1,11 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.view.PagerAdapter;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,8 +13,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
-import java.io.File;
 
 public class sonicSlideImageAdapter extends PagerAdapter {
 

@@ -6,10 +6,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
@@ -23,6 +19,12 @@ import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
+
 public class sonicAppearence {
 
 
@@ -32,9 +34,9 @@ public class sonicAppearence {
     public final static int THEME_NIGHT = 3;
 
     private static int sTheme;
-    private Activity _activity;
+    private AppCompatActivity _activity;
 
-    public sonicAppearence(Activity _activity) {
+    public sonicAppearence(AppCompatActivity _activity) {
         this._activity = _activity;
     }
 
@@ -64,7 +66,7 @@ public class sonicAppearence {
         }
     }
 
-    public static void onActivityCreateSetTheme(Activity activity, int theme)
+    public static void onActivityCreateSetTheme(AppCompatActivity activity, int theme)
     {
         switch (theme)
         {
@@ -84,7 +86,7 @@ public class sonicAppearence {
         }
     }
 
-    public static void changeStatusBarColor(Activity act,int color){
+    public static void changeStatusBarColor(AppCompatActivity act, int color){
 
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = act.getWindow();
@@ -99,7 +101,7 @@ public class sonicAppearence {
 
         tool.setBackgroundColor(Color.WHITE);
         Window window = act.getWindow();
-        EditText searchEditText = (EditText) sv.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText searchEditText = (EditText) sv.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(act.getResources().getColor(R.color.colorTextAccentDark));
         searchEditText.setHintTextColor(act.getResources().getColor(R.color.colorTextAccentLight));
 

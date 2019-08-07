@@ -1,15 +1,14 @@
 package com.softhex.sonic;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.softhex.view.ProgressProfileView;
 
 import java.io.File;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.List;
 
 
@@ -72,7 +68,7 @@ public class sonicMainHome extends Fragment {
 
         myCoordinatorLayout = myView.findViewById(R.id.layout_main);
 
-        myLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         myRecycler.setLayoutManager(myLayout);
 

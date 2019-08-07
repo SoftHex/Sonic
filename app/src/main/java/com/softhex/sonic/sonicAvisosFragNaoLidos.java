@@ -4,26 +4,23 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
@@ -34,7 +31,7 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicAvisosFragNaoLidos extends Fragment{
+public class sonicAvisosFragNaoLidos extends Fragment {
 
     private RecyclerView myRecycler;
     private sonicAvisosAdapter myAdapter;
@@ -85,7 +82,7 @@ public class sonicAvisosFragNaoLidos extends Fragment{
 
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new LinearLayoutManager(_this, LinearLayoutManager.VERTICAL, false);
+        myLayout = new LinearLayoutManager(_this, RecyclerView.VERTICAL, false);
         myRecycler.setLayoutManager(myLayout);
 
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();

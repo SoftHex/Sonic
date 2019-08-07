@@ -1,19 +1,21 @@
 package com.softhex.sonic;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by Administrador on 07/07/2017.
  */
 
-public class sonicSincronizacaoUpload extends Fragment{
+public class sonicSincronizacaoUpload extends Fragment {
 
     private View myView;
     private ProgressDialog myProgress;

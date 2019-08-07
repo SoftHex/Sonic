@@ -2,10 +2,9 @@ package com.softhex.sonic;
 
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -123,7 +122,7 @@ public class sonicTM {
 
                 mySnackBar = Snackbar.make(v,msg, Snackbar.LENGTH_SHORT);
                 View sbView = mySnackBar.getView();
-                int snackbarTextId = android.support.design.R.id.snackbar_text;
+                int snackbarTextId = android.R.id.text1;
                 TextView textView = (TextView)sbView.findViewById(snackbarTextId);
                 sbView.setBackgroundColor(myCtx.getResources().getColor(R.color.colorPrimaryBlackDarkT));
                 textView.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryWhite));

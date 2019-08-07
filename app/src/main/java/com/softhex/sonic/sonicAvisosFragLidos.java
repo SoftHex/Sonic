@@ -1,43 +1,30 @@
 package com.softhex.sonic;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 
@@ -49,7 +36,7 @@ import static android.content.Context.SEARCH_SERVICE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicAvisosFragLidos extends Fragment{
+public class sonicAvisosFragLidos extends Fragment {
 
     private RecyclerView myRecycler;
     private sonicAvisosAdapter myAdapter;
@@ -95,7 +82,7 @@ public class sonicAvisosFragLidos extends Fragment{
 
         myActionBar = getActivity().getActionBar();
 
-        myToolBar = (android.support.v7.widget.Toolbar)getActivity().findViewById(R.id.toolbar);
+        myToolBar = (androidx.appcompat.widget.Toolbar)getActivity().findViewById(R.id.toolbar);
 
         myTextViewText = (TextView)myView.findViewById(R.id.text);
 
@@ -107,7 +94,7 @@ public class sonicAvisosFragLidos extends Fragment{
 
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         myRecycler.setLayoutManager(myLayout);
 
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
@@ -125,10 +112,10 @@ public class sonicAvisosFragLidos extends Fragment{
                 inflater.inflate(R.menu.sonic_avisos, menu);
                 mySearch = (MenuItem) menu.findItem(R.id.search);
 
-                final android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) mySearch.getActionView();
+                final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
                 SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
                 searchView.setQueryHint("Pesquisar...");
-                searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener() {
+                searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
                         return false;

@@ -32,7 +32,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -97,8 +96,10 @@ public class sonicUtils {
             message =  "Bom dia,";
         }else if(timeOfDay >= 12 && timeOfDay < 18){
             message =  "Boa tarde,";
-        }else if(timeOfDay >= 18 && timeOfDay < 23){
+        }else if(timeOfDay >= 18 && timeOfDay < 24){
             message =  "Boa noite,";
+        }else {
+            message = "Olá,";
         }
         return message;
     }

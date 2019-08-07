@@ -23,10 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultAppTheme">
-        <activity android:name=".sonicGraph"></activity>
-
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.softhex.sonic.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -84,11 +82,19 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicClientesDetalhe"
+            android:parentActivityName=".sonicClientes"
             android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:parentActivityName=".sonicClientes"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicSistema"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".sonicRota"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".sonicGraph"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>

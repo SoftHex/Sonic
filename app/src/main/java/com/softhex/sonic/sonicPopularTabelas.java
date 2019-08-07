@@ -10,9 +10,11 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -682,7 +684,7 @@ public class sonicPopularTabelas {
         i.putExtra("CARGO", cargo);
         i.putExtra("IMEI", imei);
         myCtx.startActivity(i);
-        ((Activity) myCtx).finish();
+        ((AppCompatActivity) myCtx).finish();
     }
 
 

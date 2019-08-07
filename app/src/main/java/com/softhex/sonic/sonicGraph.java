@@ -1,6 +1,6 @@
 package com.softhex.sonic;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.highsoft.highcharts.common.hichartsclasses.HIChart;

@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
-        <item name="android:actionMenuTextColor">@color/colorTextDark</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
     </style>
 
@@ -17,7 +17,7 @@
         <item name="colorAccent">@color/colorWineAccent</item>
         <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
-        <item name="android:actionMenuTextColor">@color/colorTextDark</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
     </style>
 
@@ -27,7 +27,7 @@
         <item name="colorAccent">@color/colorNightAccent</item>
         <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
-        <item name="android:actionMenuTextColor">@color/colorTextDark</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
     </style>
 
@@ -37,7 +37,7 @@
         <item name="colorAccent">@color/colorGreenAccent</item>
         <item name="android:windowBackground">@drawable/back</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
-        <item name="android:actionMenuTextColor">@color/colorTextDark</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
     </style>
 
@@ -51,7 +51,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@color/colorPrimaryWhite</item>
-        <item name="android:actionMenuTextColor">@color/colorPrimaryWhite</item>
+        <item name="actionMenuTextColor">@color/colorPrimaryWhite</item>
     </style>
     <style name="SplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
