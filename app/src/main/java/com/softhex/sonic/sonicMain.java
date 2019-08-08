@@ -469,6 +469,10 @@ public class sonicMain extends AppCompatActivity{
                                 //i = new Intent(sonicMain.this, sonicTitulos.class);
                                 //startActivity(i);
                                 break;
+                            case 8:
+                                i = new Intent(sonicMain.this, sonicRota.class);
+                                startActivity(i);
+                                break;
                             case 9:
                                 //i = new Intent(sonicMain.this, sonicVendedores.class);
                                 //startActivity(i);
@@ -538,17 +542,6 @@ public class sonicMain extends AppCompatActivity{
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //mySpaceTabLayout.saveState(outState);
-    }
-
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        //mySpaceTabLayout.saveState(savedInstanceState);
     }
 
     public void setUpViewPager(ViewPager viewpager){

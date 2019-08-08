@@ -81,7 +81,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -108,7 +108,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -135,7 +135,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -162,7 +162,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -189,7 +189,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -216,7 +216,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -243,7 +243,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -269,7 +269,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -295,7 +295,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -322,7 +322,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -349,7 +349,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -376,7 +376,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -403,7 +403,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -431,7 +431,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -458,7 +458,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -485,7 +485,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -512,7 +512,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -539,7 +539,7 @@ public class sonicPopularTabelas {
                             while (line != null && line.indexOf("[") != 0) {
 
                                 count+=1;
-                                publishProgress("Gravando na tabela\n\n"+tabela, String.valueOf(count));
+                                publishProgress(tabela, String.valueOf(count));
 
                                 String str = line;
                                 int pos = str.indexOf("=") + 1;
@@ -661,7 +661,8 @@ public class sonicPopularTabelas {
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setMessage(myCtx.getResources().getString(R.string.gravandoDados));
+                myProgress.setTitle("Gravando na tabela...");
+                myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
                 new myAsyncTaskGravar().execute(arquivo);
