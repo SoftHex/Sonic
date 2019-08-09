@@ -9,10 +9,6 @@ import android.content.Context;
 public class sonicConstants {
 
     // PATHS
-    public static final String FOLDER = "GO2";
-    public static final String FOLDER_IMG = "/GO2/media/images/catalogo/";
-    public static final String FOLDER_DATA = "/GO2/data/";
-    public static final String FOLDER_TMP = "/GO2/temp/";
     public static final String LOCAL_IMG_CATALOGO = "/Sonic/media/imagens/catalogo/";
     public static final String LOCAL_IMG_CLIENTES = "/Sonic/media/imagens/clientes/";
     public static final String LOCAL_IMG_PERFIL = "/Sonic/media/imagens/perfil/";
@@ -36,6 +32,7 @@ public class sonicConstants {
     public static final String TB_CLIENTES_SEM_COMPRA = "clientes_sem_compra";
     public static final String TB_PRODUTOS = "produtos";
     public static final String TB_GRUPO_PRODUTOS = "grupo_produtos";
+    public static final String TB_ROTA = "rota";
     public static final String TB_ESTOQUE = "estoque";
     public static final String TB_RETORNO_PEDIDO = "retorno_pedido";
     public static final String TB_RETORNO_PEDIDO_ITENS = "retorno_pedido_itens";

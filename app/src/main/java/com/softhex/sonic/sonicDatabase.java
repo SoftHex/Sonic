@@ -35,6 +35,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
     private static final String DB_PRODUTOS = sonicConstants.TB_PRODUTOS;
     private static final String DB_GRUPO_PRODUTOS = sonicConstants.TB_GRUPO_PRODUTOS;
+    private static final String DB_ROTA = sonicConstants.TB_ROTA;
     private static final String DB_RANKING_PRODUTOS = sonicConstants.TB_RANKING_PRODUTOS;
     private static final String DB_ESTOQUE = sonicConstants.TB_ESTOQUE;
     private static final String DB_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
@@ -208,6 +209,18 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int, " +
             "nome string);";
     private static final String CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO = "CREATE INDEX index_grupo_produtos_codigo ON "+DB_GRUPO_PRODUTOS+" (codigo);";
+
+    private static final String CREATE_TABLE_ROTA = "CREATE TABLE IF NOT EXISTS "+DB_ROTA+" (" +
+            "_id integer primary key autoincrement, " +
+            "codigo int, " +
+            "codigo_cliente int, " +
+            "data string, " +
+            "hora string, " +
+            "ordem int);";
+    private static final String CREATE_INDEX_TABLE_ROTA_CODIGO = "CREATE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
+    private static final String CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";
+    private static final String CREATE_INDEX_TABLE_ROTA_ORDEM = "CREATE INDEX index_rota_codigo_ordem ON "+DB_ROTA+" (ordem);";
+
 
     private static final String CREATE_TABLE_ESTOQUE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+ DB_ESTOQUE +" (" +
             "_id integer primary key autoincrement, " +
@@ -457,7 +470,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_GRUPO);
         DB.execSQL(CREATE_INDEX_TABLE_PRODUTOS_CODIGO_EMPRESA);
         DB.execSQL(CREATE_TABLE_GRUPO_PRODUTOS);
+        DB.execSQL(CREATE_TABLE_ROTA);
         DB.execSQL(CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_ORDEM);
         DB.execSQL(CREATE_TABLE_ESTOQUE_PRODUTOS);
         DB.execSQL(CREATE_TABLE_RANKING_PRODUTOS);
         DB.execSQL(CREATE_TABLE_TABELA_PRECO);
@@ -489,36 +506,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase DB, int oldVersion, int newVersion) {
-        /*DB.execSQL(DROP_TABLE+DB_SITE);
-        DB.execSQL(DROP_TABLE+DB_FTP);
-        DB.execSQL(DROP_TABLE+DB_EMPRESA);
-        DB.execSQL(DROP_TABLE+DB_USUARIO);
-        DB.execSQL(DROP_TABLE+DB_CLIENTES);
-        DB.execSQL(DROP_TABLE+DB_VENDEDOR);
-        DB.execSQL(DROP_TABLE+DB_EMPRESAS_VENDEDORES);
-        DB.execSQL(DROP_TABLE+DB_PRODUTOS);
-        DB.execSQL(DROP_TABLE+DB_TABELA_PRECO);
-        //DB.execSQL(CREATE_TABLE_TABELA_PRECO_PRODUTO);
-        //DB.execSQL(CREATE_TABLE_TABELA_PRECO_CLIENTE);
-        DB.execSQL(DROP_TABLE+DB_ESTOQUE);
-        DB.execSQL(DROP_TABLE+DB_FINANCEIRO);
-        DB.execSQL(DROP_TABLE+DB_TITTULOS);
-        DB.execSQL(DROP_TABLE+DB_RETORNO_PEDIDO);
-        DB.execSQL(DROP_TABLE+DB_RETORNO_PEDIDO_ITENS);
-        DB.execSQL(DROP_TABLE+DB_GRUPO_PRODUTO);
-        //DB.execSQL(CREATE_TABLE_TIPO_COBRANCA);
-        //DB.execSQL(CREATE_TABLE_CONDICOES_PAGAMENTO);
-        //DB.execSQL(CREATE_TABLE_TRANSPORTADORA);
-        DB.execSQL(DROP_TABLE+DB_UNIDADE_MEDIDA);
-        DB.execSQL(DROP_TABLE+DB_TIPO_PEDIDO);
-        //DB.execSQL(CREATE_TABLE_TIPO_DOCUMENTO);
-        //DB.execSQL(CREATE_TABLE_DESCONTO);
-        DB.execSQL(DROP_TABLE+DB_PRAZO);
-
-        //DB.execSQL(CREATE_TABLE_MENSAGEM);
-        DB.execSQL(DROP_TABLE+DB_SINCRONIZACAO);
-        DB.execSQL(DROP_TABLE+DB_LOCALIZACAO);
-        DB.execSQL(DROP_TABLE+DB_LOG_ERRO);*/
         onCreate(DB);
     }
 

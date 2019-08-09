@@ -25,7 +25,7 @@ public class sonicClientes extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sonic_clientes);
+        setContentView(R.layout.activity_clientes);
 
         _this = this;
 

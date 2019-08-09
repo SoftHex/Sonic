@@ -1,173 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardCornerRadius="0dp"
-        card_view:cardElevation="0dp">
+    <com.softhex.timelineview.TimelineView
+        android:id="@+id/timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginStart="6dp"
+        app:lineColor="@color/colorPrimaryBlackT"
+        app:lineOrientation="vertical"
+        app:lineSize="2dp"
+        app:markerActive="false"
+        app:markerActiveColor="@color/colorPrimaryGreenLightT"
+        app:markerActiveStrokeWidth="4dp"
+        app:markerColor="@color/colorPrimaryBlack"
+        app:markerSize="20dp"
+        app:markerStrokeWidth="2dp"
+        app:markerTextColor="@color/colorPrimaryWhite"
+        app:markerTextSize="14sp"/>
 
-        <LinearLayout
-            android:id="@+id/item"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="6dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imagem"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/letra"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:textColor="@color/colorPrimaryWhite"
-                    android:textSize="22sp"
-                    android:text="@string/placeholderLetter"
-                    android:visibility="visible"
-                    android:background="@drawable/circle_textview"
-                    android:gravity="center" />
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/nome"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccentDark"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/grupo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/detalhe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="12sp" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical|center"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/letterOne"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
-
-                        <TextView
-                            android:id="@+id/letterTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
-
-                        <TextView
-                            android:id="@+id/letterThree"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
-
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
-
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="50dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/dashed_horizontal_line"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+        <include layout="@layout/layout_cards_rota_itens"/>
 
 
 </LinearLayout>

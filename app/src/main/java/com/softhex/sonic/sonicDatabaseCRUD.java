@@ -35,6 +35,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
     private final String TABLE_PRODUTOS = sonicConstants.TB_PRODUTOS;
     private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTOS;
+    private final String TABLE_ROTA = sonicConstants.TB_ROTA;
     private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE;
     private final String TABLE_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
     private final String TABLE_TITULOS = sonicConstants.TB_TITULOS;
@@ -98,12 +99,13 @@ public class sonicDatabaseCRUD {
     RankingCliente RankingClientes = new RankingCliente();
     ClienteSemCompra ClienteSemCompra = new ClienteSemCompra();
     Produto Produto = new Produto();
+    GrupoProduto GrupoProduto = new GrupoProduto();
+    Rota Rota = new Rota();
     Estoque Estoque = new Estoque();
     Titulos Titulos = new Titulos();
     Retorno Retorno = new Retorno();
     Financeiro Financeiro = new Financeiro();
     TabelaPreco TabelaPreco = new TabelaPreco();
-    GrupoProduto GrupoProduto = new GrupoProduto();
     UnidadeMedida UnidadeMedida = new UnidadeMedida();
     Sincronizacao Sincronizacao = new Sincronizacao();
     Localizacao Localizacao = new Localizacao();
@@ -3255,7 +3257,98 @@ public class sonicDatabaseCRUD {
 
     }
 
-    class TabelaPreco{
+    class Rota {
+
+            public boolean saveRota(List<String> lista) {
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                Boolean result = false;
+
+                try {
+
+                    ContentValues cv = new ContentValues();
+                    Cursor cursor = DB.getWritableDatabase().query(TABLE_ROTA, null, null, null, null, null, null);
+                    String[] columnNames = cursor.getColumnNames();
+
+                    for (int i = 0; i < columnNames.length - 1; i++) {
+
+                        cv.put(columnNames[i + 1], lista.get(i));
+
+                    }
+
+                    result = DB.getWritableDatabase().insert(TABLE_ROTA, null, cv) > 0;
+
+                } catch (SQLiteException e) {
+                    DBCL.Log.saveLog(
+                            e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+
+                }
+
+                return result;
+            }
+
+            public List<sonicRotaHolder> selectRota(){
+
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                List<sonicRotaHolder> rotas = new ArrayList<>();
+
+                String query = "SELECT " +
+                        "R.codigo," +
+                        "R.codigo_cliente," +
+                        "R.data," +
+                        "R.hora," +
+                        "R.ordem" +
+                        " FROM " + TABLE_ROTA +
+                        " R ";
+
+                try{
+
+                    Cursor cursor = DB.getReadableDatabase().rawQuery(
+                            query , null);
+
+                    while(cursor.moveToNext()){
+
+                        sonicRotaHolder rota = new sonicRotaHolder();
+
+                        rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                        rota.setData(cursor.getString(cursor.getColumnIndex("data")));
+                        rota.setHora(cursor.getString(cursor.getColumnIndex("hora")));
+                        rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+
+                        rotas.add(rota);
+
+                    }
+
+                    cursor.close();
+
+
+                }catch (SQLiteException e){
+                    DBCL.Log.saveLog(
+                            e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                }
+
+                return rotas;
+
+            }
+
+            public boolean cleanRota() {
+
+                return DB.getWritableDatabase().delete(TABLE_ROTA, null, null) > 0;
+            }
+        }
+
+        class TabelaPreco{
 
         public boolean saveTabelaPreco(List<String> lista){
 

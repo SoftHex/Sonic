@@ -336,6 +336,33 @@ public class sonicPopularTabelas {
 
                         }
 
+                        if (line != null && ("[ROTA]".equals(line) || line.equals("[ROTA]"))) {
+
+                            Log.d("ROTA", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Rota.cleanRota();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress(tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Rota.saveRota(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
                         if (line != null && ("[ESTOQUE_PRODUTOS]".equals(line) || line.equals("[ESTOQUE_PRODUTOS]"))) {
 
                             Log.d("ESTOQUE_PRODUTOS", "ENTROU");

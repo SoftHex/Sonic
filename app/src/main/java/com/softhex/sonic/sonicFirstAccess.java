@@ -57,6 +57,7 @@ public class sonicFirstAccess extends AppCompatActivity {
             public void onClick(View view) {
                 myProgress(view.getContext());
                 sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("USUARIO");
+                sonicConstants.EMPRESA_SELECIONADA_NOME = getIntent().getStringExtra("EMPRESA");
             }
         });
 

@@ -112,21 +112,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.myCtx = ctx;
     }
 
-    public void updateList(List<sonicClientesHolder> list){
-
-        clientes = list;
-        notifyDataSetChanged();
-
-    }
-
-    @Override
-    public Filter getFilter() {
-        if(userFilter == null)
-            userFilter = new UserFilter(this, clientes);
-        return userFilter;
-
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -217,6 +202,14 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         }
 
+
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(userFilter == null)
+            userFilter = new UserFilter(this, clientes);
+        return userFilter;
 
     }
 
