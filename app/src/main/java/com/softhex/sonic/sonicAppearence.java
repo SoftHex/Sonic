@@ -3,6 +3,7 @@ package com.softhex.sonic;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -38,6 +40,16 @@ public class sonicAppearence {
 
     public sonicAppearence(AppCompatActivity _activity) {
         this._activity = _activity;
+    }
+
+    public static void checkLayoutLimit(Context ctx, Window w){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && ViewConfiguration.get(ctx).hasPermanentMenuKey()) {
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     public static void changeTheme(int theme)

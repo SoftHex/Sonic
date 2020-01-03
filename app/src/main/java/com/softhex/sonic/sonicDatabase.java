@@ -213,6 +213,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_TABLE_ROTA = "CREATE TABLE IF NOT EXISTS "+DB_ROTA+" (" +
             "_id integer primary key autoincrement, " +
             "codigo int, " +
+            "codigo_empresa int, " +
             "codigo_cliente int, " +
             "data string, " +
             "hora string, " +

@@ -1639,12 +1639,15 @@ public class sonicDatabaseCRUD {
                     "u.senha, " +
                     "u.imei, " +
                     "u.nivel_acesso, " +
-                    "(SELECT u2.nome FROM "+TABLE_USUARIOS+" u2 WHERE u2.codigo = u.usuario_superior) AS usuario_superior, " +
-                    "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = u.nivel_acesso) AS cargo, " +
-                    "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = u.codigo)) AS empresa, " +
-                    "(SELECT eu.mvenda FROM "+TABLE_EMPRESAS_USUARIOS+ " eu WHERE eu.codigo_usuario = u.codigo AND eu.codigo_empresa = (SELECT e.codigo FROM "+TABLE_EMPRESAS+" e WHERE e.selecionada=1)) AS mvenda, " +
-                    "(SELECT eu.mvisita FROM "+TABLE_EMPRESAS_USUARIOS+ " eu WHERE eu.codigo_usuario = u.codigo AND eu.codigo_empresa = (SELECT e.codigo FROM "+TABLE_EMPRESAS+" e WHERE e.selecionada=1)) AS mvisita " +
-                    " FROM "+TABLE_USUARIOS+" u WHERE u.ativo=1 ";
+                    "eu.mvenda AS mvenda, " +
+                    "eu.mvisita AS mvisita, " +
+                    "e.nome_fantasia AS empresa, " +
+                    "e.codigo AS empresa_id, " +
+                    "(SELECT u2.nome FROM " + TABLE_USUARIOS + " u2 WHERE u2.codigo = u.usuario_superior) AS usuario_superior, " +
+                    "(SELECT na.nome FROM " + TABLE_NIVEL_ACESSO + " na WHERE na.nivel = u.nivel_acesso) AS cargo " +
+                    " FROM " + TABLE_USUARIOS + " u " +
+                    " JOIN " + TABLE_EMPRESAS_USUARIOS + " eu ON eu.codigo_usuario = u.codigo " +
+                    " JOIN " + TABLE_EMPRESAS + " e ON e.codigo = eu.codigo_empresa WHERE e.selecionada = 1 AND u.ativo = 1 ";
 
 
             try{
@@ -1691,12 +1694,14 @@ public class sonicDatabaseCRUD {
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
                         "SELECT " +
-                                "tu.codigo, " +
-                                "tu.nome, " +
-                                "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = tu.nivel_acesso) AS cargo, " +
-                                "(SELECT e.razao_social FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa, " +
-                                "(SELECT e.codigo FROM "+TABLE_EMPRESAS+ " e WHERE e.codigo = (SELECT eu.codigo_empresa FROM "+TABLE_EMPRESAS_USUARIOS+" eu WHERE eu.codigo_usuario = tu.codigo)) AS empresa_id " +
-                                " FROM "+TABLE_USUARIOS+" tu WHERE tu.imei = '"+imei+"'", null);
+                                "u.codigo, " +
+                                "u.nome, " +
+                                "e.nome_fantasia AS empresa, " +
+                                "e.codigo AS empresa_id, " +
+                                "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.nivel = u.nivel_acesso) AS cargo " +
+                                " FROM " + TABLE_USUARIOS + " u " +
+                                " JOIN " + TABLE_EMPRESAS_USUARIOS + " eu ON eu.codigo_usuario=u.codigo " +
+                                " JOIN " + TABLE_EMPRESAS + " e ON e.codigo=eu.codigo_empresa WHERE e.selecionada = 1 AND u.imei = '"+imei+"'", null);
 
                 while(cursor.moveToNext()){
 

@@ -122,8 +122,7 @@ public class sonicTM {
 
                 mySnackBar = Snackbar.make(v,msg, Snackbar.LENGTH_SHORT);
                 View sbView = mySnackBar.getView();
-                int snackbarTextId = android.R.id.text1;
-                TextView textView = (TextView)sbView.findViewById(snackbarTextId);
+                TextView textView = sbView.findViewById(com.google.android.material.R.id.snackbar_text);
                 sbView.setBackgroundColor(myCtx.getResources().getColor(R.color.colorPrimaryBlackDarkT));
                 textView.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryWhite));
                 mySnackBar.show();

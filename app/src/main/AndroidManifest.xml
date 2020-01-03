@@ -58,7 +58,7 @@
         <activity
             android:name=".sonicEmpresa"
             android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".sonicFirstAccess"
             android:theme="@style/DefaultAppTheme"

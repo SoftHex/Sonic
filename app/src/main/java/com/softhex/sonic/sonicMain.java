@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -40,6 +44,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.softhex.view.ProgressProfileView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -88,6 +93,9 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerRankingProdutos;
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
+    private TextView empresa, usuario, saudacao, pedidos, desemprenho, venda, meta;
+    private ProgressProfileView myProgressProfile;
+    List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
     @Override
@@ -104,12 +112,24 @@ public class sonicMain extends AppCompatActivity{
         myActionBar = getSupportActionBar();
         myActionBar.setTitle(R.string.app_name);
 
-        List<sonicUsuariosHolder> listaUser;
-        listaUser = DBC.Usuarios.selectUsuarioAtivo();
-        usuarioId = listaUser.get(0).getCodigo();
-        usuarioNome = listaUser.get(0).getNome();
-        usuarioCargo = listaUser.get(0).getCargo();
-        usuarioNivelAcesso = listaUser.get(0).getNivelAcessoId();
+        listaEmpresa = DBC.Empresa.empresasUsuarios();
+
+        usuarioId = sonicConstants.USUARIO_ATIVO_ID;
+        usuarioNome = sonicConstants.USUARIO_ATIVO_NOME;
+        usuarioCargo = sonicConstants.USUARIO_ATIVO_CARGO;
+        usuarioNivelAcesso = sonicConstants.USUARIO_ATIVO_NIVEL;
+        empresa = findViewById(R.id.empresa);
+        usuario = findViewById(R.id.usuario);
+        saudacao = findViewById(R.id.saudacao);
+        pedidos = findViewById(R.id.pedidos);
+        desemprenho = findViewById(R.id.desemprenho);
+        venda = findViewById(R.id.venda);
+        meta = findViewById(R.id.meta);
+        empresa.setText(sonicConstants.EMPRESA_SELECIONADA_NOME);
+        usuario.setText(sonicConstants.USUARIO_ATIVO_NOME);
+        saudacao.setText(sonicUtils.saudacao());
+        meta.setText(new sonicUtils(this).Number.stringToMoeda2(sonicConstants.USUARIO_ATIVO_META_VENDA));
+
 
 
         // ATUALIZA A BADGE DE AVISOS
@@ -122,7 +142,11 @@ public class sonicMain extends AppCompatActivity{
         //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
 
         myViewPager = findViewById(R.id.pagerSlide);
-        setUpViewPager(myViewPager);
+        setUpViewPager2(myViewPager);
+
+        TabLayout myTabLayout = findViewById(R.id.tabs2);
+        //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorSpotLight2));
+        myTabLayout.setupWithViewPager(myViewPager);
 
         List<Fragment> fragmentList = new ArrayList<>();
         //fragmentList.add(new sonicMainHome());
@@ -141,7 +165,7 @@ public class sonicMain extends AppCompatActivity{
             //}
         //});
 
-        myViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        /*myViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 //myBottonNav.getMenu().getItem(position).setChecked(true);
@@ -157,7 +181,7 @@ public class sonicMain extends AppCompatActivity{
             public void onPageScrollStateChanged(int state) {
 
             }
-        });
+        });*/
 
         createDrawerMenu();
 
@@ -175,16 +199,25 @@ public class sonicMain extends AppCompatActivity{
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
 
-                        sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
-                        sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
-
-                        refreshHomeFragment();
-
                         if(!currentProfile) {
                             setEmpresa(profile.getIdentifier());
                             new myAssyncTask().execute(3);
                             new myAssyncTask().execute(4);
                         }
+
+                        listaUser = DBC.Usuarios.selectUsuarioAtivo();
+                        sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
+                        sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
+                        empresa.setText(profile.getEmail().toString());
+                        meta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()));
+                        myProgressProfile = findViewById(R.id.myProgressProfile);
+                        Glide.with(getBaseContext())
+                                .load(Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_PERFIL + sonicConstants.EMPRESA_SELECIONADA_ID + "_" + usuarioId + ".jpg")
+                                .placeholder(R.drawable.no_profile)
+                                .into(myProgressProfile);
+                        myProgressProfile.setProgress(59.5f);
+                        myProgressProfile.startAnimation();
+                        refreshHomeFragment();
 
                         return true;
                     }
@@ -553,6 +586,16 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
+    public void setUpViewPager2(ViewPager viewpager){
+        myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        myAdapter.addFragment(new sonicClientesCNPJ(), "CPF");
+        myAdapter.addFragment(new sonicClientesCPF(), "CNPJ");
+        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
+        //myAdapter.addFragment(new sonicMainHome(), "");
+        viewpager.setAdapter(myAdapter);
+
+    }
+
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -807,8 +850,9 @@ public class sonicMain extends AppCompatActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode != RESULT_CANCELED && data != null) {
+        if (resultCode != RESULT_CANCELED && data != null) {
 
             if (requestCode == IMAGE_GALLERY_REQUEST) {
 
@@ -821,8 +865,7 @@ public class sonicMain extends AppCompatActivity{
                 myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_PERFIL, empresaId, usuarioId);
 
 
-
-                String url = Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+empresaId+"_"+usuarioId+".jpg";
+                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_PERFIL + empresaId + "_" + usuarioId + ".jpg";
 
                 myHeader.getActiveProfile().withIcon(url);
 

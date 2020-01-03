@@ -2,9 +2,12 @@
 <resources>
 
     <!-- DEFAULT APP COLORS -->
-    <color name="colorPrimaryDark">#192838</color>
-    <color name="colorPrimary">#2A3F54</color>
-    <color name="colorAccent">#73879C</color>
+    <color name="colorPrimaryDark">#1C1F2B</color>
+    <color name="colorPrimary">#272936</color>
+    <color name="colorAccent">#363C4C</color>
+    <color name="colorAccentLight">#666C7C</color>
+    <color name="colorSpotLight">#6959CD</color>
+    <color name="colorSpotLight2">#4682B4</color>
     <color name="colorPrimaryDarkT">#90192838</color>
     <color name="colorPrimaryT">#902A3F54</color>
     <color name="colorAccentT">#9073879C</color>

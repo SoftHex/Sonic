@@ -653,13 +653,13 @@ public class sonicPopularTabelas {
                                     startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
 
                                 }else{
-                                    new sonicTM(myCtx).showMS(myCtx.getResources().getString(R.string.headerWarning) , R.string.deviceUnknow+DBC.Empresa.empresaPadrao()+R.string.deviceImei1+imei+R.string.deviceImei2, sonicTM.MSG_WARNING);
+                                    new sonicTM(myCtx).showMS("Atenção..." , "Seu aparelho não está cadasatrado para a empresa: "+DBC.Empresa.empresaPadrao()+ " com o IMEI: " + imei + ". Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicTM.MSG_WARNING);
 
                                 }
 
                             }else{
 
-                                new sonicTM(myCtx).showMI(R.string.headerWarning, R.string.formatWrong, sonicTM.MSG_WARNING);
+                                new sonicTM(myCtx).showMS("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicTM.MSG_WARNING);
 
                             }
 

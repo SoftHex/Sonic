@@ -86,7 +86,7 @@ public class sonicUtils {
     Data Data = new Data();
     Number Number = new Number();
 
-    public static String salutation(){
+    public static String saudacao(){
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 

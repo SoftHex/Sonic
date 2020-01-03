@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -24,10 +25,7 @@ public class sonicSplash extends AppCompatActivity {
 
         DBC = new sonicDatabaseCRUD(sonicSplash.this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+        sonicAppearence.checkLayoutLimit(this, getWindow());
 
         new myAsyncTaskLogar().execute();
 
@@ -51,10 +49,12 @@ public class sonicSplash extends AppCompatActivity {
                 sonicConstants.USUARIO_ATIVO_NOME = listaUser.get(0).getNome();
                 sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
                 sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
-                sonicConstants.EMPRESA_SELECIONADA_NOME = listaEmpresa.get(0).getNomeFantasia();
-                sonicConstants.EMPRESA_SELECIONADA_ID = listaEmpresa.get(0).getCodigo();
                 sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
                 sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
+                sonicConstants.EMPRESA_SELECIONADA_NOME = listaEmpresa.get(0).getNomeFantasia();
+                sonicConstants.EMPRESA_SELECIONADA_ID = listaEmpresa.get(0).getCodigo();
+                //Log.d("EMPRESA", listaEmpresa.get(0).getNomeFantasia());
+
             }else{
                 res = false;
             }

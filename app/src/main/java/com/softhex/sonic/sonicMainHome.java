@@ -7,8 +7,12 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.softhex.view.ProgressProfileView;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -94,15 +99,17 @@ public class sonicMainHome extends Fragment {
         myPedidos.setText("0");
         myEmpresa.setText(sonicConstants.EMPRESA_SELECIONADA_NOME);
         myUser.setText(sonicConstants.USUARIO_ATIVO_NOME);
-        mySaudacao.setText(sonicUtils.salutation());
+        mySaudacao.setText(sonicUtils.saudacao());
         ///myMetaVenda.setText(new sonicUtils(_this).Number.stringToMoeda(listaUser.get(0).getMetaVenda()));
-        Log.d("META", listaUser.get(0).getMetaVenda()+"");
+
         myMetaVenda.setText(new sonicUtils(_this).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()+""));
         myVendaRealizada.setText(new sonicUtils(_this).Number.stringToMoeda2("0"));
         myTotalPercent.setText("0,00%");
         myProgressProfile.setProgress(70.7f);
 
         File file =  new File(Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+sonicConstants.EMPRESA_SELECIONADA_ID+"_"+sonicConstants.USUARIO_ATIVO_ID+".jpg");
+
+        Log.d("FILE", file.toString());
 
         if(file.exists()){
             Glide.with(_this)
