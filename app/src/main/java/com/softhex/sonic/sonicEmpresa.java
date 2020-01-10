@@ -1,11 +1,8 @@
 package com.softhex.sonic;
 
 import android.Manifest;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +22,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_empresa);
 
-        sonicAppearence.checkLayoutLimit(this, getWindow());
+        sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
 
         myRegister = findViewById(R.id.registrar);
         myCode = findViewById(R.id.code);

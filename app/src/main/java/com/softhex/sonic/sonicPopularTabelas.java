@@ -677,7 +677,7 @@ public class sonicPopularTabelas {
         }
     }
 
-    public void gravarDados(String arquivo){
+    public void gravarDadosPrimeiroAcesso(String arquivo){
 
         File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TMP+arquivo);
 
@@ -713,6 +713,7 @@ public class sonicPopularTabelas {
         i.putExtra("IMEI", imei);
         myCtx.startActivity(i);
         ((AppCompatActivity) myCtx).finish();
+
     }
 
 

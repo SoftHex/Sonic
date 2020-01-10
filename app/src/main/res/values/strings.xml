@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Sonic</string>
 
     <!-- MENU DRAWER NAMES -->
     <string name="inicioTitulo">Início</string>
@@ -75,6 +74,10 @@
     <string name="placeholderHashtag">#</string>
 
     <!-- OTHERS -->
+    <string name="appCompany">SoftHex</string>
+    <string name="appName">Sonic</string>
+    <string name="app_name">Sonic</string>
+    <string name="pBy">powered by</string>
     <string name="msgPerms">Permissões necessárias...</string>
     <string name="textNext">PRÓXIMO</string>
     <string name="textFinish">INICIAR</string>

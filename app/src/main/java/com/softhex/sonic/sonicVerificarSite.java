@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.telephony.TelephonyManager;
 
 import java.io.File;
@@ -56,7 +57,17 @@ public class sonicVerificarSite{
         myProgress.setProgressStyle(0);
         myProgress.show();
 
-        new myAsyncTaskVerificar().execute(site, fileName, fileFull);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    new myAsyncTaskVerificar().execute(site, fileName, fileFull);
+
+                                }
+                            }
+                , sonicUtils.Randomizer.generate(500, 3000));
+
 
         Boolean result = false;
 
@@ -89,7 +100,7 @@ public class sonicVerificarSite{
                             publishProgress("Gravando dados...");
 
                             sonicConstants.DOWNLOAD_TYPE = "SITE";
-                            new sonicPopularTabelas(myCtx).gravarDados(strings[0]+".TXT");
+                            new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(strings[0]+".TXT");
 
                             res = true;
 
@@ -118,7 +129,7 @@ public class sonicVerificarSite{
 
             }else{
 
-                myMessage.showMS("Erro", "Não foi possível conectar ao servidor no momento.", myMessage.MSG_WRONG);
+                myMessage.showMS("Erro...", "Não foi possível conectar ao servidor no momento. Tente novmente em alguns minutos.", myMessage.MSG_WRONG);
                 myProgress.dismiss();
                 res = false;
 

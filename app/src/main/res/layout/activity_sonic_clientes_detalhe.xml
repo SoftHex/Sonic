@@ -21,7 +21,7 @@
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance"
-            app:title="@string/app_name">
+            app:title="@string/appName">
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pagerSlide"

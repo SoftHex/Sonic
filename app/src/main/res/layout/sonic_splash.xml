@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="powered by"
+            android:text="@string/pBy"
             android:textStyle="bold"
             android:textSize="10dp" />
 
@@ -31,7 +31,7 @@
                 android:id="@+id/splash_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SoftHex"
+                android:text="@string/appCompany"
                 android:textStyle="bold"
                 android:textSize="40dp" />
 

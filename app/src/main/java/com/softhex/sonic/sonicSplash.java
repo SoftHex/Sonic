@@ -2,14 +2,10 @@ package com.softhex.sonic;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.util.List;
 
@@ -25,7 +21,7 @@ public class sonicSplash extends AppCompatActivity {
 
         DBC = new sonicDatabaseCRUD(sonicSplash.this);
 
-        sonicAppearence.checkLayoutLimit(this, getWindow());
+        sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
         new myAsyncTaskLogar().execute();
 
@@ -38,9 +34,7 @@ public class sonicSplash extends AppCompatActivity {
 
             Boolean res = DBC.Usuarios.usuarioAtivo();
             List<sonicUsuariosHolder> listaUser;
-            List<sonicEmpresasHolder> listaEmpresa;
             listaUser = DBC.Usuarios.selectUsuarioAtivo();
-            listaEmpresa = DBC.Empresa.empresasUsuarios();
 
             if(res){
 
@@ -51,9 +45,8 @@ public class sonicSplash extends AppCompatActivity {
                 sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
                 sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
                 sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
-                sonicConstants.EMPRESA_SELECIONADA_NOME = listaEmpresa.get(0).getNomeFantasia();
-                sonicConstants.EMPRESA_SELECIONADA_ID = listaEmpresa.get(0).getCodigo();
-                //Log.d("EMPRESA", listaEmpresa.get(0).getNomeFantasia());
+                sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa();
+                sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
 
             }else{
                 res = false;
@@ -94,7 +87,7 @@ public class sonicSplash extends AppCompatActivity {
 
                                 }
                             }
-                , sonicUtils.Randomizer.generate(1000, 4000));
+                , sonicUtils.Randomizer.generate(500, 3000));
 
 
     }

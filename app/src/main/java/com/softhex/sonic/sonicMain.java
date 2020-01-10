@@ -7,12 +7,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +32,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -70,9 +76,10 @@ public class sonicMain extends AppCompatActivity{
     private sonicTM myMessage;
     private Drawer myDrawer;
     private boolean check;
-    private String usuarioNome;
+    private String usuarioNome, empresaNome, usuarioMeta;
     private String usuarioCargo;
-    private int usuarioId;
+    private String pathProfile;
+    private int usuarioId, empresaId;
     private int usuarioNivelAcesso;
     private boolean empSelecioanada;
     private Boolean allowHomeUpdate = false;
@@ -95,6 +102,7 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerPremiacoes;
     private TextView empresa, usuario, saudacao, pedidos, desemprenho, venda, meta;
     private ProgressProfileView myProgressProfile;
+    private String url;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -107,17 +115,21 @@ public class sonicMain extends AppCompatActivity{
         DBC = new sonicDatabaseCRUD(myCtx);
         DBCL = new sonicDatabaseLogCRUD(myCtx);
 
-        myToolbar = (Toolbar)findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
-        myActionBar.setTitle(R.string.app_name);
+        myActionBar.setTitle(R.string.appName);
 
         listaEmpresa = DBC.Empresa.empresasUsuarios();
 
         usuarioId = sonicConstants.USUARIO_ATIVO_ID;
         usuarioNome = sonicConstants.USUARIO_ATIVO_NOME;
         usuarioCargo = sonicConstants.USUARIO_ATIVO_CARGO;
+        usuarioMeta = sonicConstants.USUARIO_ATIVO_META_VENDA;
         usuarioNivelAcesso = sonicConstants.USUARIO_ATIVO_NIVEL;
+        empresaId = sonicConstants.EMPRESA_SELECIONADA_ID;
+        empresaNome = sonicConstants.EMPRESA_SELECIONADA_NOME;
+        pathProfile = sonicConstants.LOCAL_IMG_PERFIL;
         empresa = findViewById(R.id.empresa);
         usuario = findViewById(R.id.usuario);
         saudacao = findViewById(R.id.saudacao);
@@ -125,11 +137,29 @@ public class sonicMain extends AppCompatActivity{
         desemprenho = findViewById(R.id.desemprenho);
         venda = findViewById(R.id.venda);
         meta = findViewById(R.id.meta);
-        empresa.setText(sonicConstants.EMPRESA_SELECIONADA_NOME);
-        usuario.setText(sonicConstants.USUARIO_ATIVO_NOME);
+        myProgressProfile = findViewById(R.id.myProgressProfile);
+        empresa.setText(empresaNome);
+        usuario.setText(usuarioNome);
         saudacao.setText(sonicUtils.saudacao());
-        meta.setText(new sonicUtils(this).Number.stringToMoeda2(sonicConstants.USUARIO_ATIVO_META_VENDA));
+        meta.setText(new sonicUtils(this).Number.stringToMoeda2(usuarioMeta));
+        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + empresaId + "_" + usuarioId + ".jpg";
 
+        File file = new File(url);
+        if(file.exists()){
+            Log.d("File", "EXISTE");
+            Glide.with(getBaseContext())
+                    .load(url)
+                    .placeholder(R.drawable.no_profile)
+                    .apply(new RequestOptions().override(300,300))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                    .into(myProgressProfile);
+        }
+
+
+        myProgressProfile.setProgress(59.5f);
+        myProgressProfile.startAnimation();
 
 
         // ATUALIZA A BADGE DE AVISOS
@@ -210,10 +240,14 @@ public class sonicMain extends AppCompatActivity{
                         sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
                         empresa.setText(profile.getEmail().toString());
                         meta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()));
-                        myProgressProfile = findViewById(R.id.myProgressProfile);
+                        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".jpg";
                         Glide.with(getBaseContext())
-                                .load(Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_PERFIL + sonicConstants.EMPRESA_SELECIONADA_ID + "_" + usuarioId + ".jpg")
+                                .load(url)
                                 .placeholder(R.drawable.no_profile)
+                                .apply(new RequestOptions().override(300,300))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                                 .into(myProgressProfile);
                         myProgressProfile.setProgress(59.5f);
                         myProgressProfile.startAnimation();
@@ -262,7 +296,7 @@ public class sonicMain extends AppCompatActivity{
                             new ProfileDrawerItem()
                                     .withName(usuarioNome +" ("+ usuarioCargo +")")
                                     .withEmail(listaEmpresa.get(i).getNomeFantasia())
-                                    .withIcon(file.toString())
+                                    .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
                                     .withIdentifier(listaEmpresa.get(i).getCodigo())
                     );
                 }else{
@@ -471,25 +505,19 @@ public class sonicMain extends AppCompatActivity{
 
                         switch (view.getId()){
                             case 1:
-                                //i = new Intent(sonicMain.this, sonicSincronizacao.class);
-                                //startActivity(i);
                                 new myAsyncStartActivity().execute(sonicSincronizacao.class);
-                                //i = new Intent(sonicMain.this, sonicSincronizacao.class);
-                                //startActivity(i);
                                 break;
                             case 2:
-                                i = new Intent(sonicMain.this, sonicAvisos.class);
-                                startActivity(i);
+                                new myAsyncStartActivity().execute(sonicAvisos.class);
                                 break;
                             case 3:
                                 new myAsyncStartActivity().execute(sonicClientes.class);
                                 break;
                             case 4:
-                                i = new Intent(sonicMain.this, sonicClientes.class);
-                                startActivity(i);
+                                new myAsyncStartActivity().execute(sonicProdutos.class);
+                                break;
                                 //i = new Intent(sonicMain.this, sonicProdutos.class);
                                 //startActivity(i);
-                                break;
                             case 5:
                                 //i = new Intent(sonicMain.this, go_pedido.class);
                                 //startActivity(i);
@@ -867,9 +895,18 @@ public class sonicMain extends AppCompatActivity{
 
                 String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_PERFIL + empresaId + "_" + usuarioId + ".jpg";
 
-                myHeader.getActiveProfile().withIcon(url);
+                myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 
                 myHeader.updateProfile(myHeader.getActiveProfile());
+
+                Glide.with(getBaseContext())
+                        .load(url)
+                        .placeholder(R.drawable.no_profile)
+                        .apply(new RequestOptions().override(300,300))
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                        .into(myProgressProfile);
 
 
             }

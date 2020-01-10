@@ -4,15 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +35,7 @@ public class sonicFirstAccess extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_first_access);
 
-        sonicAppearence.checkLayoutLimit(this, getWindow());
+        sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
 
         DBC = new sonicDatabaseCRUD(this);
 
@@ -93,7 +91,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
                 new myAsyncTask().execute(myProgress);
                 }
-            }, 1000);
+            }, sonicUtils.Randomizer.generate(500, 3000));
 
     }
 
@@ -104,18 +102,18 @@ public class sonicFirstAccess extends AppCompatActivity {
         protected ProgressDialog doInBackground(ProgressDialog... progressDialogs) {
             new sonicDatabaseCRUD(getBaseContext()).Usuarios.setAtivo(getIntent().getIntExtra("ID",0));
             listaUser = DBC.Usuarios.selectUsuarioAtivo();
+            sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
+            sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
+            sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
+            sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
+            sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
+            sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa(); //NOME FANTASIA
             return progressDialogs[0];
         }
 
         @Override
         protected void onPostExecute(ProgressDialog progs) {
             super.onPostExecute(progs);
-            sonicConstants.USUARIO_ATIVO_ID = listaUser.get(0).getCodigo();
-            sonicConstants.USUARIO_ATIVO_NOME = listaUser.get(0).getNome();
-            sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
-            sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
-            sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
-            sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
             progs.dismiss();
                 startActivity();
 

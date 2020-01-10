@@ -124,22 +124,16 @@ public class sonicDatabaseCRUD {
                     Cursor cursor;
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_SITE , null);
                     result = result && cursor.moveToFirst();
-                    Log.d("TABLE_SITE", result.toString());
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_FTP , null);
                     result = result && cursor.moveToFirst();
-                    Log.d("TABLE_FTP", result.toString());
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESAS , null);
                     result = result && cursor.moveToFirst();
-                    Log.d("TABLE_EMPRESAS", result.toString());
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NIVEL_ACESSO , null);
                     result = result && cursor.moveToFirst();
-                    Log.d("TABLE_NIVEL_ACESSO", result.toString());
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_USUARIOS , null);
                     result = result && cursor.moveToFirst();
-                    Log.d("TABLE_USUARIOS", result.toString());
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESAS_USUARIOS , null);
                     result = result &&  cursor.moveToFirst();
-                    Log.d("TABLE_E_USUARIOS", result.toString());
                 }catch (SQLiteException e){
                     e.printStackTrace();
                                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1669,6 +1663,7 @@ public class sonicDatabaseCRUD {
                     usuario.setCargo(cursor.getString(cursor.getColumnIndex("cargo")));
                     usuario.setUsuarioSuperior(cursor.getString(cursor.getColumnIndex("usuario_superior")));
                     usuario.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
+                    usuario.setEmpresaId(cursor.getInt(cursor.getColumnIndex("empresa_id")));
                     usuario.setMetaVenda(cursor.getString(cursor.getColumnIndex("mvenda")));
                     usuario.setMetaVisita(cursor.getInt(cursor.getColumnIndex("mvisita")));
                     usuarios.add(usuario);

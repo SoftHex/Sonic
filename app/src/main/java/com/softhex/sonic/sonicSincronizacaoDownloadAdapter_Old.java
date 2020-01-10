@@ -91,7 +91,7 @@ public class sonicSincronizacaoDownloadAdapter_Old extends RecyclerView.Adapter{
                                 @Override
                                 public void run() {
                                     String arquivo = "GERAL";
-                                    if(gravarAll.gravarDados(ctx, arquivo, "SINCRONIZACAO")){
+                                    if(gravarAll.gravarDadosPrimeiroAcesso(ctx, arquivo, "SINCRONIZACAO")){
                                         DBC.sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
                                         button.setProgress(100);
                                         button.setClickable(false);
@@ -136,7 +136,7 @@ public class sonicSincronizacaoDownloadAdapter_Old extends RecyclerView.Adapter{
                                 @Override
                                 public void run() {
                                     String arquivo = "LOCALIZACAO";
-                                    if(gravarAll.gravarDados(ctx, arquivo, "SINCRONIZACAO")){
+                                    if(gravarAll.gravarDadosPrimeiroAcesso(ctx, arquivo, "SINCRONIZACAO")){
                                         DBC.sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
                                         button.setProgress(100);
                                         button.setClickable(false);

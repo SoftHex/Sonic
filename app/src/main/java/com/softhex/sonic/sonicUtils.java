@@ -13,11 +13,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
@@ -131,6 +133,15 @@ public class sonicUtils {
         return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
     }
 
+    public static Bitmap createBitmap(Bitmap b){
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(0.9f, 0.9f);
+        return  Bitmap.createBitmap(b, 100, 100,100, 100, matrix, true);
+
+    }
+
+
     public static Drawable stringToDrawable(String filePath){
         return Drawable.createFromPath(filePath);
     }
@@ -138,6 +149,23 @@ public class sonicUtils {
     public static Bitmap stringToBitmap(String filePath){
         return BitmapFactory.decodeFile(filePath);
 
+    }
+
+    public static Bitmap centerAndCropBitmap(Bitmap b){
+        Bitmap x;
+        if(b.getWidth() >= b.getHeight()){
+            x = Bitmap.createBitmap(b, b.getWidth()/2 - b.getHeight()/2, 0, b.getHeight(), b.getHeight());
+        }else{
+            x = Bitmap.createBitmap(b,0,b.getHeight()/2 - b.getWidth()/2, b.getWidth(), b.getWidth());
+        }
+
+        return  x;
+    }
+
+    public static Drawable resize(Drawable image, Context ctx) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b,300,300, false);
+        return new BitmapDrawable(ctx.getResources(), bitmapResized);
     }
 
     public static class Randomizer {

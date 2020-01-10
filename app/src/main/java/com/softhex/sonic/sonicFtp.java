@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -290,7 +289,7 @@ public class sonicFtp {
 
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(arquivo);
                         break;
                     case "CATALOGO":
                         new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
@@ -301,7 +300,7 @@ public class sonicFtp {
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
                         break;
                     case "ESTOQUE":
-                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(arquivo);
                         break;
 
                 }
