@@ -74,13 +74,17 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
         requestAppPermissions(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_STATE // LER O IMEI DO APARELHO
+                /*
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.GET_ACCOUNTS,
                 Manifest.permission.VIBRATE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.WRITE_CONTACTS,
-                Manifest.permission.READ_PHONE_STATE
+
+                * */
+
                 },R.string.msgPerms,REQUEST_PERMISSION);
 
     }
@@ -90,9 +94,9 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
         new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CATALOGO);
         new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CLIENTES);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_PERFIL);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_USUARIO);
         new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_DATA_BACKUP);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_TMP);
+        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_TEMP);
 
     }
 

@@ -43,7 +43,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_RETORNO_PEDIDO_ITENS = sonicConstants.TB_RETORNO_PEDIDO_ITENS;
     private final String TABLE_TIPO_COBRANCA = sonicConstants.TB_TIPO_COBRANCA;
     private final String TABLE_CONDICOES_PAGAMENTO = sonicConstants.TB_CONDICOES_PAGAMENTO;
-    private final String TABLE_PRECO_PRODUTO = sonicConstants.TB_PRECO_PRODUTO;
+    private final String TABLE_PRECO_PRODUTO = sonicConstants.TB_TABELA_PRECO_PRODUTO;
     private final String TABLE_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
     private final String TABLE_VENDAS = sonicConstants.TB_VENDAS;
     private final String TABLE_VENDAS_ITENS = sonicConstants.TB_VENDAS_ITENS;

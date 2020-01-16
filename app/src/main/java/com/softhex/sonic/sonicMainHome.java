@@ -107,7 +107,7 @@ public class sonicMainHome extends Fragment {
         myTotalPercent.setText("0,00%");
         myProgressProfile.setProgress(70.7f);
 
-        File file =  new File(Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_PERFIL+sonicConstants.EMPRESA_SELECIONADA_ID+"_"+sonicConstants.USUARIO_ATIVO_ID+".jpg");
+        File file =  new File(Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_IMG_USUARIO + sonicConstants.EMPRESA_SELECIONADA_ID + "_" + sonicConstants.USUARIO_ATIVO_ID + ".jpg");
 
         Log.d("FILE", file.toString());
 

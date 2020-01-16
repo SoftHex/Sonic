@@ -52,7 +52,7 @@ public class sonicPopularTabelas {
             BufferedReader reader;
             arquivo = strings[0];
 
-            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + arquivo);
+            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + arquivo);
 
             if(file.exists()){
 
@@ -610,7 +610,7 @@ public class sonicPopularTabelas {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
-            new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TMP+arquivo);
+            new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
@@ -654,13 +654,13 @@ public class sonicPopularTabelas {
 
                                 }else{
                                     new sonicTM(myCtx).showMS("Atenção..." , "Seu aparelho não está cadasatrado para a empresa: "+DBC.Empresa.empresaPadrao()+ " com o IMEI: " + imei + ". Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicTM.MSG_WARNING);
-
+                                    sonicConstants.EMP_TESTE = false;
                                 }
 
                             }else{
 
                                 new sonicTM(myCtx).showMS("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicTM.MSG_WARNING);
-
+                                sonicConstants.EMP_TESTE = false;
                             }
 
                         }else{
@@ -679,7 +679,7 @@ public class sonicPopularTabelas {
 
     public void gravarDadosPrimeiroAcesso(String arquivo){
 
-        File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TMP+arquivo);
+        File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TEMP+arquivo);
 
         if(file.exists()){
 

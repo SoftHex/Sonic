@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -129,7 +128,7 @@ public class sonicMain extends AppCompatActivity{
         usuarioNivelAcesso = sonicConstants.USUARIO_ATIVO_NIVEL;
         empresaId = sonicConstants.EMPRESA_SELECIONADA_ID;
         empresaNome = sonicConstants.EMPRESA_SELECIONADA_NOME;
-        pathProfile = sonicConstants.LOCAL_IMG_PERFIL;
+        pathProfile = sonicConstants.LOCAL_IMG_USUARIO;
         empresa = findViewById(R.id.empresa);
         usuario = findViewById(R.id.usuario);
         saudacao = findViewById(R.id.saudacao);
@@ -285,7 +284,7 @@ public class sonicMain extends AppCompatActivity{
 
         {
 
-            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_PERFIL +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
+            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
 
             //String image = file.exists() ? file.toString() : getResources().getDrawable(R.drawable.no_profile).toString();
 
@@ -726,7 +725,7 @@ public class sonicMain extends AppCompatActivity{
         myProgressDialog.setProgressStyle(0);
         myProgressDialog.show();
 
-        String result = new sonicDatabase(myCtx).exportDb();
+        String result = new sonicDatabase(myCtx).exportDatabase();
 
         Handler handler = new Handler();
 
@@ -819,7 +818,7 @@ public class sonicMain extends AppCompatActivity{
                 case DialogInterface.BUTTON_POSITIVE:
                     sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(getApplicationContext());
                     DBC.Database.truncateAllTables();
-                    new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TMP);
+                    new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TEMP);
                     clearPreferences();
                     deleteCache(getApplicationContext());
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
@@ -890,10 +889,10 @@ public class sonicMain extends AppCompatActivity{
 
                 long empresaId = myHeader.getActiveProfile().getIdentifier();
 
-                myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_PERFIL, empresaId, usuarioId);
+                myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_USUARIO, empresaId, usuarioId);
 
 
-                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_PERFIL + empresaId + "_" + usuarioId + ".jpg";
+                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_USUARIO + empresaId + "_" + usuarioId + ".jpg";
 
                 myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 

@@ -138,7 +138,7 @@ public class sonicSincronizacaoUpload extends Fragment {
 
                     this.publishProgress("Baixando arquivos...",String.valueOf(integers[1]));
                     // FROM FTP TO LOCAL TEMP
-                    ftp.downloadFile(ftpFile, sonicConstants.LOCAL_TMP+file);
+                    ftp.downloadFile(ftpFile, sonicConstants.LOCAL_TEMP+file);
 
                     if(integers[1]==1 || integers[1]==2){
                         util.Arquivo.unzipFile(String.format(file).replace(".zip",""));

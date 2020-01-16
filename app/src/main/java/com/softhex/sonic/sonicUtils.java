@@ -309,7 +309,7 @@ public class sonicUtils {
         public void createFile(String nome){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String path = sonicConstants.LOCAL_TMP;
+            String path = sonicConstants.LOCAL_TEMP;
             File file = new File(Environment.getExternalStorageDirectory().toString()+path, nome+".TXT");
 
             try{
@@ -346,7 +346,7 @@ public class sonicUtils {
 
                 String path = Environment.getExternalStorageDirectory().toString();
 
-                File sourceLocation = new File(path+myCons.LOCAL_TMP+inputFile);
+                File sourceLocation = new File(path+myCons.LOCAL_TEMP+inputFile);
                 File targetLocation = new File (path+myCons.LOCAL_DATA+inputFile);
 
                 sourceLocation.renameTo(targetLocation);
@@ -448,7 +448,7 @@ public class sonicUtils {
                 }
 
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-                String path = (Environment.getExternalStorageDirectory().toString()+ sonicConstants.LOCAL_TMP);
+                String path = (Environment.getExternalStorageDirectory().toString()+ sonicConstants.LOCAL_TEMP);
                 String destination = (Environment.getExternalStorageDirectory().toString()+toFolder);
                 zipName = path+strings[0];
 

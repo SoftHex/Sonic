@@ -61,7 +61,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         String imagem = getIntent().getIntExtra("EMPRESA_ID",0)+"_"+getIntent().getIntExtra("ID",0)+".jpg";
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_PERFIL+imagem);
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO+imagem);
 
         if(file.exists()){
 

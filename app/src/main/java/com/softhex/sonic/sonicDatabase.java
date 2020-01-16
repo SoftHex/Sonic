@@ -511,7 +511,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     }
 
 
-    public String exportDb() {
+    public String exportDatabase() {
 
         String result = "";
 
