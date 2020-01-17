@@ -5,6 +5,10 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +26,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Environment;
 
@@ -56,9 +61,17 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Created by Administrador on 07/01/2018.
@@ -250,6 +263,56 @@ public class sonicUtils {
 
     }
 
+    public static boolean isConnected(Context context) {
+
+        Boolean res = false;
+        ConnectivityManager cm = (ConnectivityManager)context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            try {
+                URL url = new URL("http://www.google.com");
+                HttpURLConnection urlc = (HttpURLConnection)url.openConnection();
+                urlc.setRequestProperty("User-Agent", "test");
+                urlc.setRequestProperty("Connection", "close");
+                urlc.setConnectTimeout(3000); // mTimeout is in seconds
+                urlc.connect();
+                if (urlc.getResponseCode() == 200) {
+                    res = true;
+                }
+            } catch (IOException e) {
+                Log.i("INTERNET", "Error checking internet connection", e);
+                res = false;
+            }
+        }
+
+        return res;
+
+    }
+
+    public static boolean internetConnectionAvailable(int timeOut) {
+        InetAddress inetAddress = null;
+        try {
+            Future<InetAddress> future = Executors.newSingleThreadExecutor().submit(new Callable<InetAddress>() {
+                @Override
+                public InetAddress call() {
+                    try {
+                        return InetAddress.getByName("google.com");
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
+                }
+            });
+            inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS);
+            future.cancel(true);
+        } catch (InterruptedException e) {
+        } catch (ExecutionException e) {
+        } catch (TimeoutException e) {
+        }
+        return inetAddress!=null && !inetAddress.equals("");
+    }
+
     public void deleteFile(String inputFile) {
 
         StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -273,7 +336,7 @@ public class sonicUtils {
 
             public  boolean statusNetwork() {
                 boolean conectado;
-                ConnectivityManager conectivtyManager = (ConnectivityManager) myCtx.getSystemService(Context.CONNECTIVITY_SERVICE);
+                ConnectivityManager conectivtyManager = (ConnectivityManager) myCtx.getSystemService(CONNECTIVITY_SERVICE);
                 if (conectivtyManager.getActiveNetworkInfo() != null
                         && conectivtyManager.getActiveNetworkInfo().isAvailable()
                         && conectivtyManager.getActiveNetworkInfo().isConnected()) {

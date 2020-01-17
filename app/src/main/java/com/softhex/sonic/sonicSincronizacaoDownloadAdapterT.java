@@ -49,27 +49,27 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
                         case 0:
                             sonicConstants.DOWNLOAD_TYPE = "DADOS";
                             file = String.format("%5s",myListUsers.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TMP+file);
+                            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
                             break;
                         case 1:
                             sonicConstants.DOWNLOAD_TYPE = "CATALOGO";
                             file = "CATALOGO.zip";
-                            myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TMP+file);
+                            myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TEMP+file);
                             break;
                         case 2:
                             sonicConstants.DOWNLOAD_TYPE = "CLIENTES";
                             file = "CLIENTES.zip";
-                            myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TMP+file);
+                            myFtp.downloadFile2(sonicConstants.FTP_IMAGENS +file, sonicConstants.LOCAL_TEMP+file);
                             break;
                         case 3:
                             sonicConstants.DOWNLOAD_TYPE = "ESTOQUE";
                             file = "ESTOQUE.TXT";
-                            myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TMP+file);
+                            myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TEMP+file);
                             break;
                         case 4:
                             sonicConstants.DOWNLOAD_TYPE = "LOCAL";
                             file = "LOCAL.TXT";
-                            myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TMP+file);
+                            myFtp.downloadFile2(sonicConstants.FTP_ESTOQUE +file, sonicConstants.LOCAL_TEMP+file);
                             break;
                     }
 

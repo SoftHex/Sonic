@@ -84,11 +84,11 @@
     <string name="textSkip">PULAR</string>
 
     <!-- HEADER DIALOGS -->
-    <string name="headerDefault">Aviso.</string>
-    <string name="headerSuccess">Tudo certo.</string>
-    <string name="headerInfo">Informação.</string>
-    <string name="headerWarning">Atenção.</string>
-    <string name="headerWrong">Erro.</string>
+    <string name="headerDefault">Aviso...</string>
+    <string name="headerSuccess">Tudo certo!</string>
+    <string name="headerInfo">Aviso...</string>
+    <string name="headerWarning">Atenção...</string>
+    <string name="headerWrong">::: Erro :::</string>
 
     <!-- MESSAGE DIALOGS -->
     <string name="gravandoDados">Gravando na tabela</string>
@@ -99,20 +99,21 @@
     <string name="databaseBackupSaved">Backup salvo com sucesso.</string>
 
     <!-- ERROR MESSAGE -->
-    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o administrador do sistema.</string>
-    <string name="fileNotFound">Arquivo não encontrado. Contate o responsável pela administração do sistema.</string>
-    <string name="fileDownloadedNotFound">O arquivo foi baixado mas não foi encontrado no dispositivo. Contate o administrador do sistema.</string>
+    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o responsável na empresa pela administração do sistema.</string>
+    <string name="fileNotFound">O arquivo solicitado não foi encontrado. Contate o responsável na empresa pela administração do sistema.</string>
+    <string name="fileDownloadedNotFound">O arquivo solicitado foi baixado mas não foi encontrado no dispositivo. Contate na empresa o responsável pela administração do sistema.</string>
     <string name="deviceUnknow">Seu aparelho não esta cadastrado para a empresa (</string>
     <string name="deviceImei1">). Verifique se o imei (</string>
     <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
-    <string name="failToConnect">Não foi possível conectar ao servidor no momento.</string>>
-    <string name="formatWrong">Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.</string>
+    <string name="failToConnect">Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.</string>>
+    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na empresa o responsável pela administração do sistema.</string>
     >
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>
-    <string name="noLog">Sem logs por enquanto. Isso certamente é um bom sinal, :)</string>
-    <string name="noClientes">Estranho, não é normal a ausência de clientes por aqui. Tente fazer uma sincronização.</string>
+    <string name="noLog">Sem logs por enquanto.</string>
+    <string name="noClientes">Sem clientes para exibir no momento.</string>
+    <string name="noProdutos">Sem produtos para exibir no momento.</string>
     <string name="networkError">Verifique sua conexão com a internet...</string>
     <string name="networkSuccess">Conexão com a internet OK.</string>
 

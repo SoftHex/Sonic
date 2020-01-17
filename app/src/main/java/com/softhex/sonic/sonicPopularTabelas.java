@@ -499,6 +499,33 @@ public class sonicPopularTabelas {
 
                         }
 
+                        if (line != null && ("[TIPO_COBRANCA]".equals(line) || line.equals("[TIPO_COBRANCA]"))) {
+
+                            Log.d("TIPO_COBRANCA", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.TipoCobranca.cleanTipoCobranca();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress(tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.TipoCobranca.saveTipoCobranca(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
                         if (line != null && ("[UNIDADE_MEDIDA]".equals(line) || line.equals("[UNIDADE_MEDIDA]"))) {
 
                             Log.d("UNIDADE_MEDIDA", "ENTROU");
@@ -581,7 +608,12 @@ public class sonicPopularTabelas {
                         }
 
                         //CONTINUA LENDO ATE ENTRAR NUMA DAS CONDIÇÕES
+                        //reader = new BufferedReader(new InputStreamReader(f));
                         line = reader.readLine();
+                        reader.mark(0);
+
+                        reader.reset();
+                        //Log.d("LINHA", line);
 
                     }
 

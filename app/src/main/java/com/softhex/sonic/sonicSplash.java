@@ -23,6 +23,7 @@ public class sonicSplash extends AppCompatActivity {
 
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
+
         new myAsyncTaskLogar().execute();
 
     }

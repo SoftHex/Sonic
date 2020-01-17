@@ -36,7 +36,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_PRODUTOS = sonicConstants.TB_PRODUTOS;
     private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTOS;
     private final String TABLE_ROTA = sonicConstants.TB_ROTA;
-    private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE;
+    private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE_PRODUTOS;
     private final String TABLE_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
     private final String TABLE_TITULOS = sonicConstants.TB_TITULOS;
     private final String TABLE_RETORNO_PEDIDO = sonicConstants.TB_RETORNO_PEDIDO;
@@ -110,6 +110,7 @@ public class sonicDatabaseCRUD {
     Sincronizacao Sincronizacao = new Sincronizacao();
     Localizacao Localizacao = new Localizacao();
     TipoPedido TipoPedido = new TipoPedido();
+    TipoCobranca TipoCobranca = new TipoCobranca();
     Prazo Prazo = new Prazo();
     Avisos Avisos = new Avisos();
 
@@ -2195,7 +2196,7 @@ public class sonicDatabaseCRUD {
             return DB.getWritableDatabase().delete(TABLE_RANKING_PRODUTOS, null, null)>0;
         }
 
-        public void setselecionado(int codigo){
+        public void setSelecionado(int codigo){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues args = new ContentValues();
@@ -2213,7 +2214,7 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public void setNaoselecionado(){
+        public void setNaoSelecionado(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues args = new ContentValues();
@@ -2267,16 +2268,16 @@ public class sonicDatabaseCRUD {
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "p.codigo_produto AS codigo," +
+                            "p.codigo AS codigo," +
                             "p.descricao AS descricao, " +
                             "p.codigo_alternativo AS codigo_alternativo, " +
-                            "(SELECT ep.estoque FROM estoque_produtos ep WHERE ep.codigo_produto = p.codigo_produto) AS estoque, " +
-                            "(SELECT ep1.estoque_min FROM estoque_produtos ep1 WHERE ep1.codigo_produto = p.codigo_produto) AS estoque_minimo, " +
-                            "(SELECT un.sigla FROM unidade_medida un WHERE un.codigo_unidade = p.codigo_unidade) AS unidade_medida, " +
-                            "(SELECT gp.nome FROM grupo_produtos gp WHERE gp.codigo_grupo = p.codigo_grupo) AS grupo_produto, " +
-                            "(SELECT ep2.situacao FROM estoque_produtos ep2 WHERE ep2.codigo_produto = p.codigo_produto) AS situacao " +
-                            "FROM produtos p " +
-                            "WHERE p.codigo_empresa = (SELECT emp.codigo_empresa FROM "+TABLE_EMPRESAS+" emp WHERE emp.selecionada=1)" + where + orderby, null);
+                            " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTOS + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
+                            " (SELECT ep1.estoque_min FROM " + TABLE_ESTOQUE_PRODUTOS + " ep1 WHERE ep1.codigo_produto = p.codigo) AS estoque_minimo, " +
+                            " (SELECT un.sigla FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
+                            " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto, " +
+                            " (SELECT ep2.situacao FROM " + TABLE_ESTOQUE_PRODUTOS + " ep2 WHERE ep2.codigo_produto = p.codigo) AS situacao " +
+                            " FROM " + TABLE_PRODUTOS + " p " +
+                            " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESAS + " emp WHERE emp.selecionada=1)" + where + orderby, null);
 
             while(cursor.moveToNext()){
 

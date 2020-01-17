@@ -37,7 +37,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_GRUPO_PRODUTOS = sonicConstants.TB_GRUPO_PRODUTOS;
     private static final String DB_ROTA = sonicConstants.TB_ROTA;
     private static final String DB_RANKING_PRODUTOS = sonicConstants.TB_RANKING_PRODUTOS;
-    private static final String DB_ESTOQUE = sonicConstants.TB_ESTOQUE;
+    private static final String DB_ESTOQUE = sonicConstants.TB_ESTOQUE_PRODUTOS;
     private static final String DB_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
     private static final String DB_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
     private static final String DB_TITTULOS = sonicConstants.TB_TITULOS;

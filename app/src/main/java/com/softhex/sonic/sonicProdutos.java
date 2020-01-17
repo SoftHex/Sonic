@@ -26,7 +26,7 @@ public class sonicProdutos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clientes);
+        setContentView(R.layout.sonic_produtos);
 
         _this = this;
 
@@ -69,7 +69,7 @@ public class sonicProdutos extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicClientesCNPJ(), "CNPJ");
+        myAdapter.addFragment(new sonicProdutosLista(), "LISTA");
         myAdapter.addFragment(new sonicClientesCPF(), "CPF");
         viewpager.setAdapter(myAdapter);
 

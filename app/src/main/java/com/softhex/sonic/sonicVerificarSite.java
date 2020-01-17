@@ -48,7 +48,7 @@ public class sonicVerificarSite{
         }
 
         String fileName = "sites/"+ site +".TXT";
-        String fileFull = sonicConstants.LOCAL_TMP + site +".TXT";
+        String fileFull = sonicConstants.LOCAL_TEMP + site +".TXT";
 
         myProgress = new ProgressDialog(myCtx);
         myProgress.setCancelable(false);
@@ -93,7 +93,7 @@ public class sonicVerificarSite{
                         sonicConstants.EMP_EXIST = "1";
                         sonicConstants.DOWNLOAD_TYPE = "SITE";
 
-                        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TMP + strings[0] + ".TXT");
+                        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + strings[0] + ".TXT");
 
                         if (file.exists()) {
 

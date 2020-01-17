@@ -173,16 +173,13 @@ public class sonicFtp {
                 myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 myProgress.show();
 
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        new myAsyncTaskDownload().execute(fileName, localFile);
-                    }
-                }, sonicUtils.Randomizer.generate(500,1000));
-
-
-
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new myAsyncTaskDownload().execute(fileName, localFile);
+                        }
+                    }, sonicUtils.Randomizer.generate(500,1000));
 
             }
         });
@@ -196,76 +193,84 @@ public class sonicFtp {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             boolean res = true;
 
-            if(ftpConnect()){
+                if(sonicUtils.internetConnectionAvailable(3000)){
 
-                myProgress.dismiss();
+                    if(ftpConnect()){
 
-                new Handler(Looper.getMainLooper()).post(()-> {
+                        myProgress.dismiss();
 
-                    myProgress2.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    myProgress2.setMessage("Fazendo download...");
-                    myProgress2.setProgress(0);
-                    myProgress2.setCancelable(false);
-                    myProgress2.show();
+                        new Handler(Looper.getMainLooper()).post(()-> {
 
-                });
+                            myProgress2.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                            myProgress2.setMessage("Fazendo download...");
+                            myProgress2.setProgress(0);
+                            myProgress2.setCancelable(false);
+                            myProgress2.show();
 
-                long fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
+                        });
 
-                myProgress2.setMax((int)fileSize);
+                        long fileSize = sonicUtils.getFileSize(ftpClient,strings[0]);
 
-                myProgress2.setProgressNumberFormat("");
+                        myProgress2.setMax((int)fileSize);
+
+                        myProgress2.setProgressNumberFormat("");
 
 
-                CopyStreamAdapter sa = new CopyStreamAdapter(){
+                        CopyStreamAdapter sa = new CopyStreamAdapter(){
 
-                    @Override
-                    public void bytesTransferred(long l, int i, long l1) {
+                            @Override
+                            public void bytesTransferred(long l, int i, long l1) {
 
-                        myProgress2.setProgressNumberFormat((sonicUtils.bytes2String(fileSize)));
-                        publishProgress("Fazendo download...",String.valueOf(l));
+                                myProgress2.setProgressNumberFormat((sonicUtils.bytes2String(fileSize)));
+                                publishProgress("Fazendo download...",String.valueOf(l));
+                            }
+
+                        };
+
+                        ftpClient.setCopyStreamListener(sa);
+
+                        try{
+
+                            File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
+                            FileOutputStream file = new FileOutputStream(destino);
+
+                            if(ftpClient.retrieveFile(strings[0], file)){
+
+                                destino.createNewFile();
+
+                                arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
+
+                                return true;
+
+                            //}else{
+                            //    new sonicTM(myCtx).showMI(R.string.headerWarning, R.string.fileNotFound, sonicTM.MSG_WARNING);
+                            //    res =  false;
+                            }
+
+                            file.close();
+
+
+                        }catch (IOException e){
+                            e.printStackTrace();
+                            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                                    e.getMessage(),
+                                    mySystem.System.getActivityName(),
+                                    mySystem.System.getClassName(el),
+                                    mySystem.System.getMethodNames(el));
+                            res = false;
+                        }
+
+                    } else {
+
+                        new sonicTM(myCtx).showMI(R.string.headerWrong, R.string.failToConnect, sonicTM.MSG_WRONG);
+                        res = false;
                     }
 
-                };
-
-                ftpClient.setCopyStreamListener(sa);
-
-                try{
-
-                    File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
-                    FileOutputStream file = new FileOutputStream(destino);
-
-                    if(ftpClient.retrieveFile(strings[0], file)){
-
-                        destino.createNewFile();
-
-                        arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
-
-                        return true;
-
-                    }else{
-                        new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicTM.MSG_WARNING);
-                        res =  false;
-                    }
-
-                    file.close();
-
-
-                }catch (IOException e){
-                    e.printStackTrace();
-                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
-                            e.getMessage(),
-                            mySystem.System.getActivityName(),
-                            mySystem.System.getClassName(el),
-                            mySystem.System.getMethodNames(el));
-                    return false;
+                }else{
+                    res = false;
+                    myProgress.dismiss();
+                    new sonicTM(myCtx).showMI(R.string.headerWrong, R.string.networkError, sonicTM.MSG_WRONG);
                 }
-
-            } else {
-
-                new sonicTM(myCtx).showMI(R.string.headerWrong, R.string.failToConnect, sonicTM.MSG_WRONG);
-                return false;
-            }
 
             ftpDisconnect();
             return res;
