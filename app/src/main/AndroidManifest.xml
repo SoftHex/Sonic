@@ -84,12 +84,17 @@
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".sonicClientesDetalhe"
+            android:parentActivityName=".sonicClientes"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".sonicProdutos"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".sonicClientesDetalhe"
-            android:parentActivityName=".sonicClientes"
+            android:name=".sonicProdutosDetalhe"
+            android:parentActivityName=".sonicProdutos"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity

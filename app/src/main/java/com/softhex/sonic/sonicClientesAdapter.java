@@ -92,8 +92,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     DBC.Clientes.setSelecionado(codigo);
 
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    i.putExtra(sonicConstants.PUT_EXTRA_CLIENTE_NOME, cliente.getText());
-                    i.putExtra(sonicConstants.PUT_EXTRA_CLIENTE_ID, codigo);
+                    sonicConstants.PUT_EXTRA_CLIENTE_NOME = cliente.getText().toString();
+                    sonicConstants.PUT_EXTRA_CLIENTE_ID = codigo;
                     v.getContext().startActivity(i);
 
 
@@ -169,7 +169,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             holder.sit.setVisibility(View.VISIBLE);
         }
 
-        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES +cli.getCodigo()+"_1.jpg");
+        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + "_1.jpg");
 
         if(file.exists()){
 

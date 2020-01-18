@@ -233,7 +233,7 @@ public class sonicProdutosLista extends Fragment {
         myImage.setVisibility(VISIBLE);
         myTextView.setVisibility(VISIBLE);
         myTextView.startAnimation(fadeIn);
-        sonicGlide.glideImageView(_this, myImage, R.drawable.noproduct);
+        sonicGlide.glideDrawable(_this, myImage, R.drawable.noproduct);
         myTextView.setText(R.string.noProdutos);
         /*Glide.with(_this)
                 .load(R.drawable.noproduct)

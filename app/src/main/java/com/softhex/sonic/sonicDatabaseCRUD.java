@@ -2204,7 +2204,7 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                DB.getWritableDatabase().update(TABLE_PRODUTOS, args, " codigo_produto = "+codigo, null);
+                DB.getWritableDatabase().update(TABLE_PRODUTOS, args, " codigo = " + codigo, null);
 
             }catch (SQLiteException e){
                                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -2299,21 +2299,21 @@ public class sonicDatabaseCRUD {
             return produtos;
         }
 
-        public List<sonicProdutosHolder> selectProdutoselecionadO(){
+        public List<sonicProdutosHolder> selectProdutoselecionado(){
             List<sonicProdutosHolder> produtos = new ArrayList<sonicProdutosHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "p.codigo_produto AS codigo," +
+                            "p.codigo AS codigo," +
                             "p.descricao AS descricao, " +
                             "p.codigo_alternativo AS codigo_alternativo, " +
-                            "(SELECT ep.estoque FROM estoque_produtos ep WHERE ep.codigo_produto = p.codigo_produto) AS estoque, " +
-                            "(SELECT ep1.estoque_min FROM estoque_produtos ep1 WHERE ep1.codigo_produto = p.codigo_produto) AS estoque_minimo, " +
-                            "(SELECT un.sigla FROM unidade_medida un WHERE un.codigo_unidade = p.codigo_unidade) AS unidade_medida, " +
-                            "(SELECT gp.nome FROM grupo_produtos gp WHERE gp.codigo_grupo = p.codigo_grupo) AS grupo_produto, " +
-                            "(SELECT ep2.situacao FROM estoque_produtos ep2 WHERE ep2.codigo_produto = p.codigo_produto) AS situacao " +
-                            "FROM produtos p " +
-                            "WHERE p.selecionadO = 1", null);
+                            "(SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTOS + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
+                            "(SELECT ep1.estoque_min FROM " + TABLE_ESTOQUE_PRODUTOS + " ep1 WHERE ep1.codigo_produto = p.codigo) AS estoque_minimo, " +
+                            "(SELECT un.sigla FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
+                            "(SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto, " +
+                            "(SELECT ep2.situacao FROM " + TABLE_ESTOQUE_PRODUTOS + " ep2 WHERE ep2.codigo_produto = p.codigo) AS situacao " +
+                            "FROM " + TABLE_PRODUTOS + " p " +
+                            "WHERE p.selecionado = 1", null);
 
             while(cursor.moveToNext()){
 

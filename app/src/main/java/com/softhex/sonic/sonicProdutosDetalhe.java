@@ -1,23 +1,28 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
+import android.media.Image;
+import android.os.Bundle;
 import android.os.Environment;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import android.text.Html;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.text.Html;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.io.File;
 import java.util.List;
 
-public class sonicClientesDetalhe extends AppCompatActivity {
+public class sonicProdutosDetalhe extends AppCompatActivity {
 
     private Toolbar myToolbar;
     private ViewPager myViewpager;
@@ -26,15 +31,17 @@ public class sonicClientesDetalhe extends AppCompatActivity {
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout myCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
-
+    private Context ctx;
+    private ImageView myImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sonic_clientes_detalhe);
+        setContentView(R.layout.activity_sonic_produtos_detalhe);
 
+        ctx = this;
         DBC = new sonicDatabaseCRUD(this);
-        myViewpager = findViewById(R.id.pagerSlide);
+        //myViewpager = findViewById(R.id.pagerSlide);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
 
         createInterface();
@@ -47,7 +54,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         ActionBar myActionBar = getSupportActionBar();
-        myActionBar.setTitle("Clientes");
+        myActionBar.setTitle("Produtos");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);
@@ -59,7 +66,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_CLIENTE_NOME);
+        myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,47 +79,23 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
     public void slideImages(){
 
-        List<sonicClientesHolder> myList;
-        int count = 0;
+        List<sonicProdutosHolder> myList;
+        myList = DBC.Produto.selectProdutoselecionado();
 
-        myList = DBC.Clientes.selectClienteSelecionado();
-        File file;
-        String image = "";
-
-        for(int i = 0; i < myImages.length ; i++){
-
-            image = myList.get(0).getCodigo()+"_"+(i+1)+".jpg";
-            file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
-
-            if(file.exists()){
-                count++;
-            }
-        }
-
-        myImages = new String[count];
-
-        for(int i = 0; i < myImages.length ; i++){
-
-            image = myList.get(0).getCodigo()+"_"+(i+1)+".jpg";
-            file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
-
-            myImages[i] = file.toString();
-
-        }
-
-
-        if(count==0){
-            myImages = new String[1];
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO + myList.get(0).getCodigo() + ".JPG");
+        if(file.exists()){
+            myImages[0] = file.toString();
+        }else{
             myImages[0] = sonicUtils.getURLForResource(R.drawable.company);
         }
 
-
-
-        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages);
-        dotsLayout = findViewById(R.id.layoutDots);
-        myViewpager.setAdapter(myAdapter);
-        myViewpager.addOnPageChangeListener(viewListener);
-        addBottomDots(0);
+        //sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages);
+        //dotsLayout = findViewById(R.id.layoutDots);
+        //myViewpager.setAdapter(myAdapter);
+        //myViewpager.addOnPageChangeListener(viewListener);
+        //addBottomDots(0);
+        myImage = findViewById(R.id.pagerSlide);
+        sonicGlide.glideImageView(ctx,myImage,file.toString());
 
     }
 
