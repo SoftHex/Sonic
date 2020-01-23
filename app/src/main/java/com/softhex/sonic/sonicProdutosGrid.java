@@ -12,26 +12,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
-import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
@@ -44,12 +38,12 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicProdutosLista extends Fragment {
+public class sonicProdutosGrid extends Fragment {
 
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicProdutosListaAdapter myAdapter;
+    private sonicProdutosGridAdapter myAdapter;
     private List<sonicProdutosHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
@@ -61,25 +55,17 @@ public class sonicProdutosLista extends Fragment {
     private boolean allowSearch;
     private Context _this;
     private ImageView myImage;
-    private Boolean isScrooling = false;
-    private int currentItens, totalItens, scroolOutItens;
     Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_grid, container, false);
 
         _this = getActivity();
 
         loadFragment();
 
         return myView;
-
-    }
-
-    public void bindRecyclerView(){
-
-        new myAsyncTask().execute();
 
     }
 
@@ -105,7 +91,7 @@ public class sonicProdutosLista extends Fragment {
 
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        myLayout = new GridLayoutManager(getContext(), 3);
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -116,6 +102,12 @@ public class sonicProdutosLista extends Fragment {
 
         bindRecyclerView();
 
+
+    }
+
+    public void bindRecyclerView(){
+
+        new myAsyncTask().execute();
 
     }
 
@@ -219,7 +211,7 @@ public class sonicProdutosLista extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicProdutosListaAdapter(myList, _this);
+        myAdapter = new sonicProdutosGridAdapter(myList, _this);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

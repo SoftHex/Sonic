@@ -70,7 +70,7 @@ public class sonicProdutos extends AppCompatActivity {
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicProdutosLista(), "LISTA");
-        myAdapter.addFragment(new sonicClientesCPF(), "CPF");
+        myAdapter.addFragment(new sonicProdutosGrid(), "CATÁLOGO");
         viewpager.setAdapter(myAdapter);
 
     }

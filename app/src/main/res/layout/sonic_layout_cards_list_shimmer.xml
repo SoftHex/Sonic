@@ -22,12 +22,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="6dp">
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/letra"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/circle_textview_shimmer" />
 
                 <LinearLayout
@@ -47,7 +47,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@color/colorPrimaryLight" />
+                            android:background="@color/colorPrimaryLight"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/grupo"
@@ -55,13 +56,14 @@
                             android:layout_height="wrap_content"
                             android:background="@color/colorPrimaryLight"
                             android:layout_marginTop="4dp"
-                            android:textSize="8sp" />
+                            android:textSize="10sp" />
 
                         <TextView
                             android:id="@+id/detalhe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/colorPrimaryLight"
+                            android:textSize="10sp"
                             android:layout_marginTop="4dp"/>
 
                     </LinearLayout>

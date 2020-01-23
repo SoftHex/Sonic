@@ -140,7 +140,7 @@ public class sonicAppearence {
                 createCircularReveal.start();
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimaryBlackLight));
+                //window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimaryBlackLight));
             } else {
                 TranslateAnimation translateAnimation = new TranslateAnimation(0.0f, 0.0f, (float) (-tool.getHeight()), 0.0f);
                 translateAnimation.setDuration(220);
@@ -160,7 +160,7 @@ public class sonicAppearence {
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         tool.setBackgroundColor(act.getResources().getColor(R.color.colorPrimary));
-                        window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimaryDark));
+                        //window.setStatusBarColor(act.getResources().getColor(R.color.colorPrimaryDark));
                     }
                 });
                 createCircularReveal.start();

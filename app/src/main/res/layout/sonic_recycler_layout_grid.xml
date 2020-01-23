@@ -68,16 +68,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_grid_shimmer"/>
+
 
         </LinearLayout>
 
@@ -88,7 +85,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="gone"/>
 
 
