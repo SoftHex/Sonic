@@ -39,7 +39,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
+
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
@@ -79,6 +85,10 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class sonicUtils {
 
+    private static final float BITMAP_SCALE = 0.4f;
+
+    //Set the radius of the Blur. Supported range 0 < radius <= 25
+    private static float BLUR_RADIUS = 10.5f;
     private Context myCtx;
     private sonicDatabaseLogCRUD DBCL;
     private sonicSystem mySystem;
@@ -186,6 +196,68 @@ public class sonicUtils {
             return min + (int)(Math.random() * ((max - min) + 1));
         }
     }
+
+    public static Bitmap blurRenderScript(Bitmap smallBitmap, int radius, Context ctx) {
+        RenderScript rs = RenderScript.create(ctx);
+        Bitmap blurredBitmap = smallBitmap.copy(Bitmap.Config.ARGB_8888, true);
+
+        Allocation input = Allocation.createFromBitmap(rs, blurredBitmap, Allocation.MipmapControl.MIPMAP_FULL, Allocation.USAGE_SHARED);
+        Allocation output = Allocation.createTyped(rs, input.getType());
+
+        // Load up an instance of the specific script that we want to use.
+        ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+        script.setInput(input);
+
+        script.setRadius(radius);
+        script.forEach(output);
+        output.copyTo(blurredBitmap);
+
+        return blurredBitmap;
+    }
+
+    protected Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight, Context ctx) {
+        return sonicUtils.blurRenderScript(toTransform, 25, ctx);
+    }
+
+    public static Bitmap blur(Context context, Bitmap image, float blurRadius) {
+
+        Bitmap outputBitmap = null;
+
+        if (image != null) {
+
+            if (blurRadius == 0) {
+                return image;
+            }
+
+            if (blurRadius < 1) {
+                blurRadius = 1;
+            }
+
+            if (blurRadius > 25) {
+                blurRadius = 25;
+            }
+
+            BLUR_RADIUS = blurRadius;
+
+            int width = Math.round(image.getWidth() * BITMAP_SCALE);
+            int height = Math.round(image.getHeight() * BITMAP_SCALE);
+
+            Bitmap inputBitmap = Bitmap.createScaledBitmap(image, width, height, false);
+            outputBitmap = Bitmap.createBitmap(inputBitmap);
+
+            RenderScript rs = RenderScript.create(context);
+            ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
+            Allocation tmpIn = Allocation.createFromBitmap(rs, inputBitmap);
+            Allocation tmpOut = Allocation.createFromBitmap(rs, outputBitmap);
+            theIntrinsic.setRadius(BLUR_RADIUS);
+            theIntrinsic.setInput(tmpIn);
+            theIntrinsic.forEach(tmpOut);
+            tmpOut.copyTo(outputBitmap);
+        }
+
+        return outputBitmap;
+    }
+
     public static long getFileSize(FTPClient ftpClient, String fileName)
     {
         long fileSize = 0;
@@ -312,6 +384,8 @@ public class sonicUtils {
         }
         return inetAddress!=null && !inetAddress.equals("");
     }
+
+
 
     public void deleteFile(String inputFile) {
 

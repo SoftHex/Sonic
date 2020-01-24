@@ -7,7 +7,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@drawable/back</item>
-        <item name="android:colorSecondary">@color/colorTextPrimary</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
@@ -74,6 +73,18 @@
         <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
         <item name="android:textColor">@color/colorTextDark</item>
+    </style>
+
+    <style name="TabsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="tabIndicatorColor">@color/colorPrimaryGreen</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">16dp</item>
+        <item name="tabPaddingEnd">16dp</item>
+        <item name="tabPaddingBottom">8dp</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabTextAppearance">@color/colorPrimaryWhite</item>
+        <item name="tabTextColor">@color/colorPrimaryWhite</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryOrange</item>
     </style>
 
     <style name="NavigationDrawerStyle">

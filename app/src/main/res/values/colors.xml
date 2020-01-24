@@ -48,6 +48,8 @@
     <color name="colorTextPrimaryT">#90363636</color>
     <color name="colorTextAccentT">#90696969</color>
     <color name="colorTextNoAccentT">#90C0C0C0</color>
+    <color name="colorTextOrange">#FF8C00</color>
+    <color name="colorTextOrangeLight">#FFD700</color>
     <color name="colorPrimaryBlueDark">#002A73</color>
     <color name="colorPrimaryBlue">#1850AE</color>
     <color name="colorPrimaryBlueLight">#4688F7</color>

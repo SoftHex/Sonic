@@ -39,7 +39,7 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/empresa"
+                            android:id="@+id/tvEmpresa"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Empresa Nome"

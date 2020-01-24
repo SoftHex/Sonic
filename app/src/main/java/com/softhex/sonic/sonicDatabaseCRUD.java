@@ -202,6 +202,7 @@ public class sonicDatabaseCRUD {
                         mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
+                result = false;
 
             }
 
@@ -2090,7 +2091,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                Cursor cursor = db.rawQuery("SELECT p._id FROM "+TABLE_PRODUTOS+" p WHERE p.codigo = (SELECT e.codigo FROM "+TABLE_EMPRESAS+" e WHERE e.selecionada=1)", null);
+                Cursor cursor = db.rawQuery("SELECT p._id FROM " + TABLE_PRODUTOS + " p WHERE p.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESAS + " e WHERE e.selecionada=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));

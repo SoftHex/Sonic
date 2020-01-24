@@ -99,14 +99,14 @@
     <string name="databaseBackupSaved">Backup salvo com sucesso.</string>
 
     <!-- ERROR MESSAGE -->
-    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o responsável na empresa pela administração do sistema.</string>
-    <string name="fileNotFound">O arquivo solicitado não foi encontrado. Contate o responsável na empresa pela administração do sistema.</string>
-    <string name="fileDownloadedNotFound">O arquivo solicitado foi baixado mas não foi encontrado no dispositivo. Contate na empresa o responsável pela administração do sistema.</string>
-    <string name="deviceUnknow">Seu aparelho não esta cadastrado para a empresa (</string>
+    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o responsável na tvEmpresa pela administração do sistema.</string>
+    <string name="fileNotFound">O arquivo solicitado não foi encontrado. Contate o responsável na tvEmpresa pela administração do sistema.</string>
+    <string name="fileDownloadedNotFound">O arquivo solicitado foi baixado mas não foi encontrado no dispositivo. Contate na tvEmpresa o responsável pela administração do sistema.</string>
+    <string name="deviceUnknow">Seu aparelho não esta cadastrado para a tvEmpresa (</string>
     <string name="deviceImei1">). Verifique se o imei (</string>
     <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
     <string name="failToConnect">Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.</string>>
-    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na empresa o responsável pela administração do sistema.</string>
+    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na tvEmpresa o responsável pela administração do sistema.</string>
     >
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
@@ -127,7 +127,7 @@
     <string name="go_erro_data">Dados não conferem...</string>
     <string name="go_erro_conn">Erro ao tentar conexão com o servidor...</string>
     <string name="go_erro_cod_inc">Código incompleto, digite novamente!</string>
-    <string name="go_erro_no_emp">Não existe empresa para este código!</string>
+    <string name="go_erro_no_emp">Não existe tvEmpresa para este código!</string>
     <string name="go_erro_tabela">Erro ao gravar dados nas tabelas...</string>
     <string name="go_erro_file">Arquivo não encontrado...</string>
 

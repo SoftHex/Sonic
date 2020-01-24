@@ -7,20 +7,30 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.renderscript.RenderScript;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +44,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -54,6 +68,8 @@ import com.softhex.view.ProgressProfileView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class sonicMain extends AppCompatActivity{
 
@@ -99,9 +115,12 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerRankingProdutos;
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
-    private TextView empresa, usuario, saudacao, pedidos, desemprenho, venda, meta;
+    private LinearLayout llDetail;
+    private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendido, tvMeta;
     private ProgressProfileView myProgressProfile;
+    private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String url;
+    private RenderScript rs;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -119,8 +138,8 @@ public class sonicMain extends AppCompatActivity{
         myActionBar = getSupportActionBar();
         myActionBar.setTitle(R.string.appName);
 
-        listaEmpresa = DBC.Empresa.empresasUsuarios();
-
+        // INSTANCIANDO OS OBJETOS
+        llDetail = findViewById(R.id.llDetail);
         usuarioId = sonicConstants.USUARIO_ATIVO_ID;
         usuarioNome = sonicConstants.USUARIO_ATIVO_NOME;
         usuarioCargo = sonicConstants.USUARIO_ATIVO_CARGO;
@@ -129,20 +148,55 @@ public class sonicMain extends AppCompatActivity{
         empresaId = sonicConstants.EMPRESA_SELECIONADA_ID;
         empresaNome = sonicConstants.EMPRESA_SELECIONADA_NOME;
         pathProfile = sonicConstants.LOCAL_IMG_USUARIO;
-        empresa = findViewById(R.id.empresa);
-        usuario = findViewById(R.id.usuario);
-        saudacao = findViewById(R.id.saudacao);
-        pedidos = findViewById(R.id.pedidos);
-        desemprenho = findViewById(R.id.desemprenho);
-        venda = findViewById(R.id.venda);
-        meta = findViewById(R.id.meta);
+        tvEmpresa = findViewById(R.id.tvEmpresa);
+        tvSaudacao = findViewById(R.id.tvSaudacao);
+        tvUsuario = findViewById(R.id.tvUsuario);
+        tvPedidos = findViewById(R.id.tvPedidos);
+        tvDesemprenho = findViewById(R.id.tvDesemprenho);
+        tvVendido = findViewById(R.id.tvVendido);
+        tvMeta = findViewById(R.id.tvMeta);
+        pbEmpresa = findViewById(R.id.pbEmpresa);
+        pbSaudacaoUsuario = findViewById(R.id.pbSaudacaoUsuario);
+        pbPedidos = findViewById(R.id.pbPedidos);
+        pbDesempenho = findViewById(R.id.pbDesempenho);
+        pbVendido = findViewById(R.id.pbVendido);
+        pbMeta = findViewById(R.id.pbMeta);
         myProgressProfile = findViewById(R.id.myProgressProfile);
-        empresa.setText(empresaNome);
-        usuario.setText(usuarioNome);
-        saudacao.setText(sonicUtils.saudacao());
-        meta.setText(new sonicUtils(this).Number.stringToMoeda2(usuarioMeta));
         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + empresaId + "_" + usuarioId + ".jpg";
 
+        int[] backs = {
+                R.drawable.backhome0,
+                R.drawable.backhome1,
+                R.drawable.backhome2,
+                R.drawable.backhome3,
+                R.drawable.backhome4,
+                R.drawable.backhome5,
+                R.drawable.backhome6,
+                R.drawable.backhome7
+        };
+
+        //llDetail.setBackground(getResources().getDrawable(backs[sonicUtils.Randomizer.generate(1,7)]));
+
+        Glide.with(getBaseContext())
+                .load(getResources().getDrawable(backs[sonicUtils.Randomizer.generate(0,7)]))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                .centerCrop()
+                .into(new CustomTarget<Drawable>() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                        llDetail.setBackground(resource);
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
+
+        // CARREGAR FOTO DO PERFIL
         File file = new File(url);
         if(file.exists()){
             Log.d("File", "EXISTE");
@@ -156,17 +210,9 @@ public class sonicMain extends AppCompatActivity{
                     .into(myProgressProfile);
         }
 
-
+        // ATUALIZAR PERCENTUAL NA FOTO DO PERFIL
         myProgressProfile.setProgress(59.5f);
         myProgressProfile.startAnimation();
-
-
-        // ATUALIZA A BADGE DE AVISOS
-        new myAssyncTask().execute(2);
-        // ATUALIZA A BADGE DE CLIENTES
-        new myAssyncTask().execute(3);
-        // ATUALIZA A BADGE DE PRODUTOS
-        new myAssyncTask().execute(4);
 
         //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
 
@@ -214,6 +260,55 @@ public class sonicMain extends AppCompatActivity{
 
         createDrawerMenu();
 
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    new lerDadosUsuarioAsyncTask().execute();
+                                    //lerDadosUsuario();
+
+
+                                }
+                            }
+                , sonicUtils.Randomizer.generate(1500, 3000));
+
+
+        // ATUALIZA A BADGE DE AVISOS
+        //new myAssyncTask().execute(2);
+        // ATUALIZA A BADGE DE CLIENTES
+        //new myAssyncTask().execute(3);
+        // ATUALIZA A BADGE DE PRODUTOS
+        //new myAssyncTask().execute(4);
+
+    }
+
+    public void lerDadosUsuario(){
+
+
+        // ESCONDE O PROGRESS E EXIBE OS VALORES
+        pbEmpresa.setVisibility(View.GONE);
+        tvEmpresa.setVisibility(View.VISIBLE);
+        tvEmpresa.setText(empresaNome);
+        pbSaudacaoUsuario.setVisibility(View.GONE);
+        tvUsuario.setVisibility(View.VISIBLE);
+        tvUsuario.setText(usuarioNome);
+        tvSaudacao.setVisibility(View.VISIBLE);
+        tvSaudacao.setText(sonicUtils.saudacao());
+        pbPedidos.setVisibility(View.GONE);
+        pbDesempenho.setVisibility(View.GONE);
+        pbVendido.setVisibility(View.GONE);
+        pbMeta.setVisibility(View.GONE);
+        tvPedidos.setVisibility(View.VISIBLE);
+        tvPedidos.setText("12");
+        tvDesemprenho.setVisibility(View.VISIBLE);
+        tvDesemprenho.setText("59,5%");
+        tvVendido.setVisibility(View.VISIBLE);
+        tvVendido.setText("R$ 11.190,00");
+        tvMeta.setVisibility(View.VISIBLE);
+        tvMeta.setText(new sonicUtils(myCtx).Number.stringToMoeda2(usuarioMeta));
+
     }
 
     public void createDrawerMenu(){
@@ -229,7 +324,7 @@ public class sonicMain extends AppCompatActivity{
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
 
                         if(!currentProfile) {
-                            setEmpresa(profile.getIdentifier());
+                            setTvEmpresa(profile.getIdentifier());
                             new myAssyncTask().execute(3);
                             new myAssyncTask().execute(4);
                         }
@@ -237,8 +332,8 @@ public class sonicMain extends AppCompatActivity{
                         listaUser = DBC.Usuarios.selectUsuarioAtivo();
                         sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
                         sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
-                        empresa.setText(profile.getEmail().toString());
-                        meta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()));
+                        tvEmpresa.setText(profile.getEmail().toString());
+                        tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()));
                         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".jpg";
                         Glide.with(getBaseContext())
                                 .load(url)
@@ -325,7 +420,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.avisosTitulo)
                 .withDescription(R.string.avisosSubTitulo)
                 .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700).withCornersDp(20).withPadding(2))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700))//.withCornersDp(20).withPadding(2))
                 //.withBadge("100")//.withBadgeStyle(new BadgeStyle().withColor(sonicMain.this.getResources().getColor( R.color.chart_red)).withCornersDp(15).withPadding(2))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_message_text_grey600_24dp));
 
@@ -334,7 +429,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.clientesTitulo)
                 .withDescription(R.string.clientesSubTitulo)
                 .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_account_multiple_grey600_24dp));
 
         myDrawerProdutos = new PrimaryDrawerItem()
@@ -342,7 +437,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.produtosTitulo)
                 .withDescription(R.string.produtosSubTitulo)
                 .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryBlue)))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cube_grey600_24dp));
 
         myDrawerPedidos = new PrimaryDrawerItem()
@@ -350,7 +445,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.pedidosTitulo)
                 .withDescription(R.string.pedidosSubTitulo)
                 .withSelectable(false)
-                .withBadge("").withBadgeStyle(new BadgeStyle().withPaddingTopBottomDp(10))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cart_grey600_24dp));
 
         myDrawerRetorno = new PrimaryDrawerItem()
@@ -592,6 +687,30 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
+
+    class lerDadosUsuarioAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            listaEmpresa = DBC.Empresa.empresasUsuarios();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    lerDadosUsuario();
+
+                }
+            });
+        }
+    }
+
     class myUserAsyncTask extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
@@ -617,8 +736,8 @@ public class sonicMain extends AppCompatActivity{
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicClientesCNPJ(), "CPF");
         myAdapter.addFragment(new sonicClientesCPF(), "CNPJ");
-        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        //myAdapter.addFragment(new sonicMainHome(), "");
+        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
+        myAdapter.addFragment(new sonicMainHome(), "");
         viewpager.setAdapter(myAdapter);
 
     }
@@ -656,7 +775,15 @@ public class sonicMain extends AppCompatActivity{
 
     public void updateBadge( int id, String badge){
 
-        myDrawer.updateBadge(id, new StringHolder(badge));
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                myDrawer.updateBadge(id, new StringHolder(badge));
+
+            }
+        });
 
     }
 
@@ -674,10 +801,12 @@ public class sonicMain extends AppCompatActivity{
                 case 3:
                     result[0] = integers[0];
                     result[1] = DBC.Clientes.countPorEmpresa();
+                    updateBadge(3, result[1]+"");
                     break;
                 case 4:
                     result[0] = integers[0];
                     result[1] = DBC.Produto.countPorEmpresa();
+                    updateBadge(4, result[1]+"");
                     break;
             }
             return result;
@@ -690,7 +819,7 @@ public class sonicMain extends AppCompatActivity{
             if(integers[1]>0){
                 updateBadge(integers[0],integers[1]+"");
             }else {
-                updateBadge(integers[0], null);
+                updateBadge(integers[0], "0");
             }
 
         }
@@ -745,15 +874,15 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
-    public void setEmpresa(long empresa){
+    public void setTvEmpresa(long tvEmpresa){
 
         allowHomeUpdate = true;
 
-        if(empresa==0){
+        if(tvEmpresa ==0){
             DBC.Empresa.marcarEmpresas();
         }else{
             DBC.Empresa.desmarcarEmpresas();
-            DBC.Empresa.setSelecionada((int)empresa);
+            DBC.Empresa.setSelecionada((int) tvEmpresa);
         }
 
 

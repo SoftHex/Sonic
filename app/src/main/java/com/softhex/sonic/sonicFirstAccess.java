@@ -39,7 +39,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         DBC = new sonicDatabaseCRUD(this);
 
-        myEmpresa = findViewById(R.id.empresa);
+        myEmpresa = findViewById(R.id.tvEmpresa);
         myUsuario = findViewById(R.id.usuario);
         myCargo = findViewById(R.id.cargo);
         myButton = findViewById(R.id.confirmar);

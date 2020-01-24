@@ -226,7 +226,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             holder.imagem.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
             holder.letra.setText(String.valueOf(prod.getDescricao().charAt(0)));
-            holder.letra.setBackground((ctx).getResources().getDrawable(R.drawable.circle_textview));
+            //holder.letra.setBackground((ctx).getResources().getDrawable(R.drawable.circle_textview));
         }
 
     }

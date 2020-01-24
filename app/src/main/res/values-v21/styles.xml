@@ -75,6 +75,18 @@
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
 
+    <style name="TabsTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="tabIndicatorColor">@color/colorPrimaryGreen</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">16dp</item>
+        <item name="tabPaddingEnd">16dp</item>
+        <item name="tabPaddingBottom">8dp</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabTextAppearance">@color/colorPrimaryWhite</item>
+        <item name="tabTextColor">@color/colorPrimaryWhite</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryOrange</item>
+    </style>
+
     <style name="NavigationDrawerStyle">
         <item name="android:textSize">16dp</item>
 

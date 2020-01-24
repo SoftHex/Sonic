@@ -87,7 +87,7 @@ public class sonicMainHome extends Fragment {
 
         myPedidos = myView.findViewById(R.id.pedidos);
         myProgressProfile = myView.findViewById(R.id.myProgressProfile);
-        myEmpresa = myView.findViewById(R.id.empresa);
+        myEmpresa = myView.findViewById(R.id.tvEmpresa);
         myMetaVenda = myView.findViewById(R.id.metaVenda);
         myVendaRealizada = myView.findViewById(R.id.vendaRealizada);
         myTotalPercent = myView.findViewById(R.id.totalPercent);

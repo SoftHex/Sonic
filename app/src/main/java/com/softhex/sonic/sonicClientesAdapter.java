@@ -198,7 +198,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     break;
             }
 
-            holder.letra.setBackground((myCtx).getResources().getDrawable(R.drawable.circle_textview));
+            //holder.letra.setBackground((myCtx).getResources().getDrawable(R.drawable.circle_textview));
 
         }
 

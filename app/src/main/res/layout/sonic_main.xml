@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- APPBAR -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
@@ -26,16 +27,16 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <!-- DETALHE USUARIO -->
         <LinearLayout
-            android:id="@+id/detail"
+            android:id="@+id/llDetail"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_below="@+id/appbar"
             android:background="@drawable/company"
             android:layout_height="250dp">
 
+            <!-- NOME, EMPRESA E FOTO -->
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -56,8 +57,16 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
+                        <ProgressBar
+                            android:id="@+id/pbEmpresa"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:indeterminate="true"
+                            android:layout_marginTop="11dp"
+                            android:indeterminateTint="@color/colorPrimaryWhite"/>
+
                         <TextView
-                            android:id="@+id/empresa"
+                            android:id="@+id/tvEmpresa"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Empresa Nome"
@@ -66,6 +75,7 @@
                             android:textColor="@color/colorPrimaryWhite"
                             android:textStyle="bold"
                             android:textSize="24sp"
+                            android:visibility="gone"
                             android:gravity="center_vertical"/>
 
                     </LinearLayout>
@@ -77,25 +87,37 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
+                        <ProgressBar
+                            android:id="@+id/pbSaudacaoUsuario"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:indeterminate="true"
+                            android:layout_marginTop="10dp"
+                            android:indeterminateTint="@color/colorPrimaryWhite"/>
+
                         <TextView
-                            android:id="@+id/saudacao"
+                            android:id="@+id/tvSaudacao"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Bem vindo,"
-                            android:textColor="@color/colorAccentLight"
+                            android:textColor="@color/colorTextOrange"
                             android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
                             android:gravity="center_vertical"/>
 
                         <TextView
-                            android:id="@+id/usuario"
+                            android:id="@+id/tvUsuario"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="12dp"
                             android:text="Usuario"
                             android:maxLines="1"
                             android:ellipsize="end"
+                            android:textStyle="bold"
                             android:textColor="@color/colorPrimaryWhite"
                             android:textSize="18sp"
+                            android:visibility="gone"
                             android:gravity="center_vertical"/>
 
                     </LinearLayout>
@@ -129,6 +151,7 @@
 
             </LinearLayout>
 
+            <!-- DADOS DE VENDAS -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -136,12 +159,14 @@
                 android:layout_margin="16dp"
                 android:layout_weight="1">
 
+                <!-- PEDIDOS, DESEMPENHO -->
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
+                    <!-- PEDIDOS -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -151,20 +176,39 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorAccentLight"
+                            android:textColor="@color/colorTextOrange"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             android:text="Pedidos"/>
 
-                        <TextView
-                            android:id="@+id/pedidos"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorPrimaryWhite"
-                            android:textSize="18sp"
-                            android:text="0"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ProgressBar
+                                android:id="@+id/pbPedidos"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:indeterminate="true"
+                                android:layout_marginTop="2dp"
+                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                            <TextView
+                                android:id="@+id/tvPedidos"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimaryWhite"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:visibility="gone"
+                                android:text="0"/>
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
+                    <!-- DESEMPENHO -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -177,32 +221,49 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/colorAccentLight"
+                            android:textColor="@color/colorTextOrange"
                             android:textSize="16sp"
+                            android:textStyle="bold"
                             android:text="Desempenho"/>
 
-                        <TextView
-                            android:id="@+id/desemprenho"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorPrimaryWhite"
-                            android:textSize="18sp"
-                            android:text="0,00%"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ProgressBar
+                                android:id="@+id/pbDesempenho"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:indeterminate="true"
+                                android:layout_marginTop="2dp"
+                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                            <TextView
+                                android:id="@+id/tvDesemprenho"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimaryWhite"
+                                android:textSize="18sp"
+                                android:visibility="gone"
+                                android:textStyle="bold"
+                                android:text="0,00%"/>
+
+                        </LinearLayout>
+
+
 
 
                     </LinearLayout>
 
-
-
                 </LinearLayout>
 
-
-
+                <!-- VENDIDO, METAS -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
+                    <!-- VENDIDO -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -214,19 +275,39 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/colorAccentLight"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorTextOrange"
                             android:text="Vendido"/>
 
-                        <TextView
-                            android:id="@+id/venda"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorPrimaryWhite"
-                            android:text="R$ 0,00"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ProgressBar
+                                android:id="@+id/pbVendido"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:indeterminate="true"
+                                android:layout_marginTop="2dp"
+                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                            <TextView
+                                android:id="@+id/tvVendido"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                android:textColor="@color/colorPrimaryWhite"
+                                android:visibility="gone"
+                                android:textStyle="bold"
+                                android:text="R$ 0,00"/>
+
+                        </LinearLayout>
+
+
 
                     </LinearLayout>
 
+                    <!-- META -->
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
@@ -238,44 +319,58 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:textColor="@color/colorAccentLight"
+                            android:textColor="@color/colorTextOrange"
+                            android:textStyle="bold"
                             android:text="Meta"/>
 
-                        <TextView
-                            android:id="@+id/meta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorPrimaryWhite"
-                            android:text="R$ 0,00"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
+                            <ProgressBar
+                                android:id="@+id/pbMeta"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:indeterminate="true"
+                                android:layout_marginTop="2dp"
+                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                            <TextView
+                                android:id="@+id/tvMeta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                android:textColor="@color/colorPrimaryWhite"
+                                android:visibility="gone"
+                                android:textStyle="bold"
+                                android:text="R$ 0,00"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
-
-
 
                 </LinearLayout>
 
             </LinearLayout>
 
-
-
         </LinearLayout>
 
+        <!-- TABLAYOUT -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:layout_below="@id/llDetail"
+            android:theme="@style/TabsTheme"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
             app:tabTextColor="@color/colorPrimaryWhite"
-            android:layout_below="@id/detail"
-            android:padding="6dp"
-            app:tabIndicatorHeight="4dp"
-            app:tabIndicatorColor="@color/colorSpotLight2"
             app:tabMode="fixed"
             app:tabGravity="fill"/>
 
-
+        <!-- VIEWPAGER -->
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pagerSlide"
             android:layout_width="match_parent"
@@ -285,7 +380,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </androidx.viewpager.widget.ViewPager>
-
 
 
     </RelativeLayout>
