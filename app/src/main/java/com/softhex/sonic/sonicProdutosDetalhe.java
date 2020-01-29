@@ -58,7 +58,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         tvGrupo.setText(sonicConstants.PUT_EXTRA_PRODUTO_GRUPO);
 
         createInterface();
-        slideImages();
+        loadImage();
 
         myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -66,15 +66,13 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
                 if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
                     //myActionBar.setTitle("Produtos");
-                }else{
+                }else {
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
                     //myActionBar.setTitle("");
                 }
             }
         });
-
     }
-
 
     private void createInterface() {
 
@@ -104,65 +102,18 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
 
     }
 
-    public void slideImages(){
+    public void loadImage(){
 
         List<sonicProdutosHolder> myList;
         myList = DBC.Produto.selectProdutoselecionado();
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO + myList.get(0).getCodigo() + ".JPG");
-        if(file.exists()){
-            myImages[0] = file.toString();
-        }else{
-            myImages[0] = sonicUtils.getURLForResource(R.drawable.nophoto);
-        }
 
-        //sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages);
-        //dotsLayout = findViewById(R.id.layoutDots);
-        //myViewpager.setAdapter(myAdapter);
-        //myViewpager.addOnPageChangeListener(viewListener);
-        //addBottomDots(0);
+        myImages[0] = file.exists() ? file.toString() : sonicUtils.getURLForResource(R.drawable.nophoto);
+
         myImage = findViewById(R.id.pagerSlide);
         sonicGlide.glideImageView(ctx,myImage,myImages[0]);
 
     }
-
-    private void addBottomDots(int position){
-
-        dots = new TextView[myImages.length];
-        dotsLayout.removeAllViews();
-        if(myImages.length>1){
-            for(int i=0; i < dots.length; i++)
-            {
-                dots[i] = new TextView(this);
-                dots[i].setText(Html.fromHtml("&#8226;"));
-                dots[i].setTextSize(30);
-                dots[i].setTextColor(getResources().getColor(R.color.dotSlideInactive));
-                dotsLayout.addView(dots[i]);
-            }
-            if(dots.length>1){
-                dots[position].setTextColor(getResources().getColor(R.color.dotSlideActive));
-            }
-        }
-
-    }
-
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int i, float v, int i1) {
-
-        }
-
-        @Override
-        public void onPageSelected(int i) {
-
-            addBottomDots(i);
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int i) {
-
-        }
-    };
 
 }

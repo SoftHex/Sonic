@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -2131,9 +2132,9 @@ public class sonicDatabaseCRUD {
                 ContentValues cv = new ContentValues();
                 Cursor cursor = DB.getWritableDatabase().query(TABLE_PRODUTOS, null, null, null, null, null, null);
                 String[] columnNames = cursor.getColumnNames();
-
+                String value ="";
                 for(int i = 0; i < columnNames.length-2; i++){
-
+                    Log.d("VALOR",lista.get(i));
                     cv.put(columnNames[i+1], lista.get(i));
                     cv.put("selecionado", 0);
 
