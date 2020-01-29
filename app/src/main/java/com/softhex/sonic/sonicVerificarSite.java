@@ -100,7 +100,7 @@ public class sonicVerificarSite{
                             publishProgress("Gravando dados...");
 
                             sonicConstants.DOWNLOAD_TYPE = "SITE";
-                            new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(strings[0]+".TXT");
+                            new sonicPopularTabelas(myCtx).gravarDados(strings[0]+".TXT");
 
                             res = true;
 

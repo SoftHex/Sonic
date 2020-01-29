@@ -294,7 +294,7 @@ public class sonicFtp {
 
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(arquivo);
+                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
                         break;
                     case "CATALOGO":
                         new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
@@ -305,7 +305,7 @@ public class sonicFtp {
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
                         break;
                     case "ESTOQUE":
-                        new sonicPopularTabelas(myCtx).gravarDadosPrimeiroAcesso(arquivo);
+                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
                         break;
 
                 }

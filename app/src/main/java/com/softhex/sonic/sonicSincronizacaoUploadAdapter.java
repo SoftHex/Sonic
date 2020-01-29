@@ -78,7 +78,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
@@ -100,7 +100,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
@@ -122,7 +122,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
@@ -144,7 +144,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
@@ -166,7 +166,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");
@@ -188,7 +188,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
                                     Calendar c = Calendar.getInstance();
                                     SimpleDateFormat hora = new SimpleDateFormat("HH:mm");
                                     String hora_atual = hora.format(c.getTime());
-                                    if(gravar.gravarDadosPrimeiroAcesso(ctx,secao,arquivo, "SINCRONIZACAO")){
+                                    if(gravar.gravarDados(ctx,secao,arquivo, "SINCRONIZACAO")){
                                         progress.setVisibility(View.GONE);
                                         situacao.setBackgroundColor(Color.GREEN);
                                         DBC.Sincronizacao.saveSincronizacao(arquivo,"DOWNLOAD", "SINCRONIZACAO", "setOnClickListener()");

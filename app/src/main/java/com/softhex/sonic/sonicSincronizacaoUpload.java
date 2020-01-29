@@ -152,7 +152,7 @@ public class sonicSincronizacaoUpload extends Fragment {
                 try{
 
                     this.publishProgress(tipo,String.valueOf(integers[1]));
-                    popularTabelas.gravarDadosPrimeiroAcesso(file);
+                    popularTabelas.gravarDados(file);
                     myCons.REFRESH_HOME = true;
 
                 }catch (Exception e){

@@ -1,18 +1,21 @@
 package com.softhex.sonic;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -42,6 +45,30 @@ public class sonicPopularTabelas {
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
+    }
+
+    public void gravarDados(String arquivo){
+
+        File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TEMP+arquivo);
+
+        if(file.exists()){
+
+            new Handler(Looper.getMainLooper()).post(()-> {
+
+                myProgress = new ProgressDialog(myCtx);
+                myProgress.setCancelable(false);
+                myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                myProgress.setTitle("Gravando na tabela...");
+                myProgress.setMessage("");
+                myProgress.setProgress(0);
+                myProgress.show();
+                new myAsyncTaskGravar().execute(arquivo);
+
+            });
+        }else {
+            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
+        }
+
     }
 
     class myAsyncTaskGravar extends AsyncTask<String,String, Boolean>{
@@ -639,6 +666,8 @@ public class sonicPopularTabelas {
             myProgress.setProgress(Integer.parseInt(values[1]));
         }
 
+        @SuppressLint("NewApi")
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
@@ -655,53 +684,7 @@ public class sonicPopularTabelas {
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","estoque");
                         break;
                     case "SITE":
-                        TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
-
-                        if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
-
-
-                            if(new sonicDatabaseCRUD(myCtx).Database.checkMinimumData()){
-
-
-                                String imei="";
-
-                                if (android.os.Build.VERSION.SDK_INT >= 26) {
-                                    imei = myPhoneManager.getImei();
-                                }
-                                else
-                                {
-                                    imei = myPhoneManager.getDeviceId();
-                                }
-
-                                if(sonicConstants.EMP_TESTE){
-                                    imei = "123456789";
-                                }
-
-                                sonicConstants.USER_IMEI = imei;
-
-                                List<sonicUsuariosHolder> lista;
-                                lista = DBC.Usuarios.selectUsuarioImei(imei);
-                                if(!lista.isEmpty()){
-
-                                    startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
-
-                                }else{
-                                    new sonicTM(myCtx).showMS("Atenção..." , "Seu aparelho não está cadasatrado para a empresa: "+DBC.Empresa.empresaPadrao()+ " com o IMEI: " + imei + ". Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicTM.MSG_WARNING);
-                                    sonicConstants.EMP_TESTE = false;
-                                }
-
-                            }else{
-
-                                new sonicTM(myCtx).showMS("Atenção", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicTM.MSG_WARNING);
-                                sonicConstants.EMP_TESTE = false;
-                            }
-
-                        }else{
-                            ActivityCompat.requestPermissions(((Activity) myCtx),
-                                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                                    1);
-
-                        }
+                        primeiroAcesso();
                         break;
 
 
@@ -710,26 +693,51 @@ public class sonicPopularTabelas {
         }
     }
 
-    public void gravarDadosPrimeiroAcesso(String arquivo){
+    public void primeiroAcesso(){
 
-        File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_TEMP+arquivo);
+        TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
 
-        if(file.exists()){
+        if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
 
-            new Handler(Looper.getMainLooper()).post(()-> {
 
-                myProgress = new ProgressDialog(myCtx);
-                myProgress.setCancelable(false);
-                myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setTitle("Gravando na tabela...");
-                myProgress.setMessage("");
-                myProgress.setProgress(0);
-                myProgress.show();
-                new myAsyncTaskGravar().execute(arquivo);
+            if(new sonicDatabaseCRUD(myCtx).Database.checkMinimumData()){
 
-            });
-        }else {
-            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
+                String imei = "";
+
+                if(Build.VERSION.SDK_INT < 26) {
+                    myPhoneManager.getDeviceId();
+                }else{
+                    myPhoneManager.getImei();
+                }
+
+                if(sonicConstants.EMP_TESTE){
+                    imei = "0000000000000000000";
+                }
+
+                sonicConstants.USER_IMEI = imei;
+
+                List<sonicUsuariosHolder> lista;
+                lista = DBC.Usuarios.selectUsuarioImei(imei);
+                if(!lista.isEmpty()){
+
+                    startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
+
+                }else{
+                    new sonicTM(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + imei + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicTM.MSG_WARNING);
+                    sonicConstants.EMP_TESTE = false;
+                }
+
+            }else{
+
+                new sonicTM(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicTM.MSG_WARNING);
+                sonicConstants.EMP_TESTE = false;
+            }
+
+        }else{
+            ActivityCompat.requestPermissions(((Activity) myCtx),
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    1);
+
         }
 
     }
