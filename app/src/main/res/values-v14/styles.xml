@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- DEFFAULT APP THEME -->
@@ -94,7 +95,6 @@
 
     <style name="NavigationDrawerStyle">
         <item name="android:textSize">16dp</item>
-
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

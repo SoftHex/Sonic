@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -30,6 +32,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout myCollapsingToolbar;
+    private AppBarLayout myAppBar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private Context ctx;
     private ImageView myImage;
@@ -42,12 +45,25 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         ctx = this;
         DBC = new sonicDatabaseCRUD(this);
         //myViewpager = findViewById(R.id.pagerSlide);
+        myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
 
         createInterface();
         slideImages();
 
+        myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
+                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                }else{
+                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+        });
+
     }
+
 
     private void createInterface() {
 
@@ -86,7 +102,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         if(file.exists()){
             myImages[0] = file.toString();
         }else{
-            myImages[0] = sonicUtils.getURLForResource(R.drawable.company);
+            myImages[0] = sonicUtils.getURLForResource(R.drawable.nophoto);
         }
 
         //sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages);
@@ -95,7 +111,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         //myViewpager.addOnPageChangeListener(viewListener);
         //addBottomDots(0);
         myImage = findViewById(R.id.pagerSlide);
-        sonicGlide.glideImageView(ctx,myImage,file.toString());
+        sonicGlide.glideImageView(ctx,myImage,myImages[0]);
 
     }
 

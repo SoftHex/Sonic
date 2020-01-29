@@ -7,7 +7,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
 
         <!-- APPBAR -->
         <com.google.android.material.appbar.AppBarLayout
@@ -27,13 +28,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
         <!-- DETALHE USUARIO -->
         <LinearLayout
             android:id="@+id/llDetail"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_below="@+id/appbar"
-            android:background="@drawable/company"
+            android:background="@drawable/backhome1"
             android:layout_height="250dp">
 
             <!-- NOME, EMPRESA E FOTO -->
@@ -142,7 +144,7 @@
                         app:progressRingSize="4dp"
                         app:progressRingCorner="ROUND"
                         app:progressRingOutline="true"
-                        app:progressRingColor="@color/colorPrimaryGreenLight"
+                        app:progressRingColor="@color/colorPrimaryGreen"
                         app:backgroundRingColor="@android:color/transparent"
                         android:src="@drawable/no_profile"/>
 
@@ -357,16 +359,18 @@
 
         <!-- TABLAYOUT -->
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs2"
+            android:id="@+id/tab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:layout_below="@id/llDetail"
-            android:theme="@style/TabsTheme"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
+            android:fillViewport="true"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="4dp"
             app:tabTextColor="@color/colorPrimaryWhite"
+            style="@style/TabTextAppearance"
+            app:tabTextAppearance="@style/TabTextAppearance"
+            android:theme="@style/TabsTheme"
             app:tabMode="fixed"
             app:tabGravity="fill"/>
 
@@ -375,8 +379,9 @@
             android:id="@+id/pagerSlide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorAccent2"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/tabs2"
+            android:layout_below="@+id/tab"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </androidx.viewpager.widget.ViewPager>

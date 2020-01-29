@@ -16,9 +16,10 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="280dp"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
+            android:background="@color/colorPrimaryWhite"
             app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance"
             app:title="@string/appName">
@@ -27,7 +28,9 @@
                 android:id="@+id/pagerSlide"
                 android:layout_width="match_parent"
                 android:background="@color/colorPrimaryWhite"
-                android:layout_height="250dp">
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="20dp"
+                android:layout_height="wrap_content">
 
             </ImageView>
 
@@ -41,29 +44,10 @@
 
             </androidx.appcompat.widget.Toolbar>
 
-            <LinearLayout
-                android:id="@+id/layoutDots"
-                android:layout_width="wrap_content"
-                android:minWidth="60dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginLeft="100dp"
-                android:gravity="center|right"
-                app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
-                android:layout_gravity="top|right"
-                android:orientation="horizontal"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_height="0.1dp"
-        android:background="@drawable/separator_gradient_horizontal" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -80,6 +64,7 @@
         </androidx.viewpager.widget.ViewPager>
 
     </androidx.core.widget.NestedScrollView>
+
 
     <com.github.clans.fab.FloatingActionMenu
         xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -100,27 +85,7 @@
             fab:fab_colorPressed="@color/colorPrimaryWhite"
             android:src="@mipmap/ic_add_shopping_cart_white_24dp"
             fab:fab_size="mini"
-            fab:fab_label="Novo Pedido" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/mail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorPrimaryRed"
-            fab:fab_colorPressed="@color/colorPrimaryWhite"
-            android:src="@mipmap/ic_email_plus_white_24dp"
-            fab:fab_size="mini"
-            fab:fab_label="Novo E-mail" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/colorPrimaryBlueLight"
-            fab:fab_colorPressed="@color/colorPrimaryWhite"
-            android:src="@mipmap/ic_phone_plus_white_24dp"
-            fab:fab_size="mini"
-            fab:fab_label="Ligar" />
+            fab:fab_label="Fazer Pedido" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

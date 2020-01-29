@@ -15,7 +15,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:background="@drawable/company"
+            android:background="@drawable/backhome1"
             android:layout_height="250dp">
 
             <LinearLayout

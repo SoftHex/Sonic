@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,18 +18,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -55,6 +57,7 @@ public class sonicProdutosGrid extends Fragment {
     private boolean allowSearch;
     private Context _this;
     private ImageView myImage;
+    private sonicDatabaseCRUD DBC;
     Intent i;
 
     @Nullable
@@ -62,6 +65,8 @@ public class sonicProdutosGrid extends Fragment {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_grid, container, false);
 
         _this = getActivity();
+
+        DBC = new sonicDatabaseCRUD(_this);
 
         loadFragment();
 
@@ -77,7 +82,7 @@ public class sonicProdutosGrid extends Fragment {
 
         myToolBar = getActivity().findViewById(R.id.toolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.tabs);
+        myTabLayout = getActivity().findViewById(R.id.tab);
 
         myTextView = myView.findViewById(R.id.text);
 
@@ -159,6 +164,9 @@ public class sonicProdutosGrid extends Fragment {
             case R.id.pref:
                 //dialogDelete();
                 return false;
+            case R.id.filter:
+                exibirFiltro();
+                return false;
             default:
                 break;
         }
@@ -171,7 +179,7 @@ public class sonicProdutosGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Produto.selectProduto();
+            myList =  new sonicDatabaseCRUD(_this).Produto.selectProdutoGrid();
             return myList.size();
 
         }
@@ -235,6 +243,48 @@ public class sonicProdutosGrid extends Fragment {
         sonicGlide.glideDrawable(_this, myImage, R.drawable.noproduct);
         myTextView.setText(R.string.noProdutos);
 
+
+    }
+
+    private void exibirFiltro() {
+
+        List<sonicGrupoProdutosHolder> grupo = new ArrayList<sonicGrupoProdutosHolder>();
+
+        grupo = DBC.GrupoProduto.selectGrupoProduto();
+
+        List<String> l = new ArrayList<String>();
+
+        for(int i=0; i < grupo.size(); i++ ){
+            l.add(grupo.get(i).getDescricao());
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione um grupo...");
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                myCons.GRUPO_PRODUTOS_GRID = chars[item].toString();
+                myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR = "LIMPAR FILTRO";
+                dialog.dismiss();
+                refreshFragment();
+
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setPositiveButton(myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                myCons.GRUPO_PRODUTOS_GRID = "TODOS";
+                myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR = "";
+                refreshFragment();
+            }
+        }).show();
 
     }
 

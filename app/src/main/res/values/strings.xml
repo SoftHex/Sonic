@@ -42,8 +42,8 @@
     <string name="tabClientesDetalhesFinanceiro">FINANCEIRO</string>
     <string name="tabClientesDetalhesTitulos">TÍTULOS</string>
     <string name="tabClientesDetalhesPedidos">PEDIDOS</string>
-    <string name="tabProdutosLista">LISTA</string>
-    <string name="tabProdutosCatalogo">CATÁLOGO</string>
+    <string name="tabProdutosLista">Lista</string>
+    <string name="tabProdutosCatalogo">Catálogo</string>
     <string name="tabPedidosEnviar">ENVIAR</string>
     <string name="tabPedidosEnviados">ENVIADOS</string>
     <string name="tabRetornoPendente">PENDENTE</string>

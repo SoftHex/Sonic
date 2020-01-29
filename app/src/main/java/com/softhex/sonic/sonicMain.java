@@ -7,10 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.renderscript.RenderScript;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,10 +41,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -68,8 +63,6 @@ import com.softhex.view.ProgressProfileView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class sonicMain extends AppCompatActivity{
 
@@ -120,7 +113,14 @@ public class sonicMain extends AppCompatActivity{
     private ProgressProfileView myProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String url;
-    private RenderScript rs;
+    private int back = sonicUtils.Randomizer.generate(0,4);
+    private int[] backs = {
+            R.drawable.backhome1,
+            R.drawable.backhome2,
+            R.drawable.backhome3,
+            R.drawable.backhome4,
+            R.drawable.backhome5
+    };
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -164,25 +164,13 @@ public class sonicMain extends AppCompatActivity{
         myProgressProfile = findViewById(R.id.myProgressProfile);
         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + empresaId + "_" + usuarioId + ".jpg";
 
-        int[] backs = {
-                R.drawable.backhome0,
-                R.drawable.backhome1,
-                R.drawable.backhome2,
-                R.drawable.backhome3,
-                R.drawable.backhome4,
-                R.drawable.backhome5,
-                R.drawable.backhome6,
-                R.drawable.backhome7
-        };
-
-        //llDetail.setBackground(getResources().getDrawable(backs[sonicUtils.Randomizer.generate(1,7)]));
 
         Glide.with(getBaseContext())
-                .load(getResources().getDrawable(backs[sonicUtils.Randomizer.generate(0,7)]))
+                .load(getResources().getDrawable(backs[back]))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .centerCrop()
+                .fitCenter()
                 .into(new CustomTarget<Drawable>() {
                     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                     @Override
@@ -217,9 +205,9 @@ public class sonicMain extends AppCompatActivity{
         //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
 
         myViewPager = findViewById(R.id.pagerSlide);
-        setUpViewPager2(myViewPager);
+        setUpViewPager(myViewPager);
 
-        TabLayout myTabLayout = findViewById(R.id.tabs2);
+        TabLayout myTabLayout = findViewById(R.id.tab);
         //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorSpotLight2));
         myTabLayout.setupWithViewPager(myViewPager);
 
@@ -278,9 +266,9 @@ public class sonicMain extends AppCompatActivity{
         // ATUALIZA A BADGE DE AVISOS
         //new myAssyncTask().execute(2);
         // ATUALIZA A BADGE DE CLIENTES
-        //new myAssyncTask().execute(3);
+        new myAssyncTask().execute(3);
         // ATUALIZA A BADGE DE PRODUTOS
-        //new myAssyncTask().execute(4);
+        new myAssyncTask().execute(4);
 
     }
 
@@ -317,7 +305,7 @@ public class sonicMain extends AppCompatActivity{
 
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.company)
+                .withHeaderBackground(backs[back])
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
                     @Override
@@ -725,19 +713,8 @@ public class sonicMain extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicMainHome(), "");
-        //myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        //myAdapter.addFragment(new sonicMainHome(), "");
-        viewpager.setAdapter(myAdapter);
-
-    }
-
-    public void setUpViewPager2(ViewPager viewpager){
-        myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicClientesCNPJ(), "CPF");
-        myAdapter.addFragment(new sonicClientesCPF(), "CNPJ");
-        myAdapter.addFragment(new sonicAvisosFragNaoLidos(), "");
-        myAdapter.addFragment(new sonicMainHome(), "");
+        myAdapter.addFragment(new sonicClientesCNPJ(), "Performance");
+        myAdapter.addFragment(new sonicClientesCPF(), "Atuação");
         viewpager.setAdapter(myAdapter);
 
     }
@@ -801,12 +778,12 @@ public class sonicMain extends AppCompatActivity{
                 case 3:
                     result[0] = integers[0];
                     result[1] = DBC.Clientes.countPorEmpresa();
-                    updateBadge(3, result[1]+"");
+                    //updateBadge(3, result[1]+"");
                     break;
                 case 4:
                     result[0] = integers[0];
                     result[1] = DBC.Produto.countPorEmpresa();
-                    updateBadge(4, result[1]+"");
+                    //updateBadge(4, result[1]+"");
                     break;
             }
             return result;

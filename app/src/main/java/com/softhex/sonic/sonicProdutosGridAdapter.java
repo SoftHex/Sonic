@@ -3,6 +3,7 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
@@ -120,19 +121,34 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         sonicProdutosHolder prod = produtos.get(position);
         holder.codigo = prod.getCodigo();
         holder.descricao.setText(prod.getDescricao());
+        holder.grupo.setText(prod.getGrupo());
+
+        if(!sonicConstants.GRUPO_PRODUTOS_GRID.equals("TODOS")){
+            GradientDrawable shape;
+            shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setColor(ctx.getResources().getColor(R.color.colorPrimaryGreenLightT));
+            shape.setCornerRadius(80);
+            holder.grupo.setPadding(10,0,10,0);
+            holder.grupo.setBackground(shape);
+            holder.grupo.setTextColor(ctx.getResources().getColor(R.color.colorPrimary));
+            holder.grupo.setTypeface(null, Typeface.ITALIC);
+        }
 
         File fileJpg = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
 
         if(fileJpg.exists()){
 
             //sonicGlide.glideFile(ctx, holder.imagem, fileJpg);
+            Glide.with(ctx).clear(holder.imagem);
             Glide.with(ctx)
                     .load(fileJpg)
+                    .dontAnimate()
                     //.apply(new RequestOptions().override(105, 105))
                     .override(200,180)
                     .fitCenter()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(false)
                     .transition(GenericTransitionOptions.with(R.anim.fade_in))
                     .into(holder.imagem);
 
@@ -140,13 +156,15 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         }else {
 
+            Glide.with(ctx).clear(holder.imagem);
             Glide.with(ctx)
-                    .load(R.drawable.nopicture)
+                    .load(R.drawable.nophoto)
+                    .dontAnimate()
                     //.apply(new RequestOptions().override(105, 105))
                     .override(200,180)
                     .fitCenter()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .skipMemoryCache(false)
                     .transition(GenericTransitionOptions.with(R.anim.fade_in))
                     .into(holder.imagem);
 

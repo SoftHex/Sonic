@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.text.Html;
@@ -204,13 +205,15 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.codigo = prod.getCodigo();
         holder.grupo.setText(prod.getGrupo());
 
-        if(!myCons.GRUPO_PRODUTOS.equals("TODOS")){
+        if(!myCons.GRUPO_PRODUTOS_LISTA.equals("TODOS")){
             shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setColor(ctx.getResources().getColor(R.color.colorPrimaryLightT));
+            shape.setColor(ctx.getResources().getColor(R.color.colorPrimaryGreenLightT));
             shape.setCornerRadius(80);
             holder.grupo.setPadding(10,0,10,0);
             holder.grupo.setBackground(shape);
+            holder.grupo.setTextColor(ctx.getResources().getColor(R.color.colorPrimary));
+            holder.grupo.setTypeface(null, Typeface.ITALIC);
         }
 
         File fileJpg = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");

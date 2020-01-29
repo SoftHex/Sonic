@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#1C1F2B</color>
     <color name="colorPrimary">#272936</color>
     <color name="colorAccent">#363C4C</color>
+    <color name="colorAccent2">#343B4B</color>
     <color name="colorAccentLight">#666C7C</color>
     <color name="colorSpotLight">#6959CD</color>
     <color name="colorSpotLight2">#4682B4</color>
@@ -63,7 +64,11 @@
     <color name="colorPrimaryRedT">#90FF0000</color>
     <color name="colorPrimaryRedLightT">#90FF6347</color>
     <color name="colorPrimaryWhite">#FFFFFF</color>
+    <color name="colorPrimaryGreen1">#59C354</color>
     <color name="colorPrimaryGreen2">#00FA9A</color>
+    <color name="colorPrimaryGreen3">#66CDAA</color>
+    <color name="colorPrimaryGreen4">#2E8B57</color>
+    <color name="colorPrimaryGreen5">#008080</color>
     <color name="colorTypeInfo">#79b3e4</color>
     <color name="colorTypeHelp">#e8bd4b</color>
     <color name="colorTypeWrong">#ed7861</color>

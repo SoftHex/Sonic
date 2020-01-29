@@ -1,16 +1,20 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -48,8 +52,8 @@ public class sonicProdutos extends AppCompatActivity {
         ViewPager myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
-        TabLayout myTabLayout = findViewById(R.id.tabs);
-        myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+        TabLayout myTabLayout = findViewById(R.id.tab);
+        //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
         myTabLayout.setupWithViewPager(myViewPager);
 
         LayoutTransition transition = new LayoutTransition();
@@ -69,8 +73,8 @@ public class sonicProdutos extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicProdutosLista(), "LISTA");
-        myAdapter.addFragment(new sonicProdutosGrid(), "CATÁLOGO");
+        myAdapter.addFragment(new sonicProdutosLista(), "Lista");
+        myAdapter.addFragment(new sonicProdutosGrid(), "Catálogo");
         viewpager.setAdapter(myAdapter);
 
     }
