@@ -35,7 +35,9 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private AppBarLayout myAppBar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private Context ctx;
+    private TextView tvDescricao, tvGrupo, tvDetalhe, tvPreco;
     private ImageView myImage;
+    private ActionBar myActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,13 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
 
+        tvDescricao = findViewById(R.id.tvDescricao);
+        tvGrupo = findViewById(R.id.tvGrupo);
+        tvDetalhe = findViewById(R.id.tvDetalhe);
+        tvPreco = findViewById(R.id.tvPreco);
+        tvDescricao.setText(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
+        tvGrupo.setText(sonicConstants.PUT_EXTRA_PRODUTO_GRUPO);
+
         createInterface();
         slideImages();
 
@@ -56,8 +65,10 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                    //myActionBar.setTitle("Produtos");
                 }else{
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                    //myActionBar.setTitle("");
                 }
             }
         });
@@ -69,8 +80,8 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
 
         myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        ActionBar myActionBar = getSupportActionBar();
-        myActionBar.setTitle("Produtos");
+        myActionBar = getSupportActionBar();
+        myActionBar.setTitle("");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);
@@ -82,7 +93,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
+        //myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

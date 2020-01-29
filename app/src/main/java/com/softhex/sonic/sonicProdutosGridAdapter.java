@@ -75,6 +75,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
                     sonicConstants.PUT_EXTRA_PRODUTO_NOME = descricao.getText().toString();
                     sonicConstants.PUT_EXTRA_PRODUTO_ID = codigo;
+                    sonicConstants.PUT_EXTRA_PRODUTO_GRUPO = grupo.getText().toString();
                     v.getContext().startActivity(i);
 
                 }
