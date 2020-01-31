@@ -52,7 +52,7 @@ public class sonicClientesCPF extends Fragment {
     private TabLayout myTabLayout;
     private CoordinatorLayout myCoordinatorLayout;
     private ShimmerFrameLayout myShimmer;
-    private TextView myTextView;
+    private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
     private Context _this;
@@ -87,9 +87,13 @@ public class sonicClientesCPF extends Fragment {
 
         myTabLayout = getActivity().findViewById(R.id.tabs);
 
-        myTextView = myView.findViewById(R.id.text);
+        tvTexto = myView.findViewById(R.id.tvText);
 
-        myImage = myView.findViewById(R.id.image);
+        tvTitle = myView.findViewById(R.id.tvTitle);
+
+        tvSearch = myView.findViewById(R.id.tvSearch);
+
+        myImage = myView.findViewById(R.id.ivImage);
 
         myCoordinatorLayout = myView.findViewById(R.id.layout_main);
 
@@ -240,16 +244,19 @@ public class sonicClientesCPF extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = false;
-        myImage.setVisibility(VISIBLE);
-        myTextView.setVisibility(VISIBLE);
-        myTextView.startAnimation(fadeIn);
-        myTextView.setText(R.string.noClientes);
-        Glide.with(_this)
+        //myImage.setVisibility(VISIBLE);
+        tvTitle.setVisibility(VISIBLE);
+        tvTexto.setVisibility(VISIBLE);
+        tvTitle.startAnimation(fadeIn);
+        tvTexto.startAnimation(fadeIn);
+        tvTitle.setText(R.string.noClientesTitle);
+        tvTexto.setText(R.string.noClientesText);
+        /*Glide.with(_this)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(myImage);
+                .into(myImage);*/
 
     }
 

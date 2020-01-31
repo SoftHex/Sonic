@@ -58,10 +58,10 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         public prodHolder(View view) {
             super(view);
 
-            item = view.findViewById(R.id.item);
-            descricao = view.findViewById(R.id.descricao);
-            grupo = view.findViewById(R.id.grupo);
-            imagem = view.findViewById(R.id.imagem);
+            item = view.findViewById(R.id.llItem);
+            descricao = view.findViewById(R.id.tvDescricao);
+            grupo = view.findViewById(R.id.tvGrupo);
+            imagem = view.findViewById(R.id.ivImagem);
 
             DBC = new sonicDatabaseCRUD(ctx);
 

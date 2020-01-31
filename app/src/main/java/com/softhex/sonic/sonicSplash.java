@@ -88,7 +88,7 @@ public class sonicSplash extends AppCompatActivity {
 
                                 }
                             }
-                , sonicUtils.Randomizer.generate(500, 3000));
+                , 3000);
 
 
     }

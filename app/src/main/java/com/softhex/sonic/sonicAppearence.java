@@ -42,6 +42,13 @@ public class sonicAppearence {
         this._activity = _activity;
     }
 
+    public static void layoutWhitTransparentStatusBar(Context ctx, Window w){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+
     public static void layoutWhitLogicalMenu(Context ctx, Window w){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && ViewConfiguration.get(ctx).hasPermanentMenuKey()) {
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);

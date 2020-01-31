@@ -28,8 +28,9 @@ public class sonicGlide {
         Glide.with(c).clear(i);
         Glide.with(c)
                 .load(file)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(false)
+                .centerCrop()
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(i);
     }

@@ -78,16 +78,18 @@
     <string name="appName">Sonic</string>
     <string name="app_name">Sonic</string>
     <string name="pBy">powered by</string>
+    <string name="appVerify">Verificaremos se o código digitado encontra-se em nossa base de dados.</string>
+    <string name="appConfirm">Confirme se esses são seus dados, caso contrário contate na sua empresa o responsável pela administração do sistema.</string>
     <string name="msgPerms">Permissões necessárias...</string>
     <string name="textNext">PRÓXIMO</string>
     <string name="textFinish">INICIAR</string>
     <string name="textSkip">PULAR</string>
 
     <!-- HEADER DIALOGS -->
-    <string name="headerDefault">Aviso...</string>
+    <string name="headerDefault">::: Aviso :::</string>
     <string name="headerSuccess">Tudo certo!</string>
-    <string name="headerInfo">Aviso...</string>
-    <string name="headerWarning">Atenção...</string>
+    <string name="headerInfo">::: Aviso :::</string>
+    <string name="headerWarning">::: Atenção :::</string>
     <string name="headerWrong">::: Erro :::</string>
 
     <!-- MESSAGE DIALOGS -->
@@ -99,21 +101,22 @@
     <string name="databaseBackupSaved">Backup salvo com sucesso.</string>
 
     <!-- ERROR MESSAGE -->
-    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate o responsável na tvEmpresa pela administração do sistema.</string>
-    <string name="fileNotFound">O arquivo solicitado não foi encontrado. Contate o responsável na tvEmpresa pela administração do sistema.</string>
-    <string name="fileDownloadedNotFound">O arquivo solicitado foi baixado mas não foi encontrado no dispositivo. Contate na tvEmpresa o responsável pela administração do sistema.</string>
-    <string name="deviceUnknow">Seu aparelho não esta cadastrado para a tvEmpresa (</string>
+    <string name="imageZipFail">Erro ao tentar extrair o arquivo. Contate na sua empresa o responsável pela administração do sistema.</string>
+    <string name="fileNotFound">O arquivo solicitado não foi encontrado. Contate na sua empresa o responsável pela administração do sistema.</string>
+    <string name="fileDownloadedNotFound">O arquivo solicitado foi baixado mas não foi encontrado no dispositivo. Contate na sua empresa o responsável pela administração do sistema.</string>
+    <string name="deviceUnknow">Seu aparelho não esta cadastrado para a empresa (</string>
     <string name="deviceImei1">). Verifique se o imei (</string>
     <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
     <string name="failToConnect">Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.</string>>
-    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na tvEmpresa o responsável pela administração do sistema.</string>
-    >
+    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na sua empresa o responsável pela administração do sistema.</string>>
 
-    <!-- SINCRONIZAÇÃO MENSAGENS-->
+    <!-- SEM RESULTADO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>
     <string name="noLog">Sem logs por enquanto.</string>
-    <string name="noClientes">Sem clientes para exibir no momento.</string>
-    <string name="noProdutos">Sem produtos para exibir no momento.</string>
+    <string name="noClientesTitle">Sem clientes no momento...</string>
+    <string name="noClientesText">Faça uma sincronização para que seus clientes possam aparecer aqui.</string>
+    <string name="noProdutosTitle">Sem produtos no momento...</string>
+    <string name="noProdutosText">Faça uma sincronização para que produtos possam aparecer aqui.</string>
     <string name="networkError">Verifique sua conexão com a internet...</string>
     <string name="networkSuccess">Conexão com a internet OK.</string>
 

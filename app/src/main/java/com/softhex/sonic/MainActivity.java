@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
-
         DBC = new sonicDatabaseCRUD(getBaseContext());
         setContentView(R.layout.activity_main);
 
@@ -41,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (DBC.Database.checkMinimumData()){
 
+            sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
             i  = new Intent(MainActivity.this,sonicSplash.class);
             startActivity(i);
             finish();
 
+        }else {
+            sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
         }
 
         setContentView(R.layout.activity_main);

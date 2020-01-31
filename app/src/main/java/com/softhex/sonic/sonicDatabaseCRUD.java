@@ -2134,10 +2134,8 @@ public class sonicDatabaseCRUD {
                 String[] columnNames = cursor.getColumnNames();
                 String value ="";
                 for(int i = 0; i < columnNames.length-2; i++){
-                    Log.d("VALOR",lista.get(i));
                     cv.put(columnNames[i+1], lista.get(i));
                     cv.put("selecionado", 0);
-
                 }
 
                 result = DB.getWritableDatabase().insert(TABLE_PRODUTOS, null, cv)>0;

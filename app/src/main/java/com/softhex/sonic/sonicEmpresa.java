@@ -22,7 +22,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_empresa);
 
-        sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
+        sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
         myRegister = findViewById(R.id.registrar);
         myCode = findViewById(R.id.code);

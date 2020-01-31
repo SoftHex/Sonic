@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -239,6 +240,7 @@ public class sonicFtp {
                                 destino.createNewFile();
 
                                 arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
+                                Log.d("ARQUIVO", arquivo);
 
                                 return true;
 

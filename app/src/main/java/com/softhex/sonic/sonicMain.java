@@ -276,13 +276,13 @@ public class sonicMain extends AppCompatActivity{
 
 
         // ESCONDE O PROGRESS E EXIBE OS VALORES
-        pbEmpresa.setVisibility(View.GONE);
-        tvEmpresa.setVisibility(View.VISIBLE);
+        //pbEmpresa.setVisibility(View.GONE);
+        //tvEmpresa.setVisibility(View.VISIBLE);
         tvEmpresa.setText(empresaNome);
-        pbSaudacaoUsuario.setVisibility(View.GONE);
-        tvUsuario.setVisibility(View.VISIBLE);
+        //pbSaudacaoUsuario.setVisibility(View.GONE);
+        //tvUsuario.setVisibility(View.VISIBLE);
         tvUsuario.setText(usuarioNome);
-        tvSaudacao.setVisibility(View.VISIBLE);
+        //tvSaudacao.setVisibility(View.VISIBLE);
         tvSaudacao.setText(sonicUtils.saudacao());
         pbPedidos.setVisibility(View.GONE);
         pbDesempenho.setVisibility(View.GONE);

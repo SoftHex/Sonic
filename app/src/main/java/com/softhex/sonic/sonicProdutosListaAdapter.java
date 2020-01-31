@@ -2,8 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
@@ -15,25 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 /**
  * Created by Administrador on 11/08/2017.
@@ -45,14 +32,10 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     private List<sonicProdutosHolder> produtos;
     private List<sonicProdutosHolder> produtos_filtered;
     private prodFilter prodFilter;
-    private AlertDialog.Builder dialogBuilder;
-    private int lastPosition = -1;
     private sonicDatabaseCRUD DBC;
-    private Bitmap bitmap;
     private sonicConstants myCons;
     private GradientDrawable shape;
     private final int VIEW_TYPE_ITEM = 0;
-    private final int VIEW_TYPE_LOADING = 1;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -168,8 +151,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         this.ctx = ctx;
     }
 
-    public void updateList(List<sonicProdutosHolder> list){
-        produtos = list;
+    public void updateList(){
         notifyDataSetChanged();
     }
 
@@ -247,7 +229,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     @Override
     public int getItemCount() {
-        return produtos == null ? 0 : produtos.size();
+        return produtos.size();
     }
 
     private static class prodFilter extends Filter {
@@ -270,16 +252,12 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             filteredList.clear();
             final FilterResults results = new FilterResults();
 
-
-
             if (constraint.length() == 0) {
                 filteredList.addAll(originalList);
-
+                sonicConstants.SEARCH_COUNT = originalList.size();
             } else {
 
                 final String filterPattern = constraint.toString().toUpperCase().trim();
-
-
 
                 for (final sonicProdutosHolder prod : originalList) {
 
@@ -291,6 +269,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                     }
 
                 }
+
             }
             results.values = filteredList;
             results.count = filteredList.size();
@@ -299,9 +278,9 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.produtos.clear();
-            adapter.produtos_filtered.addAll((ArrayList<sonicProdutosHolder>) results.values);
-            adapter.notifyDataSetChanged();
+                adapter.produtos.clear();
+                adapter.produtos_filtered.addAll((ArrayList<sonicProdutosHolder>) results.values);
+                adapter.notifyDataSetChanged();
         }
     }
 

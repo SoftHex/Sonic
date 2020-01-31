@@ -43,8 +43,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/IntroTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,16 +52,12 @@
         </activity>
         <activity
             android:name=".sonicSplash"
-            android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:theme="@style/IntroTheme"/>
         <activity
             android:name=".sonicEmpresa"
-            android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".sonicFirstAccess"
-            android:theme="@style/DefaultAppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:name=".sonicFirstAccess"/>
         <activity
             android:name=".sonicAvisos"
             android:theme="@style/DefaultAppTheme"

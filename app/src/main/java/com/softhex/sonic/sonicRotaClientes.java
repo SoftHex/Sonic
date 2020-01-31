@@ -233,7 +233,7 @@ public class sonicRotaClientes extends Fragment {
         myImage.setVisibility(VISIBLE);
         myTextView.setVisibility(VISIBLE);
         myTextView.startAnimation(fadeIn);
-        myTextView.setText(R.string.noClientes);
+        myTextView.setText(R.string.noClientesText);
         Glide.with(_this)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)

@@ -35,7 +35,7 @@ public class sonicFirstAccess extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_first_access);
 
-        sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
+        sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
         DBC = new sonicDatabaseCRUD(this);
 

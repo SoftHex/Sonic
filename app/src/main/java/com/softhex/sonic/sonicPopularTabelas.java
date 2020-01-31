@@ -66,9 +66,14 @@ public class sonicPopularTabelas {
 
             });
         }else {
-            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
+            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicTM.MSG_WARNING);
         }
 
+    }
+
+    protected static boolean contains(CharSequence sequence)
+    {
+        return String.valueOf(sequence).indexOf(sequence.toString()) > -1;
     }
 
     class myAsyncTaskGravar extends AsyncTask<String,String, Boolean>{
@@ -231,7 +236,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[EMPRESAS_USUARIOS]".equals(line) || line.equals("[EMPRESAS_USUARIOS]"))) {
+                        if (line != null && ("[EMPRESAS_USUARIOS]".equals(line) || line.equals("[EMPRESAS_USUARIOS]") || line.contains(("[EMPRESAS_USUARIOS]")))) {
 
                             Log.d("EMPRESAS_USUARIOS", "ENTROU");
 
@@ -259,7 +264,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[CLIENTES]".equals(line) || line.equals("[CLIENTES]"))) {
+                        if (line != null && (line.contains("[CLIENTES]"))) {
 
                             Log.d("CLIENTES", "ENTROU");
                             tabela = line;
@@ -285,7 +290,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[GRUPO_CLIENTES]".equals(line) || line.equals("[GRUPO_CLIENTES]"))) {
+                        if (line != null && ("[GRUPO_CLIENTES]".equals(line) || line.equals("[GRUPO_CLIENTES]") || line.contains("[GRUPO_CLIENTES]"))) {
 
                             Log.d("GRUPO_CLIENTES", "ENTROU");
                             tabela = line;
@@ -305,6 +310,32 @@ public class sonicPopularTabelas {
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
                                 DBC.GrupoCliente.saveGrupoCliente(data);
+                                line = reader.readLine();
+
+                            }
+
+                        }
+
+                        if (line != null && ("[EMPRESAS_CLIENTES]".equals(line) || line.equals("[EMPRESAS_CLIENTES]") || line.contains("[EMPRESAS_CLIENTES]"))) {
+
+                            Log.d("GRUPO_CLIENTES", "ENTROU");
+                            tabela = line;
+
+                            DBC.EmpresasClientes.cleanEmpresasClientes();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress(tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.EmpresasClientes.saveEmpresasClientes(data);
                                 line = reader.readLine();
 
                             }
@@ -391,7 +422,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[ESTOQUE_PRODUTOS]".equals(line) || line.equals("[ESTOQUE_PRODUTOS]"))) {
+                        if (line != null && ("[ESTOQUE_PRODUTOS]".equals(line) || line.equals("[ESTOQUE_PRODUTOS]") || line.contains("[ESTOQUE_PRODUTOS]"))) {
 
                             Log.d("ESTOQUE_PRODUTOS", "ENTROU");
 
@@ -445,7 +476,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[EMPRESAS_CLIENTES]".equals(line) || line.equals("[EMPRESAS_CLIENTES]"))) {
+                        if (line != null && ("[EMPRESAS_CLIENTES]".equals(line) || line.equals("[EMPRESAS_CLIENTES]") || line.contains("[EMPRESAS_CLIENTES]"))) {
 
                             Log.d("EMPRESAS_CLIENTES", "ENTROU");
 
@@ -473,7 +504,7 @@ public class sonicPopularTabelas {
                         }
 
 
-                        if (line != null && ("[FINANCEIRO]".equals(line) || line.equals("[FINANCEIRO]"))) {
+                        if (line != null && ("[FINANCEIRO]".equals(line) || line.equals("[FINANCEIRO]") || line.contains("[FINANCEIRO]"))) {
 
                             Log.d("FINANCEIRO", "ENTROU");
 
@@ -500,7 +531,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[TIPO_PEDIDO]".equals(line) || line.equals("[TIPO_PEDIDO]"))) {
+                        if (line != null && ("[TIPO_PEDIDO]".equals(line) || line.equals("[TIPO_PEDIDO]") || line.contains("[TIPO_PEDIDO]"))) {
 
                             Log.d("TIPO_PEDIDO", "ENTROU");
 
@@ -527,7 +558,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[TIPO_COBRANCA]".equals(line) || line.equals("[TIPO_COBRANCA]"))) {
+                        if (line != null && ("[TIPO_COBRANCA]".equals(line) || line.equals("[TIPO_COBRANCA]") || line.contains("[TIPO_COBRANCA]"))) {
 
                             Log.d("TIPO_COBRANCA", "ENTROU");
 
@@ -554,7 +585,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[UNIDADE_MEDIDA]".equals(line) || line.equals("[UNIDADE_MEDIDA]"))) {
+                        if (line != null && ("[UNIDADE_MEDIDA]".equals(line) || line.equals("[UNIDADE_MEDIDA]") || line.contains("[UNIDADE_MEDIDA]"))) {
 
                             Log.d("UNIDADE_MEDIDA", "ENTROU");
 
@@ -581,7 +612,7 @@ public class sonicPopularTabelas {
 
                         }
 
-                        if (line != null && ("[PRAZO]".equals(line) || line.equals("[PRAZO]"))) {
+                        if (line != null && ("[PRAZO]".equals(line) || line.equals("[PRAZO]") || line.contains("[PRAZO]"))) {
 
                             Log.d("PRAZO", "ENTROU");
 
@@ -666,9 +697,6 @@ public class sonicPopularTabelas {
             myProgress.setProgress(Integer.parseInt(values[1]));
         }
 
-        @SuppressLint("NewApi")
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
@@ -685,6 +713,7 @@ public class sonicPopularTabelas {
                         break;
                     case "SITE":
                         primeiroAcesso();
+                        Log.d("TYPE", "PRIMEIRO ACESSO");
                         break;
 
 
@@ -704,11 +733,14 @@ public class sonicPopularTabelas {
 
                 String imei = "";
 
-                if(Build.VERSION.SDK_INT < 26) {
-                    myPhoneManager.getDeviceId();
+                if(android.os.Build.VERSION.SDK_INT >= 26) {
+                    imei = myPhoneManager.getImei();
+
                 }else{
-                    myPhoneManager.getImei();
+                    imei = myPhoneManager.getDeviceId();
                 }
+
+                Log.d("IMEI", imei);
 
                 if(sonicConstants.EMP_TESTE){
                     imei = "0000000000000000000";
