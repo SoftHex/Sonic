@@ -3,7 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/itSincronizar"
+        android:icon="@mipmap/ic_cached_white_24dp"
+        android:title="Sincronizar"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/itNotificacao"
+        android:icon="@mipmap/ic_bell_white_24dp"
+        android:title="Sincronizar"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/itSettings"
         android:orderInCategory="100"
         android:title="Configurações"
         android:iconTint="@color/colorPrimaryWhite"

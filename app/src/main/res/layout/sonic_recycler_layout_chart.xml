@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,25 +29,30 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/llProgress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:padding="6dp"
-            android:layout_gravity=""
-            android:gravity="center">
+            android:layout_below="@+id/llPeriodo"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
             <ProgressBar
+                android:id="@+id/pbChart"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/colorTextWhite"
-                android:visibility="gone"
-                android:indeterminate="true"/>
+                android:indeterminate="true"
+                android:progressDrawable="@drawable/gradiente_progressbar"
+                android:indeterminateTint="@color/colorPrimaryWhite"
+                android:layout_centerInParent="true" />
 
-        </LinearLayout>
 
-    </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerList"

@@ -135,20 +135,24 @@
                     android:layout_gravity="center"
                     android:layout_weight="0">
 
-                    <com.softhex.view.ProgressProfileView
-                        android:id="@+id/myProgressProfile"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
-                        android:scaleType="centerCrop"
-                        app:progress="0"
-                        app:max="100"
-                        app:progressRingSize="4dp"
-                        app:progressRingCorner="ROUND"
-                        app:progressRingOutline="true"
-                        app:progressRingColor="@color/colorPrimaryGreen"
-                        app:backgroundRingColor="@android:color/transparent"
-                        android:src="@drawable/no_profile"/>
+
+                        <com.softhex.view.ProgressProfileView
+                            android:id="@+id/myProgressProfile"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
+                            app:progress="0"
+                            app:max="100"
+                            app:joinGradient="true"
+                            app:gradientFactor="5.0"
+                            app:progressRingSize="4dp"
+                            app:progressRingCorner="RECT"
+                            app:progressRingOutline="true"
+                            app:progressRingColor="@color/colorPrimaryRed"
+                            app:backgroundRingColor="@android:color/transparent"
+                            android:src="@drawable/no_profile"/>
 
 
                 </LinearLayout>
@@ -233,30 +237,51 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
 
-                            <ProgressBar
-                                android:id="@+id/pbDesempenho"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:indeterminate="true"
-                                android:layout_marginTop="2dp"
-                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/tvDesemprenho"
+                                <ProgressBar
+                                    android:id="@+id/pbDesempenho"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:indeterminate="true"
+                                    android:layout_marginTop="2dp"
+                                    android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                                <TextView
+                                    android:id="@+id/tvDesemprenho"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimaryWhite"
+                                    android:textSize="18sp"
+                                    android:visibility="gone"
+                                    android:textStyle="bold"
+                                    android:text="0,00%"/>
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/llStar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/colorPrimaryWhite"
-                                android:textSize="18sp"
+                                android:layout_marginLeft="4dp"
                                 android:visibility="gone"
-                                android:textStyle="bold"
-                                android:text="0,00%"/>
+                                android:layout_gravity="center">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="@color/colorPrimaryYellow"
+                                android:background="@mipmap/ic_star_white_18dp"/>
 
                         </LinearLayout>
 
-
-
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -332,23 +357,48 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <ProgressBar
-                                android:id="@+id/pbMeta"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:indeterminate="true"
-                                android:layout_marginTop="2dp"
-                                android:indeterminateTint="@color/colorPrimaryWhite"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
 
-                            <TextView
-                                android:id="@+id/tvMeta"
+                                <ProgressBar
+                                    android:id="@+id/pbMeta"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:indeterminate="true"
+                                    android:layout_marginTop="2dp"
+                                    android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                                <TextView
+                                    android:id="@+id/tvMeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/colorPrimaryWhite"
+                                    android:visibility="gone"
+                                    android:textStyle="bold"
+                                    android:text="R$ 0,00"/>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llChecked"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="18sp"
-                                android:textColor="@color/colorPrimaryWhite"
-                                android:visibility="gone"
-                                android:textStyle="bold"
-                                android:text="R$ 0,00"/>
+                                android:layout_marginLeft="4dp"
+                                android:visibility="visible"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:backgroundTint="@color/colorPrimaryGreen"
+                                    android:background="@mipmap/ic_check_all_white_18dp"/>
+
+                            </LinearLayout>
+
 
                         </LinearLayout>
 

@@ -64,6 +64,12 @@
     <color name="colorPrimaryRedDarkT">#908B0000</color>
     <color name="colorPrimaryRedT">#90FF0000</color>
     <color name="colorPrimaryRedLightT">#90FF6347</color>
+    <color name="colorPrimaryYellowDark">#FFD700</color>
+    <color name="colorPrimaryYellow">#FFFF00</color>
+    <color name="colorPrimaryYellowLight">#F0E68C</color>
+    <color name="colorPrimaryYellowDarkT">#90FFD700</color>
+    <color name="colorPrimaryYellowT">#90FFFF00</color>
+    <color name="colorPrimaryYellowLightT">#90F0E68C</color>
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryGreen1">#59C354</color>
     <color name="colorPrimaryGreen2">#00FA9A</color>
@@ -77,22 +83,22 @@
     <color name="colorTypeSuccess">#90b06e</color>
 
     <!-- WINE THEME -->
-
     <color name="colorWinePrimaryDark">#610B0B</color>
     <color name="colorWinePrimary">#8A0808</color>
     <color name="colorWineAccent">#B43104</color>
 
     <!-- NIGHT THEME -->
-
     <color name="colorNightPrimaryDark">#1C1C1C</color>
     <color name="colorNightPrimary">#424242</color>
     <color name="colorNightAccent">#6E6E6E</color>
 
     <!-- GREEN THEME -->
-
     <color name="colorGreenPrimaryDark">#0B6138</color>
+    <color name="colorGreenPrimaryDarkT">#900B6138</color>
     <color name="colorGreenPrimary">#04B45F</color>
+    <color name="colorGreenPrimaryT">#9004B45F</color>
     <color name="colorGreenAccent">#01DFA5</color>
+    <color name="colorGreenAccentT">#9001DFA5</color>
 
     <!-- dots colors -->
     <color name="dotActive">@color/colorPrimary</color>
@@ -100,5 +106,56 @@
     <color name="dotSlideActive">#FFFFFF</color>
     <color name="dotSlideInactive">#363636</color>
 
+    <!-- tab colors -->
+    <color name="iconTabSelected">@color/colorPrimaryOrange</color>
+    <color name="iconTabUnselected">@color/colorPrimaryWhite</color>
+    <color name="textTabSelected">@color/colorPrimaryOrange</color>
+    <color name="textTabUnselected">@color/colorPrimaryWhite</color>
+
+    <!-- PROGRESS PROFILE -->
+    <array name="progressProfile0">
+        <item>@color/colorPrimaryRed</item>
+        <item>@color/colorPrimaryRed</item>
+    </array>
+    <array name="progressProfile0t025">
+        <item>@color/colorPrimaryRed</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+    </array>
+    <array name="progressProfile25t050">
+        <item>@color/colorPrimaryRed</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+    </array>
+    <array name="progressProfile50to75">
+        <item>@color/colorPrimaryRed</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+    </array>
+    <array name="progressProfile75to100">
+        <item>@color/colorPrimaryRed</item>
+        <item>@color/colorPrimaryOrangeLight</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+    </array>
+    <array name="progressProfile100">
+        <item>@color/colorPrimaryGreen</item>
+        <item>@color/colorPrimaryGreen</item>
+    </array>
 
 </resources>

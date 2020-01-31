@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,7 +115,10 @@ public class sonicMain extends AppCompatActivity{
     private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendido, tvMeta;
     private ProgressProfileView myProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
-    private String url;
+    private String url, vendido;
+    private LinearLayout llStar, llChecked;
+    private Float percentualProgress, percentualTotal;
+    private int[] progress;
     private int back = sonicUtils.Randomizer.generate(0,4);
     private int[] backs = {
             R.drawable.backhome1,
@@ -162,6 +167,8 @@ public class sonicMain extends AppCompatActivity{
         pbDesempenho = findViewById(R.id.pbDesempenho);
         pbVendido = findViewById(R.id.pbVendido);
         pbMeta = findViewById(R.id.pbMeta);
+        llStar = findViewById(R.id.llStar);
+        llChecked = findViewById(R.id.llChecked);
         myProgressProfile = findViewById(R.id.myProgressProfile);
         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + empresaId + "_" + usuarioId + ".jpg";
 
@@ -199,30 +206,43 @@ public class sonicMain extends AppCompatActivity{
                     .into(myProgressProfile);
         }
 
-        // ATUALIZAR PERCENTUAL NA FOTO DO PERFIL
-        myProgressProfile.setProgress(59.5f);
-        myProgressProfile.startAnimation();
-
-        //mySpaceTabLayout = (SpaceTabLayout)findViewById(R.id.spaceTabLayout);
-
         myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
         myTabLayout = findViewById(R.id.tab);
-        //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorSpotLight2));
         myTabLayout.setupWithViewPager(myViewPager);
-        //myTabLayout.getTabAt(0).setIcon(R.mipmap.ic_account_tie_white_24dp);
 
+        myTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getIcon()!=null){
+                    myTabLayout.getTabAt(tab.getPosition()).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                if(tab.getIcon()!=null){
+                    myTabLayout.getTabAt(tab.getPosition()).getIcon().setColorFilter(getResources().getColor(R.color.iconTabUnselected), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         createDrawerMenu();
-
+        calcularPercentual("2200000",usuarioMeta);
+        lerDadosUsuario();
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    new lerDadosUsuarioAsyncTask().execute();
+                                    //calcularPercentual("1234500",usuarioMeta);
+                                    //new lerDadosUsuarioAsyncTask().execute();
                                     //lerDadosUsuario();
 
 
@@ -244,8 +264,41 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
-    public void lerDadosUsuario(){
 
+
+    public void calcularPercentual(String vend, String uMeta){
+        // FAZER CALCULO DO PERCENTUAL DE ATUAÇÃO
+        vendido = vend;
+        percentualProgress = (Float.valueOf(vend)/Float.valueOf(uMeta))*100;
+        percentualTotal = percentualProgress;
+        int [] progress2 = null;
+        llStar.setVisibility(View.INVISIBLE);
+        llChecked.setVisibility(View.INVISIBLE);
+        tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        if(percentualProgress <=25.0){
+            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile0t025);
+        }else if(percentualProgress <=50.0){
+            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile25t050);
+        }else if(percentualProgress <=75.0){
+            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile50to75);
+        }else if(percentualProgress <100.0){
+            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile75to100);
+        }else{
+            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile100);
+            percentualProgress = 100f;
+            llChecked.setVisibility(View.VISIBLE);
+            llStar.setVisibility(View.VISIBLE);
+            tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
+            tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
+        }
+        //progress = myCtx.getResources().getIntArray(R.array.progressProfile75to100);
+        myProgressProfile.setProgressGradient(progress2);
+        myProgressProfile.setProgress(percentualProgress);
+        myProgressProfile.startAnimation();
+    }
+
+    public void lerDadosUsuario(){
 
         // ESCONDE O PROGRESS E EXIBE OS VALORES
         pbPedidos.setVisibility(View.GONE);
@@ -255,9 +308,9 @@ public class sonicMain extends AppCompatActivity{
         tvPedidos.setVisibility(View.VISIBLE);
         tvPedidos.setText("12");
         tvDesemprenho.setVisibility(View.VISIBLE);
-        tvDesemprenho.setText("59,5%");
+        tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
         tvVendido.setVisibility(View.VISIBLE);
-        tvVendido.setText("R$ 11.190,00");
+        tvVendido.setText(new sonicUtils(myCtx).Number.stringToMoeda2(vendido));
         tvMeta.setVisibility(View.VISIBLE);
         tvMeta.setText(new sonicUtils(myCtx).Number.stringToMoeda2(usuarioMeta));
 
@@ -281,22 +334,19 @@ public class sonicMain extends AppCompatActivity{
                             new myAssyncTask().execute(4);
                         }
 
+
                         listaUser = DBC.Usuarios.selectUsuarioAtivo();
                         sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
                         sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
+                        usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
-                        tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(listaUser.get(0).getMetaVenda()));
+                        tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
                         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".jpg";
-                        Glide.with(getBaseContext())
-                                .load(url)
-                                .placeholder(R.drawable.no_profile)
-                                .apply(new RequestOptions().override(300,300))
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
-                                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                                .into(myProgressProfile);
-                        myProgressProfile.setProgress(59.5f);
-                        myProgressProfile.startAnimation();
+                        File f = new File(url);
+                        String picture = f.exists() ? f.toString() : sonicUtils.getURLForResource(R.drawable.no_profile);
+                        sonicGlide.glideImageView(myCtx,myProgressProfile,picture);
+                        calcularPercentual("2200000", usuarioMeta);
+                        lerDadosUsuario();
                         refreshHomeFragment();
 
                         return true;
@@ -333,7 +383,6 @@ public class sonicMain extends AppCompatActivity{
 
             File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
 
-            //String image = file.exists() ? file.toString() : getResources().getDrawable(R.drawable.no_profile).toString();
 
             if(i<3){
 
@@ -475,7 +524,7 @@ public class sonicMain extends AppCompatActivity{
                 .withIdentifier(13)
                 .withName("Sair")
                 .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_power_grey600_24dp));
+                .withIcon(getResources().getDrawable(R.mipmap.ic_power_settings_new_white_24dp));
 
         myDrawerExportar = new PrimaryDrawerItem()
                 .withIdentifier(18)
@@ -677,9 +726,10 @@ public class sonicMain extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicMainHome1(), "", R.mipmap.ic_account_tie_white_18dp);
+        myAdapter.addFragment(new sonicMainHome1(), "", R.mipmap.ic_chart_line_variant_white_24dp);
         myAdapter.addFragment(new sonicMainHome1(), "Perform");
         myAdapter.addFragment(new sonicMainHome1(), "Atuação");
+
         viewpager.setAdapter(myAdapter);
 
     }
@@ -697,6 +747,9 @@ public class sonicMain extends AppCompatActivity{
         public Fragment getItem(int position) {
             if(mIcon.get(position)!=null){
                 myTabLayout.getTabAt(position).setIcon(mIcon.get(position));
+                if(myTabLayout.getTabAt(position).isSelected()){
+                    myTabLayout.getTabAt(position).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
+                }
             }
             return mFragmentList.get(position);
         }
@@ -877,15 +930,27 @@ public class sonicMain extends AppCompatActivity{
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                item.setEnabled(true);
+                switch (item.getItemId()){
+                    case R.id.itSettings:
+                        i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
+                        startActivity(i);
+                        break;
+                    case R.id.itNotificacao:
+                        Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
+                        return false;
+                    case R.id.itSincronizar:
+                        Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
+                        return false;
+                }
+                //item.setEnabled(true);
                 return false;
             }
         });
 
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.itSettings) {
             i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
             startActivity(i);
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
