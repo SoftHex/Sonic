@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/DefaultAppTheme">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -37,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_below="@+id/appbar"
             android:background="@drawable/backhome1"
-            android:layout_height="250dp">
+            android:layout_height="220dp">
 
             <!-- NOME, EMPRESA E FOTO -->
             <LinearLayout
@@ -105,7 +104,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Bem vindo,"
-                            android:textColor="@color/colorTextOrange"
+                            android:textColor="@color/colorTextWhite"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:visibility="visible"
@@ -161,7 +160,8 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_weight="1">
 
                 <!-- PEDIDOS, DESEMPENHO -->
@@ -367,8 +367,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/llDetail"
             android:fillViewport="true"
-            android:layout_marginRight="26dp"
-            android:layout_marginLeft="26dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="24dp"
             android:layout_marginBottom="12dp"
             app:tabTextColor="@color/colorPrimaryWhite"
             style="@style/TabTextAppearance"
@@ -377,14 +377,16 @@
             app:tabMode="fixed"
             app:tabGravity="fill"/>
 
+
         <!-- VIEWPAGER -->
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pagerSlide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent2"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/tab"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </androidx.viewpager.widget.ViewPager>

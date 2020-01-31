@@ -95,11 +95,11 @@ public class sonicClientesCNPJ extends Fragment {
 
         myImage = myView.findViewById(R.id.ivImage);
 
-        myCoordinatorLayout = myView.findViewById(R.id.layout_main);
+        myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
         myShimmer = myView.findViewById(R.id.shimmer);
 
-        myRecycler =  myView.findViewById(R.id.recycler_list);
+        myRecycler =  myView.findViewById(R.id.recyclerList);
 
         myRecycler.setHasFixedSize(true);
 

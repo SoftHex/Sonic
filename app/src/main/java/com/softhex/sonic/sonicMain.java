@@ -73,6 +73,7 @@ public class sonicMain extends AppCompatActivity{
     private sonicDatabaseCRUD DBC;
     private sonicDatabaseLogCRUD DBCL;
     private Intent i;
+    private TabLayout myTabLayout;
     private Toolbar myToolbar;
     private ActionBar myActionBar;
     private ViewPager myViewPager;
@@ -207,44 +208,11 @@ public class sonicMain extends AppCompatActivity{
         myViewPager = findViewById(R.id.pagerSlide);
         setUpViewPager(myViewPager);
 
-        TabLayout myTabLayout = findViewById(R.id.tab);
+        myTabLayout = findViewById(R.id.tab);
         //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorSpotLight2));
         myTabLayout.setupWithViewPager(myViewPager);
+        //myTabLayout.getTabAt(0).setIcon(R.mipmap.ic_account_tie_white_24dp);
 
-        List<Fragment> fragmentList = new ArrayList<>();
-        //fragmentList.add(new sonicMainHome());
-        //fragmentList.add(new sonicAvisosFragNaoLidos());
-        //fragmentList.add(new sonicAvisosFragNaoLidos());
-
-        //mySpaceTabLayout.initialize(myViewPager,getSupportFragmentManager(),fragmentList,savedInstanceState);
-
-        //mySpaceTabLayout.setTabOneOnClickListener(new View.OnClickListener() {
-            //@Override
-            //public void onClick(View view) {
-
-                //Intent i = new Intent(sonicMain.this, sonicShimmer.class);
-                //startActivity(i);
-
-            //}
-        //});
-
-        /*myViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                //myBottonNav.getMenu().getItem(position).setChecked(true);
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
 
         createDrawerMenu();
 
@@ -270,20 +238,16 @@ public class sonicMain extends AppCompatActivity{
         // ATUALIZA A BADGE DE PRODUTOS
         new myAssyncTask().execute(4);
 
+        tvEmpresa.setText(empresaNome);
+        tvUsuario.setText(usuarioNome);
+        tvSaudacao.setText(sonicUtils.saudacao());
+
     }
 
     public void lerDadosUsuario(){
 
 
         // ESCONDE O PROGRESS E EXIBE OS VALORES
-        //pbEmpresa.setVisibility(View.GONE);
-        //tvEmpresa.setVisibility(View.VISIBLE);
-        tvEmpresa.setText(empresaNome);
-        //pbSaudacaoUsuario.setVisibility(View.GONE);
-        //tvUsuario.setVisibility(View.VISIBLE);
-        tvUsuario.setText(usuarioNome);
-        //tvSaudacao.setVisibility(View.VISIBLE);
-        tvSaudacao.setText(sonicUtils.saudacao());
         pbPedidos.setVisibility(View.GONE);
         pbDesempenho.setVisibility(View.GONE);
         pbVendido.setVisibility(View.GONE);
@@ -713,8 +677,9 @@ public class sonicMain extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicClientesCNPJ(), "Performance");
-        myAdapter.addFragment(new sonicClientesCPF(), "Atuação");
+        myAdapter.addFragment(new sonicMainHome1(), "", R.mipmap.ic_account_tie_white_18dp);
+        myAdapter.addFragment(new sonicMainHome1(), "Perform");
+        myAdapter.addFragment(new sonicMainHome1(), "Atuação");
         viewpager.setAdapter(myAdapter);
 
     }
@@ -722,7 +687,7 @@ public class sonicMain extends AppCompatActivity{
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
-
+        private final List<Integer> mIcon = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -730,6 +695,9 @@ public class sonicMain extends AppCompatActivity{
 
         @Override
         public Fragment getItem(int position) {
+            if(mIcon.get(position)!=null){
+                myTabLayout.getTabAt(position).setIcon(mIcon.get(position));
+            }
             return mFragmentList.get(position);
         }
 
@@ -741,6 +709,13 @@ public class sonicMain extends AppCompatActivity{
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+            mIcon.add(null);
+        }
+
+        public void addFragment(Fragment fragment, String title, Integer icon) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+            mIcon.add(icon);
         }
 
         @Override
@@ -748,6 +723,10 @@ public class sonicMain extends AppCompatActivity{
             return mFragmentTitleList.get(position);
         }
 
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
     }
 
     public void updateBadge( int id, String badge){

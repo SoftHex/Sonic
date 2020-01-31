@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_main"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -101,7 +101,7 @@
     </com.facebook.shimmer.ShimmerFrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_list"
+        android:id="@+id/recyclerList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
