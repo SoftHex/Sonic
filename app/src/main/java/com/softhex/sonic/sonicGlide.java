@@ -1,9 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.widget.ImageView;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -20,6 +17,8 @@ public class sonicGlide {
                 .load(d)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
+                .override(600,600)
+                .centerCrop()
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(i);
     }
@@ -28,19 +27,21 @@ public class sonicGlide {
         Glide.with(c).clear(i);
         Glide.with(c)
                 .load(file)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(false)
-                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .override(300, 300)
+                // MELHOR OPÇÃO PARA TODAS AS IMAGENS
+                .fitCenter()
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(i);
     }
 
-    public static void glideImageViewPlaceHolder(Context c, ImageView i, String file, int p){
+    public static void glideImageViewPlaceHolder(Context c, ImageView i, String file, int placeholder){
         Glide.with(c).clear(i);
         Glide.with(c)
                 .load(file)
-                .placeholder(p)
-                .override(300,300)
+                .placeholder(placeholder)
+                .override(600,600)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
@@ -51,10 +52,9 @@ public class sonicGlide {
         Glide.with(c).clear(i);
         Glide.with(c)
                 .load(file)
-                .dontAnimate()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(false)
+                .override(100,100)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(i);
     }

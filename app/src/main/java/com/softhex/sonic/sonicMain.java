@@ -68,9 +68,11 @@ import java.util.List;
 
 public class sonicMain extends AppCompatActivity{
 
-    public static final int IMAGE_GALLERY_REQUEST = 20;
-    public static final int CAMERA_REQUEST_CODE = 228;
-    public static final int CAMERA_PERMISSION_REQUEST_CODE = 4192;
+    static final String STATE_SCORE = "playerScore";
+    static final String STATE_LEVEL = "playerLevel";
+    static final int IMAGE_GALLERY_REQUEST = 20;
+    static final int CAMERA_REQUEST_CODE = 228;
+    static final int CAMERA_PERMISSION_REQUEST_CODE = 4192;
     private ImageView imgPicture;
     private sonicDatabaseCRUD DBC;
     private sonicDatabaseLogCRUD DBCL;
@@ -119,14 +121,9 @@ public class sonicMain extends AppCompatActivity{
     private LinearLayout llStar, llChecked;
     private Float percentualProgress, percentualTotal;
     private int[] progress;
+    private sonicFtp myFtp;
+    private Bundle myBundle;
     private int back = sonicUtils.Randomizer.generate(0,4);
-    private int[] backs = {
-            R.drawable.backhome1,
-            R.drawable.backhome2,
-            R.drawable.backhome3,
-            R.drawable.backhome4,
-            R.drawable.backhome5
-    };
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -174,7 +171,7 @@ public class sonicMain extends AppCompatActivity{
 
 
         Glide.with(getBaseContext())
-                .load(getResources().getDrawable(backs[back]))
+                .load(getResources().getDrawable(sonicConstants.BACKS[back]))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
@@ -264,17 +261,34 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SCORE, 1);
+        outState.putInt(STATE_LEVEL, 2);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            //mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
+            //mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
+        } else {
+            // Probably initialize members with default values for a new instance
+        }
+    }
 
     public void calcularPercentual(String vend, String uMeta){
         // FAZER CALCULO DO PERCENTUAL DE ATUAÇÃO
         vendido = vend;
-        percentualProgress = (Float.valueOf(vend)/Float.valueOf(uMeta))*100;
-        percentualTotal = percentualProgress;
+        //percentualProgress = (Float.valueOf(vend)/Float.valueOf(uMeta))*100;
+        //percentualTotal = percentualProgress;
         int [] progress2 = null;
         llStar.setVisibility(View.INVISIBLE);
         llChecked.setVisibility(View.INVISIBLE);
-        tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        /*tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         if(percentualProgress <=25.0){
             progress2 = myCtx.getResources().getIntArray(R.array.progressProfile0t025);
@@ -291,10 +305,10 @@ public class sonicMain extends AppCompatActivity{
             llStar.setVisibility(View.VISIBLE);
             tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
             tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
-        }
+        }*/
         //progress = myCtx.getResources().getIntArray(R.array.progressProfile75to100);
-        myProgressProfile.setProgressGradient(progress2);
-        myProgressProfile.setProgress(percentualProgress);
+        myProgressProfile.setProgressGradient(myCtx.getResources().getIntArray(R.array.progressProfile100));
+        myProgressProfile.setProgress(10f);
         myProgressProfile.startAnimation();
     }
 
@@ -308,21 +322,22 @@ public class sonicMain extends AppCompatActivity{
         tvPedidos.setVisibility(View.VISIBLE);
         tvPedidos.setText("12");
         tvDesemprenho.setVisibility(View.VISIBLE);
-        tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
+        //tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
         tvVendido.setVisibility(View.VISIBLE);
-        tvVendido.setText(new sonicUtils(myCtx).Number.stringToMoeda2(vendido));
+        //tvVendido.setText(new sonicUtils(myCtx).Number.stringToMoeda2(vendido));
         tvMeta.setVisibility(View.VISIBLE);
-        tvMeta.setText(new sonicUtils(myCtx).Number.stringToMoeda2(usuarioMeta));
+        //tvMeta.setText(new sonicUtils(myCtx).Number.stringToMoeda2(usuarioMeta));
 
     }
 
     public void createDrawerMenu(){
 
         listaEmpresa = DBC.Empresa.empresasUsuarios();
+        listaUser = DBC.Usuarios.selectUsuarioAtivo();
 
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(backs[back])
+                .withHeaderBackground(sonicConstants.BACKS[back])
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
                     @Override
@@ -334,8 +349,6 @@ public class sonicMain extends AppCompatActivity{
                             new myAssyncTask().execute(4);
                         }
 
-
-                        listaUser = DBC.Usuarios.selectUsuarioAtivo();
                         sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
                         sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
                         usuarioMeta = listaUser.get(0).getMetaVenda();
@@ -343,7 +356,7 @@ public class sonicMain extends AppCompatActivity{
                         tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
                         url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".jpg";
                         File f = new File(url);
-                        String picture = f.exists() ? f.toString() : sonicUtils.getURLForResource(R.drawable.no_profile);
+                        String picture = f.exists() ? f.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
                         sonicGlide.glideImageView(myCtx,myProgressProfile,picture);
                         calcularPercentual("2200000", usuarioMeta);
                         lerDadosUsuario();
@@ -939,7 +952,12 @@ public class sonicMain extends AppCompatActivity{
                         Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
                         return false;
                     case R.id.itSincronizar:
-                        Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
+                        myFtp = new sonicFtp(myCtx);
+                        sonicConstants.DOWNLOAD_TYPE = "DADOS";
+                        String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
+                        Log.d("FILE", file);
+                        myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+                        //Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
                         return false;
                 }
                 //item.setEnabled(true);

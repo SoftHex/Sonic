@@ -103,7 +103,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
         if(count==0){
             myImages = new String[1];
-            myImages[0] = sonicUtils.getURLForResource(R.drawable.backhome1);
+            myImages[0] = sonicUtils.getURIForResource(R.drawable.backhome1);
         }
 
 

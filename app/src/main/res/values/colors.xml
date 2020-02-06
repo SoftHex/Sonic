@@ -9,8 +9,8 @@
     <color name="colorAccentLight">#666C7C</color>
     <color name="colorSpotLight">#6959CD</color>
     <color name="colorSpotLight2">#4682B4</color>
-    <color name="colorPrimaryDarkT">#90192838</color>
-    <color name="colorPrimaryT">#902A3F54</color>
+    <color name="colorPrimaryDarkT">#991C1F2B</color>
+    <color name="colorPrimaryT">#90272936</color>
     <color name="colorAccentT">#9073879C</color>
     <color name="colorPrimaryLight">#9EB4C8</color>
     <color name="colorPrimaryLightT">#9EB4C8</color>
@@ -25,7 +25,7 @@
     <color name="colorPrimaryGreenDark">#234B20</color>
     <color name="colorPrimaryGreenDarkT">#90234B20</color>
     <color name="colorPrimaryGreenLight">#32CD32</color>
-    <color name="colorPrimaryGreenLightT">#9032CD32</color>
+    <color name="colorPrimaryGreenLightT">#2032CD32</color>
     <color name="colorPrimaryBrown">#A0522D</color>
     <color name="colorPrimaryBrownT">#90A0522D</color>
     <color name="colorPrimaryBrownDark">#8B4513</color>

@@ -238,6 +238,21 @@
         <item>1</item>
     </string-array>
 
+    <!-- PREFERENCES FOR GRID / CATALOGO -->
+    <string name="prefTitleGridCatalogo">Layout do Grid de imagens.</string>
+    <string name="prefDescriptionGridCatalogo">Altera a vizualização - Quantidade de colunas a serem exibidas - no grid de imagens.</string>
+    <string name="prefTitleGridCatalogoQtde">Quantidade de colunas no grid...</string>
+    <string-array name="prefTitleGridCatalogoQtde">
+        <item>Duas colunas</item>
+        <item>Três colunas</item>
+        <item>Quatro colunas</item>
+    </string-array>
+    <string-array name="prefValuesGridCatalogoQtde">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
 
     <!-- GERAL CLIENTES -->
     <string name="no_cliente">Sem cliente para ser exibido no momento. Vá até o menu no ícone</string>

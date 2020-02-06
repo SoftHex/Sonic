@@ -1,36 +1,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_margin="6dp"
     android:id="@+id/llItem">
 
-    <ImageView
-        android:id="@+id/ivImagem"
-        android:layout_height="110dp"
-        android:layout_width="wrap_content" />
+    <!-- IMAGEM -->
+    <RelativeLayout
+        android:id="@+id/rlCatalogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_grid_image"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvGrupo"
-        android:textColor="@color/colorTextPrimaryT"
-        android:text="XXX"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textSize="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="2dp">
 
-    <TextView
-        android:id="@+id/tvDescricao"
-        android:textColor="@color/colorTextPrimary"
-        android:text="XXXXXXXX"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:textSize="10sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/ivImagem"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/nophoto"/>
+
+        </LinearLayout>
+
+        <!-- DESCRICAO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="35dp"
+            android:background="@drawable/background_grid_description"
+            android:padding="4dp"
+            android:gravity="center_vertical"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvGrupo"
+                android:textColor="@color/colorTextWhite"
+                android:text="XXX"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="10sp"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvDescricao"
+                android:textColor="@color/colorTextWhite"
+                android:text="XXXXXXXX"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

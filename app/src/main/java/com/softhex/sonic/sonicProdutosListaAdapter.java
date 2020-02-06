@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,15 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -72,9 +74,8 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                     DBC.Produto.setSelecionado(codigo);
 
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    sonicConstants.PUT_EXTRA_PRODUTO_NOME = descricao.getText().toString();
-                    sonicConstants.PUT_EXTRA_PRODUTO_ID = codigo;
-                    sonicConstants.PUT_EXTRA_PRODUTO_GRUPO = grupo.getText().toString();
+                    i.putExtra("PRODUTO_NOME", descricao.getText().toString());
+                    i.putExtra("PRODUTO_GRUPO", grupo.getText().toString());
                     v.getContext().startActivity(i);
 
                 }

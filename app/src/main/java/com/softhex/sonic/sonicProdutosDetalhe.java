@@ -3,10 +3,7 @@ package com.softhex.sonic;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +18,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
-import java.io.File;
 import java.util.List;
 
 public class sonicProdutosDetalhe extends AppCompatActivity {
@@ -38,6 +34,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private TextView tvDescricao, tvGrupo, tvDetalhe, tvPreco;
     private ImageView myImage;
     private ActionBar myActionBar;
+    private String title="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,26 +46,36 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         //myViewpager = findViewById(R.id.pagerSlide);
         myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
-
         tvDescricao = findViewById(R.id.tvDescricao);
         tvGrupo = findViewById(R.id.tvGrupo);
         tvDetalhe = findViewById(R.id.tvDetalhe);
         tvPreco = findViewById(R.id.tvPreco);
-        tvDescricao.setText(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
-        tvGrupo.setText(sonicConstants.PUT_EXTRA_PRODUTO_GRUPO);
 
         createInterface();
         loadImage();
+
+        Bundle extras = getIntent().getExtras();
+        if(savedInstanceState==null){
+            if(extras!=null){
+                tvDescricao.setText(extras.getString("PRODUTO_NOME"));
+                tvGrupo.setText(extras.getString("PRODUTO_GRUPO"));
+                title = extras.getString("PRODUTO_NOME");
+            }
+        }else{
+            tvDescricao.setText(extras.getString("PRODUTO_NOME"));
+            tvGrupo.setText(extras.getString("PRODUTO_GRUPO"));
+            title = extras.getString("PRODUTO_NOME");
+        }
 
         myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                    //myActionBar.setTitle("Produtos");
+                    myCollapsingToolbar.setTitle(title);
                 }else {
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                    //myActionBar.setTitle("");
+                    myCollapsingToolbar.setTitle("");
                 }
             }
         });
@@ -91,7 +98,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        //myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_PRODUTO_NOME);
+        myCollapsingToolbar.setTitle(title);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,12 +114,10 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         List<sonicProdutosHolder> myList;
         myList = DBC.Produto.selectProdutoselecionado();
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO + myList.get(0).getCodigo() + ".JPG");
-
-        myImages[0] = file.exists() ? file.toString() : sonicUtils.getURLForResource(R.drawable.nophoto);
+        String fileJpg = myList.get(0).getCodigo() + ".JPG";
 
         myImage = findViewById(R.id.pagerSlide);
-        sonicGlide.glideImageView(ctx,myImage,myImages[0]);
+        sonicGlide.glideImageView(ctx, myImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg, R.drawable.nophoto));
 
     }
 

@@ -112,6 +112,15 @@ public class sonicUtils {
         return String.valueOf(sequence).indexOf(sequence.toString()) > -1;
     }
 
+    /*
+     *
+    OBS: DPS/PIXEL
+     */
+    public static int intToDps(Context c, int a){
+        float scale = c.getResources().getDisplayMetrics().density;
+        return (int) (a * scale + 0.5f);
+    }
+
     public static String saudacao(){
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
@@ -153,7 +162,7 @@ public class sonicUtils {
         return output;
     }
 
-    public static String getURLForResource (int resourceId) {
+    public static String getURIForResource(int resourceId) {
         return Uri.parse("android.resource://"+R.class.getPackage().getName()+"/" +resourceId).toString();
     }
 
@@ -164,7 +173,26 @@ public class sonicUtils {
         return  Bitmap.createBitmap(b, 100, 100,100, 100, matrix, true);
 
     }
+    /*
+     * SOURCE
+     * */
+    public static String checkImageJpg(String path, String file,  int placeholder){
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + file);
+        return opt1.exists() ? opt1.toString() : sonicUtils.getURIForResource(placeholder);
+    }
+    /*
+    * SOURCE
+    * */
+    public static String checkImageJpgPng(String path, String optOne, String optTwo,  int placeholder){
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + optOne);
+        File opt2 = new File(Environment.getExternalStorageDirectory(), path + optTwo);
+        return opt1.exists() ? opt1.toString() : opt2.exists() ? opt2.toString() : sonicUtils.getURIForResource(placeholder);
+    }
 
+    public static Boolean checkImageJpg(String path, String optOne){
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + optOne);
+        return opt1.exists() ? true : false;
+    }
 
     public static Drawable stringToDrawable(String filePath){
         return Drawable.createFromPath(filePath);

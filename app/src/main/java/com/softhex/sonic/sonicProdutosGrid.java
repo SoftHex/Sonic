@@ -99,9 +99,12 @@ public class sonicProdutosGrid extends Fragment {
 
         myRecycler =  myView.findViewById(R.id.recycler_list);
 
+        //TODO WITH PREFERENCES
+        int qtd = 3;
+
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new GridLayoutManager(getContext(), 3);
+        myLayout = new GridLayoutManager(getContext(), qtd);
 
         myRecycler.setLayoutManager(myLayout);
 

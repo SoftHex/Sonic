@@ -2,12 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Environment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +9,14 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -53,11 +38,12 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         TextView grupo;
         ImageView imagem;
         LinearLayout item;
-
+        RelativeLayout rlCatalogo;
 
         public prodHolder(View view) {
             super(view);
 
+            rlCatalogo = view.findViewById(R.id.rlCatalogo);
             item = view.findViewById(R.id.llItem);
             descricao = view.findViewById(R.id.tvDescricao);
             grupo = view.findViewById(R.id.tvGrupo);
@@ -73,9 +59,8 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
                     DBC.Produto.setSelecionado(codigo);
 
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    sonicConstants.PUT_EXTRA_PRODUTO_NOME = descricao.getText().toString();
-                    sonicConstants.PUT_EXTRA_PRODUTO_ID = codigo;
-                    sonicConstants.PUT_EXTRA_PRODUTO_GRUPO = grupo.getText().toString();
+                    i.putExtra("PRODUTO_NOME", descricao.getText().toString());
+                    i.putExtra("PRODUTO_GRUPO", grupo.getText().toString());
                     v.getContext().startActivity(i);
 
                 }
@@ -122,56 +107,15 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         sonicProdutosHolder prod = produtos.get(position);
         holder.codigo = prod.getCodigo();
         holder.descricao.setText(prod.getDescricao());
-        holder.grupo.setText(prod.getGrupo());
+        //holder.grupo.setText(prod.getGrupo());
+        //TODO WITH PREFERENCES
+        int qtd = 3;
 
-        if(!sonicConstants.GRUPO_PRODUTOS_GRID.equals("TODOS")){
-            GradientDrawable shape;
-            shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setColor(ctx.getResources().getColor(R.color.colorPrimaryGreenLightT));
-            shape.setCornerRadius(80);
-            holder.grupo.setPadding(10,0,10,0);
-            holder.grupo.setBackground(shape);
-            holder.grupo.setTextColor(ctx.getResources().getColor(R.color.colorPrimary));
-            holder.grupo.setTypeface(null, Typeface.ITALIC);
-        }
+        holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(ctx,380/qtd);
 
-        File fileJpg = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
+        String fileJpg = String.valueOf(prod.getCodigo())+".JPG";
 
-        if(fileJpg.exists()){
-
-            //sonicGlide.glideFile(ctx, holder.imagem, fileJpg);
-            Glide.with(ctx).clear(holder.imagem);
-            Glide.with(ctx)
-                    .load(fileJpg)
-                    .dontAnimate()
-                    //.apply(new RequestOptions().override(105, 105))
-                    .override(200,180)
-                    .fitCenter()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(false)
-                    .transition(GenericTransitionOptions.with(R.anim.fade_in))
-                    .into(holder.imagem);
-
-
-
-        }else {
-
-            Glide.with(ctx).clear(holder.imagem);
-            Glide.with(ctx)
-                    .load(R.drawable.nophoto)
-                    .dontAnimate()
-                    //.apply(new RequestOptions().override(105, 105))
-                    .override(200,180)
-                    .fitCenter()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(false)
-                    .transition(GenericTransitionOptions.with(R.anim.fade_in))
-                    .into(holder.imagem);
-
-
-        }
-
+        sonicGlide.glideImageView(ctx, holder.imagem, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
 
     }
 

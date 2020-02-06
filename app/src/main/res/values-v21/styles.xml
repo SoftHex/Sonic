@@ -78,11 +78,12 @@
     <style name="TabsTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="tabIndicatorColor">@color/colorPrimaryGreen</item>
         <item name="tabIndicatorFullWidth">false</item>
-        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorHeight">4dp</item>
         <item name="android:dividerPadding">4dp</item>
         <item name="android:divider">@android:color/white</item>
         <item name="tabBackground">@color/colorPrimary</item>
         <item name="tabTextColor">@color/colorPrimaryWhite</item>
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
         <item name="tabSelectedTextColor">@color/colorPrimaryOrange</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
     </style>
@@ -133,7 +134,7 @@
 
     <style name="ExpandedTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">26sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
 </resources>
