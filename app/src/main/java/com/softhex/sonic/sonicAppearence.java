@@ -134,7 +134,7 @@ public class sonicAppearence {
         Window window = act.getWindow();
         EditText searchEditText = (EditText) sv.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(act.getResources().getColor(R.color.colorTextAccentDark));
-        searchEditText.setHintTextColor(act.getResources().getColor(R.color.colorTextAccentLight));
+        searchEditText.setHintTextColor(act.getResources().getColor(R.color.colorTextAccentDark));
 
         if (show) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

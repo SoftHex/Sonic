@@ -3,12 +3,10 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,9 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
@@ -43,6 +44,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private sonicConstants myCons;
     private GradientDrawable shape;
     private SharedPreferences myPrefs;
+    private String clienteTipo;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -55,27 +57,30 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         TextView titulos;
         TextView pedidos;
         CardView card;
+        String clienteStatus;
         CircleImageView imagem;
         RelativeLayout back;
-        int codigo;
+        String codigo;
         String order;
         Boolean exibir_titulos;
         Boolean situacao;
         LinearLayout item;
+        LinearLayout lineraNew;
 
         public cliHolder(View view) {
             super(view);
 
             card = view.findViewById(R.id.cardView);
-            item = view.findViewById(R.id.item);
-            cliente = view.findViewById(R.id.nome);
-            letra = view.findViewById(R.id.letra);
-            grupo = view.findViewById(R.id.grupo);
-            endereco = view.findViewById(R.id.detalhe);
-            sit = view.findViewById(R.id.letterOne);
-            pedidos = view.findViewById(R.id.letterTwo);
-            titulos = view.findViewById(R.id.letterThree);
-            imagem = view.findViewById(R.id.imagem);
+            item = view.findViewById(R.id.linearItem);
+            cliente = view.findViewById(R.id.tvNome);
+            letra = view.findViewById(R.id.tvLetra);
+            grupo = view.findViewById(R.id.tvGrupo);
+            endereco = view.findViewById(R.id.tvDetalhe);
+            //sit = view.findViewById(R.id.letterOne);
+            //pedidos = view.findViewById(R.id.letterTwo);
+            //titulos = view.findViewById(R.id.letterThree);
+            imagem = view.findViewById(R.id.ivImagem);
+            lineraNew = view.findViewById(R.id.linearNew);
             //back = view.findViewById(R.id.layout);
             order = myPrefs.getString("show_name", "0");
             exibir_titulos = myPrefs.getBoolean("exibir_titulos", true);
@@ -88,12 +93,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onClick(View v) {
 
-                    DBC.Clientes.setNaoSelecionado();
-                    DBC.Clientes.setSelecionado(codigo);
 
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    sonicConstants.PUT_EXTRA_CLIENTE_NOME = cliente.getText().toString();
-                    sonicConstants.PUT_EXTRA_CLIENTE_ID = codigo;
+                    i.putExtra("CLIENTE_CODIGO", codigo);
+                    i.putExtra("CLIENTE_NOME", cliente.getText());
+                    i.putExtra("CLIENTE_GRUPO", grupo.getText());
+                    i.putExtra("CLIENTE_STATUS", clienteStatus);
                     v.getContext().startActivity(i);
 
 
@@ -103,19 +108,20 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         }
     }
 
-    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context ctx) {
+    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context ctx, String tipo) {
 
         myPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         myCons = new sonicConstants();
         this.clientes = cliente;
         this.filteredClientes = cliente;
         this.myCtx = ctx;
+        this.clienteTipo = tipo;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(myCtx).inflate(R.layout.layout_cards_clientes, parent, false);
+        View view = LayoutInflater.from(myCtx).inflate(R.layout.sonic_layout_cards_list, parent, false);
         cliHolder clientes = new cliHolder(view);
         return clientes;
 
@@ -128,31 +134,48 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         holder.setIsRecyclable(false);
         sonicClientesHolder cli = clientes.get(position);
 
-        holder.codigo = cli.getCodigo();
+        holder.codigo = String.valueOf(cli.getCodigo());
+        holder.clienteStatus = cli.getStatus();
+        holder.lineraNew.setVisibility(cli.getStatus().equals("NOVO") ? View.VISIBLE : View.GONE);
+
+        String letra;
+        String letra2;
 
         switch (holder.order){
             case "0":
                 holder.cliente.setText(cli.getRazaoSocial());
+                letra = String.valueOf(cli.getRazaoSocial().charAt(0)).toUpperCase();
                 break;
             case "1":
                 holder.cliente.setText(cli.getNomeFantasia());
+                letra = String.valueOf(cli.getNomeFantasia().charAt(0)).toUpperCase();
                 break;
                 default:
                 holder.cliente.setText(cli.getRazaoSocial());
+                letra = String.valueOf(cli.getRazaoSocial().charAt(0)).toUpperCase();
                 break;
         }
 
         //DESTACA O GRUPO/CATEGORIA DO CLIENTE
-        if(!myCons.GRUPO_CLIENTES.equals("TODOS")){
+        if(clienteTipo.equals("J") && !myCons.GRUPO_CLIENTES_CNPJ.equals("TODOS")){
             shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setColor(myCtx.getResources().getColor(R.color.colorPrimaryLightT));
+            shape.setColor(myCtx.getResources().getColor(R.color.colorPrimaryGreenLightT));
             shape.setCornerRadius(80);
-            holder.grupo.setPadding(10,0,10,0);
+            holder.grupo.setPadding(4,0,10,0);
             holder.grupo.setBackground(shape);
+            holder.grupo.setTextColor(myCtx.getResources().getColor(R.color.colorTextPrimary));
+        }else if(clienteTipo.equals("F") && !myCons.GRUPO_CLIENTES_CPF.equals("TODOS")){
+            shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setColor(myCtx.getResources().getColor(R.color.colorPrimaryGreenLightT));
+            shape.setCornerRadius(80);
+            holder.grupo.setPadding(4,0,10,0);
+            holder.grupo.setBackground(shape);
+            holder.grupo.setTextColor(myCtx.getResources().getColor(R.color.colorTextPrimary));
         }
 
-        holder.grupo.setText("GRUPO: "+cli.getGrupo());
+        holder.grupo.setText(cli.getGrupo());
         holder.endereco.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
 
         if(cli.getTitulos()>0){
@@ -186,19 +209,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             holder.imagem.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
-            switch (holder.order){
-                case "0":
-                    holder.letra.setText(String.valueOf(cli.getRazaoSocial().charAt(0)).toUpperCase());
-                    break;
-                case "1":
-                    holder.letra.setText(String.valueOf(cli.getNomeFantasia().charAt(0)).toUpperCase());
-                    break;
-                default:
-                    holder.letra.setText(String.valueOf(cli.getRazaoSocial().charAt(0)).toUpperCase());
-                    break;
-            }
-
-            //holder.letra.setBackground((myCtx).getResources().getDrawable(R.drawable.circle_textview));
+            holder.letra.setText(letra);
+            holder.letra.setTypeface(Typeface.DEFAULT_BOLD);
 
         }
 

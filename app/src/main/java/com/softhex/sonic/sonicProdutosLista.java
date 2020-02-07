@@ -17,7 +17,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -212,6 +211,8 @@ public class sonicProdutosLista extends Fragment {
 
             Handler handler = new Handler();
             handler.postDelayed(() -> {
+
+                        //result>0 ? showResult() : showNoResult();
 
                         if(result>0){
 

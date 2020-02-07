@@ -24,7 +24,9 @@ public class sonicGlide {
     }
 
     public static void glideImageView(Context c, ImageView i, String file){
+
         Glide.with(c).clear(i);
+        Glide.get(c).clearMemory();
         Glide.with(c)
                 .load(file)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -50,11 +52,13 @@ public class sonicGlide {
 
     public static void glideFile(Context c, ImageView i, File file){
         Glide.with(c).clear(i);
+        Glide.get(c).clearMemory();
         Glide.with(c)
                 .load(file)
-                .override(100,100)
+                .override(300,300)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
+                .fitCenter()
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(i);
     }

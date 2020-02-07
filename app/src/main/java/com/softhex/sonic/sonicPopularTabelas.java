@@ -1,21 +1,18 @@
 package com.softhex.sonic;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -360,7 +357,7 @@ public class sonicPopularTabelas {
                                 int pos = str.indexOf("=") + 1;
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
-                                List<String> data = Arrays.asList(str2.split(";"));
+                                List<String> data = Arrays.asList(str2.split(";", -1));
                                 DBC.Produto.saveProduto(data);
                                 line = reader.readLine();
 

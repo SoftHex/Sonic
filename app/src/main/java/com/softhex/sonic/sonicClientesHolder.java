@@ -26,6 +26,7 @@ public class sonicClientesHolder {
      String grupo;
      int titulos;
      String tabela_preco;
+     String status;
 
     public sonicClientesHolder(){
 
@@ -49,7 +50,8 @@ public class sonicClientesHolder {
                                String data_cadastro,
                                String grupo,
                                int titulos,
-                               String tabela_preco){
+                               String tabela_preco,
+                               String status){
 
         this.codigo_cliente = codigo_cliente;
         this.tipo = tipo;
@@ -71,6 +73,7 @@ public class sonicClientesHolder {
         this.grupo = grupo;
         this.titulos = titulos;
         this.tabela_preco = tabela_preco;
+        this.status = status;
 
     }
 
@@ -133,6 +136,9 @@ public class sonicClientesHolder {
     public String getTabelaPreco(){
         return this.tabela_preco;
     }
+    public String getStatus(){
+        return this.status;
+    }
 
     public void setCodigo(int codigo_cliente){
         this.codigo_cliente = codigo_cliente;
@@ -182,6 +188,7 @@ public class sonicClientesHolder {
     }
 
     public void setTabelaPreco(String tabela_preco){ this.tabela_preco = tabela_preco; }
+    public void setStatus(String status){ this.status = status; }
 
     @Override
     public String toString(){

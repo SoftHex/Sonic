@@ -4,14 +4,20 @@
     tools:context="br.com.softhex.go.sonic_clientes">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/itemSearch"
         android:icon="@mipmap/ic_search_white_24dp"
         android:title=""
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
-        android:id="@+id/pref"
+        android:id="@+id/itemFiltro"
+        android:icon="@mipmap/ic_filter_outline_white_24dp"
+        android:title=""
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/itemPref"
         android:orderInCategory="100"
         android:title="Preferências"
         app:showAsAction="never" />

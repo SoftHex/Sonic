@@ -1,19 +1,23 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
-import android.os.Environment;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
+import android.os.Environment;
 import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.io.File;
 import java.util.List;
 
@@ -26,7 +30,10 @@ public class sonicClientesDetalhe extends AppCompatActivity {
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout myCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
-
+    private String clienteNome;
+    private String clienteCod;
+    private String clienteStatus;
+    private LinearLayout linearNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,20 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         DBC = new sonicDatabaseCRUD(this);
         myViewpager = findViewById(R.id.pagerSlide);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
+        dotsLayout = findViewById(R.id.layoutDots);
+
+        Bundle extras = getIntent().getExtras();
+        if(savedInstanceState==null){
+            if(extras!=null){
+                clienteNome = extras.getString("CLIENTE_NOME");
+                clienteCod = extras.getString("CLIENTE_CODIGO");
+                clienteStatus = extras.getString("CLIENTE_STATUS");
+            }
+        }else{
+            clienteNome = extras.getString("CLIENTE_NOME");
+            clienteCod = extras.getString("CLIENTE_CODIGO");
+            clienteStatus = extras.getString("CLIENTE_STATUS");
+        }
 
         createInterface();
         slideImages();
@@ -59,12 +80,27 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        myCollapsingToolbar.setTitle(sonicConstants.PUT_EXTRA_CLIENTE_NOME);
+        myCollapsingToolbar.setTitle(clienteNome);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
+                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                    dotsLayout.setVisibility(View.INVISIBLE);
+                    //myCollapsingToolbar.setTitle(title);
+                }else {
+                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                    dotsLayout.setVisibility(View.VISIBLE);
+                    //myCollapsingToolbar.setTitle("");
+                }
             }
         });
 
@@ -75,13 +111,13 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         List<sonicClientesHolder> myList;
         int count = 0;
 
-        myList = DBC.Clientes.selectClienteSelecionado();
+        myList = DBC.Clientes.selectClienteID(12345);
         File file;
         String image = "";
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = myList.get(0).getCodigo()+"_"+(i+1)+".jpg";
+            image = clienteCod+"_"+(i+1)+".jpg";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
@@ -93,7 +129,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = myList.get(0).getCodigo()+"_"+(i+1)+".jpg";
+            image = clienteCod+"_"+(i+1)+".jpg";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             myImages[i] = file.toString();
@@ -103,13 +139,13 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
         if(count==0){
             myImages = new String[1];
-            myImages[0] = sonicUtils.getURIForResource(R.drawable.backhome1);
+            myImages[0] = sonicUtils.getURIForResource(R.drawable.nophoto);
         }
 
+        linearNew = findViewById(R.id.linearNew);
+        linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
 
-
-        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages);
-        dotsLayout = findViewById(R.id.layoutDots);
+        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
         myViewpager.setAdapter(myAdapter);
         myViewpager.addOnPageChangeListener(viewListener);
         addBottomDots(0);

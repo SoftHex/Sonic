@@ -1,14 +1,12 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
@@ -18,11 +16,12 @@ public class sonicSlideImageAdapter extends PagerAdapter {
 
     private Context myCtx;
     private String[] myImages;
-    private Drawable image;
+    private Boolean myCcrop;
 
-    public sonicSlideImageAdapter(Context myCtx, String[] myImages) {
+    public sonicSlideImageAdapter(Context myCtx, String[] myImages, Boolean ccrop) {
         this.myCtx = myCtx;
         this.myImages = myImages;
+        this.myCcrop = ccrop;
     }
 
     @Override
@@ -40,17 +39,19 @@ public class sonicSlideImageAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
 
         ImageView imageView = new ImageView(myCtx);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(myCcrop ? ImageView.ScaleType.CENTER_CROP : ImageView.ScaleType.FIT_CENTER);
 
+            Glide.with(myCtx).clear(imageView);
+            Glide.get(myCtx).clearMemory();
             Glide.with(myCtx)
                     .load(myImages[position])
                     //.placeholder(R.mipmap.loader)
-                    .override(600,400)
+                    .override(myCcrop ? 600 : 300, myCcrop ? 400 : 300)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(imageView);
-            imageView.setColorFilter(myCtx.getResources().getColor(R.color.colorPrimaryBlackExtraLightT), PorterDuff.Mode.DARKEN);
+            //imageView.setColorFilter(myCtx.getResources().getColor(R.color.colorPrimaryBlackExtraLightT), PorterDuff.Mode.DARKEN);
 
         container.addView(imageView);
 

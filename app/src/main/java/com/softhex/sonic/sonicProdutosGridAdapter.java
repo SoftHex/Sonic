@@ -33,34 +33,37 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
-        TextView descricao;
-        int codigo;
+        TextView tvDescricao;
+        String codigo;
         TextView grupo;
-        ImageView imagem;
-        LinearLayout item;
-        RelativeLayout rlCatalogo;
+        ImageView ivImagem, ivNew;
+        LinearLayout llDescription, linearNew;
+        RelativeLayout rlCatalogo, linearItem;
+        String status;
 
         public prodHolder(View view) {
             super(view);
 
-            rlCatalogo = view.findViewById(R.id.rlCatalogo);
-            item = view.findViewById(R.id.llItem);
-            descricao = view.findViewById(R.id.tvDescricao);
+            rlCatalogo = view.findViewById(R.id.relativeCatalogo);
+            linearItem = view.findViewById(R.id.linearItem);
+            linearNew = view.findViewById(R.id.linearNew);
+            llDescription = view.findViewById(R.id.llDescricao);
+            tvDescricao = view.findViewById(R.id.tvDescricao);
             grupo = view.findViewById(R.id.tvGrupo);
-            imagem = view.findViewById(R.id.ivImagem);
+            ivImagem = view.findViewById(R.id.ivImagem);
+            ivNew = view.findViewById(R.id.ivNew);
 
             DBC = new sonicDatabaseCRUD(ctx);
 
-            item.setOnClickListener(new View.OnClickListener() {
+            linearItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    DBC.Produto.setNaoSelecionado();
-                    DBC.Produto.setSelecionado(codigo);
-
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    i.putExtra("PRODUTO_NOME", descricao.getText().toString());
-                    i.putExtra("PRODUTO_GRUPO", grupo.getText().toString());
+                    i.putExtra("PRODUTO_CODIGO", codigo);
+                    i.putExtra("PRODUTO_NOME", tvDescricao.getText());
+                    i.putExtra("PRODUTO_GRUPO", grupo.getText());
+                    i.putExtra("PRODUTO_STATUS", status);
                     v.getContext().startActivity(i);
 
                 }
@@ -105,17 +108,20 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = produtos.get(position);
-        holder.codigo = prod.getCodigo();
-        holder.descricao.setText(prod.getDescricao());
+        holder.codigo = String.valueOf(prod.getCodigo());
+        holder.tvDescricao.setText(prod.getDescricao());
+        holder.status = prod.getStatus();
+        holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
         //holder.grupo.setText(prod.getGrupo());
         //TODO WITH PREFERENCES
         int qtd = 3;
 
+        holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(ctx, 120/qtd);
         holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(ctx,380/qtd);
 
         String fileJpg = String.valueOf(prod.getCodigo())+".JPG";
 
-        sonicGlide.glideImageView(ctx, holder.imagem, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
+        sonicGlide.glideImageView(ctx, holder.ivImagem, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
 
     }
 
@@ -135,7 +141,6 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     }
 
     private static class prodFilter extends Filter {
-
         private final sonicProdutosGridAdapter adapter;
 
         private final List<sonicProdutosHolder> originalList;

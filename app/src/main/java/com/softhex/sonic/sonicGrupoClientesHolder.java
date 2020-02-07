@@ -7,18 +7,18 @@ package com.softhex.sonic;
 public class sonicGrupoClientesHolder {
 
      int id;
-     int codigo_grupo;
+     int codigo;
      String nome;
 
     public sonicGrupoClientesHolder(){
 
     }
     public sonicGrupoClientesHolder(int id,
-                                    int codigo_grupo,
+                                    int codigo,
                                     String nome){
 
         this.id = id;
-        this.codigo_grupo = codigo_grupo;
+        this.codigo = codigo;
         this.nome = nome;
 
 
@@ -28,7 +28,7 @@ public class sonicGrupoClientesHolder {
         return this.id;
     }
     public int getCodigo(){
-        return this.codigo_grupo;
+        return this.codigo;
     }
     public String getNome(){
         return this.nome;
@@ -39,8 +39,8 @@ public class sonicGrupoClientesHolder {
     public void setId(int id){
         this.id = id;
     }
-    public void setCodigo(int codigo_grupo){
-        this.codigo_grupo = codigo_grupo;
+    public void setCodigo(int codigo){
+        this.codigo = codigo;
     }
     public void setNome(String nome){
         this.nome = nome;

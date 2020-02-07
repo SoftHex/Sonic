@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
@@ -25,12 +27,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -57,6 +57,7 @@ public class sonicClientesCNPJ extends Fragment {
     private boolean allowSearch;
     private Context _this;
     private ImageView myImage;
+    private sonicDatabaseCRUD DBC;
     Intent i;
 
     @Nullable
@@ -64,6 +65,8 @@ public class sonicClientesCNPJ extends Fragment {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         _this = getActivity();
+
+        DBC = new sonicDatabaseCRUD(_this);
 
         loadFragment();
 
@@ -121,7 +124,7 @@ public class sonicClientesCNPJ extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.sonic_clientes, menu);
-        mySearch = menu.findItem(R.id.search);
+        mySearch = menu.findItem(R.id.itemSearch);
 
         final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
         searchView.setQueryHint("Pesquisar...");
@@ -147,17 +150,19 @@ public class sonicClientesCNPJ extends Fragment {
             }
         });
 
+
+
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
                 myTabLayout.setVisibility(GONE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,2,true,true);
+                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,true,true);
             }
 
             @Override
             public void onViewDetachedFromWindow(View view) {
                 myTabLayout.setVisibility(VISIBLE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,2,false,false);
+                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
 
             }
         });
@@ -167,15 +172,17 @@ public class sonicClientesCNPJ extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
+            case R.id.itemSearch:
                 return false;
-            case R.id.pref:
+            case R.id.itemFiltro:
+                exibirFiltro();
+                return false;
+            case R.id.itemPref:
                 //dialogDelete();
                 return false;
             default:
                 break;
         }
-
         return false;
     }
 
@@ -224,7 +231,7 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(myList, _this);
+        myAdapter = new sonicClientesAdapter(myList, _this, "J");
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -254,6 +261,49 @@ public class sonicClientesCNPJ extends Fragment {
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                 .into(myImage);*/
+
+    }
+
+    private void exibirFiltro() {
+
+        List<sonicGrupoClientesHolder> grupo;
+
+        grupo = DBC.GrupoCliente.selectGrupoClientes();
+
+        List<String> l = new ArrayList<String>();
+
+        for(int i=0; i < grupo.size(); i++ ){
+            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CNPJ){
+                l.add(grupo.get(i).getNome());
+            }
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione um grupo...");
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                sonicConstants.GRUPO_CLIENTES_CNPJ = chars[item].toString();
+                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "LIMPAR FILTRO";
+                dialog.dismiss();
+                refreshFragment();
+
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sonicConstants.GRUPO_CLIENTES_CNPJ = "TODOS";
+                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "";
+                refreshFragment();
+            }
+        }).show();
 
     }
 

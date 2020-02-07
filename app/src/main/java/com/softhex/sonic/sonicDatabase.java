@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -154,7 +153,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "data_cadastro string, " +
             "codigo_grupo int not null, " +
 			"situacao int, " +
-            "selecionado int);";
+            "status string);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO = "CREATE INDEX index_clientes_codigo ON "+DB_CLIENTES+" (codigo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO = "CREATE INDEX index_clientes_codigo_grupo ON "+DB_CLIENTES+" (codigo_grupo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_SITUACAO = "CREATE INDEX index_clientes_situacao ON "+DB_CLIENTES+" (situacao);";
@@ -198,7 +197,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_unidade int, " +
             "codigo_grupo int," +
             "codigo_empresa int," +
-            "selecionado int);";
+            "status string);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO = "CREATE INDEX index_produtos_codigo ON "+DB_PRODUTOS+" (codigo);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_UNIDADE = "CREATE INDEX index_produtos_codigo_unidade ON "+DB_PRODUTOS+" (codigo_unidade);";
     private static final String CREATE_INDEX_TABLE_PRODUTOS_CODIGO_GRUPO = "CREATE INDEX index_produtos_codigo_grupo ON "+DB_PRODUTOS+" (codigo_grupo);";

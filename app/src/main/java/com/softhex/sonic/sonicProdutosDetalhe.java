@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,12 +28,14 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout myCollapsingToolbar;
     private AppBarLayout myAppBar;
-    private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
+    private String[] myImages = new String[1];
     private Context ctx;
     private TextView tvDescricao, tvGrupo, tvDetalhe, tvPreco;
-    private ImageView myImage;
     private ActionBar myActionBar;
-    private String title="";
+    private String produtoCod;
+    private String produtoNome;
+    private String produtoStatus;
+    private LinearLayout linearNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,36 +47,36 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         //myViewpager = findViewById(R.id.pagerSlide);
         myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
-        tvDescricao = findViewById(R.id.tvDescricao);
-        tvGrupo = findViewById(R.id.tvGrupo);
-        tvDetalhe = findViewById(R.id.tvDetalhe);
-        tvPreco = findViewById(R.id.tvPreco);
-
-        createInterface();
-        loadImage();
+        //tvDescricao = findViewById(R.id.tvDescricao);
+        //tvGrupo = findViewById(R.id.tvGrupo);
+        //tvDetalhe = findViewById(R.id.tvDetalhe);
+        //tvPreco = findViewById(R.id.tvPreco);
 
         Bundle extras = getIntent().getExtras();
         if(savedInstanceState==null){
             if(extras!=null){
-                tvDescricao.setText(extras.getString("PRODUTO_NOME"));
-                tvGrupo.setText(extras.getString("PRODUTO_GRUPO"));
-                title = extras.getString("PRODUTO_NOME");
+                produtoNome = extras.getString("PRODUTO_NOME");
+                produtoCod = extras.getString("PRODUTO_CODIGO");
+                produtoStatus = extras.getString("PRODUTO_STATUS");
             }
         }else{
-            tvDescricao.setText(extras.getString("PRODUTO_NOME"));
-            tvGrupo.setText(extras.getString("PRODUTO_GRUPO"));
-            title = extras.getString("PRODUTO_NOME");
+            produtoNome = extras.getString("PRODUTO_NOME");
+            produtoCod = extras.getString("PRODUTO_CODIGO");
+            produtoStatus = extras.getString("PRODUTO_STATUS");
         }
+
+        createInterface();
+        loadImage();
 
         myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                    myCollapsingToolbar.setTitle(title);
+                    //myCollapsingToolbar.setTitle(produtoCod);
                 }else {
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                    myCollapsingToolbar.setTitle("");
+                    //myCollapsingToolbar.setTitle("");
                 }
             }
         });
@@ -98,7 +99,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        myCollapsingToolbar.setTitle(title);
+        myCollapsingToolbar.setTitle(produtoNome);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +113,20 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     public void loadImage(){
 
         List<sonicProdutosHolder> myList;
-        myList = DBC.Produto.selectProdutoselecionado();
+        myList = DBC.Produto.selectProdutoID(50675);
 
-        String fileJpg = myList.get(0).getCodigo() + ".JPG";
+        String fileJpg = produtoCod + ".JPG";
 
-        myImage = findViewById(R.id.pagerSlide);
-        sonicGlide.glideImageView(ctx, myImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg, R.drawable.nophoto));
+        myViewpager = findViewById(R.id.pagerSlide);
+
+        myImages[0] = sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg, R.drawable.nophoto);
+        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, false);
+        //dotsLayout = findViewById(R.id.layoutDots);
+        myViewpager.setAdapter(myAdapter);
+        linearNew = findViewById(R.id.linearNew);
+        linearNew.setVisibility(produtoStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
+        //myViewpager.setOn
+        //addBottomDots(0);
 
     }
 

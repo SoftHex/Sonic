@@ -18,6 +18,7 @@ public class sonicProdutosHolder {
      String quantidade_anterior;
      int pedidos;
      String atuacao;
+     String status;
 
     public sonicProdutosHolder(){
 
@@ -33,7 +34,8 @@ public class sonicProdutosHolder {
                                String quantidade,
                                String quantidade_anterior,
                                int pedidos,
-                               String atuacao){
+                               String atuacao,
+                               String status){
 
         this.codigo_produto = codigo_produto;
         this.descricao = descricao;
@@ -47,6 +49,7 @@ public class sonicProdutosHolder {
         this.quantidade_anterior = quantidade_anterior;
         this.pedidos = pedidos;
         this.atuacao = atuacao;
+        this.status = status;
 
     }
 
@@ -89,6 +92,9 @@ public class sonicProdutosHolder {
     public String getAtuacao() {
         return atuacao;
     }
+    public String getStatus() {
+        return status;
+    }
 
     public void setCodigo(int codigo_produto){
         this.codigo_produto = codigo_produto;
@@ -124,6 +130,9 @@ public class sonicProdutosHolder {
 
     public void setAtuacao(String atuacao) {
         this.atuacao = atuacao;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

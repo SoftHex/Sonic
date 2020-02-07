@@ -3,10 +3,10 @@
     <solid android:color="@color/colorPrimaryBlackDarkT"/>
 
     <padding
-        android:left="1dp"
+        android:left="0dp"
         android:top="0dp"
         android:right="1dp"
-        android:bottom="1dp"/>
+        android:bottom="0dp"/>
 
     <corners
         android:bottomRightRadius="2dp"

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -53,11 +54,13 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.holder.StringHolder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.softhex.view.ProgressProfileView;
@@ -109,6 +112,7 @@ public class sonicMain extends AppCompatActivity{
     private PrimaryDrawerItem myDrawerSistema;
     private PrimaryDrawerItem myDrawerRedefinir;
     private PrimaryDrawerItem myDrawerExportar;
+    private SwitchDrawerItem myDrawerLock;
     private SecondaryDrawerItem myDrawerRankingClientes;
     private SecondaryDrawerItem myDrawerRankingProdutos;
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
@@ -135,6 +139,7 @@ public class sonicMain extends AppCompatActivity{
         myCtx = this;
         DBC = new sonicDatabaseCRUD(myCtx);
         DBCL = new sonicDatabaseLogCRUD(myCtx);
+        sonicConstants.BACK = back;
 
         myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -193,6 +198,7 @@ public class sonicMain extends AppCompatActivity{
         File file = new File(url);
         if(file.exists()){
             Log.d("File", "EXISTE");
+            Glide.get(getBaseContext()).clearMemory();
             Glide.with(getBaseContext())
                     .load(url)
                     .placeholder(R.drawable.no_profile)
@@ -545,6 +551,24 @@ public class sonicMain extends AppCompatActivity{
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_database_export_grey600_24dp));
 
+        myDrawerLock = new SwitchDrawerItem()
+                .withIdentifier(19)
+                .withCheckable(false)
+                .withName("Sistema")
+                .withDescription("Solicitar senha ao entrar")
+                .withIcon(getResources().getDrawable(R.mipmap.ic_cellphone_lock_grey600_24dp))
+        .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(getApplicationContext(), "Checked", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "UnChecked", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
         myDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(myToolbar)
@@ -602,6 +626,8 @@ public class sonicMain extends AppCompatActivity{
                         myDrawerVendedores,
                         new SectionDrawerItem().withName(R.string.relatoriosTitulo),
                         myDrawerRelatorios,
+                        new SectionDrawerItem().withName("Segurança"),
+                        myDrawerLock,
                         new SectionDrawerItem().withName(R.string.extraTitulo),
                         myDrawerSistema,
                         myDrawerRedefinir,

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,40 +41,41 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     public class prodHolder extends RecyclerView.ViewHolder {
 
         TextView descricao;
-        int codigo;
-        TextView codigo_full;
+        String codigo;
+        TextView codigoFull;
         TextView grupo;
         TextView situacao;
+        String status;
         CircleImageView imagem;
         TextView letra;
         CardView card;
-        LinearLayout item;
+        LinearLayout llItem, linearNew;
 
 
         public prodHolder(View view) {
             super(view);
 
-            card = (CardView)view.findViewById(R.id.cardView);
-            item = view.findViewById(R.id.item);
-            descricao = (TextView)view.findViewById(R.id.nome);
-            grupo = (TextView)view.findViewById(R.id.grupo);
-            codigo_full = (TextView)view.findViewById(R.id.detalhe);
+            card = view.findViewById(R.id.cardView);
+            llItem = view.findViewById(R.id.linearItem);
+            linearNew = view.findViewById(R.id.linearNew);
+            descricao = view.findViewById(R.id.tvNome);
+            grupo = view.findViewById(R.id.tvGrupo);
+            codigoFull = view.findViewById(R.id.tvDetalhe);
             //situacao = (TextView)view.findViewById(R.id.situacao);
-            letra = (TextView)view.findViewById(R.id.letra);
-            imagem = (CircleImageView) view.findViewById(R.id.imagem);
+            letra = view.findViewById(R.id.tvLetra);
+            imagem = view.findViewById(R.id.ivImagem);
 
             DBC = new sonicDatabaseCRUD(ctx);
 
-            item.setOnClickListener(new View.OnClickListener() {
+            llItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    DBC.Produto.setNaoSelecionado();
-                    DBC.Produto.setSelecionado(codigo);
-
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    i.putExtra("PRODUTO_NOME", descricao.getText().toString());
-                    i.putExtra("PRODUTO_GRUPO", grupo.getText().toString());
+                    i.putExtra("PRODUTO_CODIGO", codigo);
+                    i.putExtra("PRODUTO_NOME", descricao.getText());
+                    i.putExtra("PRODUTO_GRUPO", grupo.getText());
+                    i.putExtra("PRODUTO_STATUS", status);
                     v.getContext().startActivity(i);
 
                 }
@@ -185,20 +185,12 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         holder.descricao.setText(prod.getDescricao());
         //holder.descricao.setTextColor(Color.parseColor(prod.getSituacaoCor()));
-        holder.codigo_full.setText("Cód.: "+prod.getCodigo()+" "+Html.fromHtml("&#187;")+" Referência: "+prod.getCodigoAlternativo());
-        holder.codigo = prod.getCodigo();
+        holder.codigoFull.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+        holder.codigo = String.valueOf(prod.getCodigo());
         holder.grupo.setText(prod.getGrupo());
+        holder.status = prod.getStatus();
 
-        if(!myCons.GRUPO_PRODUTOS_LISTA.equals("TODOS")){
-            shape = new GradientDrawable();
-            shape.setShape(GradientDrawable.RECTANGLE);
-            shape.setColor(ctx.getResources().getColor(R.color.colorPrimaryGreenLightT));
-            shape.setCornerRadius(80);
-            holder.grupo.setPadding(10,0,10,0);
-            holder.grupo.setBackground(shape);
-            holder.grupo.setTextColor(ctx.getResources().getColor(R.color.colorPrimary));
-            holder.grupo.setTypeface(null, Typeface.ITALIC);
-        }
+        holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
 
         File fileJpg = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
 
@@ -213,7 +205,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             holder.imagem.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
             holder.letra.setText(String.valueOf(prod.getDescricao().charAt(0)));
-            //holder.letra.setBackground((ctx).getResources().getDrawable(R.drawable.circle_textview));
+            holder.letra.setTypeface(Typeface.DEFAULT_BOLD);
         }
 
     }
