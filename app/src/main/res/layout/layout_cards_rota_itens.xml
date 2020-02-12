@@ -17,7 +17,7 @@
             android:id="@+id/item"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="6dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -25,20 +25,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="110dp"
                 android:orientation="horizontal"
                 android:padding="6dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imagem"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/letra"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:textColor="@color/colorPrimaryWhite"
                     android:textSize="22sp"
                     android:text="@string/placeholderLetter"
@@ -65,66 +65,111 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccentDark"
+                            android:maxLines="2"
+                            android:text="NOME DO CLIENTE"
+                            android:textColor="@color/colorPrimaryGreen"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/grupo"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="12sp" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tipo:"/>
+
+                            <TextView
+                                android:id="@+id/tvTipo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:background="@drawable/oval_text_blue"
+                                android:text="Agendamento"
+                                android:layout_marginLeft="6dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textColor="@color/colorTextWhite"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:text="Situação:"/>
+
+                            <TextView
+                                android:id="@+id/tvSituacao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:background="@drawable/oval_text_gray"
+                                android:text="Não Iniciada"
+                                android:layout_marginLeft="6dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:textColor="@color/colorTextWhite"
+                                android:textSize="10sp" />
+
+                        </LinearLayout>
+
+
 
                         <TextView
-                            android:id="@+id/detalhe"
+                            android:id="@+id/tvEndereco"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@string/placeholderText"
+                            android:drawablePadding="12dp"
+                            android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_18dp"
+                            android:maxLines="2"
+                            android:text="Endereço do Cliente"
                             android:textColor="@color/colorTextAccent"
-                            android:textSize="12sp" />
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvDetalhe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:drawablePadding="12dp"
+                            android:drawableLeft="@mipmap/ic_calendar_text_grey600_18dp"
+                            android:maxLines="2"
+                            android:text="Data Prevista: 00/00/000 - 10:00"
+                            android:textColor="@color/colorTextAccent"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvTempo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:drawablePadding="12dp"
+                            android:drawableLeft="@mipmap/ic_progress_clock_grey600_18dp"
+                            android:maxLines="2"
+                            android:text="Duração:"
+                            android:textColor="@color/colorTextAccent"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical|center"
+                        android:gravity="right|top"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/letterOne"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
+                            android:background="@mipmap/ic_dots_vertical_grey600_18dp"
+                            android:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/letterTwo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
-
-                        <TextView
-                            android:id="@+id/letterThree"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="13sp"
-                            android:visibility="gone"
-                            android:text="@string/placeholderLetter"/>
 
                     </LinearLayout>
 
@@ -132,7 +177,7 @@
 
             </LinearLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

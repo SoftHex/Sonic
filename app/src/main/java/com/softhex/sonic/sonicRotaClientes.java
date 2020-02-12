@@ -87,15 +87,15 @@ public class sonicRotaClientes extends Fragment {
 
         myTabLayout = getActivity().findViewById(R.id.tabs);
 
-        myTextView = myView.findViewById(R.id.text);
+        myTextView = myView.findViewById(R.id.tvText);
 
-        myImage = myView.findViewById(R.id.image);
+        myImage = myView.findViewById(R.id.ivImage);
 
-        myCoordinatorLayout = myView.findViewById(R.id.layout_main);
+        myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
         myShimmer = myView.findViewById(R.id.shimmer);
 
-        myRecycler =  myView.findViewById(R.id.recycler_list);
+        myRecycler =  myView.findViewById(R.id.recyclerList);
 
         myRecycler.setHasFixedSize(true);
 

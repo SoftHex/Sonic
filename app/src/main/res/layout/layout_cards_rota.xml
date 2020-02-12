@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <com.softhex.timelineview.TimelineView
-        android:id="@+id/timeline"
+        android:id="@+id/tlRota"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginEnd="6dp"
@@ -27,7 +27,7 @@
         app:markerTextColor="@color/colorPrimaryWhite"
         app:markerTextSize="12sp"/>
 
-        <include layout="@layout/layout_cards_rota_itens"/>
+        <!--<include layout="@layout/layout_cards_rota_itens"/>-->
 
 
 </LinearLayout>

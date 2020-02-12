@@ -1,6 +1,5 @@
 package com.softhex.sonic;
 
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
@@ -10,13 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.softhex.timelineview.LineType;
 import com.softhex.timelineview.TimelineView;
 
@@ -42,7 +36,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
         ViewHolder(View view) {
             super(view);
-            timelineView = (TimelineView) view.findViewById(R.id.timeline);
+            timelineView = (TimelineView) view.findViewById(R.id.tlRota);
             //tvName = (TextView) view.findViewById(R.id.tv_name);
             //tvAddress = (TextView) view.findViewById(R.id.tv_address);
         }
