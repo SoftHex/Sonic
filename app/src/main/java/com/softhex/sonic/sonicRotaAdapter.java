@@ -62,7 +62,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter implements Filterable
         holder.setIsRecyclable(false);
         sonicRotaHolder rota = rotas.get(position);
 
-        holder.cliente.setText(rota.getData());
+        holder.cliente.setText(rota.getDataAgendamento());
 
     }
 

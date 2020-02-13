@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,14 +34,23 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TimelineView timelineView;
-        TextView tvName;
-        TextView tvAddress;
+        TextView tvNome;
+        TextView tvEndereco;
+        TextView tvTipo;
+        TextView tvSituacao;
+        TextView tvOptions;
 
         ViewHolder(View view) {
             super(view);
             timelineView = (TimelineView) view.findViewById(R.id.tlRota);
+            tvOptions = view.findViewById(R.id.tvOptions);
+            tvNome = view.findViewById(R.id.tvNome);
+            tvTipo = view.findViewById(R.id.tvTipo);
+            tvSituacao = view.findViewById(R.id.tvSituacao);
+            tvEndereco = view.findViewById(R.id.tvEndereco);
             //tvName = (TextView) view.findViewById(R.id.tv_name);
             //tvAddress = (TextView) view.findViewById(R.id.tv_address);
+
         }
     }
 
@@ -60,14 +72,34 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
         //holder.tvName.setText(items.get(position).getName());
         //holder.tvAddress.setText(items.get(position).getAddress());
-        holder.timelineView.setLineType(getLineType(position));
-        holder.timelineView.setNumber(position);
+        //holder.timelineView.setLineType(getLineType(position));
+        //holder.timelineView.setNumber(position);
+        holder.tvNome.setText(rota.getRazaoSocial());
+        holder.tvEndereco.setText(rota.getEnderecoCompleto());
+        holder.tvTipo.setText(rota.getTipo());
+
+        holder.tvOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu myPopUp = new PopupMenu(myCtx, holder.tvOptions);
+                myPopUp.getMenuInflater().inflate(R.menu.sonic_rota_cards_options, myPopUp.getMenu());
+
+                myPopUp.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(myCtx, item.getTitle().toString(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+
+            }
+        });
 
         // Make first and last markers stroked, others filled
         if (position == 0 || position + 1 == getItemCount()) {
-            holder.timelineView.setFillMarker(false);
+            //holder.timelineView.setFillMarker(false);
         } else {
-            holder.timelineView.setFillMarker(true);
+            //holder.timelineView.setFillMarker(true);
         }
 
         if (position == 4) {
@@ -76,11 +108,11 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
             //R.mipmap.ic_check_all_white_24dp));
 
         } else {
-            holder.timelineView.setDrawable(null);
+            //holder.timelineView.setDrawable(null);
         }
 
         // Set every third item active
-        holder.timelineView.setActive(position % 3 == 2);
+        //holder.timelineView.setActive(position % 3 == 2);
 
         String file = Environment.getExternalStorageDirectory()+myCons.LOCAL_IMG_CLIENTES + rota.getCodigoCliente()+"_1.jpg";
         File f = new File(file);

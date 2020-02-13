@@ -3371,11 +3371,17 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT " +
                         "R.codigo," +
                         "R.codigo_cliente," +
-                        "R.data," +
-                        "R.hora," +
-                        "R.ordem" +
+                        "R.data_agendamento," +
+                        "R.hora_agendamento," +
+                        "R.ordem," +
+                        "R.tipo," +
+                        "R.observacao," +
+                        "C.razao_social," +
+                        "C.endereco," +
+                        "C.bairro," +
+                        "C.municipio" +
                         " FROM " + TABLE_ROTA +
-                        " R ";
+                        " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente" ;
 
                 try{
 
@@ -3388,9 +3394,14 @@ public class sonicDatabaseCRUD {
 
                         rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                         rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                        rota.setData(cursor.getString(cursor.getColumnIndex("data")));
-                        rota.setHora(cursor.getString(cursor.getColumnIndex("hora")));
+                        rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
+                        rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
                         rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+                        rota.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
+                        rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        rota.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                        rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                        rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
 
                         rotas.add(rota);
 

@@ -23,37 +23,15 @@
                 android:focusable="true"
                 android:background="?selectableItemBackground">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:orientation="horizontal"
-                android:padding="6dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imagem"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/letra"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:textColor="@color/colorPrimaryWhite"
-                    android:textSize="22sp"
-                    android:text="@string/placeholderLetter"
-                    android:visibility="visible"
-                    android:background="@drawable/circle_textview"
-                    android:gravity="center" />
-
+                <!-- CONTAINER -->
                 <LinearLayout
 
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:orientation="horizontal"
                     android:layout_weight="1">
 
+                    <!-- CONTEUDO -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -61,16 +39,17 @@
                         android:layout_weight="1">
 
                         <TextView
-                            android:id="@+id/nome"
+                            android:id="@+id/tvNome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:text="NOME DO CLIENTE"
                             android:textColor="@color/colorPrimaryGreen"
-                            android:textSize="15sp"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
+                        <!-- CABEÇALHO -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -90,10 +69,9 @@
                                 android:background="@drawable/oval_text_blue"
                                 android:text="Agendamento"
                                 android:layout_marginLeft="6dp"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
+                                android:padding="4dp"
                                 android:textColor="@color/colorTextWhite"
-                                android:textSize="10sp" />
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -110,64 +88,86 @@
                                 android:background="@drawable/oval_text_gray"
                                 android:text="Não Iniciada"
                                 android:layout_marginLeft="6dp"
-                                android:paddingLeft="4dp"
-                                android:paddingRight="4dp"
+                                android:padding="4dp"
                                 android:textColor="@color/colorTextWhite"
-                                android:textSize="10sp" />
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <!-- INFORMAÇOES GERAIS -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvEndereco"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_18dp"
+                                android:maxLines="1"
+                                android:text="Endereço do Cliente"
+                                android:textColor="@color/colorTextAccent"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvDetalhe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_calendar_text_grey600_18dp"
+                                android:maxLines="1"
+                                android:text="Data Prevista: 00/00/000 - 10:00"
+                                android:textColor="@color/colorTextAccent"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvObservacao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_note_text_outline_grey600_18dp"
+                                android:maxLines="1"
+                                android:text="Observação:"
+                                android:textColor="@color/colorTextAccent"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tvTempo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_progress_clock_grey600_18dp"
+                                android:maxLines="1"
+                                android:text="Duração:"
+                                android:textColor="@color/colorTextAccent"
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 
 
-
-                        <TextView
-                            android:id="@+id/tvEndereco"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:drawablePadding="12dp"
-                            android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_18dp"
-                            android:maxLines="2"
-                            android:text="Endereço do Cliente"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvDetalhe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:drawablePadding="12dp"
-                            android:drawableLeft="@mipmap/ic_calendar_text_grey600_18dp"
-                            android:maxLines="2"
-                            android:text="Data Prevista: 00/00/000 - 10:00"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvTempo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:drawablePadding="12dp"
-                            android:drawableLeft="@mipmap/ic_progress_clock_grey600_18dp"
-                            android:maxLines="2"
-                            android:text="Duração:"
-                            android:textColor="@color/colorTextAccent"
-                            android:textSize="14sp" />
-
                     </LinearLayout>
 
+                    <!-- MENU LATERAL -->
                     <LinearLayout
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:gravity="right|top"
+                        android:elevation="1dp"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/letterOne"
+                            android:id="@+id/tvOptions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@mipmap/ic_dots_vertical_grey600_18dp"
+                            android:background="@mipmap/ic_dots_vertical_grey600_24dp"
+                            android:textSize="14sp"
                             android:visibility="visible" />
 
 
@@ -176,8 +176,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

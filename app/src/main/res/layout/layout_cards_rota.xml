@@ -10,24 +10,16 @@
         android:id="@+id/tlRota"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginEnd="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:layout_marginStart="6dp"
-        android:background="@color/colorPrimaryWhite"
-        app:lineColor="@color/colorPrimaryBlackT"
         app:lineOrientation="vertical"
-        app:lineSize="2dp"
-        app:markerActive="false"
-        app:markerActiveColor="@color/colorPrimaryGreenLightT"
-        app:markerActiveStrokeWidth="4dp"
-        app:markerColor="@color/colorPrimaryBlack"
+        android:layout_marginLeft="6dp"
+        app:markerInCenter="false"
         app:markerSize="20dp"
-        app:markerStrokeWidth="2dp"
-        app:markerTextColor="@color/colorPrimaryWhite"
-        app:markerTextSize="12sp"/>
-
-        <!--<include layout="@layout/layout_cards_rota_itens"/>-->
+        app:markerPaddingTop="8dp"
+        app:lineWidth="2dp"
+        app:lineStyle="dash"
+        app:endLineColor="@color/colorPrimary" />
+    
+        <include layout="@layout/layout_cards_rota_itens"/>
 
 
 </LinearLayout>

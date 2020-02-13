@@ -157,7 +157,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO = "CREATE INDEX index_clientes_codigo ON "+DB_CLIENTES+" (codigo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO = "CREATE INDEX index_clientes_codigo_grupo ON "+DB_CLIENTES+" (codigo_grupo);";
     private static final String CREATE_INDEX_TABLE_CLIENTES_SITUACAO = "CREATE INDEX index_clientes_situacao ON "+DB_CLIENTES+" (situacao);";
-    private static final String CREATE_INDEX_TABLE_CLIENTES_SELECIONADO = "CREATE INDEX index_clientes_selecionado ON "+DB_CLIENTES+" (selecionado);";
 
     private static final String CREATE_TABLE_EMPRESAS_CLIENTES = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESAS_CLIENTES+" (" +
             "_id integer primary key autoincrement, "+
@@ -211,13 +210,24 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_TABLE_ROTA = "CREATE TABLE IF NOT EXISTS "+DB_ROTA+" (" +
             "_id integer primary key autoincrement, " +
-            "codigo int, " +
-            "codigo_empresa int, " +
-            "codigo_cliente int, " +
-            "data string, " +
-            "hora string, " +
-            "ordem int);";
+            "codigo int not null, " +
+            "codigo_empresa int not null, " +
+            "codigo_cliente int not null, " +
+            "tipo string, " +
+            "situacao int, " +
+            "data_agendamento string, " +
+            "hora_agendamento string, " +
+            "ordem int, " +
+            "observacao string, " +
+            "data_inicio string, " +
+            "hora_inicio string, " +
+            "data_fim string, " +
+            "hora_fim string, " +
+            "conclusao string, " +
+            "negativacao int, " +
+            "cancelamento string);";
     private static final String CREATE_INDEX_TABLE_ROTA_CODIGO = "CREATE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
+    private static final String CREATE_INDEX_TABLE_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
     private static final String CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";
     private static final String CREATE_INDEX_TABLE_ROTA_ORDEM = "CREATE INDEX index_rota_codigo_ordem ON "+DB_ROTA+" (ordem);";
 
@@ -452,7 +462,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_TABLE_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_CODIGO_GRUPO);
-        DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_SELECIONADO);
         DB.execSQL(CREATE_INDEX_TABLE_CLIENTES_SITUACAO);
         DB.execSQL(CREATE_TABLE_EMPRESAS_CLIENTES);
         DB.execSQL(CREATE_INDEX_TABLE_EMPRESAS_CLIENTES_CODIGO_CLIENTE);
@@ -474,6 +483,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TABLE_GRUPO_PRODUTOS_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO_EMPRESA);
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_ORDEM);
         DB.execSQL(CREATE_TABLE_ESTOQUE_PRODUTOS);
         DB.execSQL(CREATE_TABLE_RANKING_PRODUTOS);
