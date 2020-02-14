@@ -1,16 +1,22 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +66,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
     private sonicConstants myCons;
     private GradientDrawable shape;
     private SharedPreferences myPrefs;
+    private Activity mActivity;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -71,6 +78,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         TextView tvObservacao;
         TextView tvAtendente;
         TextView tvDataHora;
+        TextView tvSituacao;
         LinearLayout linearItem;
 
         ViewHolder(View view) {
@@ -81,6 +89,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
             tvNome = view.findViewById(R.id.tvNome);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
+            tvSituacao = view.findViewById(R.id.tvSituacao);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
             tvObservacao = view.findViewById(R.id.tvObservacao);
@@ -88,10 +97,11 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         }
     }
 
-    sonicRotaAdapter2(Context myCtx, List<sonicRotaHolder> rotas) {
-        this.myCtx = myCtx;
+    sonicRotaAdapter2(Activity activity, List<sonicRotaHolder> rotas) {
+        this.myCtx = activity.getApplicationContext();
         this.rotas = rotas;
         this.filteredRotas = rotas;
+        this.mActivity = activity;
     }
 
     @Override
@@ -123,6 +133,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
                 holder.tvStatus.setBackground(myCtx.getResources().getDrawable(R.drawable.status_nao_iniciada));
                 holder.tvStatus.setText(StatusText.NAO_INICIADO);
                 holder.tvNome.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryBlue));
+                holder.tvEndereco.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryBlue));
                 holder.timelineView.setEndLineColor(myCtx.getResources().getColor(R.color.colorPrimaryBlue), holder.getItemViewType());
                 holder.timelineView.setMarkerColor(myCtx.getResources().getColor(R.color.colorPrimaryBlue));
                 break;
@@ -130,6 +141,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
                 holder.tvStatus.setBackground(myCtx.getResources().getDrawable(R.drawable.status_iniciada));
                 holder.tvStatus.setText(StatusText.EM_ANDAMENTO);
                 holder.tvNome.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryOrange));
+                holder.tvEndereco.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryOrange));
                 holder.timelineView.setEndLineColor(myCtx.getResources().getColor(R.color.colorPrimaryOrange), holder.getItemViewType());
                 holder.timelineView.setMarkerColor(myCtx.getResources().getColor(R.color.colorPrimaryOrange));
                 break;
@@ -137,22 +149,30 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
                 holder.tvStatus.setBackground(myCtx.getResources().getDrawable(R.drawable.status_concluida));
                 holder.tvStatus.setText(StatusText.CONCLUIDA);
                 holder.tvNome.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryGreen));
+                holder.tvEndereco.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryGreen));
                 holder.timelineView.setEndLineColor(myCtx.getResources().getColor(R.color.colorPrimaryGreen), holder.getItemViewType());
                 holder.timelineView.setMarkerColor(myCtx.getResources().getColor(R.color.colorPrimaryGreen));
                 holder.tvOptions.setVisibility(View.GONE);
+                holder.tvSituacao.setVisibility(View.VISIBLE);
                 break;
             case Status.CANCELADA:
                 holder.tvStatus.setBackground(myCtx.getResources().getDrawable(R.drawable.status_cancelada));
                 holder.tvStatus.setText(StatusText.CANCELADA);
                 holder.tvNome.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryRed));
+                holder.tvEndereco.setTextColor(myCtx.getResources().getColor(R.color.colorPrimaryRed));
                 holder.timelineView.setEndLineColor(myCtx.getResources().getColor(R.color.colorPrimaryRed), holder.getItemViewType());
                 holder.timelineView.setMarkerColor(myCtx.getResources().getColor(R.color.colorPrimaryRed));
                 holder.tvOptions.setVisibility(View.GONE);
                 break;
         }
+        holder.linearItem.setOnClickListener((View v)->{
+
+            dialogRota(v, rota);
+
+            });
         holder.tvOptions.setOnClickListener((View v) -> {
 
-            PopupWindow popup = popupDisplay(v, rota.getCodigo());
+            PopupWindow popup = popupDisplay(v, rota.getCodigo(), rota.getStatus());
             popup.showAsDropDown(v, 0, -26);
 
         });
@@ -225,7 +245,15 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         }
     }
 
-    public PopupWindow popupDisplay(View v, int cod)
+    /**
+     *
+     * @param v View
+     * @param cod Código da rota
+     * @param status Status atual da rota
+     * @return PopupWindow
+     */
+
+    public PopupWindow popupDisplay(View v, int cod, int status)
     {
 
         final PopupWindow popupWindow = new PopupWindow(v);
@@ -233,21 +261,86 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         // inflate your layout or dynamically add view
         LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.mylayout, null);
+        View view = inflater.inflate(R.layout.menu_rota_options, null);
 
         TextView tvIniciar = view.findViewById(R.id.tvIniciar);
         TextView tvCancelar = view.findViewById(R.id.tvCancelar);
+        TextView tvFinalizar = view.findViewById(R.id.tvFinalizar);
+
+        switch (status){
+            case Status.EM_ANDAMENTO:
+                tvIniciar.setVisibility(View.GONE);
+                tvCancelar.setVisibility(View.GONE);
+                tvFinalizar.setVisibility(View.VISIBLE);
+        }
+
         tvIniciar.setOnClickListener((View x) -> {
 
-            Toast.makeText(x.getContext(), cod+"", Toast.LENGTH_SHORT).show();
+            Toast.makeText(x.getContext(), "Iniciar", Toast.LENGTH_SHORT).show();
 
         });
+
+        tvCancelar.setOnClickListener((View x) -> {
+
+            Toast.makeText(x.getContext(), "Cancelar", Toast.LENGTH_SHORT).show();
+
+        });
+
+        tvFinalizar.setOnClickListener((View x) -> {
+
+            Toast.makeText(x.getContext(), "Finalizar", Toast.LENGTH_SHORT).show();
+
+        });
+
         popupWindow.setFocusable(true);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(view);
 
         return popupWindow;
+    }
+
+    public void dialogRota(View v, sonicRotaHolder holder){
+
+            v.setOnClickListener((View x)-> {
+
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
+                    Rect displayRectangle = new Rect();
+                    Window window = mActivity.getWindow();
+                    window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+                    ViewGroup viewGroup = x.findViewById(android.R.id.content);
+                    View view = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_rota, viewGroup, false);
+                    view.setMinimumWidth(displayRectangle.width());
+                    view.setMinimumHeight(displayRectangle.height());
+                    dialogBuilder.setView(view);
+                    AlertDialog dialog = dialogBuilder.create();
+                    TextView tvHeader = view.findViewById(R.id.tvHeader);
+                    TextView tvEndereco = view.findViewById(R.id.tvEndereco);
+                    TextView tvClose = view.findViewById(R.id.tvClose);
+                    tvClose.setOnClickListener((View Vview)->{
+                        dialog.dismiss();
+                    });
+                    ProgressBar pbProgress = view.findViewById(R.id.pbProgress);
+
+                        Handler handler = new Handler();
+
+                        handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
+
+                                                  pbProgress.setVisibility(View.GONE);
+                                                  tvHeader.setText(holder.getRazaoSocial());
+                                                  tvEndereco.setText(holder.getEnderecoCompleto());
+                                                }
+                                            }
+                                , 500);
+
+
+                    dialog.show();
+
+
+            });
+
     }
 
 }

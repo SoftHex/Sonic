@@ -5,19 +5,22 @@
     android:orientation="vertical"
     android:tag="cards main container">
 
-    <!--<androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="0dp">-->
+            card_view:cardElevation="0dp">
 
         <LinearLayout
             android:id="@+id/linearItem"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:background="?selectableItemBackground"
                 android:padding="6dp">
 
                 <!-- CONTAINER -->
@@ -40,16 +43,27 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:maxLines="2"
+                            android:maxLines="1"
                             android:text="NOME DO CLIENTE"
                             android:textColor="@color/colorPrimaryGreen"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/tvEndereco"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Endereço do Cliente"
+                            android:textColor="@color/colorTextAccentDark"
+                            android:textSize="16sp" />
+
                         <!-- CABEÇALHO -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
                             android:orientation="horizontal">
 
                             <!--<TextView
@@ -76,7 +90,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Status:"/>
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_progress_clock_grey600_18dp"/>
 
                             <TextView
                                 android:id="@+id/tvStatus"
@@ -86,11 +101,26 @@
                                 android:maxLines="1"
                                 android:background="@drawable/status_nao_iniciada"
                                 android:text="Status"
-                                android:layout_marginLeft="6dp"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="4dp"
                                 android:paddingTop="2dp"
                                 android:paddingBottom="2dp"
+                                android:textColor="@color/colorTextWhite"
+                                android:textSize="12sp" />
+                            <TextView
+                                android:id="@+id/tvSituacao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:background="@drawable/status_concluida"
+                                android:text="Negativado"
+                                android:layout_marginLeft="4dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:visibility="gone"
                                 android:textColor="@color/colorTextWhite"
                                 android:textSize="12sp" />
 
@@ -100,7 +130,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -112,18 +141,6 @@
                                 android:drawableLeft="@mipmap/ic_card_account_phone_outline_grey600_18dp"
                                 android:maxLines="1"
                                 android:text="Atendente"
-                                android:textColor="@color/colorTextAccentDark"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/tvEndereco"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:ellipsize="end"
-                                android:drawablePadding="20dp"
-                                android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_18dp"
-                                android:maxLines="1"
-                                android:text="Endereço do Cliente"
                                 android:textColor="@color/colorTextAccentDark"
                                 android:textSize="14sp" />
 
@@ -190,7 +207,7 @@
 
             </LinearLayout>
 
-    <!--</androidx.cardview.widget.CardView>-->
+    </androidx.cardview.widget.CardView>
 
     <View
         android:id="@+id/view"
