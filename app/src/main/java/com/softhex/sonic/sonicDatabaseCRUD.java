@@ -3368,20 +3368,28 @@ public class sonicDatabaseCRUD {
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 List<sonicRotaHolder> rotas = new ArrayList<>();
 
+                String where="";
+
+                if(sonicConstants.GRUPO_ROTA_STATUS != "TODOS"){
+                    where += " WHERE R.status = "+sonicConstants.GRUPO_ROTA_STATUS_INT;
+                }
+
                 String query = "SELECT " +
                         "R.codigo," +
                         "R.codigo_cliente," +
                         "R.data_agendamento," +
                         "R.hora_agendamento," +
-                        "R.ordem," +
+                        "R.atendente," +
                         "R.tipo," +
+                        "R.status," +
                         "R.observacao," +
                         "C.razao_social," +
+                        "C.nome_fantasia," +
                         "C.endereco," +
                         "C.bairro," +
                         "C.municipio" +
                         " FROM " + TABLE_ROTA +
-                        " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente" ;
+                        " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente" + where ;
 
                 try{
 
@@ -3396,9 +3404,12 @@ public class sonicDatabaseCRUD {
                         rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
                         rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
                         rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                        rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
-                        rota.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
+                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                        rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
+                        rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                        rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
                         rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
                         rota.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
                         rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
                         rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));

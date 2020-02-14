@@ -2,24 +2,24 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.softhex.timelineview.TimelineView
-        android:id="@+id/tlRota"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:lineOrientation="vertical"
-        android:layout_marginLeft="6dp"
-        app:markerInCenter="false"
-        app:markerSize="20dp"
-        app:markerPaddingTop="8dp"
-        app:lineWidth="2dp"
-        app:lineStyle="dash"
-        app:endLineColor="@color/colorPrimary" />
-    
-        <include layout="@layout/layout_cards_rota_itens"/>
+        <com.softhex.timelineview.TimelineView
+            android:id="@+id/tlRota"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6dp"
+            app:lineOrientation="vertical"
+            app:markerInCenter="false"
+            app:markerSize="28dp"
+            app:markerColor="@color/colorPrimary"
+            app:markerPaddingTop="7dp"
+            app:linePadding="4dp"
+            app:lineWidth="2dp"
+            app:lineStyle="dash"/>
+
+            <include layout="@layout/layout_cards_rota_itens"/>
 
 
 </LinearLayout>

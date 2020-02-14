@@ -1306,16 +1306,19 @@ public class sonicUtils {
 
         }
 
+        /**
+         *
+         * @param horas String com formato '0000' sem separador ou espaço.
+         * @return 00:00
+         */
         public String horaFotmatadaBR(String horas){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String hora_ = horas;
-            String minuto_ = horas;
             String hora_completa = "";
 
             try{
-                String hora = hora_.substring(0,2);
-                String minuto = minuto_.substring(0,4);
+                String hora = horas.substring(0,2);
+                String minuto = horas.substring(2,4);
 
                 hora_completa = hora+":"+minuto;
             }catch (Exception e){
@@ -1328,6 +1331,35 @@ public class sonicUtils {
             }
 
 
+
+            return hora_completa;
+
+        }
+
+        /**
+         *
+         * @param horas String com formato '000000' sem separador ou espaço.
+         * @return 00:00:00
+         */
+        public String horaFotmatadaSegundoBR(String horas){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            String hora_completa = "";
+
+            try{
+                String hora = horas.substring(0,2);
+                String minuto = horas.substring(2,4);
+                String segundo = horas.substring(4,6);
+
+                hora_completa = hora+":"+minuto+":"+segundo;
+            }catch (Exception e){
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
 
             return hora_completa;
 

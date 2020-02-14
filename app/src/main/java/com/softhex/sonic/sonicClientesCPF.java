@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -136,8 +137,21 @@ public class sonicClientesCPF extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (allowSearch) {
-                    myAdapter.getFilter().filter(newText);
+                if(allowSearch){
+                    Filter.FilterListener listener = new Filter.FilterListener() {
+                        @Override
+                        public void onFilterComplete(int count) {
+                            if (allowSearch) {
+                                if (myAdapter.getItemCount()==0) {
+                                    tvSearch.setVisibility(VISIBLE);
+                                    tvSearch.setText("Nenhum resultado para '"+newText+"'");
+                                } else {
+                                    tvSearch.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        }
+                    };
+                    myAdapter.getFilter().filter(newText, listener);
                 }
                 return false;
             }

@@ -213,11 +213,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int not null, " +
             "codigo_empresa int not null, " +
             "codigo_cliente int not null, " +
-            "tipo string, " +
-            "situacao int, " +
+            "tipo int, " + // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
+            "status int, " + // 1=NÃO EM_ANDAMENTO, 2=EM_ANDAMENTO, 3=CONCLUIDA, 4=CANCELADA
             "data_agendamento string, " +
             "hora_agendamento string, " +
-            "ordem int, " +
+            "atendente string, " +
             "observacao string, " +
             "data_inicio string, " +
             "hora_inicio string, " +
@@ -229,7 +229,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TABLE_ROTA_CODIGO = "CREATE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
     private static final String CREATE_INDEX_TABLE_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
     private static final String CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";
-    private static final String CREATE_INDEX_TABLE_ROTA_ORDEM = "CREATE INDEX index_rota_codigo_ordem ON "+DB_ROTA+" (ordem);";
+    private static final String CREATE_INDEX_TABLE_ROTA_TIPO = "CREATE INDEX index_rota_tipo ON "+DB_ROTA+" (tipo);";
+    private static final String CREATE_INDEX_TABLE_ROTA_STATUS = "CREATE INDEX index_rota_situacao ON "+DB_ROTA+" (status);";
 
 
     private static final String CREATE_TABLE_ESTOQUE_PRODUTOS = "CREATE TABLE IF NOT EXISTS "+ DB_ESTOQUE +" (" +
@@ -484,7 +485,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO);
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_TABLE_ROTA_CODIGO_EMPRESA);
-        DB.execSQL(CREATE_INDEX_TABLE_ROTA_ORDEM);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_TIPO);
+        DB.execSQL(CREATE_INDEX_TABLE_ROTA_STATUS);
         DB.execSQL(CREATE_TABLE_ESTOQUE_PRODUTOS);
         DB.execSQL(CREATE_TABLE_RANKING_PRODUTOS);
         DB.execSQL(CREATE_TABLE_TABELA_PRECO);

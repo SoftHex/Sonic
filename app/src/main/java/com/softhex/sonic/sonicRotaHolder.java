@@ -14,10 +14,11 @@ public class sonicRotaHolder{
     String bairro;
     String municipio;
     String endereco_completo;
-    String tipo;
-    int situacao;
+    int tipo;
+    int status;
     String data_agendamento;
     String hora_agendamento;
+    String atendente;
     int ordem;
     String observacao;
     String data_inicio;
@@ -44,10 +45,11 @@ public class sonicRotaHolder{
                            String bairro,
                            String municipio,
                            String endereco_completo,
-                           String tipo,
-                           int situacao,
+                           int tipo,
+                           int status,
                            String data_agendamento,
                            String hora_agendamento,
+                           String atendente,
                            int ordem,
                            String observacao,
                            String data_inicio,
@@ -70,7 +72,7 @@ public class sonicRotaHolder{
         this.municipio = municipio;
         this.endereco_completo = endereco_completo;
         this.tipo = tipo;
-        this.situacao = situacao;
+        this.status = status;
         this.data_agendamento = data_agendamento;
         this.hora_agendamento = hora_agendamento;
         this.ordem = ordem;
@@ -121,9 +123,9 @@ public class sonicRotaHolder{
         return endereco+", "+bairro+", "+municipio;
     }
 
-    public String getTipo(){return  tipo;};
+    public int getTipo(){return  tipo;};
 
-    public int getSituacao(){return  situacao;};
+    public int getStatus(){return  status;};
 
     public String getDataAgendamento() {
         return data_agendamento;
@@ -131,6 +133,10 @@ public class sonicRotaHolder{
 
     public String getHoraAgendamento() {
         return hora_agendamento;
+    }
+
+    public String getAtendente() {
+        return atendente;
     }
 
     public int getOrdem() {
@@ -196,9 +202,9 @@ public class sonicRotaHolder{
         this.endereco_completo = endereco_completo;
     }
 
-    public void setTipo(String tipo){this.tipo = tipo;}
-    public void setSituacao(int situacao) {
-        this.situacao = situacao;
+    public void setTipo(int tipo){this.tipo = tipo;}
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setDataAgendamento(String data_agendamento) {
@@ -209,8 +215,16 @@ public class sonicRotaHolder{
         this.hora_agendamento = hora_agendamento;
     }
 
+    public void setAtendente(String atendente) {
+        this.atendente = atendente;
+    }
+
     public void setOrdem(int ordem) {
         this.ordem = ordem;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public void setDataInicio(String data_inicio) {

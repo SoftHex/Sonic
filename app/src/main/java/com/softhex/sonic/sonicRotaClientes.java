@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
@@ -31,6 +34,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -52,7 +56,7 @@ public class sonicRotaClientes extends Fragment {
     private TabLayout myTabLayout;
     private CoordinatorLayout myCoordinatorLayout;
     private ShimmerFrameLayout myShimmer;
-    private TextView myTextView;
+    private TextView myTextView, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
     private Context _this;
@@ -61,7 +65,7 @@ public class sonicRotaClientes extends Fragment {
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
 
         _this = getActivity();
 
@@ -88,6 +92,8 @@ public class sonicRotaClientes extends Fragment {
         myTabLayout = getActivity().findViewById(R.id.tabs);
 
         myTextView = myView.findViewById(R.id.tvText);
+
+        tvSearch = myView.findViewById(R.id.tvSearch);
 
         myImage = myView.findViewById(R.id.ivImage);
 
@@ -117,10 +123,10 @@ public class sonicRotaClientes extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.sonic_rota, menu);
-        mySearch = menu.findItem(R.id.search);
+        mySearch = menu.findItem(R.id.itSearch);
 
         final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
-        searchView.setQueryHint("Pesquisar...");
+        searchView.setQueryHint("ID, N.Fantas, R.Social, Atendente...");
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -129,8 +135,21 @@ public class sonicRotaClientes extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (allowSearch) {
-                    //myAdapter.getFilter().filter(newText);
+                if(allowSearch){
+                    Filter.FilterListener listener = new Filter.FilterListener() {
+                        @Override
+                        public void onFilterComplete(int count) {
+                            if (allowSearch) {
+                                if (myAdapter.getItemCount()==0) {
+                                    tvSearch.setVisibility(VISIBLE);
+                                    tvSearch.setText("Nenhum resultado para '"+newText+"'");
+                                } else {
+                                    tvSearch.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                        }
+                    };
+                    myAdapter.getFilter().filter(newText, listener);
                 }
                 return false;
             }
@@ -156,10 +175,10 @@ public class sonicRotaClientes extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
+            case R.id.itSearch:
                 return false;
-            case R.id.pref:
-                //dialogDelete();
+            case R.id.itFilter:
+                exibirFiltro();
                 return false;
             default:
                 break;
@@ -240,6 +259,45 @@ public class sonicRotaClientes extends Fragment {
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))
                 .into(myImage);
+
+    }
+
+    private void exibirFiltro() {
+
+
+        List<String> l = new ArrayList<String>();
+        l.add("NÃO INICIADO");
+        l.add("EM ANDAMENTO");
+        l.add("CONCLUIDO");
+        l.add("CANCELADO");
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Selecione um status...");
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+
+                sonicConstants.GRUPO_ROTA_STATUS_INT = item+1;
+                sonicConstants.GRUPO_ROTA_STATUS = chars[item].toString();
+                sonicConstants.GRUPO_ROTA_STATUS_LIMPAR = "LIMPAR FILTRO";
+                dialog.dismiss();
+                refreshFragment();
+
+            }
+        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setPositiveButton(sonicConstants.GRUPO_ROTA_STATUS_LIMPAR, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                sonicConstants.GRUPO_ROTA_STATUS = "TODOS";
+                sonicConstants.GRUPO_ROTA_STATUS_LIMPAR = "";
+                refreshFragment();
+            }
+        }).show();
 
     }
 

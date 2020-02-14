@@ -5,23 +5,20 @@
     android:orientation="vertical"
     android:tag="cards main container">
 
-    <androidx.cardview.widget.CardView
+    <!--<androidx.cardview.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="0dp">
+            card_view:cardElevation="0dp">-->
 
         <LinearLayout
-            android:id="@+id/item"
+            android:id="@+id/linearItem"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?selectableItemBackground">
+                android:padding="6dp">
 
                 <!-- CONTAINER -->
                 <LinearLayout
@@ -55,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <TextView
+                            <!--<TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Tipo:"/>
@@ -69,26 +66,31 @@
                                 android:background="@drawable/oval_text_blue"
                                 android:text="Agendamento"
                                 android:layout_marginLeft="6dp"
-                                android:padding="4dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
                                 android:textColor="@color/colorTextWhite"
-                                android:textSize="12sp" />
+                                android:textSize="12sp" />-->
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="6dp"
-                                android:text="Situação:"/>
+                                android:text="Status:"/>
 
                             <TextView
-                                android:id="@+id/tvSituacao"
+                                android:id="@+id/tvStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:background="@drawable/oval_text_gray"
-                                android:text="Não Iniciada"
+                                android:background="@drawable/status_nao_iniciada"
+                                android:text="Status"
                                 android:layout_marginLeft="6dp"
-                                android:padding="4dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
                                 android:textColor="@color/colorTextWhite"
                                 android:textSize="12sp" />
 
@@ -102,6 +104,18 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvAtendente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:drawablePadding="20dp"
+                                android:drawableLeft="@mipmap/ic_card_account_phone_outline_grey600_18dp"
+                                android:maxLines="1"
+                                android:text="Atendente"
+                                android:textColor="@color/colorTextAccentDark"
+                                android:textSize="14sp" />
+
+                            <TextView
                                 android:id="@+id/tvEndereco"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -110,19 +124,19 @@
                                 android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_18dp"
                                 android:maxLines="1"
                                 android:text="Endereço do Cliente"
-                                android:textColor="@color/colorTextAccent"
+                                android:textColor="@color/colorTextAccentDark"
                                 android:textSize="14sp" />
 
                             <TextView
-                                android:id="@+id/tvDetalhe"
+                                android:id="@+id/tvDataHora"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:drawablePadding="20dp"
                                 android:drawableLeft="@mipmap/ic_calendar_text_grey600_18dp"
                                 android:maxLines="1"
-                                android:text="Data Prevista: 00/00/000 - 10:00"
-                                android:textColor="@color/colorTextAccent"
+                                android:text="Data Prevista:"
+                                android:textColor="@color/colorTextAccentDark"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -134,7 +148,7 @@
                                 android:drawableLeft="@mipmap/ic_note_text_outline_grey600_18dp"
                                 android:maxLines="1"
                                 android:text="Observação:"
-                                android:textColor="@color/colorTextAccent"
+                                android:textColor="@color/colorTextAccentDark"
                                 android:textSize="14sp" />
 
                             <TextView
@@ -146,7 +160,7 @@
                                 android:drawableLeft="@mipmap/ic_progress_clock_grey600_18dp"
                                 android:maxLines="1"
                                 android:text="Duração:"
-                                android:textColor="@color/colorTextAccent"
+                                android:textColor="@color/colorTextAccentDark"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -167,8 +181,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@mipmap/ic_dots_vertical_grey600_24dp"
-                            android:textSize="14sp"
-                            android:visibility="visible" />
+                            android:textSize="14sp"/>
 
 
                     </LinearLayout>
@@ -177,7 +190,7 @@
 
             </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    <!--</androidx.cardview.widget.CardView>-->
 
     <View
         android:id="@+id/view"
