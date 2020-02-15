@@ -111,7 +111,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         List<sonicClientesHolder> myList;
         int count = 0;
 
-        myList = DBC.Clientes.selectClienteID(12345);
+        myList = DBC.Cliente.selectClienteID(12345);
         File file;
         String image = "";
 
@@ -143,7 +143,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         }
 
         linearNew = findViewById(R.id.linearNew);
-        linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
+        //linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
 
         sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
         myViewpager.setAdapter(myAdapter);

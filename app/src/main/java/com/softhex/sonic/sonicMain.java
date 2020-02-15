@@ -338,8 +338,8 @@ public class sonicMain extends AppCompatActivity{
 
     public void createDrawerMenu(){
 
-        listaEmpresa = DBC.Empresa.empresasUsuarios();
-        listaUser = DBC.Usuarios.selectUsuarioAtivo();
+        listaEmpresa = DBC.Empresa.empresaUsuario();
+        listaUser = DBC.Usuario.selectUsuarioAtivo();
 
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -732,7 +732,7 @@ public class sonicMain extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            listaEmpresa = DBC.Empresa.empresasUsuarios();
+            listaEmpresa = DBC.Empresa.empresaUsuario();
             return null;
         }
 
@@ -844,11 +844,11 @@ public class sonicMain extends AppCompatActivity{
             switch (integers[0]){
                 case 2:
                     result[0] = integers[0];
-                    result[1] = DBC.Avisos.countNaoLidos();
+                    result[1] = DBC.Aviso.countNaoLido();
                     break;
                 case 3:
                     result[0] = integers[0];
-                    result[1] = DBC.Clientes.countPorEmpresa();
+                    result[1] = DBC.Cliente.countPorEmpresa();
                     //updateBadge(3, result[1]+"");
                     break;
                 case 4:
@@ -927,9 +927,9 @@ public class sonicMain extends AppCompatActivity{
         allowHomeUpdate = true;
 
         if(tvEmpresa ==0){
-            DBC.Empresa.marcarEmpresas();
+            DBC.Empresa.marcarEmpresa();
         }else{
-            DBC.Empresa.desmarcarEmpresas();
+            DBC.Empresa.desmarcarEmpresa();
             DBC.Empresa.setSelecionada((int) tvEmpresa);
         }
 

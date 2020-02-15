@@ -51,7 +51,7 @@ public class sonicFtp {
         Boolean result = false;
         String server, user ,pass;
 
-        if(DBC.Usuarios.usuarioAtivo()){
+        if(DBC.Usuario.usuarioAtivo()){
             server = DBC.Ftp.ftp();
             user = DBC.Ftp.user();
             pass = DBC.Ftp.pass();

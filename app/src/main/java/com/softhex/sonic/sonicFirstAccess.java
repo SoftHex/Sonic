@@ -7,13 +7,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
@@ -46,14 +45,14 @@ public class sonicFirstAccess extends AppCompatActivity {
         myImage = findViewById(R.id.perfil);
 
         myEmpresa.setText(getIntent().getStringExtra("EMPRESA"));
-        myUsuario.setText(getIntent().getStringExtra("USUARIO"));
+        myUsuario.setText(getIntent().getStringExtra("Usuario"));
         myCargo.setText("("+getIntent().getStringExtra("CARGO")+")");
 
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myProgress(view.getContext());
-                sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("USUARIO");
+                sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("Usuario");
                 sonicConstants.EMPRESA_SELECIONADA_NOME = getIntent().getStringExtra("EMPRESA");
                 sonicConstants.USUARIO_ATIVO_ID = getIntent().getIntExtra("ID",0);
             }
@@ -100,8 +99,8 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         @Override
         protected ProgressDialog doInBackground(ProgressDialog... progressDialogs) {
-            new sonicDatabaseCRUD(getBaseContext()).Usuarios.setAtivo(getIntent().getIntExtra("ID",0));
-            listaUser = DBC.Usuarios.selectUsuarioAtivo();
+            new sonicDatabaseCRUD(getBaseContext()).Usuario.setAtivo(getIntent().getIntExtra("ID",0));
+            listaUser = DBC.Usuario.selectUsuarioAtivo();
             sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
             sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
             sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();

@@ -42,6 +42,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="22sp"
                     android:text="@string/placeholderLetter"
+                    android:background="@drawable/circle_textview"
                     android:visibility="visible"
                     android:gravity="center" />
 

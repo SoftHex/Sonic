@@ -197,7 +197,7 @@ public class sonicClientesCPF extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Clientes.selectClienteTipo("F");
+            myList =  new sonicDatabaseCRUD(_this).Cliente.selectClienteTipo("F");
             return myList.size();
 
         }
@@ -284,7 +284,7 @@ public class sonicClientesCPF extends Fragment {
 
         List<sonicGrupoClientesHolder> grupo;
 
-        grupo = DBC.GrupoCliente.selectGrupoClientes();
+        grupo = DBC.GrupoCliente.selectGrupoCliente("F");
 
         List<String> l = new ArrayList<String>();
 

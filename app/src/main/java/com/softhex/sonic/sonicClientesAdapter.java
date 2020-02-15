@@ -136,7 +136,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         holder.codigo = String.valueOf(cli.getCodigo());
         holder.clienteStatus = cli.getStatus();
-        holder.lineraNew.setVisibility(cli.getStatus().equals("NOVO") ? View.VISIBLE : View.GONE);
+        //holder.lineraNew.setVisibility(cli.getStatus().equals("NOVO") ? View.VISIBLE : View.GONE);
 
         String letra;
         String letra2;
@@ -156,7 +156,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 break;
         }
 
-        //DESTACA O GRUPO/CATEGORIA DO CLIENTE
+        //DESTACA O GRUPO/CATEGORIA DO Cliente
         if(clienteTipo.equals("J") && !myCons.GRUPO_CLIENTES_CNPJ.equals("TODOS")){
             shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);

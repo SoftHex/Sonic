@@ -2,14 +2,15 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,7 +56,7 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
                 public void onClick(View view) {
 
                     if(status==0){
-                        new sonicDatabaseCRUD(view.getContext()).Avisos.saveAvisosLidos(codigo);
+                        new sonicDatabaseCRUD(view.getContext()).Aviso.saveAvisoLido(codigo);
                     }
 
                     TextView dados[] = {autor, titulo, mensagem, data};

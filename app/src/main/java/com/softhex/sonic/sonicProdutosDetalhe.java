@@ -124,7 +124,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         //dotsLayout = findViewById(R.id.layoutDots);
         myViewpager.setAdapter(myAdapter);
         linearNew = findViewById(R.id.linearNew);
-        linearNew.setVisibility(produtoStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
+        //linearNew.setVisibility(produtoStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
         //myViewpager.setOn
         //addBottomDots(0);
 

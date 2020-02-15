@@ -212,7 +212,7 @@ public class sonicPopularTabelas {
 
                             tabela = line;
 
-                            DBC.Usuarios.cleanUsuarios();
+                            DBC.Usuario.cleanUsuario();
 
                             line = reader.readLine();
 
@@ -226,7 +226,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Usuarios.saveUsuario(data);
+                                DBC.Usuario.saveUsuario(data);
                                 line = reader.readLine();
 
                             }
@@ -239,7 +239,7 @@ public class sonicPopularTabelas {
 
                             tabela = line;
 
-                            DBC.EmpresasUsuarios.cleanEmpresasUsuarios();
+                            DBC.EmpresaUsuario.cleanEmpresaUsuario();
 
                             line = reader.readLine();
 
@@ -253,7 +253,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.EmpresasUsuarios.saveEmpresasUsuarios(data);
+                                DBC.EmpresaUsuario.saveEmpresaUsuario(data);
                                 line = reader.readLine();
 
 
@@ -266,7 +266,7 @@ public class sonicPopularTabelas {
                             Log.d("CLIENTES", "ENTROU");
                             tabela = line;
 
-                            DBC.Clientes.cleanCliente();
+                            DBC.Cliente.cleanCliente();
 
                             line = reader.readLine();
 
@@ -280,7 +280,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Clientes.saveCliente(data);
+                                DBC.Cliente.saveCliente(data);
                                 line = reader.readLine();
 
                             }
@@ -318,7 +318,7 @@ public class sonicPopularTabelas {
                             Log.d("GRUPO_CLIENTES", "ENTROU");
                             tabela = line;
 
-                            DBC.EmpresasClientes.cleanEmpresasClientes();
+                            DBC.EmpresaCliente.cleanEmpresaCliente();
 
                             line = reader.readLine();
 
@@ -332,7 +332,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.EmpresasClientes.saveEmpresasClientes(data);
+                                DBC.EmpresaCliente.saveEmpresaCliente(data);
                                 line = reader.readLine();
 
                             }
@@ -426,7 +426,7 @@ public class sonicPopularTabelas {
 
                             tabela = line;
 
-                            DBC.Titulos.cleanTitulos();
+                            DBC.Titulo.cleanTitulo();
 
                             line = reader.readLine();
 
@@ -440,7 +440,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Titulos.saveTitulos(data);
+                                DBC.Titulo.saveTitulo(data);
                                 line = reader.readLine();
 
                             }
@@ -453,7 +453,7 @@ public class sonicPopularTabelas {
 
                             tabela = line;
 
-                            DBC.EmpresasClientes.cleanEmpresasClientes();
+                            DBC.EmpresaCliente.cleanEmpresaCliente();
 
                             line = reader.readLine();
 
@@ -467,7 +467,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.EmpresasClientes.saveEmpresasClientes(data);
+                                DBC.EmpresaCliente.saveEmpresaCliente(data);
                                 line = reader.readLine();
 
                             }
@@ -643,7 +643,7 @@ public class sonicPopularTabelas {
 
                             tabela = line;
 
-                            DBC.Avisos.cleanAvisos();
+                            DBC.Aviso.cleanAviso();
 
                             line = reader.readLine();
 
@@ -657,7 +657,7 @@ public class sonicPopularTabelas {
                                 int len = str.length();
                                 String str2 = str.substring(pos, len);
                                 List<String> data = Arrays.asList(str2.split(";"));
-                                DBC.Avisos.saveAvisos(data);
+                                DBC.Aviso.saveAviso(data);
                                 line = reader.readLine();
 
                             }
@@ -747,7 +747,7 @@ public class sonicPopularTabelas {
                 sonicConstants.USER_IMEI = imei;
 
                 List<sonicUsuariosHolder> lista;
-                lista = DBC.Usuarios.selectUsuarioImei(imei);
+                lista = DBC.Usuario.selectUsuarioImei(imei);
                 if(!lista.isEmpty()){
 
                     startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
@@ -779,7 +779,7 @@ public class sonicPopularTabelas {
         i.putExtra("ID", id);
         i.putExtra("EMPRESA", empresa);
         i.putExtra("EMPRESA_ID", empresa_id);
-        i.putExtra("USUARIO", usuario);
+        i.putExtra("Usuario", usuario);
         i.putExtra("CARGO", cargo);
         i.putExtra("IMEI", imei);
         myCtx.startActivity(i);

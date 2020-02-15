@@ -55,7 +55,7 @@ public class sonicSincronizacaoUpload extends Fragment {
         util = new sonicUtils(_this);
         popularTabelas = new sonicPopularTabelas(_this);
         myCons = new sonicConstants();
-        list = DBC.Usuarios.selectUsuarioAtivo();
+        list = DBC.Usuario.selectUsuarioAtivo();
 
         //sonicSincronizacaoFragUploadAdapter adapterViewAndroid = new sonicSincronizacaoFragUploadAdapter(getContext(), gridViewString, gridViewImageId);
         //myGridView = (GridView)myView.findViewById(R.id.gridview);

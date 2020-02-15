@@ -165,7 +165,7 @@ public class sonicAvisosFragLidos extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            avisos = new sonicDatabaseCRUD(_this).Avisos.selectAvisos();
+            avisos = new sonicDatabaseCRUD(_this).Aviso.selectAviso();
             return avisos.size();
 
         }

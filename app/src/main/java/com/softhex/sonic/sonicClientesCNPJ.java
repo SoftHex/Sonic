@@ -196,7 +196,7 @@ public class sonicClientesCNPJ extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Clientes.selectClienteTipo("J");
+            myList =  new sonicDatabaseCRUD(_this).Cliente.selectClienteTipo("J");
             return myList.size();
 
         }
@@ -273,9 +273,9 @@ public class sonicClientesCNPJ extends Fragment {
 
         List<sonicGrupoClientesHolder> grupo;
 
-        grupo = DBC.GrupoCliente.selectGrupoClientes();
+        grupo = DBC.GrupoCliente.selectGrupoCliente("J");
 
-        List<String> l = new ArrayList<String>();
+        List<String> l = new ArrayList<>();
 
         for(int i=0; i < grupo.size(); i++ ){
             if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CNPJ){

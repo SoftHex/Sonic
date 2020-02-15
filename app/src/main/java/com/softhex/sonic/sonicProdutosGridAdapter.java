@@ -111,7 +111,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         holder.codigo = String.valueOf(prod.getCodigo());
         holder.tvDescricao.setText(prod.getDescricao());
         holder.status = prod.getStatus();
-        holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
+        //holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
         //holder.grupo.setText(prod.getGrupo());
         //TODO WITH PREFERENCES
         int qtd = 3;

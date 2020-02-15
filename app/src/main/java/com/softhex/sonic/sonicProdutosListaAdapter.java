@@ -190,7 +190,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.grupo.setText(prod.getGrupo());
         holder.status = prod.getStatus();
 
-        holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
+        //holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
 
         File fileJpg = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
 

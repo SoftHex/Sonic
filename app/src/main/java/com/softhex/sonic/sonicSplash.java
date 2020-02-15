@@ -2,10 +2,10 @@ package com.softhex.sonic;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 
 import java.util.List;
 
@@ -33,9 +33,9 @@ public class sonicSplash extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Integer... integers) {
 
-            Boolean res = DBC.Usuarios.usuarioAtivo();
+            Boolean res = DBC.Usuario.usuarioAtivo();
             List<sonicUsuariosHolder> listaUser;
-            listaUser = DBC.Usuarios.selectUsuarioAtivo();
+            listaUser = DBC.Usuario.selectUsuarioAtivo();
 
             if(res){
 
