@@ -700,9 +700,9 @@ public class sonicUtils {
                 super.onPostExecute(aBoolean);
                 myProgress.dismiss();
                 if(aBoolean){
-                    new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.imagesSaved, sonicTM.MSG_SUCCESS);
+                    new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.imagesSaved, sonicDialog.MSG_SUCCESS);
                 }else{
-                    new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicTM.MSG_WARNING);
+                    new sonicDialog(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicDialog.MSG_WARNING);
                 }
             }
         }

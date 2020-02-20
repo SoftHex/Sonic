@@ -38,7 +38,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    new sonicTM(sonicEmpresa.this).showSB(view,"Verifique sua conexão com a internet...");
+                    new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
 
                 }
             }
@@ -54,7 +54,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
-                        new sonicTM(sonicEmpresa.this).showSB(view,"Código inválido...");
+                        new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Código inválido...");
 
                     } else {
 
@@ -64,7 +64,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    new sonicTM(sonicEmpresa.this).showSB(view,"Verifique sua conexão com a internet...");
+                    new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
 
                 }
 

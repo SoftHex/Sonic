@@ -4,14 +4,14 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
-import cn.refactor.lib.colordialog.ColorDialog;
-import cn.refactor.lib.colordialog.PromptDialog;
+import com.google.android.material.snackbar.Snackbar;
+import com.softhex.materialdialog.ColorDialog;
+import com.softhex.materialdialog.PromptDialog;
 
-public class sonicTM {
+public class sonicDialog {
 
     public Context myCtx;
     public Snackbar mySnackBar;
@@ -20,8 +20,11 @@ public class sonicTM {
     public static final int MSG_INFO = PromptDialog.DIALOG_TYPE_INFO;
     public static final int MSG_WARNING = PromptDialog.DIALOG_TYPE_WARNING;
     public static final int MSG_WRONG = PromptDialog.DIALOG_TYPE_WRONG;
+    public static int RESULT;
+    public static final boolean OK = false;
+    public static final boolean CANCEL  = false;
 
-    public sonicTM(Context ctx){
+    public sonicDialog(Context ctx){
         this.myCtx = ctx;
     }
 
@@ -38,7 +41,7 @@ public class sonicTM {
                         .setContentText(msg)
                         .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
                             @Override
-                            public void onClick(PromptDialog dialog) {
+                            public void onClick(PromptDialog dialog){
                                 dialog.dismiss();
                             }
                         }).show();
@@ -46,6 +49,76 @@ public class sonicTM {
             }
         });
 
+    }
+
+    public boolean showMSTwoOptions(final String title, final String msg, String optpositive, String optnegative, final int type){
+
+        final PromptDialog prompt = new PromptDialog(myCtx);
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                prompt.setDialogType(type);
+                prompt.setAnimationEnable(true);
+                prompt.setTitle(title);
+                prompt.setContentText(msg);
+                prompt.setPositiveListener(optpositive,new PromptDialog.OnPositiveListener() {
+                    @Override
+                    public void onClick(PromptDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setNegativeListener(optnegative, new PromptDialog.OnNegativeListener() {
+                    @Override
+                    public void onClick(PromptDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+                prompt.show();
+
+            }
+        });
+
+        return prompt.getResultListener();
+    }
+
+    public int showMSThreeOptions(final String title, final String msg, String optpositive, String optnegative, String thirdoption, final int type){
+
+        final PromptDialog prompt = new PromptDialog(myCtx);
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+            @Override
+            public void run() {
+
+                prompt.setDialogType(type);
+                prompt.setAnimationEnable(true);
+                prompt.setTitle(title);
+                prompt.setContentText(msg);
+                prompt.setOrientation(PromptDialog.VERTICAL);
+                prompt.setPositiveListener(optpositive,new PromptDialog.OnPositiveListener() {
+                    @Override
+                    public void onClick(PromptDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setNegativeListener(optnegative, new PromptDialog.OnNegativeListener() {
+                    @Override
+                    public void onClick(PromptDialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).setThirdOptionListener(thirdoption, new PromptDialog.OnThirdOptionListener() {
+                    @Override
+                    public void onClick(PromptDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+                prompt.show();
+
+            }
+        });
+
+        return prompt.getResultListenerInt();
     }
 
     public void showMI(final int title, final int msg, final int type){
@@ -114,7 +187,7 @@ public class sonicTM {
 
     }
 
-    public void showSB(final View v, final String msg){
+    public void showSnackBar(final View v, final String msg){
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override

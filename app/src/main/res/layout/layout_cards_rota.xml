@@ -13,7 +13,7 @@
             app:lineOrientation="vertical"
             app:markerInCenter="false"
             app:markerSize="28dp"
-            app:markerColor="@color/colorPrimary"
+            app:markerColor="@color/colorTextAccent"
             app:markerPaddingTop="7dp"
             app:linePadding="4dp"
             app:lineWidth="2dp"

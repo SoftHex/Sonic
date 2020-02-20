@@ -63,7 +63,7 @@ public class sonicPopularTabelas {
 
             });
         }else {
-            new sonicTM(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicTM.MSG_WARNING);
+            new sonicDialog(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicDialog.MSG_WARNING);
         }
 
     }
@@ -702,11 +702,11 @@ public class sonicPopularTabelas {
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.dadosSincronizados, sonicTM.MSG_SUCCESS);
+                        new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.dadosSincronizados, sonicDialog.MSG_SUCCESS);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","geral");
                         break;
                     case "ESTOQUE":
-                        new sonicTM(myCtx).showMI(R.string.headerSuccess,R.string.estoqueSincronizado, sonicTM.MSG_SUCCESS);
+                        new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.estoqueSincronizado, sonicDialog.MSG_SUCCESS);
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","estoque");
                         break;
                     case "SITE":
@@ -753,13 +753,13 @@ public class sonicPopularTabelas {
                     startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
 
                 }else{
-                    new sonicTM(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + imei + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicTM.MSG_WARNING);
+                    new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + imei + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
                     sonicConstants.EMP_TESTE = false;
                 }
 
             }else{
 
-                new sonicTM(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicTM.MSG_WARNING);
+                new sonicDialog(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicDialog.MSG_WARNING);
                 sonicConstants.EMP_TESTE = false;
             }
 

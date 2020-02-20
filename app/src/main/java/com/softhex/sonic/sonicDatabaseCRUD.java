@@ -1203,7 +1203,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public boolean saveVENDAITEM(List<String> lista){
+        public boolean saveVendaItem(List<String> lista){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result = false;
@@ -3381,6 +3381,12 @@ public class sonicDatabaseCRUD {
 
                 return rotas;
 
+            }
+
+            public boolean updateRota(String column, String codigo, int status){
+                ContentValues cv = new ContentValues();
+                cv.put(column, status);
+                return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo = ? ", new String[]{codigo})>0;
             }
 
             public boolean cleanRota() {

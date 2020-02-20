@@ -89,7 +89,7 @@ public class sonicMain extends AppCompatActivity{
     private AccountHeader myHeader;
     private Context myCtx;
     private sonicUtils myUtil;
-    private sonicTM myMessage;
+    private sonicDialog myMessage;
     private Drawer myDrawer;
     private boolean check;
     private String usuarioNome, empresaNome, usuarioMeta;
@@ -912,7 +912,7 @@ public class sonicMain extends AppCompatActivity{
 
                                     myProgressDialog.dismiss();
 
-                                    new sonicTM(myCtx).showMS("Informação.",result, sonicTM.MSG_INFO);
+                                    new sonicDialog(myCtx).showMS("Informação.",result, sonicDialog.MSG_INFO);
 
                                 }
                             }

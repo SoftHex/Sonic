@@ -18,7 +18,7 @@ public class sonicVerificarSite{
     private Context myCtx;
     private ProgressDialog myProgress;
     private sonicFtp myFtp;
-    private sonicTM myMessage;
+    private sonicDialog myMessage;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
@@ -31,7 +31,7 @@ public class sonicVerificarSite{
         this.myCtx = ctx;
         this.myProgress = new ProgressDialog(myCtx);
         this.myFtp = new sonicFtp(myCtx);
-        this.myMessage = new sonicTM(myCtx);
+        this.myMessage = new sonicDialog(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);

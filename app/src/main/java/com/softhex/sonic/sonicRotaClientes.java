@@ -105,7 +105,11 @@ public class sonicRotaClientes extends Fragment {
 
         myRecycler.setHasFixedSize(true);
 
+        myRecycler.getRecycledViewPool().setMaxRecycledViews(1,50);
+
         myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+
+        myLayout.scrollToPosition(sonicConstants.ROTA_ITEM_SELECTED);
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -232,7 +236,7 @@ public class sonicRotaClientes extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter2(getActivity(), myList);
+        myAdapter = new sonicRotaAdapter2(myList, this);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

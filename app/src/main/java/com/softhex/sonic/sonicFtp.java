@@ -30,7 +30,7 @@ public class sonicFtp {
     private ProgressDialog myProgress2;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
-    private sonicTM myMessage;
+    private sonicDialog myMessage;
     private sonicSystem mySystem;
     private sonicPopularTabelas myPopTable;
     private String arquivo;
@@ -39,7 +39,7 @@ public class sonicFtp {
         this.myCtx = ctx;
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
-        this.myMessage = new sonicTM(myCtx);
+        this.myMessage = new sonicDialog(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.myPopTable = new sonicPopularTabelas(myCtx);
         this.myProgress2 = new ProgressDialog(myCtx);
@@ -245,7 +245,7 @@ public class sonicFtp {
                                 return true;
 
                             //}else{
-                            //    new sonicTM(myCtx).showMI(R.string.headerWarning, R.string.fileNotFound, sonicTM.MSG_WARNING);
+                            //    new sonicDialog(myCtx).showMI(R.string.headerWarning, R.string.fileNotFound, sonicDialog.MSG_WARNING);
                             //    res =  false;
                             }
 
@@ -264,14 +264,14 @@ public class sonicFtp {
 
                     } else {
 
-                        new sonicTM(myCtx).showMI(R.string.headerWrong, R.string.failToConnect, sonicTM.MSG_WRONG);
+                        new sonicDialog(myCtx).showMI(R.string.headerWrong, R.string.failToConnect, sonicDialog.MSG_WRONG);
                         res = false;
                     }
 
                 }else{
                     res = false;
                     myProgress.dismiss();
-                    new sonicTM(myCtx).showMI(R.string.headerWrong, R.string.networkError, sonicTM.MSG_WRONG);
+                    new sonicDialog(myCtx).showMI(R.string.headerWrong, R.string.networkError, sonicDialog.MSG_WRONG);
                 }
 
             ftpDisconnect();

@@ -45,7 +45,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="NOME DO CLIENTE"
-                            android:textColor="@color/colorPrimaryGreen"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -99,7 +99,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:background="@drawable/status_nao_iniciada"
+                                android:background="@drawable/status_nao_iniciado"
                                 android:text="Status"
                                 android:paddingLeft="4dp"
                                 android:paddingRight="4dp"
@@ -113,7 +113,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:maxLines="1"
-                                android:background="@drawable/status_concluida"
+                                android:background="@drawable/status_concluido"
                                 android:text="Negativado"
                                 android:layout_marginLeft="4dp"
                                 android:paddingLeft="4dp"
@@ -195,7 +195,7 @@
 
                         <TextView
                             android:id="@+id/tvOptions"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@mipmap/ic_dots_vertical_grey600_24dp"
                             android:textSize="14sp"/>
