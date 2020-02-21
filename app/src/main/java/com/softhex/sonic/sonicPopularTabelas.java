@@ -779,9 +779,16 @@ public class sonicPopularTabelas {
         i.putExtra("ID", id);
         i.putExtra("EMPRESA", empresa);
         i.putExtra("EMPRESA_ID", empresa_id);
-        i.putExtra("Usuario", usuario);
+        i.putExtra("USUARIO", usuario);
         i.putExtra("CARGO", cargo);
         i.putExtra("IMEI", imei);
+
+        sonicPreferences pref = new sonicPreferences(myCtx);
+        pref.Login.setEmpresaId(empresa_id);
+        pref.Login.setEmpresaNome(empresa);
+        pref.Login.setUsuarioId(id);
+        pref.Login.setUsuarioNome(usuario);
+        pref.Login.setUsuarioCargo(cargo);
         myCtx.startActivity(i);
         ((AppCompatActivity) myCtx).finish();
 

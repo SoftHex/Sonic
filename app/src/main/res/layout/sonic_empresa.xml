@@ -1,85 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
-    android:fitsSystemWindows="true">
+    android:theme="@style/IntroTheme">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="70dp"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="30dp">
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:src="@drawable/nophoto"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@drawable/rounded_box"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/colorTextWhite"
-            android:text="CÓDIGO DA EMPRESA"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
 
-        <EditText
-            android:id="@+id/code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="16"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:padding="6dp"
-            android:textCursorDrawable="@drawable/whitepipe"
-            android:textColor="@color/colorTextWhite"
-            android:background="@drawable/border_bottom"
-            android:textAlignment="center"
-            android:inputType="number"
-            android:layout_gravity="start"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="18dp"
+                    android:layout_marginTop="20dp"
+                    android:text="CÓDIGO DA EMPRESA"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textColor="@color/colorTextWhite"
-            android:text="@string/appVerify"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/etCodigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:padding="6dp"
+                android:drawablePadding="-24dp"
+                android:textCursorDrawable="@drawable/blackpipe"
+                android:background="@drawable/border_bottom"
+                android:textAlignment="center"
+                android:inputType="number"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/tvMensagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:padding="20dp"
+                android:textColor="@color/colorTypeInfo"
+                android:layout_marginTop="0dp"
+                android:text="@string/appVerify"/>
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/registrar"
-            android:layout_width="200dp"
+            android:id="@+id/btRegistrar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:textColor="@color/colorPrimaryWhite"
-            android:textStyle="bold"
-            android:text="Registrar"
-            android:background="@drawable/border_round" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
-            android:textColor="@color/colorTextWhite"
-            android:text="Ainda não possui um código?"/>
-
-        <TextView
-            android:id="@+id/teste"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:textColor="@color/colorTextWhite"
-            android:text="Clique e faça um teste..."/>
+            android:text="REGISTRAR"
+            android:background="@drawable/border_round"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

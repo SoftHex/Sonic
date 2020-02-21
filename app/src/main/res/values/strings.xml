@@ -107,8 +107,10 @@
     <string name="deviceUnknow">Seu aparelho não esta cadastrado para a empresa (</string>
     <string name="deviceImei1">). Verifique se o imei (</string>
     <string name="deviceImei2">) foi cadastrado corretamente pelo administrador.</string>
-    <string name="failToConnect">Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.</string>>
-    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na sua empresa o responsável pela administração do sistema.</string>>
+    <string name="failToConnect">Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.</string>
+    >
+    <string name="formatWrong">O arquivo solicitado parece não conter dados suficientes ou está mal formatado. Contate na sua empresa o responsável pela administração do sistema.</string>
+    >
 
     <!-- SEM RESULTADO MENSAGENS-->
     <string name="placeholderLog">Sem logs por enquanto...</string>

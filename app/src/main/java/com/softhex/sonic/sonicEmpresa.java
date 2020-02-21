@@ -22,13 +22,13 @@ public class sonicEmpresa extends sonicRuntimePermission {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_empresa);
 
-        sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
+        //sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
-        myRegister = findViewById(R.id.registrar);
-        myCode = findViewById(R.id.code);
-        myTest = findViewById(R.id.teste);
+        myRegister = findViewById(R.id.btRegistrar);
+        myCode = findViewById(R.id.etCodigo);
+        //myTest = findViewById(R.id.teste);
 
-        myTest.setOnClickListener(new View.OnClickListener() {
+        /*myTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -42,7 +42,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }
             }
-        });
+        });*/
 
         myRegister.setOnClickListener(new View.OnClickListener() {
             @Override

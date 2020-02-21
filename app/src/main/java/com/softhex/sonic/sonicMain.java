@@ -360,7 +360,7 @@ public class sonicMain extends AppCompatActivity{
                         usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
                         tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
-                        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".jpg";
+                        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".JPG";
                         File f = new File(url);
                         String picture = f.exists() ? f.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
                         sonicGlide.glideImageView(myCtx,myProgressProfile,picture);
@@ -553,20 +553,17 @@ public class sonicMain extends AppCompatActivity{
 
         myDrawerLock = new SwitchDrawerItem()
                 .withIdentifier(19)
-                .withCheckable(false)
+                .withChecked(new sonicPreferences(myCtx).Login.getStatusLogin())
                 .withName("Sistema")
                 .withDescription("Solicitar senha ao entrar")
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cellphone_lock_grey600_24dp))
-        .withOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    Toast.makeText(getApplicationContext(), "Checked", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "UnChecked", Toast.LENGTH_SHORT).show();
-                }
+                .withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
 
-            }
+                        new sonicPreferences(myCtx).Login.setStatusLogin(isChecked);
+
+                    }
         });
 
         myDrawer = new DrawerBuilder()
@@ -650,9 +647,8 @@ public class sonicMain extends AppCompatActivity{
                             case 4:
                                 new myAsyncStartActivity().execute(sonicProdutos.class);
                                 break;
-                                //i = new Intent(sonicMain.this, sonicProdutos.class);
-                                //startActivity(i);
                             case 5:
+                                new myAsyncStartActivity().execute(sonicLogin.class);
                                 //i = new Intent(sonicMain.this, go_pedido.class);
                                 //startActivity(i);
                                 break;
@@ -1086,7 +1082,7 @@ public class sonicMain extends AppCompatActivity{
                 myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_USUARIO, empresaId, usuarioId);
 
 
-                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_USUARIO + empresaId + "_" + usuarioId + ".jpg";
+                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_USUARIO + empresaId + "_" + usuarioId + ".JPG";
 
                 myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 

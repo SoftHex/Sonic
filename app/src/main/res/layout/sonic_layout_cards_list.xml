@@ -67,7 +67,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/placeholderText"
-                            android:textColor="@color/colorTextAccentDark"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:text="@string/placeholderText"
-                                    android:textColor="@color/colorTextAccent"
+                                    android:textColor="@color/colorTextAccentDark"
                                     android:textSize="14sp" />
 
                                 <TextView
@@ -99,7 +99,7 @@
                                     android:ellipsize="end"
                                     android:maxLines="1"
                                     android:text="@string/placeholderText"
-                                    android:textColor="@color/colorTextAccent"
+                                    android:textColor="@color/colorTextAccentDark"
                                     android:textSize="14sp" />
 
                             </LinearLayout>

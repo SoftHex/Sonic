@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,12 +14,14 @@ public class sonicSplash extends AppCompatActivity {
 
     private Intent i;
     private sonicDatabaseCRUD DBC;
+    private Activity mActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_splash);
 
+        mActivity = this;
         DBC = new sonicDatabaseCRUD(sonicSplash.this);
 
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
@@ -48,6 +51,12 @@ public class sonicSplash extends AppCompatActivity {
                 sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
                 sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa();
                 sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
+                sonicPreferences pref = new sonicPreferences(mActivity);
+                pref.Login.setUsuarioId(listaUser.get(0).getCodigo());
+                pref.Login.setUsuarioNome(listaUser.get(0).getNome());
+                pref.Login.setUsuarioCargo(listaUser.get(0).getCargo());
+                pref.Login.setEmpresaId(listaUser.get(0).getEmpresaId());
+                pref.Login.setEmpresaNome(listaUser.get(0).getEmpresa());
 
             }else{
                 res = false;
@@ -62,7 +71,12 @@ public class sonicSplash extends AppCompatActivity {
 
             if(result){
 
-                i  = new Intent(sonicSplash.this,sonicMain.class);
+                // VERIFICA SE O USUARIO ESCOLHEU COLOCAR SENHA AO ENTRAR
+                if(new sonicPreferences(mActivity).Login.getStatusLogin()){
+                    i  = new Intent(mActivity,sonicLogin.class);
+                }else {
+                    i = new Intent(mActivity, sonicMain.class);
+                }
 
             }else{
 

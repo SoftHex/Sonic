@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Sonic.iml" filepath="$PROJECT_DIR$/Sonic.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gradle-wrapper/gradle-wrapper.iml" filepath="$PROJECT_DIR$/gradle-wrapper/gradle-wrapper.iml" />
       <module fileurl="file://$PROJECT_DIR$/materialdialog/materialdialog.iml" filepath="$PROJECT_DIR$/materialdialog/materialdialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/progressprofile/progressprofile.iml" filepath="$PROJECT_DIR$/progressprofile/progressprofile.iml" />
       <module fileurl="file://$PROJECT_DIR$/timelineview/timelineview.iml" filepath="$PROJECT_DIR$/timelineview/timelineview.iml" />

@@ -205,6 +205,7 @@ public class sonicUtils {
 
     public static Bitmap centerAndCropBitmap(Bitmap b){
         Bitmap x;
+
         if(b.getWidth() >= b.getHeight()){
             x = Bitmap.createBitmap(b, b.getWidth()/2 - b.getHeight()/2, 0, b.getHeight(), b.getHeight());
         }else{

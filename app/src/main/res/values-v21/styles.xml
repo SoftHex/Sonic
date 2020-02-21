@@ -60,10 +60,12 @@
         <item name="colorAccent">@color/colorPrimaryWhite</item>
         <item name="android:windowBackground">@drawable/back</item>
     </style>
+
     <style name="IntroTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryWhite</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryWhite</item>
-        <item name="colorAccent">@color/colorPrimaryWhite</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimaryWhite</item>
         <item name="android:windowBackground">@color/colorPrimaryWhite</item>
     </style>
 
