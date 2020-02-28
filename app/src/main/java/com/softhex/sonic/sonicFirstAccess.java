@@ -45,8 +45,8 @@ public class sonicFirstAccess extends AppCompatActivity {
         myImage = findViewById(R.id.perfil);
 
         myEmpresa.setText(getIntent().getStringExtra("EMPRESA"));
-        myUsuario.setText(new sonicPreferences(this).Login.getUsuarioNome());
-        myCargo.setText("("+new sonicPreferences(this).Login.getUsuarioCargo()+")");
+        myUsuario.setText(new sonicPreferences(this).Users.getUsuarioNome());
+        myCargo.setText("("+new sonicPreferences(this).Users.getUsuarioCargo()+")");
 
         myButton.setOnClickListener(new View.OnClickListener() {
             @Override

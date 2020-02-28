@@ -12,14 +12,13 @@
             android:layout_marginLeft="6dp"
             app:lineOrientation="vertical"
             app:markerInCenter="false"
-            app:markerSize="28dp"
-            app:markerColor="@color/colorTextAccent"
+            app:markerSize="25dp"
+            app:marker="@drawable/ic_map_grey600_36dp"
             app:markerPaddingTop="7dp"
             app:linePadding="4dp"
             app:lineWidth="2dp"
             app:lineStyle="dash"/>
 
             <include layout="@layout/layout_cards_rota_itens"/>
-
 
 </LinearLayout>

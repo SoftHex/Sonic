@@ -261,6 +261,7 @@ public class sonicPopularTabelas {
 
                         }
 
+
                         if (line != null && (line.contains("[CLIENTES]"))) {
 
                             Log.d("CLIENTES", "ENTROU");
@@ -610,6 +611,34 @@ public class sonicPopularTabelas {
 
                         }
 
+                        if (line != null && ("[HISTORICO_MES1]".equals(line) || line.equals("[HISTORICO_MES1]") || line.contains(("[HISTORICO_MES1]")))) {
+
+                            Log.d("HISTORICO_MES1", "ENTROU");
+
+                            tabela = line;
+
+                            DBC.Historico.cleanHistoricoMes1();
+
+                            line = reader.readLine();
+
+                            while (line != null && line.indexOf("[") != 0) {
+
+                                count+=1;
+                                publishProgress(tabela, String.valueOf(count));
+
+                                String str = line;
+                                int pos = str.indexOf("=") + 1;
+                                int len = str.length();
+                                String str2 = str.substring(pos, len);
+                                List<String> data = Arrays.asList(str2.split(";"));
+                                DBC.Historico.saveHistoricoMes1(data);
+                                line = reader.readLine();
+
+
+                            }
+
+                        }
+
                         if (line != null && ("[PRAZO]".equals(line) || line.equals("[PRAZO]") || line.contains("[PRAZO]"))) {
 
                             Log.d("PRAZO", "ENTROU");
@@ -784,11 +813,11 @@ public class sonicPopularTabelas {
         i.putExtra("IMEI", imei);
 
         sonicPreferences pref = new sonicPreferences(myCtx);
-        pref.Login.setEmpresaId(empresa_id);
-        pref.Login.setEmpresaNome(empresa);
-        pref.Login.setUsuarioId(id);
-        pref.Login.setUsuarioNome(usuario);
-        pref.Login.setUsuarioCargo(cargo);
+        pref.Users.setEmpresaId(empresa_id);
+        pref.Users.setEmpresaNome(empresa);
+        pref.Users.setUsuarioId(id);
+        pref.Users.setUsuarioNome(usuario);
+        pref.Users.setUsuarioCargo(cargo);
         myCtx.startActivity(i);
         ((AppCompatActivity) myCtx).finish();
 

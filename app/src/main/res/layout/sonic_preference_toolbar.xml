@@ -8,4 +8,4 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/DefaultAppTheme"
     app:navigationIcon="?attr/homeAsUpIndicator"
-    app:title="Preferências" />
+    app:title="Personalização" />

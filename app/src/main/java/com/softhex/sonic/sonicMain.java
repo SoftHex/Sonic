@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -22,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -74,30 +72,18 @@ public class sonicMain extends AppCompatActivity{
     static final String STATE_SCORE = "playerScore";
     static final String STATE_LEVEL = "playerLevel";
     static final int IMAGE_GALLERY_REQUEST = 20;
-    static final int CAMERA_REQUEST_CODE = 228;
-    static final int CAMERA_PERMISSION_REQUEST_CODE = 4192;
-    private ImageView imgPicture;
     private sonicDatabaseCRUD DBC;
-    private sonicDatabaseLogCRUD DBCL;
     private Intent i;
     private TabLayout myTabLayout;
     private Toolbar myToolbar;
     private ActionBar myActionBar;
     private ViewPager myViewPager;
     private ViewPagerAdapter myAdapter;
-    private SharedPreferences pref;
     private AccountHeader myHeader;
-    private Context myCtx;
+    private Context mActivity;
     private sonicUtils myUtil;
-    private sonicDialog myMessage;
     private Drawer myDrawer;
-    private boolean check;
-    private String usuarioNome, empresaNome, usuarioMeta;
-    private String usuarioCargo;
-    private String pathProfile;
-    private int usuarioId, empresaId;
-    private int usuarioNivelAcesso;
-    private boolean empSelecioanada;
+    private String usuarioMeta;
     private Boolean allowHomeUpdate = false;
     private PrimaryDrawerItem myDrawerSincronizar;
     private PrimaryDrawerItem myDrawerAvisos;
@@ -121,13 +107,12 @@ public class sonicMain extends AppCompatActivity{
     private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendido, tvMeta;
     private ProgressProfileView myProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
-    private String url, vendido;
+    private String  vendido;
     private LinearLayout llStar, llChecked;
     private Float percentualProgress, percentualTotal;
-    private int[] progress;
     private sonicFtp myFtp;
-    private Bundle myBundle;
     private int back = sonicUtils.Randomizer.generate(0,4);
+    private sonicPreferences prefs;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -136,9 +121,9 @@ public class sonicMain extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_main);
 
-        myCtx = this;
-        DBC = new sonicDatabaseCRUD(myCtx);
-        DBCL = new sonicDatabaseLogCRUD(myCtx);
+        mActivity = this;
+        DBC = new sonicDatabaseCRUD(mActivity);
+        prefs = new sonicPreferences(mActivity);
         sonicConstants.BACK = back;
 
         myToolbar = findViewById(R.id.toolbar);
@@ -148,14 +133,7 @@ public class sonicMain extends AppCompatActivity{
 
         // INSTANCIANDO OS OBJETOS
         llDetail = findViewById(R.id.llDetail);
-        usuarioId = sonicConstants.USUARIO_ATIVO_ID;
-        usuarioNome = sonicConstants.USUARIO_ATIVO_NOME;
-        usuarioCargo = sonicConstants.USUARIO_ATIVO_CARGO;
         usuarioMeta = sonicConstants.USUARIO_ATIVO_META_VENDA;
-        usuarioNivelAcesso = sonicConstants.USUARIO_ATIVO_NIVEL;
-        empresaId = sonicConstants.EMPRESA_SELECIONADA_ID;
-        empresaNome = sonicConstants.EMPRESA_SELECIONADA_NOME;
-        pathProfile = sonicConstants.LOCAL_IMG_USUARIO;
         tvEmpresa = findViewById(R.id.tvEmpresa);
         tvSaudacao = findViewById(R.id.tvSaudacao);
         tvUsuario = findViewById(R.id.tvUsuario);
@@ -172,9 +150,8 @@ public class sonicMain extends AppCompatActivity{
         llStar = findViewById(R.id.llStar);
         llChecked = findViewById(R.id.llChecked);
         myProgressProfile = findViewById(R.id.myProgressProfile);
-        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + empresaId + "_" + usuarioId + ".jpg";
 
-
+        // DISPLAY DRAWABLE FILE IN LINEAR LAYOUT
         Glide.with(getBaseContext())
                 .load(getResources().getDrawable(sonicConstants.BACKS[back]))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -195,12 +172,12 @@ public class sonicMain extends AppCompatActivity{
                 });
 
         // CARREGAR FOTO DO PERFIL
-        File file = new File(url);
+        File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
         if(file.exists()){
             Log.d("File", "EXISTE");
             Glide.get(getBaseContext()).clearMemory();
             Glide.with(getBaseContext())
-                    .load(url)
+                    .load(file)
                     .placeholder(R.drawable.no_profile)
                     .apply(new RequestOptions().override(300,300))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -261,8 +238,8 @@ public class sonicMain extends AppCompatActivity{
         // ATUALIZA A BADGE DE PRODUTOS
         new myAssyncTask().execute(4);
 
-        tvEmpresa.setText(empresaNome);
-        tvUsuario.setText(usuarioNome);
+        tvEmpresa.setText(prefs.Users.getEmpresaNome());
+        tvUsuario.setText(prefs.Users.getUsuarioNome());
         tvSaudacao.setText(sonicUtils.saudacao());
 
     }
@@ -297,23 +274,23 @@ public class sonicMain extends AppCompatActivity{
         /*tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         if(percentualProgress <=25.0){
-            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile0t025);
+            progress2 = mActivity.getResources().getIntArray(R.array.progressProfile0t025);
         }else if(percentualProgress <=50.0){
-            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile25t050);
+            progress2 = mActivity.getResources().getIntArray(R.array.progressProfile25t050);
         }else if(percentualProgress <=75.0){
-            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile50to75);
+            progress2 = mActivity.getResources().getIntArray(R.array.progressProfile50to75);
         }else if(percentualProgress <100.0){
-            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile75to100);
+            progress2 = mActivity.getResources().getIntArray(R.array.progressProfile75to100);
         }else{
-            progress2 = myCtx.getResources().getIntArray(R.array.progressProfile100);
+            progress2 = mActivity.getResources().getIntArray(R.array.progressProfile100);
             percentualProgress = 100f;
             llChecked.setVisibility(View.VISIBLE);
             llStar.setVisibility(View.VISIBLE);
             tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
             tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
         }*/
-        //progress = myCtx.getResources().getIntArray(R.array.progressProfile75to100);
-        myProgressProfile.setProgressGradient(myCtx.getResources().getIntArray(R.array.progressProfile100));
+        //progress = mActivity.getResources().getIntArray(R.array.progressProfile75to100);
+        myProgressProfile.setProgressGradient(mActivity.getResources().getIntArray(R.array.progressProfile100));
         myProgressProfile.setProgress(10f);
         myProgressProfile.startAnimation();
     }
@@ -330,9 +307,9 @@ public class sonicMain extends AppCompatActivity{
         tvDesemprenho.setVisibility(View.VISIBLE);
         //tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
         tvVendido.setVisibility(View.VISIBLE);
-        //tvVendido.setText(new sonicUtils(myCtx).Number.stringToMoeda2(vendido));
+        //tvVendido.setText(new sonicUtils(mActivity).Number.stringToMoeda2(vendido));
         tvMeta.setVisibility(View.VISIBLE);
-        //tvMeta.setText(new sonicUtils(myCtx).Number.stringToMoeda2(usuarioMeta));
+        //tvMeta.setText(new sonicUtils(mActivity).Number.stringToMoeda2(usuarioMeta));
 
     }
 
@@ -360,10 +337,9 @@ public class sonicMain extends AppCompatActivity{
                         usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
                         tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
-                        url = Environment.getExternalStorageDirectory().getPath() + pathProfile + (int)profile.getIdentifier() + "_" + usuarioId + ".JPG";
-                        File f = new File(url);
-                        String picture = f.exists() ? f.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
-                        sonicGlide.glideImageView(myCtx,myProgressProfile,picture);
+                        File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
+                        String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
+                        sonicGlide.glideImageView(mActivity,myProgressProfile,picture);
                         calcularPercentual("2200000", usuarioMeta);
                         lerDadosUsuario();
                         refreshHomeFragment();
@@ -400,15 +376,14 @@ public class sonicMain extends AppCompatActivity{
 
         {
 
-            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO +listaEmpresa.get(i).getCodigo()+"_"+usuarioId+".jpg");
-
+            File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
 
             if(i<3){
 
                 if(file.exists()){
                     myHeader.addProfiles(
                             new ProfileDrawerItem()
-                                    .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                    .withName(prefs.Users.getUsuarioNome() +" ("+ prefs.Users.getUsuarioCargo() +")")
                                     .withEmail(listaEmpresa.get(i).getNomeFantasia())
                                     .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
                                     .withIdentifier(listaEmpresa.get(i).getCodigo())
@@ -417,7 +392,7 @@ public class sonicMain extends AppCompatActivity{
 
                     myHeader.addProfiles(
                             new ProfileDrawerItem()
-                                    .withName(usuarioNome +" ("+ usuarioCargo +")")
+                                    .withName(prefs.Users.getUsuarioNome() +" ("+ prefs.Users.getUsuarioCargo() +")")
                                     .withEmail(listaEmpresa.get(i).getNomeFantasia())
                                     .withIcon(getResources().getDrawable(R.drawable.no_profile))
                                     .withIdentifier(listaEmpresa.get(i).getCodigo())
@@ -553,7 +528,7 @@ public class sonicMain extends AppCompatActivity{
 
         myDrawerLock = new SwitchDrawerItem()
                 .withIdentifier(19)
-                .withChecked(new sonicPreferences(myCtx).Login.getStatusLogin())
+                .withChecked(new sonicPreferences(mActivity).Users.getStatusLogin())
                 .withName("Sistema")
                 .withDescription("Solicitar senha ao entrar")
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cellphone_lock_grey600_24dp))
@@ -561,7 +536,7 @@ public class sonicMain extends AppCompatActivity{
                     @Override
                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
 
-                        new sonicPreferences(myCtx).Login.setStatusLogin(isChecked);
+                        new sonicPreferences(mActivity).Users.setStatusLogin(isChecked);
 
                     }
         });
@@ -668,6 +643,9 @@ public class sonicMain extends AppCompatActivity{
                                 //i = new Intent(sonicMain.this, sonicVendedores.class);
                                 //startActivity(i);
                                 //normalListDialogNoTitle("MENU");
+                                //mActivity.getSharedPreferences("PREFERENCE_DATA",0).edit().clear().apply();
+                                prefs.Util.deleteCache();
+                                prefs.Util.clearPreferences(false);
                                 break;
                             case 11:
                                 new myAsyncStartActivity().execute(sonicSistema.class);
@@ -680,10 +658,6 @@ public class sonicMain extends AppCompatActivity{
                                 //normalListDialogNoTitle("MENU");
                                 break;
                             case 13:
-                                SharedPreferences.Editor check = pref.edit();
-                                check.putBoolean("KEEP_PASS", false);
-                                check.apply();
-                                finish();
                                 break;
                             case 14:
                                 //i = new Intent(sonicMain.this, sonicRankingClientes.class);
@@ -871,7 +845,7 @@ public class sonicMain extends AppCompatActivity{
 
     private void dialogBackup() {
 
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(myCtx);
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
         builder.setMessage("O backup será salvo no diretório: "+ sonicConstants.LOCAL_DATA_BACKUP)
                 .setPositiveButton("FAZER BACKUP", new DialogInterface.OnClickListener() {
                     @Override
@@ -891,14 +865,14 @@ public class sonicMain extends AppCompatActivity{
 
     public void salvarBackup(){
 
-        ProgressDialog myProgressDialog = new ProgressDialog(myCtx);
+        ProgressDialog myProgressDialog = new ProgressDialog(mActivity);
         myProgressDialog.setCancelable(false);
         myProgressDialog.setMessage("Salvando, aguarde...");
         myProgressDialog.setMax(1);
         myProgressDialog.setProgressStyle(0);
         myProgressDialog.show();
 
-        String result = new sonicDatabase(myCtx).exportDatabase();
+        String result = new sonicDatabase(mActivity).exportDatabase();
 
         Handler handler = new Handler();
 
@@ -908,7 +882,7 @@ public class sonicMain extends AppCompatActivity{
 
                                     myProgressDialog.dismiss();
 
-                                    new sonicDialog(myCtx).showMS("Informação.",result, sonicDialog.MSG_INFO);
+                                    new sonicDialog(mActivity).showMS("Backup",result, sonicDialog.MSG_INFO);
 
                                 }
                             }
@@ -960,39 +934,26 @@ public class sonicMain extends AppCompatActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.itSettings:
-                        i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
-                        startActivity(i);
-                        break;
-                    case R.id.itNotificacao:
-                        Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
-                        return false;
-                    case R.id.itSincronizar:
-                        myFtp = new sonicFtp(myCtx);
-                        sonicConstants.DOWNLOAD_TYPE = "DADOS";
-                        String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                        Log.d("FILE", file);
-                        myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
-                        //Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
-                        return false;
-                }
-                //item.setEnabled(true);
+        switch (item.getItemId()){
+            case R.id.itSettings:
+                i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
+                startActivity(i);
+                break;
+            case R.id.itNotificacao:
+                Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
                 return false;
-            }
-        });
+            case R.id.itSincronizar:
+                myFtp = new sonicFtp(mActivity);
+                sonicConstants.DOWNLOAD_TYPE = "DADOS";
+                String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
+                Log.d("FILE", file);
+                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+                //Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
+                return false;
 
-        /*if (id == R.id.itSettings) {
-            i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
-            startActivity(i);
-        }*/
+        }
 
-        return super.onOptionsItemSelected(item);
+       return false;
     }
 
 
@@ -1006,15 +967,15 @@ public class sonicMain extends AppCompatActivity{
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(getApplicationContext());
+                    sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(mActivity);
                     DBC.Database.truncateAllTables();
                     new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TEMP);
-                    clearPreferences();
-                    deleteCache(getApplicationContext());
+                    prefs.Util.clearPreferences(true);
+                    prefs.Util.deleteCache();
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
                     int mPendingIntentId = 123456;
-                    PendingIntent mPendingIntent = PendingIntent.getActivity(sonicMain.this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                    AlarmManager mgr = (AlarmManager) sonicMain.this.getSystemService(Context.ALARM_SERVICE);
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                     System.exit(0);
                     break;
@@ -1024,46 +985,6 @@ public class sonicMain extends AppCompatActivity{
             }
         }
     };
-
-
-    public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e) {}
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
-    }
-
-    private void clearPreferences() {
-
-        getApplication().getSharedPreferences("GO_LOGIN", 0).edit().clear().apply();
-
-        try {
-
-            Intent intent = new Intent("android.intent.action.DELETE");
-            intent.setData(Uri.parse("package: com.softhex.sonic"));
-            startActivity(intent);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1075,14 +996,13 @@ public class sonicMain extends AppCompatActivity{
 
                 Uri imageUri = data.getData();
 
-                myUtil = new sonicUtils(myCtx);
+                myUtil = new sonicUtils(mActivity);
 
                 long empresaId = myHeader.getActiveProfile().getIdentifier();
 
-                myUtil.Arquivo.saveUriFile(imageUri, sonicConstants.LOCAL_IMG_USUARIO, empresaId, usuarioId);
+                myUtil.Arquivo.saveUriFile(imageUri, prefs.Path.getProfilePath(), prefs.Users.getEmpresaId(), prefs.Users.getUsuarioId());
 
-
-                String url = Environment.getExternalStorageDirectory().getPath() + sonicConstants.LOCAL_IMG_USUARIO + empresaId + "_" + usuarioId + ".JPG";
+                String url = Environment.getExternalStorageDirectory().getPath() + prefs.Path.getProfilePath() + prefs.Users.getEmpresaId() + "_" + prefs.Users.getUsuarioId() + ".JPG";
 
                 myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 

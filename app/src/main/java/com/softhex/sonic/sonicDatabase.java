@@ -27,6 +27,12 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_USUARIO = sonicConstants.TB_USUARIO;
     private static final String DB_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
     private static final String DB_HISTORICO_USUARIO = sonicConstants.TB_HISTORICO_USUARIO;
+    private static final String DB_HISTORICO_MES1 = sonicConstants.TB_HISTORICO_MES1;
+    private static final String DB_HISTORICO_MES2 = sonicConstants.TB_HISTORICO_MES2;
+    private static final String DB_HISTORICO_MES3 = sonicConstants.TB_HISTORICO_MES3;
+    private static final String DB_HISTORICO_MES4 = sonicConstants.TB_HISTORICO_MES4;
+    private static final String DB_HISTORICO_MES5 = sonicConstants.TB_HISTORICO_MES5;
+    private static final String DB_HISTORICO_MES6 = sonicConstants.TB_HISTORICO_MES6;
     private static final String DB_CLIENTE = sonicConstants.TB_CLIENTE;
     private static final String DB_EMPRESA_CLIENTE = sonicConstants.TB_EMPRESA_CLIENTE;
     private static final String DB_GRUPO_CLIENTE = sonicConstants.TB_GRUPO_CLIENTE;
@@ -106,24 +112,71 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_USUARIO_USUARIO_SUPERIOR = "CREATE INDEX index_usuario_usuario_superior ON "+DB_USUARIO+" (usuario_superior);";
     private static final String CREATE_INDEX_USUARIO_ATIVO = "CREATE INDEX index_usuario_ativo ON "+DB_USUARIO+" (ativo);";
 
-    private static final String CREATE_HISTORICO_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_USUARIO+" (" +
+    private static final String CREATE_HISTORICO_MES1 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES1+" (" +
             "_id integer primary key autoincrement, "+
-            "codigo_empresa int, " +
-            "codigo_usuario int, " +
-            "mes1 string, " +
-            "valor1 decimal(9,2), " +
-            "mes2 string, " +
-            "valor2 decimal(9,2), " +
-            "mes3 string, " +
-            "valor3 decimal(9,2), " +
-            "mes4 string, " +
-            "valor4 decimal(9,2), " +
-            "mes5 string, " +
-            "valor5 decimal(9,2), " +
-            "mes6 string, " +
-            "valor6 decimal(9,2));";
-    private static final String CREATE_INDEX_HISTORICO_USUARIO_CODIGO_EMPRESA = "CREATE INDEX index_historico_usuario_codigo_empresa ON "+DB_HISTORICO_USUARIO+" (codigo_empresa);";
-    private static final String CREATE_INDEX_HISTORICO_USUARIO_CODIGO_USUARIO = "CREATE INDEX index_historico_usuario_codigo_usuario ON "+DB_HISTORICO_USUARIO+" (codigo_usuario);";
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES1_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes1_codigo_empresa ON "+DB_HISTORICO_MES1+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES1_CODIGO_USUARIO = "CREATE INDEX index_historico_mes1_codigo_usuario ON "+DB_HISTORICO_MES1+" (codigo_usuario);";
+
+    private static final String CREATE_HISTORICO_MES2 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES2+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES2_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes2_codigo_empresa ON "+DB_HISTORICO_MES2+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES2_CODIGO_USUARIO = "CREATE INDEX index_historico_mes2_codigo_usuario ON "+DB_HISTORICO_MES2+" (codigo_usuario);";
+
+    private static final String CREATE_HISTORICO_MES3 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES3+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES3_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes3_codigo_empresa ON "+DB_HISTORICO_MES3+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES3_CODIGO_USUARIO = "CREATE INDEX index_historico_mes3_codigo_usuario ON "+DB_HISTORICO_MES3+" (codigo_usuario);";
+
+    private static final String CREATE_HISTORICO_MES4 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES4+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES4_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes4_codigo_empresa ON "+DB_HISTORICO_MES4+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES4_CODIGO_USUARIO = "CREATE INDEX index_historico_mes4_codigo_usuario ON "+DB_HISTORICO_MES4+" (codigo_usuario);";
+
+    private static final String CREATE_HISTORICO_MES5 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES5+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES5_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes5_codigo_empresa ON "+DB_HISTORICO_MES5+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES5_CODIGO_USUARIO = "CREATE INDEX index_historico_mes5_codigo_usuario ON "+DB_HISTORICO_MES5+" (codigo_usuario);";
+
+    private static final String CREATE_HISTORICO_MES6 = "CREATE TABLE IF NOT EXISTS "+DB_HISTORICO_MES6+" (" +
+            "_id integer primary key autoincrement, "+
+            "codigo_empresa int not null, " +
+            "codigo_usuario int not null, " +
+            "pedidos int, " +
+            "clientes int, " +
+            "valor decimal(9,2), " +
+            "mes string);";
+    private static final String CREATE_INDEX_HISTORICO_MES6_CODIGO_EMPRESA = "CREATE INDEX index_historico_mes6_codigo_empresa ON "+DB_HISTORICO_MES6+" (codigo_empresa);";
+    private static final String CREATE_INDEX_HISTORICO_MES6_CODIGO_USUARIO = "CREATE INDEX index_historico_mes6_codigo_usuario ON "+DB_HISTORICO_MES6+" (codigo_usuario);";
 
     private static final String CREATE_EMPRESA_USUARIO = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESA_USUARIO+" (" +
             "_id integer primary key autoincrement, "+
@@ -489,9 +542,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_USUARIO_NIVEL_ACESSO);
         DB.execSQL(CREATE_INDEX_USUARIO_USUARIO_SUPERIOR);
         DB.execSQL(CREATE_INDEX_USUARIO_ATIVO);
-        DB.execSQL(CREATE_HISTORICO_USUARIO);
-        DB.execSQL(CREATE_INDEX_HISTORICO_USUARIO_CODIGO_USUARIO);
-        DB.execSQL(CREATE_INDEX_HISTORICO_USUARIO_CODIGO_EMPRESA);
         DB.execSQL(CREATE_EMPRESA_USUARIO);
         DB.execSQL(CREATE_INDEX_EMPRESA_USUARIO_CODIGO_USUARIO);
         DB.execSQL(CREATE_INDEX_EMPRESA_USUARIO_CODIGO_EMPRESA);
@@ -504,6 +554,24 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_EMPRESA_CLIENTE_CODIGO_EMPRESA);
         DB.execSQL(CREATE_GRUPO_CLIENTE);
         DB.execSQL(CREATE_INDEX_GRUPO_CLIENTE_CODIGO);
+        DB.execSQL(CREATE_HISTORICO_MES1);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES1_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES1_CODIGO_USUARIO);
+        DB.execSQL(CREATE_HISTORICO_MES2);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES2_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES2_CODIGO_USUARIO);
+        DB.execSQL(CREATE_HISTORICO_MES3);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES3_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES3_CODIGO_USUARIO);
+        DB.execSQL(CREATE_HISTORICO_MES4);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES4_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES4_CODIGO_USUARIO);
+        DB.execSQL(CREATE_HISTORICO_MES5);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES5_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES5_CODIGO_USUARIO);
+        DB.execSQL(CREATE_HISTORICO_MES6);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES6_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_HISTORICO_MES6_CODIGO_USUARIO);
         DB.execSQL(CREATE_RANKING_CLIENTE);
         DB.execSQL(CREATE_INDEX_RANKING_CLIENTE_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_RANKING_CLIENTE_CODIGO_EMPRESA);

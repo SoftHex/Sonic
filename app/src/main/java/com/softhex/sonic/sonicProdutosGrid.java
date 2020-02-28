@@ -59,6 +59,7 @@ public class sonicProdutosGrid extends Fragment {
     private Context _this;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
+    private sonicPreferences prefs;
     Intent i;
 
     @Nullable
@@ -68,6 +69,8 @@ public class sonicProdutosGrid extends Fragment {
         _this = getActivity();
 
         DBC = new sonicDatabaseCRUD(_this);
+
+        prefs = new sonicPreferences(_this);
 
         loadFragment();
 
@@ -104,7 +107,7 @@ public class sonicProdutosGrid extends Fragment {
 
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new GridLayoutManager(getContext(), qtd);
+        myLayout = new GridLayoutManager(getContext(), prefs.Produtos.getCatalogoColunas());
 
         myRecycler.setLayoutManager(myLayout);
 

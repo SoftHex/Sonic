@@ -6,12 +6,13 @@
     android:tag="cards main container">
 
     <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/cardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="0dp">
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp">
+
 
         <LinearLayout
             android:id="@+id/linearItem"
@@ -38,32 +39,77 @@
                         android:orientation="vertical"
                         android:layout_weight="1">
 
-                        <TextView
-                            android:id="@+id/tvNome"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="NOME DO CLIENTE"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/tvEndereco"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="Endereço do Cliente"
-                            android:textColor="@color/colorTextAccentDark"
-                            android:textSize="16sp" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:layout_gravity="center_vertical">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/ivImagem"
+                                    android:layout_width="42dp"
+                                    android:layout_height="42dp"
+                                    android:visibility="gone"/>
+
+                                <TextView
+                                    android:id="@+id/tvLetra"
+                                    android:layout_width="42dp"
+                                    android:layout_height="42dp"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22sp"
+                                    android:text="@string/placeholderLetter"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/circle_textview"
+                                    android:visibility="visible"
+                                    android:gravity="center" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvNome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="NOME DO CLIENTE"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvEndereco"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="Endereço do Cliente"
+                                    android:textColor="@color/colorTextAccentDark"
+                                    android:textSize="16sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
 
                         <!-- CABEÇALHO -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
 
                             <!--<TextView
@@ -130,6 +176,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -191,6 +238,7 @@
                         android:layout_height="match_parent"
                         android:gravity="right|top"
                         android:elevation="1dp"
+                        android:visibility="gone"
                         android:orientation="vertical">
 
                         <TextView
@@ -207,12 +255,12 @@
 
             </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@drawable/separator_gradient_horizontal" />
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

@@ -1,39 +1,37 @@
 package com.softhex.sonic;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Handler;
-import android.view.Gravity;
+import android.os.Environment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.softhex.materialdialog.PromptDialog;
+import com.bumptech.glide.GenericTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.softhex.timelineview.TimelineView;
 
+import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.ViewHolder> implements Filterable {
 
@@ -95,14 +93,18 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         TextView tvAtendente;
         TextView tvDataHora;
         TextView tvSituacao;
+        CircleImageView ivImagem;
+        TextView tvLetra;
         LinearLayout linearItem;
 
         ViewHolder(View view) {
             super(view);
             linearItem = view.findViewById(R.id.linearItem);
-            timelineView = view.findViewById(R.id.tlRota);
-            tvOptions = view.findViewById(R.id.tvOptions);
+            //timelineView = view.findViewById(R.id.tlRota);
+            //tvOptions = view.findViewById(R.id.tvOptions);
             tvNome = view.findViewById(R.id.tvNome);
+            tvLetra = view.findViewById(R.id.tvLetra);
+            ivImagem = view.findViewById(R.id.ivImagem);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
             tvSituacao = view.findViewById(R.id.tvSituacao);
@@ -132,7 +134,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cards_rota, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cards_rota_itens, parent, false);
         return new ViewHolder(v);
     }
 
@@ -148,7 +150,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
         holder.tvDataHora.setText("Data Prevista: "+utils.Data.dataFotmatadaBarra(rota.getDataAgendamento())+" Ás "+utils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
         holder.tvObservacao.setText("Observação: "+rota.getObservacao());
-        holder.timelineView.setMarker(
+        /*holder.timelineView.setMarker(
                 rota.getTipo()==Tipo.PADRAO ?
                         myCtx.getResources().getDrawable(R.mipmap.ic_map_grey600_36dp) :
                         rota.getTipo()==Tipo.AGENDAMENTO ?
@@ -156,9 +158,26 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
         if(rota.getStatus()==2){
             sonicConstants.ROTA_EM_ATENDIMENTO = true;
-        }
+        }*/
 
-        //holder.tvObservacao.setText(rota.getStatus());
+        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + "_1.JPG");
+
+        if(file.exists()){
+            holder.ivImagem.setVisibility(View.VISIBLE);
+            holder.tvLetra.setVisibility(View.GONE);
+            Glide.with(myCtx)
+                    .load(file)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                    .into(holder.ivImagem);
+
+
+        }else{
+
+            holder.tvLetra.setText("A");
+
+        }
 
         String statusText = rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
                 rota.getStatus()==Status.EM_ATENDIMENTO ? StatusText.EM_ATENDIMENTO :
@@ -185,170 +204,17 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         holder.tvStatus.setText(statusText);
         holder.tvStatus.setBackground(statusDrawable);
 
-        holder.tvOptions.setVisibility(statusOptions);
-        holder.tvSituacao.setVisibility(statusSituacao);
+        //holder.tvOptions.setVisibility(statusOptions);
+        //holder.tvSituacao.setVisibility(statusSituacao);
 
-        holder.timelineView.setEndLineColor(statusColor, holder.getItemViewType());
-        holder.timelineView.setMarkerColor(statusColor);
-
-        holder.linearItem.setOnClickListener((View v)->{
-
-            dialogRota(v, rota);
-
-            });
-        holder.tvOptions.setOnClickListener((View v) -> {
-
-                    PopupMenu popup = new PopupMenu(mActivity, holder.tvOptions, Gravity.END, 0, R.style.PopupMenu);
-                    //Inflating the Popup using xml file
-                    popup.getMenuInflater().inflate(R.menu.sonic_rota_cards_options, popup.getMenu());
-                    switch (rota.getStatus()){
-                        case Status.NAO_INICIADO:
-                            popup.getMenu().getItem(1).setVisible(false);//CONCLUIR ATENDIMENTO
-                            break;
-                        case Status.EM_ATENDIMENTO:
-                            popup.getMenu().getItem(0).setVisible(false);//HIDE INICIAR ATENDIMENTO
-                            popup.getMenu().getItem(2).setVisible(false);//HIDE CANCELAR ATENDIMENTO
-                            break;
-                        case Status.CANCELADO:
-                            holder.tvOptions.setVisibility(View.GONE);
-                            break;
-                        case Status.CONCLUIDO:
-                            holder.tvOptions.setVisibility(View.GONE);
-                            break;
-                    }
-
-                    //registering popup with OnMenuItemClickListener
-                    popup.setOnMenuItemClickListener((MenuItem item)-> {
-
-                        switch (item.getTitle().toString()){
-                            case ItemText.INICIAR:
-                                if(sonicConstants.ROTA_EM_ATENDIMENTO){
-                                    new sonicDialog(mActivity).showMS("Atenção...", "Só é possível iniciar 1(um) atendimento por vez. Finalize o atendimento que estiver em aberto e tente novamente.", sonicDialog.MSG_WARNING);
-                                }else {
-                                    //showOptionsDialog(holder, rota.getCodigo(), popup);
-                                    new PromptDialog(mActivity)
-                                            .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
-                                            .setAnimationEnable(true)
-                                            .setOrientation(PromptDialog.VERTICAL)
-                                            .setTitleText("Iniciar atendimento...")
-                                            .setContentText("Deseja fazer um novo pedido ou apenas iniciar o atendimento?")
-                                            .setPositiveListener("NOVO PEDIDO", new PromptDialog.OnPositiveListener() {
-                                                @Override
-                                                public void onClick(PromptDialog dialog) {
-                                                    dialog.dismiss();
-
-                                                }
-                                            }).setThirdOptionListener("INICIAR ATENDIMENTO", new PromptDialog.OnThirdOptionListener() {
-                                        @Override
-                                        public void onClick(PromptDialog dialog) {
-                                            dialog.dismiss();
-                                            mDataBase.Rota.updateRota("status",String.valueOf(rota.getCodigo()),2);
-                                            alteredRotas = new sonicDatabaseCRUD(mActivity).Rota.selectRota();
-                                            //sonicConstants.ROTA_ALTERADA = true;
-                                            //updateAdapter(alteredRotas);
-                                            //sonicConstants.ROTA_ITEM_SELECTED = holder.getPosition();
-                                            ((sonicRotaClientes)mFragment).refreshFragment();
-
-                                        }
-                                    }).setNegativeListener("FECHAR", new PromptDialog.OnNegativeListener() {
-                                        @Override
-                                        public void onClick(PromptDialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show();
-                                }
-                                break;
-                            case ItemText.CONCLUIR:
-                                sonicConstants.ROTA_ITEM_SELECTED = holder.getPosition();
-                                //holder.tvOptions.setVisibility(View.GONE);
-                                //holder.tvStatus.setText(StatusText.CONCLUIDO);
-                                //holder.tvStatus.setBackground(myCtx.getResources().getDrawable(R.drawable.status_concluido));
-                                mDataBase.Rota.updateRota("status",String.valueOf(rota.getCodigo()),3);
-                                ((sonicRotaClientes)mFragment).refreshFragment();
-                                break;
-                            case ItemText.CANCELAR:
-                                new PromptDialog(mActivity)
-                                        .setDialogType(PromptDialog.DIALOG_TYPE_WRONG)
-                                        .setAnimationEnable(true)
-                                        .setOrientation(PromptDialog.VERTICAL)
-                                        .setTitleText("::: ATENDIMENTO :::")
-                                        .setContentText("Deseja realmente cancelar esse atendimento?")
-                                        .setPositiveListener("SIM, QUERO CANCELAR", new PromptDialog.OnPositiveListener() {
-                                            @Override
-                                            public void onClick(PromptDialog dialog) {
-                                                dialog.dismiss();
-                                                sonicConstants.ROTA_ITEM_SELECTED = holder.getPosition();
-                                                mDataBase.Rota.updateRota("status",String.valueOf(rota.getCodigo()),4);
-                                                ((sonicRotaClientes)mFragment).refreshFragment();
-                                            }
-                                        }).setNegativeListener("AGORA NÃO, FECHAR",new PromptDialog.OnNegativeListener() {
-                                    @Override
-                                    public void onClick(PromptDialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                }).show();
-
-                                break;
-                        }
-
-                            return false;
-
-                    });
-
-                    popup.show();
-
-        });
-
-    }
-
-
-
-    public void dialogRota(View v, sonicRotaHolder holder){
-
-        v.setOnClickListener((View x)-> {
-
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mActivity);
-            Rect displayRectangle = new Rect();
-            Window window = mActivity.getWindow();
-            window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-            ViewGroup viewGroup = x.findViewById(android.R.id.content);
-            View view = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_rota, viewGroup, false);
-            view.setMinimumWidth(displayRectangle.width());
-            view.setMinimumHeight(displayRectangle.height());
-            dialogBuilder.setView(view);
-            AlertDialog dialog = dialogBuilder.create();
-            TextView tvHeader = view.findViewById(R.id.tvHeader);
-            TextView tvEndereco = view.findViewById(R.id.tvEndereco);
-            TextView tvClose = view.findViewById(R.id.tvClose);
-            tvClose.setOnClickListener((View Vview)->{
-                dialog.dismiss();
-            });
-            ProgressBar pbProgress = view.findViewById(R.id.pbProgress);
-
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        pbProgress.setVisibility(View.GONE);
-                                        tvHeader.setText(holder.getRazaoSocial());
-                                        tvEndereco.setText(holder.getEnderecoCompleto());
-                                    }
-                                }
-                    , 500);
-
-
-            dialog.show();
-
-
-        });
+        //holder.timelineView.setEndLineColor(statusColor, holder.getItemViewType());
+        //holder.timelineView.setMarkerColor(statusColor);
 
     }
 
     @Override
     public int getItemViewType(int position) {
-        return R.layout.layout_cards_rota;
+        return R.layout.layout_cards_rota_itens;
 
     }
 

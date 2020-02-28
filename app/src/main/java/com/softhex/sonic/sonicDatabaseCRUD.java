@@ -27,7 +27,12 @@ public class sonicDatabaseCRUD {
     private final String TABLE_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private final String TABLE_USUARIO = sonicConstants.TB_USUARIO;
     private final String TABLE_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
-    private final String TABLE_HITORICO_USUARIO = sonicConstants.TB_HISTORICO_USUARIO;
+    private final String TABLE_HISTORICO_MES1 = sonicConstants.TB_HISTORICO_MES1;
+    private final String TABLE_HISTORICO_MES2 = sonicConstants.TB_HISTORICO_MES2;
+    private final String TABLE_HISTORICO_MES3 = sonicConstants.TB_HISTORICO_MES3;
+    private final String TABLE_HISTORICO_MES4 = sonicConstants.TB_HISTORICO_MES4;
+    private final String TABLE_HISTORICO_MES5 = sonicConstants.TB_HISTORICO_MES5;
+    private final String TABLE_HISTORICO_MES6 = sonicConstants.TB_HISTORICO_MES6;
     private final String TABLE_CLIENTE = sonicConstants.TB_CLIENTE;
     private final String TABLE_EMPRESA_CLIENTE = sonicConstants.TB_EMPRESA_CLIENTE;
     private final String TABLE_GRUPO_CLIENTE = sonicConstants.TB_GRUPO_CLIENTE;
@@ -64,6 +69,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
     private sonicDatabase DB;
     private sonicDatabaseLogCRUD DBCL;
+    private sonicPreferences pref;
     private sonicUtils myUtil;
     private SharedPreferences prefs;
     private sonicConstants myCons;
@@ -79,6 +85,7 @@ public class sonicDatabaseCRUD {
         this.myUtil = new sonicUtils(myCtx);
         this.myCons = new sonicConstants();
         this.mySystem = new sonicSystem(myCtx);
+        this.pref = new sonicPreferences(myCtx);
 
     }
 
@@ -88,11 +95,11 @@ public class sonicDatabaseCRUD {
     Ftp Ftp = new Ftp();
     Empresa Empresa = new Empresa();
     Usuario Usuario = new Usuario();
-    HistoricoUsuario HistoricoUsuario = new HistoricoUsuario();
     EmpresaUsuario EmpresaUsuario = new EmpresaUsuario();
     sonicDatabaseCRUD.NivelAcesso NivelAcesso = new NivelAcesso();
     Cliente Cliente = new Cliente();
     EmpresaCliente EmpresaCliente = new EmpresaCliente();
+    Historico Historico = new Historico();
     Venda Venda = new Venda();
     VendaItem VendaItem = new VendaItem();
     GrupoCliente GrupoCliente = new GrupoCliente();
@@ -959,26 +966,10 @@ public class sonicDatabaseCRUD {
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 List<sonicClientesHolder> clientes = new ArrayList<>();
 
-                String order = prefs.getString("show_name", "0");
-                String orderby = "";
-
-                String where = "";
+                String order = pref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? " ORDER BY C.nome_fantasia " : " ORDER BY C.razao_social ";
+                Log.d("EXIBICAO", pref.Clientes.getClienteExibicao());
                 String grupo = tipo.equals("J") ? myCons.GRUPO_CLIENTES_CNPJ : myCons.GRUPO_CLIENTES_CPF;
-
-                if (grupo!="TODOS") {
-                    where += " AND gc.nome = '" + grupo + "' ";
-                }
-
-                switch (order) {
-                    case "0":
-                        orderby = " ORDER BY razao_social";
-                        break;
-                    case "1":
-                        orderby = " ORDER BY nome_fantasia";
-                        break;
-                    default:
-                        orderby = " ORDER BY razao_social";
-                }
+                String where = grupo != "TODOS" ? " AND gc.nome = '" + grupo + "' " : "";
 
                 String query = "SELECT " +
                         "C.codigo AS codigo, " +
@@ -1013,9 +1004,7 @@ public class sonicDatabaseCRUD {
 
 
                     Cursor cursor = DB.getReadableDatabase().rawQuery(
-                            query + where + orderby, null);
-
-                    Log.d("LOG", query);
+                            query + where + order , null);
 
                     while (cursor.moveToNext()) {
 
@@ -1132,6 +1121,245 @@ public class sonicDatabaseCRUD {
                 return CLIENTE;
 
             }
+
+
+    }
+
+    class Historico{
+
+        public boolean saveHistoricoMes1(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES1, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES1, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes1() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES1, null, null) > 0;
+        }
+
+        public boolean saveHistoricoMes2(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES2, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES2, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes2() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES2, null, null) > 0;
+        }
+
+        public boolean saveHistoricoMes3(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES3, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES3, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes3() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES3, null, null) > 0;
+        }
+
+        public boolean saveHistoricoMes4(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES4, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES4, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes4() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES4, null, null) > 0;
+        }
+
+        public boolean saveHistoricoMes5(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES5, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES5, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes5() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES5, null, null) > 0;
+        }
+
+        public boolean saveHistoricoMes6(List<String> lista) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
+
+            try {
+
+                ContentValues cv = new ContentValues();
+                Cursor cursor = DB.getWritableDatabase().query(TABLE_HISTORICO_MES6, null, null, null, null, null, null);
+                String[] columnNames = cursor.getColumnNames();
+
+                for (int i = 0; i < columnNames.length-1; i++) {
+
+                    cv.put(columnNames[i+1], lista.get(i));
+
+                }
+
+                result = DB.getWritableDatabase().insert(TABLE_HISTORICO_MES6, null, cv) > 0;
+
+            } catch (SQLiteException e) {
+
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+            return result;
+        }
+
+        public boolean cleanHistoricoMes6() {
+
+            return DB.getWritableDatabase().delete(TABLE_HISTORICO_MES6, null, null) > 0;
+        }
 
 
     }
@@ -1765,126 +1993,6 @@ public class sonicDatabaseCRUD {
 
         public boolean cleanUsuario(){
             return DB.getWritableDatabase().delete(TABLE_USUARIO, null, null)>0;
-        }
-
-    }
-
-    class HistoricoUsuario {
-
-        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-        public long count() {
-
-            long count = 0;
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_HITORICO_USUARIO);
-            } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public boolean saveHistoricoUsuario(List<String> lista) {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try {
-                for (int i = 0; i < lista.size(); i++) {
-
-                    cv.put("codigo_empresa", lista.get(0));
-                    cv.put("codigo_vendedor", lista.get(1));
-                    cv.put("mes1", lista.get(2));
-                    cv.put("valor1", lista.get(3));
-                    cv.put("mes2", lista.get(4));
-                    cv.put("valor2", lista.get(5));
-                    cv.put("mes3", lista.get(6));
-                    cv.put("valor3", lista.get(7));
-                    cv.put("mes4", lista.get(8));
-                    cv.put("valor4", lista.get(9));
-                    cv.put("mes5", lista.get(10));
-                    cv.put("valor5", lista.get(11));
-                    cv.put("mes6", lista.get(12));
-                    cv.put("valor6", lista.get(13));
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_HITORICO_USUARIO, null, cv) > 0;
-
-            } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        /*public List<sonicMainFragOneHolder> selectHistoricoVendedor(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicMainFragOneHolder> hists = new ArrayList<sonicMainFragOneHolder>();
-
-            int nivel = prefs.getInt("VENDEDOR_NIVEL_ACESSO",0);
-            String query="";
-
-            switch (nivel){
-                case 2:
-                    query = " AND hv.codigo_vendedor IN (SELECT v.codigo_vendedor FROM "+TABLE_VENDEDOR+" v WHERE v.pessoa_superior = (SELECT v2.codigo_vendedor FROM "+TABLE_VENDEDOR+" v2 WHERE V2.ativo=1) )  ";
-                    break;
-                case 3:
-                    query = " AND hv.codigo_vendedor = (SELECT v.codigo_vendedor FROM "+TABLE_VENDEDOR+" v WHERE v.ativo=1) ";
-                    break;
-            }
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            " SUM(hv.valor1) AS valor1," +
-                            " hv.mes1 AS mes1," +
-                            " SUM(hv.valor2) AS valor2," +
-                            " hv.mes2 AS mes2," +
-                            " SUM(hv.valor3) AS valor3," +
-                            " hv.mes3 AS mes3," +
-                            " SUM(hv.valor4) AS valor4," +
-                            " hv.mes4 AS mes4," +
-                            " SUM(hv.valor5) AS valor5," +
-                            " hv.mes5 AS mes5," +
-                            " SUM(hv.valor6) AS valor6," +
-                            " hv.mes6 AS mes6" +
-                            " FROM " + TABLE_HITORICO_VENDEDOR +
-                            " hv WHERE  hv.codigo_empresa IN (SELECT e.codigo_empresa FROM "+TABLE_EMPRESA+" e WHERE e.selecionada=1)" +
-                            query +
-                            " GROUP BY hv.mes1, hv.mes2, hv.mes3, hv.mes4, hv.mes5, hv.mes6 ", null);
-
-            while(cursor.moveToNext()){
-
-                sonicMainFragOneHolder historico = new sonicMainFragOneHolder();
-
-                //historico.setVendedor(cursor.getString(cursor.getColumnIndex("Usuario")));
-                historico.setMes1(cursor.getString(cursor.getColumnIndex("mes1")));
-                historico.setValor1(cursor.getString(cursor.getColumnIndex("valor1")));
-                historico.setMes2(cursor.getString(cursor.getColumnIndex("mes2")));
-                historico.setValor2(cursor.getString(cursor.getColumnIndex("valor2")));
-                historico.setMes3(cursor.getString(cursor.getColumnIndex("mes3")));
-                historico.setValor3(cursor.getString(cursor.getColumnIndex("valor3")));
-                historico.setMes4(cursor.getString(cursor.getColumnIndex("mes4")));
-                historico.setValor4(cursor.getString(cursor.getColumnIndex("valor4")));
-                historico.setMes5(cursor.getString(cursor.getColumnIndex("mes5")));
-                historico.setValor5(cursor.getString(cursor.getColumnIndex("valor5")));
-                historico.setMes6(cursor.getString(cursor.getColumnIndex("mes6")));
-                historico.setValor6(cursor.getString(cursor.getColumnIndex("valor6")));
-
-                hists.add(historico);
-
-            }
-            cursor.close();
-            return hists;
-        }*/
-
-        public boolean cleanHistoricoUsuario() {
-
-            return DB.getWritableDatabase().delete(TABLE_HITORICO_USUARIO, null, null) > 0;
         }
 
     }

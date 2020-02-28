@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/prefGeralCategory">
+
+        <EditTextPreference android:title="Seu Nome"
+            android:key="usuarioNome"
+            android:summary="Personaliza seu nome.">
+
+        </EditTextPreference>
+
+    </PreferenceCategory>
+
+    <CheckBoxPreference android:title="Application Updates"
+        android:defaultValue="false"
+        android:summary="This option if selected will allow the application to check for latest versions."
+        android:key="applicationUpdates" />
+
+    <PreferenceCategory android:title="@string/prefClientesCategory">
+
+        <ListPreference     android:title="@string/prefClientesNome"
+            android:summary="@string/prefClientesDescription"
+            android:key="clienteTipo"
+            android:defaultValue="Nome Fantasia"
+            android:entries="@array/prefClientesListOptions"
+            android:entryValues="@array/prefClientesListValues" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/prefProdutosCategory">
+
+        <ListPreference     android:title="@string/prefProdutosCatalogoNome"
+            android:summary="@string/prefProdutosCatalogoDescription"
+            android:key="catalogoQtde"
+            android:defaultValue="Três Colunas"
+            android:entries="@array/prefProdutosCatalogoOptions"
+            android:entryValues="@array/prefProdutosCatalogoValues" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

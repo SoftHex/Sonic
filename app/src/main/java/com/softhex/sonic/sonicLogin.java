@@ -40,12 +40,12 @@ public class sonicLogin extends AppCompatActivity {
         tvEmpresa = findViewById(R.id.tvEmpresa);
         myImage = findViewById(R.id.ciPerfil);
         sonicPreferences pref = new sonicPreferences(this);
-        tvUsuario.setText(pref.Login.getUsuarioNome());
-        tvCargo.setText("("+pref.Login.getUsuarioCargo()+")");
-        tvEmpresa.setText(pref.Login.getEmpresaNome());
+        tvUsuario.setText(pref.Users.getUsuarioNome());
+        tvCargo.setText("("+pref.Users.getUsuarioCargo()+")");
+        tvEmpresa.setText(pref.Users.getEmpresaNome());
         btEntrar = findViewById(R.id.btEntrar);
 
-        String imagem = pref.Login.getEmpresaId()+"_"+pref.Login.getUsuarioId()+".JPG";
+        String imagem = pref.Users.getEmpresaId()+"_"+pref.Users.getUsuarioId()+".JPG";
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO+imagem);
         Log.d("IMAGEM", file.toString());
@@ -65,7 +65,7 @@ public class sonicLogin extends AppCompatActivity {
             mProgress = new ProgressDialog(mActivity);
             mProgress.setCancelable(false);
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgress.setTitle("Login");
+            mProgress.setTitle("Users");
             mProgress.setMessage("Autenticando...");
             mProgress.setIndeterminate(true);
             mProgress.show();

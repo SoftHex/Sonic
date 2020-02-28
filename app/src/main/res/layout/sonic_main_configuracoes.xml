@@ -14,7 +14,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:layout_gravity="top"
-        android:id="@+id/go_main_configuracoes_toolbar"
+        android:id="@+id/tbConfig"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_scrollFlags="scroll|enterAlways"
@@ -24,7 +24,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/layout_configuracoes"
+        android:id="@+id/llConfig"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -72,7 +72,7 @@
         <!-- SEGURANÇA -->
 
         <LinearLayout
-            android:id="@+id/seguranca"
+            android:id="@+id/llSeguranca"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?selectableItemBackground">
@@ -98,7 +98,7 @@
         <!-- PERSONALIZAÇÃO -->
 
         <LinearLayout
-            android:id="@+id/personalizacao"
+            android:id="@+id/llPersonalizacao"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?selectableItemBackground">
@@ -124,7 +124,7 @@
         <!-- NOTIFICAÇÕES -->
 
         <LinearLayout
-            android:id="@+id/notificacoes"
+            android:id="@+id/llNotificacoes"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?selectableItemBackground">
@@ -150,7 +150,7 @@
         <!-- AJUDA -->
 
         <LinearLayout
-            android:id="@+id/ajuda"
+            android:id="@+id/llAjuda"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?selectableItemBackground">
@@ -176,7 +176,7 @@
         <!-- SOBRE -->
 
         <LinearLayout
-            android:id="@+id/sobre"
+            android:id="@+id/llSobre"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="?selectableItemBackground">

@@ -52,11 +52,11 @@ public class sonicSplash extends AppCompatActivity {
                 sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa();
                 sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
                 sonicPreferences pref = new sonicPreferences(mActivity);
-                pref.Login.setUsuarioId(listaUser.get(0).getCodigo());
-                pref.Login.setUsuarioNome(listaUser.get(0).getNome());
-                pref.Login.setUsuarioCargo(listaUser.get(0).getCargo());
-                pref.Login.setEmpresaId(listaUser.get(0).getEmpresaId());
-                pref.Login.setEmpresaNome(listaUser.get(0).getEmpresa());
+                pref.Users.setUsuarioId(listaUser.get(0).getCodigo());
+                pref.Users.setUsuarioNome(listaUser.get(0).getNome());
+                pref.Users.setUsuarioCargo(listaUser.get(0).getCargo());
+                pref.Users.setEmpresaId(listaUser.get(0).getEmpresaId());
+                pref.Users.setEmpresaNome(listaUser.get(0).getEmpresa());
 
             }else{
                 res = false;
@@ -72,7 +72,7 @@ public class sonicSplash extends AppCompatActivity {
             if(result){
 
                 // VERIFICA SE O USUARIO ESCOLHEU COLOCAR SENHA AO ENTRAR
-                if(new sonicPreferences(mActivity).Login.getStatusLogin()){
+                if(new sonicPreferences(mActivity).Users.getStatusLogin()){
                     i  = new Intent(mActivity,sonicLogin.class);
                 }else {
                     i = new Intent(mActivity, sonicMain.class);
