@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/tvDescricao"
+                    android:id="@+id/tvNome"
                     android:textColor="@color/colorTextWhite"
                     android:text="XXXXXXXX"
                     android:maxLines="2"

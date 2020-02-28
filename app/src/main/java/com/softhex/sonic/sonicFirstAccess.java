@@ -48,14 +48,13 @@ public class sonicFirstAccess extends AppCompatActivity {
         myUsuario.setText(new sonicPreferences(this).Users.getUsuarioNome());
         myCargo.setText("("+new sonicPreferences(this).Users.getUsuarioCargo()+")");
 
-        myButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myProgress(view.getContext());
+        myButton.setOnClickListener((View v)-> {
+
+                myProgress(v.getContext());
                 sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("Usuario");
                 sonicConstants.EMPRESA_SELECIONADA_NOME = getIntent().getStringExtra("EMPRESA");
                 sonicConstants.USUARIO_ATIVO_ID = getIntent().getIntExtra("ID",0);
-            }
+
         });
 
         String imagem = getIntent().getIntExtra("EMPRESA_ID",0)+"_"+getIntent().getIntExtra("ID",0)+".jpg";

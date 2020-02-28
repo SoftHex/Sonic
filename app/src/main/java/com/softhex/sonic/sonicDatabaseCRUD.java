@@ -2361,7 +2361,7 @@ public class sonicDatabaseCRUD {
         public List<sonicProdutosHolder> selectProdutoGrid(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicProdutosHolder> PRODUTO = new ArrayList<sonicProdutosHolder>();
+            List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
 
             String order = prefs.getString("order_produto", "");
             Boolean estoque = prefs.getBoolean("produto_zero_switch", false);
@@ -2394,71 +2394,114 @@ public class sonicDatabaseCRUD {
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "p.codigo AS codigo, " +
-                            "p.nome AS nome, " +
-                            "p.codigo_alternativo AS codigo_alternativo, " +
+                            "p.codigo, " +
+                            "p.nome, " +
+                            "p.codigo_empresa, " +
+                            "p.data_cadastro, " +
+                            "p.codigo_alternativo, " +
+                            "p.descricao, " +
+                            "p.ncm, " +
+                            "p.peso_bruto, " +
+                            "p.peso_liquido, " +
+                            "p.estoque_minimo, " +
+                            "p.estoque_maximo, " +
+                            "p.multiplicidade, " +
+                            "p.codigo_ean, " +
+                            "p.codigo_ean_tributavel, " +
                             " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
-                            " (SELECT ep1.estoque_min FROM " + TABLE_ESTOQUE_PRODUTO + " ep1 WHERE ep1.codigo_produto = p.codigo) AS estoque_minimo, " +
                             " (SELECT un.sigla FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
                             " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
                             " FROM " + TABLE_PRODUTO + " p " +
                             " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1)" + where + orderby, null);
 
-            while(cursor.moveToNext()){
+            if(cursor.moveToFirst()){
+                while(cursor.moveToNext()){
 
-                sonicProdutosHolder produto = new sonicProdutosHolder();
+                    sonicProdutosHolder produtos = new sonicProdutosHolder();
 
-                produto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                produto.setDescricao(cursor.getString(cursor.getColumnIndex("nome")));
-                produto.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
-                produto.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
-                produto.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
-                produto.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
-                produto.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                //produto.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                //produto.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+                    produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("nome")));
+                    produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
+                    produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
+                    produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
+                    produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
+                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                    produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
+                    produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
+                    produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
+                    produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
+                    produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
+                    produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
+                    produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
+                    produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
+                    produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
 
-                PRODUTO.add(produto);
+                    produto.add(produtos);
 
+                }
             }
+
             cursor.close();
-            return PRODUTO;
+            return produto;
         }
 
         public List<sonicProdutosHolder> selectProdutoID(int id){
-            List<sonicProdutosHolder> PRODUTO = new ArrayList<sonicProdutosHolder>();
+            List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "p.codigo AS codigo," +
-                            "p.nome AS nome, " +
-                            "p.codigo_alternativo AS codigo_alternativo, " +
-                            "(SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
-                            "(SELECT ep1.estoque_min FROM " + TABLE_ESTOQUE_PRODUTO + " ep1 WHERE ep1.codigo_produto = p.codigo) AS estoque_minimo, " +
-                            "(SELECT un.sigla FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
-                            "(SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
-                            "FROM " + TABLE_PRODUTO + " p " +
-                            "WHERE p.codigo = "+id, null);
+                            "p.codigo, " +
+                            "p.nome, " +
+                            "p.codigo_empresa, " +
+                            "p.data_cadastro, " +
+                            "p.codigo_alternativo, " +
+                            "p.descricao, " +
+                            "p.ncm, " +
+                            "p.peso_bruto, " +
+                            "p.peso_liquido, " +
+                            "p.estoque_minimo, " +
+                            "p.estoque_maximo, " +
+                            "p.multiplicidade, " +
+                            "p.codigo_ean, " +
+                            "p.codigo_ean_tributavel, " +
+                            " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
+                            " (SELECT un.sigla FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
+                            " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
+                            " FROM " + TABLE_PRODUTO + " p " +
+                            " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1)", null);
 
-            while(cursor.moveToNext()){
+            if(cursor.moveToFirst()){
+                while(cursor.moveToNext()){
 
-                sonicProdutosHolder produto = new sonicProdutosHolder();
+                    sonicProdutosHolder produtos = new sonicProdutosHolder();
 
-                produto.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                produto.setDescricao(cursor.getString(cursor.getColumnIndex("nome")));
-                produto.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
-                produto.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
-                produto.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
-                produto.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
-                produto.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                //produto.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                //produto.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+                    produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("nome")));
+                    produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
+                    produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
+                    produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
+                    produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
+                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                    produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
+                    produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
+                    produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
+                    produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
+                    produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
+                    produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
+                    produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
+                    produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
+                    produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
 
-                PRODUTO.add(produto);
 
+                    produto.add(produtos);
+
+                }
             }
+
             cursor.close();
-            return PRODUTO;
+            return produto;
         }
 
         public List<sonicProdutosHolder> selectRankingProduto(){
@@ -2499,10 +2542,8 @@ public class sonicDatabaseCRUD {
                 produto.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
                 produto.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
                 produto.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                produto.setQuantidade(cursor.getString(cursor.getColumnIndex("quantidade")));
-                produto.setQuantidadeAnterior(cursor.getString(cursor.getColumnIndex("quantidade_anterior")));
-                produto.setPedidos(cursor.getInt(cursor.getColumnIndex("pedidos")));
-                produto.setAtuacao(cursor.getString(cursor.getColumnIndex("atuacao")));
+                produto.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
+
 
                 PRODUTO.add(produto);
 
@@ -2534,10 +2575,6 @@ public class sonicDatabaseCRUD {
                 sonicProdutosHolder produto = new sonicProdutosHolder();
 
                 produto.setGrupo(cursor.getString(cursor.getColumnIndex("nome")));
-                produto.setQuantidade(cursor.getString(cursor.getColumnIndex("quantidade")));
-                produto.setQuantidadeAnterior(cursor.getString(cursor.getColumnIndex("quantidade_anterior")));
-                produto.setPedidos(cursor.getInt(cursor.getColumnIndex("pedidos")));
-                produto.setAtuacao(cursor.getString(cursor.getColumnIndex("atuacao")));
 
                 PRODUTO.add(produto);
 

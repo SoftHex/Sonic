@@ -6,138 +6,125 @@ package com.softhex.sonic;
 
 public class sonicProdutosHolder {
 
-     int codigo_produto;
-     String descricao;
-     String codigo_alternativo;
-     int estoque;
-     int estoque_minimo;
-     String unidade_medida;
-     String grupo_produto;
-     int situacao;
-     String quantidade;
-     String quantidade_anterior;
-     int pedidos;
-     String atuacao;
-     String status;
+    int codigo_produto;
+    int codigo_empresa;
+    String nome;
+    String unidade_medida;
+    String grupo_produto;
+    String data_cadastro;
+    String codigo_alternativo;
+    String descricao;
+    String ncm;
+    String peso_bruto;
+    String peso_liquido;
+    int estoque;
+    int estoque_minimo;
+    int estoque_maximo;
+    int multiplicidade;
+    String codigo_ean;
+    String codigo_ean_tributavel;
+
 
     public sonicProdutosHolder(){
 
     }
-    public sonicProdutosHolder(int codigo_produto,
-                               String descricao,
-                               String codigo_alternativo,
-                               int estoque,
-                               int estoque_minimo,
-                               String unidade_medida,
-                               String grupo_produto,
-                               int situacao,
-                               String quantidade,
-                               String quantidade_anterior,
-                               int pedidos,
-                               String atuacao,
-                               String status){
+    public sonicProdutosHolder( int codigo_produto,
+                                int codigo_empresa,
+                                String nome,
+                                String unidade_medida,
+                                String grupo_produto,
+                                String data_cadastro,
+                                String codigo_alternativo,
+                                String descricao,
+                                String ncm,
+                                String peso_bruto,
+                                String peso_liquido,
+                                int estoque,
+                                int estoque_minimo,
+                                int estoque_maximo,
+                                int multiplicidade,
+                                String codigo_ean,
+                                String codigo_ean_tributavel){
 
         this.codigo_produto = codigo_produto;
-        this.descricao = descricao;
-        this.codigo_alternativo = codigo_alternativo;
-        this.estoque = estoque;
-        this.estoque_minimo = estoque_minimo;
+        this.codigo_empresa = codigo_empresa;
+        this.nome = nome;
         this.unidade_medida = unidade_medida;
         this.grupo_produto = grupo_produto;
-        this.situacao = situacao;
-        this.quantidade = quantidade;
-        this.quantidade_anterior = quantidade_anterior;
-        this.pedidos = pedidos;
-        this.atuacao = atuacao;
-        this.status = status;
+        this.data_cadastro = data_cadastro;
+        this.codigo_alternativo = codigo_alternativo;
+        this.descricao = descricao;
+        this.ncm = ncm;
+        this.peso_bruto = peso_bruto;
+        this.peso_liquido = peso_liquido;
+        this.estoque = estoque;
+        this.estoque_minimo = estoque_minimo;
+        this.estoque_maximo = estoque_maximo;
+        this.multiplicidade = multiplicidade;
+        this.codigo_ean = codigo_ean;
+        this.codigo_ean_tributavel = codigo_ean_tributavel;
 
     }
 
     public int getCodigo(){
         return this.codigo_produto;
     }
-    public String getDescricao(){ return this.descricao; }
-    public String getCodigoAlternativo(){
-        return this.codigo_alternativo;
-    }
-    public int getEstoque(){
-        return this.estoque;
-    }
-    public int getEstoqueMinimo(){
-        return this.estoque_minimo;
-    }
+    public int getCodigoEmpresa(){return this.codigo_empresa;}
+    public String getNome(){return this.nome;}
     public String getUnidadeMedida(){
         return this.unidade_medida;
     }
     public String getGrupo(){
         return this.grupo_produto;
     }
-
-    public int getSituacao() {
-        return situacao;
+    public String getDataCadastro(){return this.data_cadastro;}
+    public String getCodigoAlternativo(){
+        return this.codigo_alternativo;
     }
-
-    public String getQuantidade() {
-        return quantidade;
+    public String getDescricao(){ return this.descricao; }
+    public String getNcm(){return this.ncm;}
+    public String getPesoBruto(){return this.peso_bruto;}
+    public String getPesoPiquido(){return this.peso_liquido;}
+    public int getEstoque(){
+        return this.estoque;
     }
-
-    public String getQuantidadeAnterior() {
-        return quantidade_anterior;
+    public int getEstoqueMinimo(){
+        return this.estoque_minimo;
     }
-
-    public int getPedidos() {
-        return pedidos;
-    }
-
-    public String getAtuacao() {
-        return atuacao;
-    }
-    public String getStatus() {
-        return status;
-    }
+    public int getEstoqueMaximo(){return this.estoque_maximo;}
+    public int getMultiplicidade(){return this.multiplicidade;}
+    public String getCodigoEan(){return this.codigo_ean;}
+    public String getCodigoEanTributavel(){return this.codigo_ean_tributavel;}
 
     public void setCodigo(int codigo_produto){
         this.codigo_produto = codigo_produto;
     }
-    public void setDescricao(String descricao){
-        this.descricao = descricao;
-    }
-    public void setCodigoAlternativo(String codigo_alternativo){ this.codigo_alternativo = codigo_alternativo; }
-    public void setEstoque(int estoque){
-        this.estoque = estoque;
-    }
-    public void setEstoqueMinimo(int estoque_minimo){this.estoque_minimo = estoque_minimo;}
+    public void setCodigoEmpresa(int codigo_empresa){this.codigo_empresa = codigo_empresa;}
+    public void setNome(String nome){this.nome = nome;}
     public void setUnidadeMedida(String unidade_medida){ this.unidade_medida = unidade_medida; }
     public void setGrupo(String grupo_produto){
         this.grupo_produto = grupo_produto;
     }
-
-    public void setSituacao(int situacao) {
-        this.situacao = situacao;
+    public void setDataCadastro(String data_cadastro){this.data_cadastro = data_cadastro;}
+    public void setCodigoAlternativo(String codigo_alternativo){ this.codigo_alternativo = codigo_alternativo; }
+    public void setDescricao(String descricao){
+        this.descricao = descricao;
     }
-
-    public void setQuantidade(String quantidade) {
-        this.quantidade = quantidade;
+    public void setNcm(String ncm){this.ncm = ncm;}
+    public void setPesoBruto(String peso_bruto){this.peso_bruto = peso_bruto;}
+    public void setPesoLiquido(String peso_liquido){this.peso_liquido = peso_liquido;}
+    public void setEstoque(int estoque){
+        this.estoque = estoque;
     }
-
-    public void setQuantidadeAnterior(String quantidade_anterior) {
-        this.quantidade_anterior = quantidade_anterior;
-    }
-
-    public void setPedidos(int pedidos) {
-        this.pedidos = pedidos;
-    }
-
-    public void setAtuacao(String atuacao) {
-        this.atuacao = atuacao;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public void setEstoqueMinimo(int estoque_minimo){this.estoque_minimo = estoque_minimo;}
+    public void setEstoqueMaximo(int estoque_maximo){this.estoque_maximo = estoque_maximo;}
+    public void setMultiplicidade(int multiplicidade){this.multiplicidade= multiplicidade;}
+    public void setCodigoEan(String codigo_ean){this.codigo_ean = codigo_ean;}
+    public void setCodigoEanTributavel(String codigo_ean_tributavel){this.codigo_ean_tributavel = codigo_ean_tributavel;}
 
     @Override
     public String toString(){
-        return descricao;
+        return nome;
     }
 
 

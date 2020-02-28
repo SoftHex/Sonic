@@ -171,79 +171,59 @@
     <string name="prefGeralCategory">Geral</string>
 
     <!-- PREFERENCES FOR CLIENTS -->
-    <string name="prefClientesCategory">Clientes</string>
-    <string name="prefClientesNome">Modo de Exibição</string>
-    <string name="prefClientesDescription">Nome para exibir os clientes listados.</string>
-    <string name="prefClientesOrder">Exibir clientes por...</string>
-    <string-array name="prefClientesListOptions">
+    <string name="prefClienteCategory">Clientes</string>
+
+    <string name="clienteTipo" translatable="false">clienteTipo</string>
+    <string name="prefClienteNome">Modo de Exibição</string>
+    <string name="prefClienteDescription">Nome para exibir os clientes listados.</string>
+    <string name="prefClienteOrder">Exibir clientes por...</string>
+    <string name="prefClienteTipoDefault">Nome Fantasia</string>
+    <string-array name="prefClienteListOptions">
         <item name="1">Nome Fantasia</item>
         <item name="2">Razão Social</item>
     </string-array>
-    <string-array name="prefClientesListValues">
+    <string-array name="prefClienteListValues">
         <item name="1">Nome Fantasia</item>
         <item name="2">Razão Social</item>
     </string-array>
 
     <!-- PREFERENCES FOR USUARIOS -->
-    <string name="pref_title_usuario_logado">Usuario Logado</string>
-    <string name="pref_description_usuario_logado">Exibir usuario logado no sistema.</string>
-    <string name="pref_title_order_usuario">Ordenar usuarios por...</string>
-    <string-array name="pref_title_order_usuario_options">
-        <item>Nome</item>
-        <item>Cargo</item>
-    </string-array>
-    <string-array name="pref_usuario_list_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
+
 
     <!-- PREFERENCES FOR TITULOS -->
-    <string name="pref_title_titulos_lock">Clientes bloqueados</string>
-    <string name="pref_description_titulos_lock">Permitir a vizualização de títulos de clientes que estejam bloqueados.</string>
-    <string name="pref_title_order_titulos">Ordenar títulos por...</string>
-    <string-array name="pref_title_order_options_tit">
-        <item>Data de emissão</item>
-        <item>Data de vencimento</item>
-        <item>Dias atraso -</item>
-        <item>Dias atraso +</item>
-    </string-array>
-    <string-array name="pref_example_list_values_tit">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
+
 
     <!-- PREFERENCES FOR PRODUTOS -->
-    <string name="prefProdutosCategory">Produtos</string>
-    <string name="prefProdutosNome">Produtos com estoque negativo</string>
-    <string name="pref_description_produtos_zero">Permitir a vizualização de produto que não possui saldo positivo em estoque.</string>
-    <string name="pref_title_order_produto">Ordenar produtos por...</string>
-    <string-array name="pref_title_order_options_prod">
-        <item>Nome</item>
-        <item>Código</item>
-        <item>Estoque -</item>
-        <item>Estoque +</item>
+    <string name="prefProdutoCategory">Produtos</string>
+
+    <string name="catalogoQtde" translatable="false">catalogoQtde</string>
+    <string name="prefProdutoCatalogoNome">Catálogo</string>
+    <string name="prefProdutoCatalogoDescription">Quantidade de colunas para exibição catálogo de produtos.</string>
+    <string name="prefProdutoCatalogoDefault">Duas Colunas</string>
+    <string-array name="prefProdutoCatalogoOptions">
+        <item name="1">Duas Colunas</item>
+        <item name="2">Três Colunas</item>
+        <item name="3">Quatro Colunas</item>
     </string-array>
-    <string-array name="pref_example_list_values_prod">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="prefProdutoCatalogoValues">
+        <item name="1">Duas Colunas</item>
+        <item name="2">Três Colunas</item>
+        <item name="3">Quatro Colunas</item>
     </string-array>
 
-    <string name="prefProdutosCatalogoNome">Catálogo</string>
-    <string name="prefProdutosCatalogoDescription">Quantidade de colunas para exibição catálogo de produtos.</string>
-    <string name="prefCatalogoColumns">Exibir colunas...</string>
-    <string-array name="prefProdutosCatalogoOptions">
-        <item name="2">Duas Colunas</item>
-        <item name="3">Três Colunas</item>
-        <item name="4">Quatro Colunas</item>
+    <string name="produtoNovo" translatable="false">produtoNovo</string>
+    <string name="prefProdutoNovoNome">Produtos Novos</string>
+    <string name="prefProdutoNovoDescription">Quantidade de dias a partir da data de cadastro para que o produto seja destacado como novo.</string>
+    <string name="prefProdutoNovoDefault">30 Dias</string>
+    <string-array name="prefProdutoNovoOptions">
+        <item name="1">30 Dias</item>
+        <item name="2">60 Dias</item>
+        <item name="3">90 Dias</item>
     </string-array>
-    <string-array name="prefProdutosCatalogoValues">
-        <item name="2">Duas Colunas</item>
-        <item name="3">Três Colunas</item>
-        <item name="4">Quatro Colunas</item>
+    <string-array name="prefProdutoNovoValues">
+        <item name="1">30 Dias</item>
+        <item name="2">60 Dias</item>
+        <item name="3">90 Dias</item>
     </string-array>
 
     <!-- PREFERENCES FOR RETORNO -->

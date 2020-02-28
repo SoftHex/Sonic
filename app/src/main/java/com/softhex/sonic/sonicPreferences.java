@@ -8,7 +8,7 @@ import android.preference.ListPreference;
 import java.io.File;
 
 public class sonicPreferences{
-    public static final String PREFERENCE_NAME = "PREFERENCE_DATA";
+    public static final String PREFERENCE_NAME = "com.softhex.sonic_preferences";
     private final SharedPreferences sharedpreferences;
     private SharedPreferences.Editor editor;
     private Context mContex;
@@ -17,15 +17,11 @@ public class sonicPreferences{
     private static final String USUARIO_ID = "usuarioId";
     private static final String USUARIO_NOME = "usuarioNome";
     private static final String USUARIO_CARGO = "usuarioCargo";
-    private static final String CLIENTE_TIPO = "clienteTipo";
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
-    private static final String ENVIRONMENT = "environment";
+    private static final String ENVIRONMENT = "pathEnvironment";
     private static final String PROFILE_PATH = "profilePath";
-    private static final String CLIENT_PATH = "clientPath";
-    private static final String CATALOG_PATH = "catalogoPath";
     private static final String SAUDACAO = "saudacao";
-    private static final String CATALOGO_QTDE = "catalogoQtde";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -40,23 +36,31 @@ public class sonicPreferences{
     }
 
     public class Produtos{
-        public int getCatalogoColunas(){
-            return sharedpreferences.getInt(CATALOGO_QTDE, 3);
+        public String getCatalogoColunas(){
+            return sharedpreferences.getString(mContex.getResources().getString(R.string.catalogoQtde), mContex.getResources().getString(R.string.catalogoQtde));
         }
-        public void setCatalogoColunas(int value){
+        public void setCatalogoColunas(String value){
             editor = sharedpreferences.edit();
-            editor.putInt(CATALOGO_QTDE, value);
+            editor.putString(mContex.getResources().getString(R.string.catalogoQtde), value);
+            editor.apply();
+        }
+        public String getDiasNovo(){
+            return sharedpreferences.getString(mContex.getResources().getString(R.string.produtoNovo), mContex.getResources().getString(R.string.prefProdutoNovoDefault));
+        }
+        public void setDiasNovo(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(mContex.getResources().getString(R.string.produtoNovo), value);
             editor.apply();
         }
     }
 
     public class Clientes{
         public String getClienteExibicao(){
-            return sharedpreferences.getString(CLIENTE_TIPO, "Nome Fantasia");
+            return sharedpreferences.getString(mContex.getResources().getString(R.string.clienteTipo), mContex.getResources().getString(R.string.prefClienteTipoDefault));
         }
         public void  setClienteExibicao(String value){
             editor = sharedpreferences.edit();
-            editor.putString(CLIENTE_TIPO, value);
+            editor.putString(mContex.getResources().getString(R.string.clienteTipo), value);
             editor.apply();
         }
     }
@@ -139,9 +143,9 @@ public class sonicPreferences{
         }
         public String getSaudacao(){
             setSaudacao();
-        return sharedpreferences.getString(SAUDACAO, "Olá,");
+        return sharedpreferences.getString(SAUDACAO, "Olá, ");
         }
-        public void clearPreferences(Boolean restore) {
+        public void clearPreferences() {
 
             File sharedPreferenceFile = new File("/data/data/"+ mContex.getPackageName()+ "/shared_prefs/");
             File[] listFiles = sharedPreferenceFile.listFiles();
@@ -151,17 +155,6 @@ public class sonicPreferences{
             SharedPreferences.Editor p = mContex.getSharedPreferences(PREFERENCE_NAME, 0).edit();
             p.clear();
             p.apply();
-            if(restore){
-                try {
-
-                    //Intent intent = new Intent("android.intent.action.DELETE");
-                    //intent.setData(Uri.parse("package: com.softhex.sonic"));
-                    //mContex.startActivity(intent);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
         }
         public void deleteCache() {

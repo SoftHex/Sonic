@@ -67,6 +67,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import zerobranch.androidremotedebugger.AndroidRemoteDebugger;
+
 public class sonicMain extends AppCompatActivity{
 
     static final String STATE_SCORE = "playerScore";
@@ -120,6 +122,8 @@ public class sonicMain extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_main);
+
+        AndroidRemoteDebugger.init(this);
 
         mActivity = this;
         DBC = new sonicDatabaseCRUD(mActivity);
@@ -645,7 +649,7 @@ public class sonicMain extends AppCompatActivity{
                                 //normalListDialogNoTitle("MENU");
                                 //mActivity.getSharedPreferences("PREFERENCE_DATA",0).edit().clear().apply();
                                 prefs.Util.deleteCache();
-                                prefs.Util.clearPreferences(false);
+                                prefs.Util.clearPreferences();
                                 break;
                             case 11:
                                 new myAsyncStartActivity().execute(sonicSistema.class);
@@ -970,7 +974,7 @@ public class sonicMain extends AppCompatActivity{
                     sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(mActivity);
                     DBC.Database.truncateAllTables();
                     new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TEMP);
-                    prefs.Util.clearPreferences(true);
+                    prefs.Util.clearPreferences();
                     prefs.Util.deleteCache();
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
                     int mPendingIntentId = 123456;

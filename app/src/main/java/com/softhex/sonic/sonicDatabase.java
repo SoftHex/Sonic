@@ -249,21 +249,21 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_unidade int not null, " +
             "codigo_grupo int not null," +
             "nome string not null, " +
-            "data_cadastro string, " +
             "codigo_alternativo string, " +
             "descricao string, " +
+            "data_cadastro string, " +
             "ncm string, " +
             "peso_bruto string, " +
             "peso_liquido string, " +
-            "estoque_minnimo int, " +
+            "estoque_minimo int, " +
             "estoque_maximo int, " +
             "multiplicidade int, " +
             "codigo_ean string, " +
             "codigo_ean_tributavel string);";
-    private static final String CREATE_INDEX_PRODUTO_CODIGO = "CREATE INDEX index_PRODUTO_codigo ON "+DB_PRODUTO+" (codigo);";
-    private static final String CREATE_INDEX_PRODUTO_CODIGO_EMPRESA = "CREATE INDEX index_PRODUTO_codigo_empresa ON "+DB_PRODUTO+" (codigo_empresa);";
-    private static final String CREATE_INDEX_PRODUTO_CODIGO_UNIDADE = "CREATE INDEX index_PRODUTO_codigo_unidade ON "+DB_PRODUTO+" (codigo_unidade);";
-    private static final String CREATE_INDEX_PRODUTO_CODIGO_GRUPO = "CREATE INDEX index_PRODUTO_codigo_grupo ON "+DB_PRODUTO+" (codigo_grupo);";
+    private static final String CREATE_INDEX_PRODUTO_CODIGO = "CREATE INDEX index_produto_codigo ON "+DB_PRODUTO+" (codigo);";
+    private static final String CREATE_INDEX_PRODUTO_CODIGO_EMPRESA = "CREATE INDEX index_produto_codigo_empresa ON "+DB_PRODUTO+" (codigo_empresa);";
+    private static final String CREATE_INDEX_PRODUTO_CODIGO_UNIDADE = "CREATE INDEX index_produto_codigo_unidade ON "+DB_PRODUTO+" (codigo_unidade);";
+    private static final String CREATE_INDEX_PRODUTO_CODIGO_GRUPO = "CREATE INDEX index_produto_codigo_grupo ON "+DB_PRODUTO+" (codigo_grupo);";
 
     private static final String CREATE_GRUPO_PRODUTO = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_PRODUTO+" (" +
             "_id integer primary key autoincrement, " +

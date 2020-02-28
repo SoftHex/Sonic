@@ -48,6 +48,7 @@ dependencies {
     implementation 'com.mikepenz:materialdrawer:6.0.9'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'com.github.zerobranch:android-remote-debugger:1.0.0'
     // Material Dialog - In Use
     //implementation 'com.github.andyxialm:ColorDialog:1.0.0'
     // Goolge Gson

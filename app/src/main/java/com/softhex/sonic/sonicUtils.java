@@ -1139,7 +1139,7 @@ public class sonicUtils {
         public int dateDiffDay(String start, String end){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             int difference = 3;
             Date inicio = new Date();
             Date fim = new Date();

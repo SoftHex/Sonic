@@ -47,7 +47,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         //myViewpager = findViewById(R.id.pagerSlide);
         myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
-        //tvDescricao = findViewById(R.id.tvDescricao);
+        //tvNome = findViewById(R.id.tvNome);
         //tvGrupo = findViewById(R.id.tvGrupo);
         //tvDetalhe = findViewById(R.id.tvDetalhe);
         //tvPreco = findViewById(R.id.tvPreco);

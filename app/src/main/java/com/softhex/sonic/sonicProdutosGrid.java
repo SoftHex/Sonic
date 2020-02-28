@@ -56,7 +56,7 @@ public class sonicProdutosGrid extends Fragment {
     private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private Context _this;
+    private Context mContext;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
     private sonicPreferences prefs;
@@ -66,11 +66,11 @@ public class sonicProdutosGrid extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_grid, container, false);
 
-        _this = getActivity();
+        mContext = getActivity();
 
-        DBC = new sonicDatabaseCRUD(_this);
+        DBC = new sonicDatabaseCRUD(mContext);
 
-        prefs = new sonicPreferences(_this);
+        prefs = new sonicPreferences(mContext);
 
         loadFragment();
 
@@ -102,12 +102,14 @@ public class sonicProdutosGrid extends Fragment {
 
         myRecycler =  myView.findViewById(R.id.recycler_list);
 
-        //TODO WITH PREFERENCES
-        int qtd = 3;
-
         myRecycler.setHasFixedSize(true);
 
-        myLayout = new GridLayoutManager(getContext(), prefs.Produtos.getCatalogoColunas());
+        String[] array = getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
+        int colunas = prefs.Produtos.getCatalogoColunas().equals(array[0]) ? 2 :
+                            prefs.Produtos.getCatalogoColunas().equals(array[1]) ? 3 :
+                                prefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
+
+        myLayout = new GridLayoutManager(getContext(), colunas);
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -204,7 +206,7 @@ public class sonicProdutosGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Produto.selectProdutoGrid();
+            myList =  new sonicDatabaseCRUD(mContext).Produto.selectProdutoGrid();
             return myList.size();
 
         }
@@ -244,7 +246,7 @@ public class sonicProdutosGrid extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicProdutosGridAdapter(myList, _this);
+        myAdapter = new sonicProdutosGridAdapter(myList, mContext);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -269,7 +271,7 @@ public class sonicProdutosGrid extends Fragment {
         tvTexto.startAnimation(fadeIn);
         tvTitle.setText(R.string.noProdutosTitle);
         tvTexto.setText(R.string.noProdutosText);
-        /*Glide.with(_this)
+        /*Glide.with(mContext)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)

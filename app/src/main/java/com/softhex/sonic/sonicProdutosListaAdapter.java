@@ -17,7 +17,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,9 +36,13 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     private List<sonicProdutosHolder> produtos_filtered;
     private prodFilter prodFilter;
     private sonicDatabaseCRUD DBC;
+    private sonicUtils mUtil;
+    private sonicPreferences mPrefs;
     private sonicConstants myCons;
     private GradientDrawable shape;
     private final int VIEW_TYPE_ITEM = 0;
+    private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
+    private String mDataAtual = mDateFormat.format(new Date());
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -44,7 +50,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         String codigo;
         TextView codigoFull;
         TextView grupo;
-        TextView situacao;
         String status;
         CircleImageView imagem;
         TextView letra;
@@ -61,7 +66,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             descricao = view.findViewById(R.id.tvNome);
             grupo = view.findViewById(R.id.tvGrupo);
             codigoFull = view.findViewById(R.id.tvDetalhe);
-            //situacao = (TextView)view.findViewById(R.id.situacao);
             letra = view.findViewById(R.id.tvLetra);
             imagem = view.findViewById(R.id.ivImagem);
 
@@ -83,64 +87,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
             });
 
-            //notifyDataSetChanged();
-
-            /*dialogBuilder = new AlertDialog.Builder(view.getContext());
-            final LayoutInflater inflate = LayoutInflater.from(view.getContext());
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    View v = inflate.inflate(R.layout.dialog_produto_catalogo, null);
-
-                    Arquivo file = new Arquivo(Environment.getExternalStorageDirectory(), "/GO2/media/images/catalogo/"+codigo+".jpg");
-
-                    ImageView img = (ImageView)v.findViewById(R.id.Produto);
-
-                    Log.d("IMAGEM", file.toString());
-
-                    if(file.exists()){
-
-                        Log.d("IMAGEM", file.toString());
-
-                        String path = Environment.getExternalStorageDirectory() + "/GO2/media/images/catalogo/"+codigo+".jpg";
-                        Bitmap bitmap = BitmapFactory.decodeFile(path);
-
-                        img.setImageBitmap(bitmap);
-
-                    }else{
-
-                        String path = Environment.getExternalStorageDirectory() + "/GO2/media/images/catalogo/no_image.png";
-                        Bitmap bitmap = BitmapFactory.decodeFile(path);
-                        img.setImageBitmap(bitmap);
-                        //img.setBackgroundResource(R.mipmap.ic_no_image_available);
-
-                    }
-
-                    dialogBuilder.setMessage(nome_full.getText());
-
-                    TextView estoque_diag = (TextView)v.findViewById(R.id.Estoque);
-                    TextView estoque_minimo_diag = (TextView)v.findViewById(R.id.estoque_minimo);
-                    TextView codigo_diag = (TextView)v.findViewById(R.id.codigo);
-                    codigo_diag.setText("CÓDIGO: "+codigo);
-                    estoque_diag.setText("ESTOQUE: "+Estoque.getText());
-                    estoque_minimo_diag.setText("ESTOQUE MÍN: "+estoque_minimo.getText());
-
-                    AlertDialog alertDialog = dialogBuilder.create();
-
-                    if(v.getParent() == null){
-                        alertDialog.setView(v);
-                    }else{
-                        v = null;
-                        alertDialog.setView(v);
-                    }
-
-                    alertDialog.show();
-
-                }
-            });*/
-
         }
     }
 
@@ -150,6 +96,8 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         this.produtos = produto;
         this.produtos_filtered = produto;
         this.ctx = ctx;
+        this.mUtil = new sonicUtils(ctx);
+        this.mPrefs = new sonicPreferences(ctx);
     }
 
     public void updateList(){
@@ -166,7 +114,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        prodHolder produtos;
         View view;
         if(viewType == VIEW_TYPE_ITEM){
             view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list, parent, false);
@@ -182,13 +129,13 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = produtos.get(position);
-
+        int dias = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
         holder.descricao.setText(prod.getDescricao());
         //holder.descricao.setTextColor(Color.parseColor(prod.getSituacaoCor()));
-        holder.codigoFull.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+        holder.codigoFull.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo()+dias);
         holder.codigo = String.valueOf(prod.getCodigo());
         holder.grupo.setText(prod.getGrupo());
-        holder.status = prod.getStatus();
+
 
         //holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
 
