@@ -44,7 +44,7 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/IntroTheme">
+            android:theme="@style/DefaultAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +53,7 @@
         </activity>
         <activity
             android:name=".sonicSplash"
-            android:theme="@style/IntroTheme" />
+            android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".sonicEmpresa"
             android:theme="@style/IntroTheme"

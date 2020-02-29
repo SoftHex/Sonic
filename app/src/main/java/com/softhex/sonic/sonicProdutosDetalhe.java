@@ -102,6 +102,13 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
             }
         });
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                loadImage();
+            }
+        });
+
         new mAsyncTask().execute(mPrefs.Produtos.getProdutoId());
 
     }
@@ -110,7 +117,6 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         @Override
         protected Void doInBackground(Integer... integers) {
             mList = DBC.Produto.selectProdutoID(integers[0]);
-            loadImage();
             return null;
         }
 

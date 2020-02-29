@@ -59,6 +59,21 @@ public class sonicAppearence {
         }
     }
 
+    public static void layoutFullScreenMode(Window w){
+        int uiOptions = w.getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        if (Build.VERSION.SDK_INT >= 14) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        }
+        if (Build.VERSION.SDK_INT >= 16) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        }
+        if (Build.VERSION.SDK_INT >= 18) {
+            newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        }
+        w.getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
     public static void layoutWhitNoLogicalMenu(Context ctx, Window w){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

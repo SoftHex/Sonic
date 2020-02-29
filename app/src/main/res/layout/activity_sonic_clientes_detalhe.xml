@@ -44,12 +44,26 @@
             <LinearLayout
                 android:id="@+id/layoutDots"
                 android:layout_width="match_parent"
-                android:minWidth="60dp"
-                android:layout_height="36dp"
-                android:gravity="center_vertical|center"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
                 app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
                 android:layout_gravity="bottom|center"
                 android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_margin="10dp"
+                    android:textSize="18sp"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimaryWhite"
+                    android:background="@drawable/counter_images"
+                    android:text="1/1"/>
 
             </LinearLayout>
 

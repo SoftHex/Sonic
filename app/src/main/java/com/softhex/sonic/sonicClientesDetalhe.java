@@ -26,6 +26,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
     private Toolbar myToolbar;
     private ViewPager myViewpager;
     private TextView[] dots;
+    private TextView tvCount;
     private LinearLayout dotsLayout;
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout myCollapsingToolbar;
@@ -40,10 +41,13 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sonic_clientes_detalhe);
 
+        //sonicAppearence.layoutFullScreenMode(getWindow());
+
         DBC = new sonicDatabaseCRUD(this);
         myViewpager = findViewById(R.id.pagerSlide);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
+        tvCount = findViewById(R.id.tvCount);
 
         Bundle extras = getIntent().getExtras();
         if(savedInstanceState==null){
@@ -80,7 +84,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         AppBarLayout myAppBar = findViewById(R.id.appbar);
         myAppBar.setLayoutTransition(transition);
 
-        myCollapsingToolbar.setTitle(clienteNome);
+        //myCollapsingToolbar.setTitle(clienteNome);
 
         myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,11 +99,11 @@ public class sonicClientesDetalhe extends AppCompatActivity {
                 if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.INVISIBLE);
-                    //myCollapsingToolbar.setTitle(title);
+                    myCollapsingToolbar.setTitle(clienteNome);
                 }else {
                     myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.VISIBLE);
-                    //myCollapsingToolbar.setTitle("");
+                    myCollapsingToolbar.setTitle("");
                 }
             }
         });
@@ -148,8 +152,16 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
         myViewpager.setAdapter(myAdapter);
         myViewpager.addOnPageChangeListener(viewListener);
-        addBottomDots(0);
+        //addBottomDots(0);
+        addCount(1);
 
+    }
+
+    private void addCount(int position){
+        if(myImages.length>1){
+            tvCount.setVisibility(View.VISIBLE);
+            tvCount.setText(position+"/"+myImages.length);
+        }
     }
 
     private void addBottomDots(int position){
@@ -167,6 +179,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
             }
             if(dots.length>1){
                 dots[position].setTextColor(getResources().getColor(R.color.dotSlideActive));
+                dots[position].setTextSize(45);
             }
         }
 
@@ -181,7 +194,8 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         @Override
         public void onPageSelected(int i) {
 
-            addBottomDots(i);
+            //addBottomDots(i);
+            addCount(i+1);
 
         }
 

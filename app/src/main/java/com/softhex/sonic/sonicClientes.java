@@ -3,8 +3,8 @@ package com.softhex.sonic;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.os.Bundle;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
+import android.view.View;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,21 +13,26 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.View;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import zerobranch.androidremotedebugger.AndroidRemoteDebugger;
+
 public class sonicClientes extends AppCompatActivity {
 
-    private Context _this;
+    private Context mContex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_clientes);
 
-        _this = this;
+        AndroidRemoteDebugger.init(this);
+
+        mContex = this;
 
         createInterface();
 
