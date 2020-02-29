@@ -43,17 +43,19 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     private final int VIEW_TYPE_ITEM = 0;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
     private String mDataAtual = mDateFormat.format(new Date());
+    private int dias, diasDiff;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
-        TextView descricao;
-        String codigo;
+        TextView tvNome;
+        int codigo;
         TextView codigoFull;
-        TextView grupo;
+        TextView tvGrupo;
         String status;
         CircleImageView imagem;
         TextView letra;
         CardView card;
+        String dataCadastro;
         LinearLayout llItem, linearNew;
 
 
@@ -63,27 +65,26 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             card = view.findViewById(R.id.cardView);
             llItem = view.findViewById(R.id.linearItem);
             linearNew = view.findViewById(R.id.linearNew);
-            descricao = view.findViewById(R.id.tvNome);
-            grupo = view.findViewById(R.id.tvGrupo);
+            tvNome = view.findViewById(R.id.tvNome);
+            tvGrupo = view.findViewById(R.id.tvGrupo);
             codigoFull = view.findViewById(R.id.tvDetalhe);
             letra = view.findViewById(R.id.tvLetra);
             imagem = view.findViewById(R.id.ivImagem);
 
             DBC = new sonicDatabaseCRUD(ctx);
 
-            llItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            llItem.setOnClickListener((View v) -> {
 
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
                     i.putExtra("PRODUTO_CODIGO", codigo);
-                    i.putExtra("PRODUTO_NOME", descricao.getText());
-                    i.putExtra("PRODUTO_GRUPO", grupo.getText());
+                    i.putExtra("PRODUTO_NOME", tvNome.getText());
+                    i.putExtra("PRODUTO_GRUPO", tvGrupo.getText());
                     i.putExtra("PRODUTO_STATUS", status);
+                    mPrefs.Produtos.setProdutoId(codigo);
+                    mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
+                    mPrefs.Produtos.setProdutoGrupo(tvGrupo.getText().toString());
+                    mPrefs.Produtos.setProdutoDataCadastro(dataCadastro);
                     v.getContext().startActivity(i);
-
-                }
-
 
             });
 
@@ -129,15 +130,20 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = produtos.get(position);
-        int dias = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        holder.descricao.setText(prod.getDescricao());
-        //holder.descricao.setTextColor(Color.parseColor(prod.getSituacaoCor()));
-        holder.codigoFull.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo()+dias);
-        holder.codigo = String.valueOf(prod.getCodigo());
-        holder.grupo.setText(prod.getGrupo());
 
+        holder.tvNome.setText(prod.getNome());
+        //holder.tvNome.setTextColor(Color.parseColor(prod.getSituacaoCor()));
+        holder.codigoFull.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+        holder.codigo = prod.getCodigo();
+        holder.tvGrupo.setText(prod.getGrupo());
+        holder.dataCadastro = prod.getDataCadastro();
+        String[] array = ctx.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+        diasDiff = mUtil.Data.dateDiffDay(holder.dataCadastro, mDataAtual);
+        dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
+                mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
+        mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 : 30;
 
-        //holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
+        holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
 
         File fileJpg = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
 
@@ -151,7 +157,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         }else {
             holder.imagem.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
-            holder.letra.setText(String.valueOf(prod.getDescricao().charAt(0)));
+            holder.letra.setText(String.valueOf(prod.getNome().charAt(0)));
             holder.letra.setTypeface(Typeface.DEFAULT_BOLD);
         }
 
@@ -203,7 +209,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
                     String codigo = String.valueOf(prod.getCodigo());
 
-                    if (prod.getDescricao().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
+                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
                         filteredList.add(prod);
 
                     }

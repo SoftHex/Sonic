@@ -32,7 +32,7 @@
 
         <ListPreference     android:title="@string/prefProdutoNovoNome"
             android:summary="@string/prefProdutoNovoDescription"
-            android:key="@string/produtoNovo"
+            android:key="@string/produtoNovoDias"
             android:defaultValue="@string/prefProdutoNovoDefault"
             android:entries="@array/prefProdutoNovoOptions"
             android:entryValues="@array/prefProdutoNovoValues" />

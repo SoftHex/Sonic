@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,16 +118,20 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         sonicProdutosHolder prod = produtos.get(position);
         holder.codigo = String.valueOf(prod.getCodigo());
         holder.tvNome.setText(prod.getNome());
-        int dias = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        Log.d("DIAS", dias+"");
-        //holder.linearNew.setVisibility((prod.getStatus().equals("NOVO")) ? View.VISIBLE : View.GONE);
-        //holder.grupo.setText(prod.getGrupo());
-        String[] array = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
-        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(array[0]) ? 2 :
-                mPrefs.Produtos.getCatalogoColunas().equals(array[1]) ? 3 :
-                        mPrefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
+
+        String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+        int diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
+        int dias = mPrefs.Produtos.getDiasNovo().equals(arrayNovo[0]) ? 30 :
+                mPrefs.Produtos.getDiasNovo().equals(arrayNovo[1]) ? 60 :
+                        mPrefs.Produtos.getDiasNovo().equals(arrayNovo[2]) ? 90 : 30;
+
+        String[] arrayColumn = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
+        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[0]) ? 2 :
+                mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[1]) ? 3 :
+                        mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[2]) ? 4 : 3;
 
         holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 120/colunas);
+        holder.ivNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
         holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);
 
         String fileJpg = prod.getCodigo()+".JPG";
@@ -186,7 +189,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
                     String codigo = String.valueOf(prod.getCodigo());
 
-                    if (prod.getDescricao().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
+                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
                         filteredList.add(prod);
 
                     }

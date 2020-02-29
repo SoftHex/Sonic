@@ -31,7 +31,7 @@ public class sonicPersonalizacao extends PreferenceActivity{
 
         mPreferenceCliente = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteTipo));
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
-        mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovo));
+        mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));
         mPreferenceCliente.setOnPreferenceChangeListener((preference, newValue) -> {
             mPreferences.Clientes.setClienteExibicao(newValue.toString());
             return true;

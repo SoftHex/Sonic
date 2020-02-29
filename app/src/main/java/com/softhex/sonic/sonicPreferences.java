@@ -3,7 +3,6 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.ListPreference;
 
 import java.io.File;
 
@@ -12,15 +11,20 @@ public class sonicPreferences{
     private final SharedPreferences sharedpreferences;
     private SharedPreferences.Editor editor;
     private Context mContex;
-    private ListPreference mListPref;
     private static final String KEEP_LOGGED = "keepLogged";
     private static final String USUARIO_ID = "usuarioId";
     private static final String USUARIO_NOME = "usuarioNome";
     private static final String USUARIO_CARGO = "usuarioCargo";
+    private static final String PRODUTO_ID = "produtoId";
+    private static final String PRODUTO_NOME = "produtoNome";
+    private static final String PRODUTO_GRUPO = "produtoGrupo";
+    private static final String PRODUTO_NOVO = "produtoNovo";
+    private static final String PRODUTO_DATA_CADASTRO = "produtoDataCadastro";
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
-    private static final String PROFILE_PATH = "profilePath";
+    private static final String USER_PATH = "userPath";
+    private static final String CLIENTE_PATH = "clientePath";
     private static final String SAUDACAO = "saudacao";
 
     Users Users = new Users();
@@ -36,6 +40,50 @@ public class sonicPreferences{
     }
 
     public class Produtos{
+
+        public void setProdutoId(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(PRODUTO_ID, value);
+            editor.apply();
+        }
+        public int getProdutoId(){
+            return sharedpreferences.getInt(PRODUTO_ID, 0);
+        }
+
+        public void setProdutoNome(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(PRODUTO_NOME, value);
+            editor.apply();
+        }
+
+        public String getProdutoNome(){
+            return sharedpreferences.getString(PRODUTO_NOME, "");
+        }
+
+        public void setProdutoGrupo(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(PRODUTO_GRUPO, value);
+            editor.apply();
+        }
+        public String getProdutoGrupo(){
+            return sharedpreferences.getString(PRODUTO_GRUPO, "");
+        }
+        public void setProdutoDataCadastro(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(PRODUTO_DATA_CADASTRO, value);
+            editor.apply();
+        }
+        public String getProdutoDataCadastro(){
+            return sharedpreferences.getString(PRODUTO_DATA_CADASTRO, "");
+        }
+        public void setProdutoNovo(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(PRODUTO_NOVO, value);
+            editor.apply();
+        }
+        public Boolean getProdutoNovo(){
+            return sharedpreferences.getBoolean(PRODUTO_NOVO , false);
+        }
         public String getCatalogoColunas(){
             return sharedpreferences.getString(mContex.getResources().getString(R.string.catalogoQtde), mContex.getResources().getString(R.string.catalogoQtde));
         }
@@ -45,11 +93,11 @@ public class sonicPreferences{
             editor.apply();
         }
         public String getDiasNovo(){
-            return sharedpreferences.getString(mContex.getResources().getString(R.string.produtoNovo), mContex.getResources().getString(R.string.prefProdutoNovoDefault));
+            return sharedpreferences.getString(mContex.getResources().getString(R.string.produtoNovoDias), mContex.getResources().getString(R.string.prefProdutoNovoDefault));
         }
         public void setDiasNovo(String value){
             editor = sharedpreferences.edit();
-            editor.putString(mContex.getResources().getString(R.string.produtoNovo), value);
+            editor.putString(mContex.getResources().getString(R.string.produtoNovoDias), value);
             editor.apply();
         }
     }
@@ -127,12 +175,21 @@ public class sonicPreferences{
         }
         private void setProfilePath(){
             editor = sharedpreferences.edit();
-            editor.putString(PROFILE_PATH, sonicConstants.LOCAL_IMG_USUARIO);
+            editor.putString(USER_PATH, sonicConstants.LOCAL_IMG_USUARIO);
             editor.apply();
         }
         public String getProfilePath(){
             setProfilePath();
-            return sharedpreferences.getString(PROFILE_PATH, sonicConstants.LOCAL_IMG_USUARIO);
+            return sharedpreferences.getString(USER_PATH, sonicConstants.LOCAL_IMG_USUARIO);
+        }
+        private void setClientePath(){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_PATH, sonicConstants.LOCAL_IMG_CLIENTES);
+            editor.apply();
+        }
+        public String getClientePath(){
+            setProfilePath();
+            return sharedpreferences.getString(CLIENTE_PATH, sonicConstants.LOCAL_IMG_CLIENTES);
         }
     }
     public class Util{

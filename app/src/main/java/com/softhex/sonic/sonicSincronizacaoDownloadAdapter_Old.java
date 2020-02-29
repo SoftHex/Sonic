@@ -44,7 +44,7 @@ public class sonicSincronizacaoDownloadAdapter_Old extends RecyclerView.Adapter{
         public sincHolder(View view) {
             super(view);
             //titulo = (TextView)view.findViewById(R.id.titulo);
-            //descricao = (TextView)view.findViewById(R.id.descricao);
+            //tvNome = (TextView)view.findViewById(R.id.tvNome);
             //ultima_sincronizacao = (TextView)view.findViewById(R.id.ultima_sincronizacao);
             //button = (ActionProcessButton)view.findViewById(R.id.button);
 

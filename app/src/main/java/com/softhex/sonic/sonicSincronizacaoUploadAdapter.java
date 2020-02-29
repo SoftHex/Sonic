@@ -46,7 +46,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
         public sincHolder(View view) {
             super(view);
             //nome = (TextView)view.findViewById(R.id.nome_upload);
-            //descricao = (TextView)view.findViewById(R.id.descricao_upload);
+            //tvNome = (TextView)view.findViewById(R.id.descricao_upload);
             //atualizacao = (TextView)view.findViewById(R.id.atualizacao_upload);
             //situacao = (ImageView)view.findViewById(R.id.situacao_upload);
             //progress = (ProgressBar)view.findViewById(R.id.progress_upload);
@@ -241,7 +241,7 @@ public class sonicSincronizacaoUploadAdapter extends RecyclerView.Adapter{
 
         holder.nome.setText(nome[position]);
         holder.descricao.setText(desc[position]);
-        //holder.descricao.setText(sinc.getHora_sinc());
+        //holder.tvNome.setText(sinc.getHora_sinc());
         //holder.updTxt.setText("ÚLTIMA SINCRONIZAÇÃO: "+last_sinc_data[position]);
 
 

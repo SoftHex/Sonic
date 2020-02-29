@@ -297,7 +297,7 @@ public class sonicClientesCPF extends Fragment {
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um grupo...");
+        builder.setTitle("Selecione um tvGrupo...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

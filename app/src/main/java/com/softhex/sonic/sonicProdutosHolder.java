@@ -84,7 +84,7 @@ public class sonicProdutosHolder {
     public String getDescricao(){ return this.descricao; }
     public String getNcm(){return this.ncm;}
     public String getPesoBruto(){return this.peso_bruto;}
-    public String getPesoPiquido(){return this.peso_liquido;}
+    public String getPesoLiquido(){return this.peso_liquido;}
     public int getEstoque(){
         return this.estoque;
     }
