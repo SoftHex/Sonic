@@ -1,21 +1,24 @@
 package com.softhex.sonic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
 
-public class sonicPersonalizacao extends PreferenceActivity{
+public class sonicPerson extends PreferenceActivity{
 
     private Toolbar myToolbar;
     private sonicPreferences mPreferences;
     private ListPreference mPreferenceCliente;
     private ListPreference mPreferenceCatalogoQtde;
     private ListPreference mPreferenceProdutoNovo;
+    private PreferenceScreen mPreferenceClientLista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class sonicPersonalizacao extends PreferenceActivity{
         mPreferenceCliente = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteTipo));
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
         mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));
+        mPreferenceClientLista = (PreferenceScreen)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteLista));
         mPreferenceCliente.setOnPreferenceChangeListener((preference, newValue) -> {
             mPreferences.Clientes.setClienteExibicao(newValue.toString());
             return true;
@@ -44,7 +48,11 @@ public class sonicPersonalizacao extends PreferenceActivity{
             mPreferences.Produtos.setDiasNovo(newValue.toString());
             return true;
         });
-
+        mPreferenceClientLista.setOnPreferenceClickListener((Preference) -> {
+                Intent i = new Intent(this, sonicPersonClienteLista.class);
+                startActivity(i);
+                return true;
+        });
         myToolbar.setNavigationOnClickListener((View v) -> {
                 onBackPressed();
         });

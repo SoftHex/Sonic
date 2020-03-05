@@ -59,7 +59,7 @@ public class sonicMainConfiguracoes extends AppCompatActivity implements View.On
                 //startActivity(i);
                 break;
             case R.id.llPersonalizacao:
-                i = new Intent(this, sonicPersonalizacao.class);
+                i = new Intent(this, sonicPerson.class);
                 startActivity(i);
                 break;
             case R.id.llNotificacoes:

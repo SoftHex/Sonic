@@ -8,6 +8,7 @@ public class sonicClientesHolder {
 
     int codigo_cliente;
      String tipo;
+     String nome;
      String razao_social;
      String nome_fantasia;
      String cpf_cnpj;
@@ -21,10 +22,12 @@ public class sonicClientesHolder {
      String contato;
      String email;
      int situacao;
+     int cli_sem_compra;
      String obs;
      String data_cadastro;
      String grupo;
      int titulos;
+     int titulos_em_atraso;
      String tabela_preco;
      String status;
 
@@ -33,6 +36,7 @@ public class sonicClientesHolder {
     }
     public sonicClientesHolder(int codigo_cliente,
                                String tipo,
+                               String nome,
                                String razao_social,
                                String nome_fantasia,
                                String cpf_cnpj,
@@ -46,15 +50,18 @@ public class sonicClientesHolder {
                                String contato,
                                String email,
                                int situacao,
+                               int cli_sem_compra,
                                String obs,
                                String data_cadastro,
                                String grupo,
                                int titulos,
+                               int titulos_em_atraso,
                                String tabela_preco,
                                String status){
 
         this.codigo_cliente = codigo_cliente;
         this.tipo = tipo;
+        this.nome = nome;
         this.razao_social = razao_social;
         this.nome_fantasia = nome_fantasia;
         this.cpf_cnpj = cpf_cnpj;
@@ -68,6 +75,7 @@ public class sonicClientesHolder {
         this.contato = contato;
         this.email = email;
         this.situacao = situacao;
+        this.cli_sem_compra = cli_sem_compra;
         this.obs = obs;
         this.data_cadastro = data_cadastro;
         this.grupo = grupo;
@@ -83,6 +91,7 @@ public class sonicClientesHolder {
     public String getTipo(){
         return this.tipo;
     }
+    public String getNome(){return this.nome;}
     public String getRazaoSocial(){
         return this.razao_social;
     }
@@ -118,6 +127,7 @@ public class sonicClientesHolder {
     public int getSituacao(){
         return this.situacao;
     }
+    public int getCliSemCompra(){return this.cli_sem_compra;}
     public String getObservacao(){
         return this.obs;
     }
@@ -132,6 +142,7 @@ public class sonicClientesHolder {
     public int getTitulos() {
         return titulos;
     }
+    public int getTitulosEmAtraso(){return titulos_em_atraso;}
 
     public String getTabelaPreco(){
         return this.tabela_preco;
@@ -146,6 +157,7 @@ public class sonicClientesHolder {
     public void setTipo(String tipo){
         this.tipo = tipo;
     }
+    public void setNome(String nome){this.nome = nome;}
     public void setRazaoSocial(String razao_social){
         this.razao_social = razao_social;
     }
@@ -176,6 +188,7 @@ public class sonicClientesHolder {
         this.email = email;
     }
     public void setSituacao(int situacao){ this.situacao = situacao; }
+    public void setCliSemCompra(int cli_sem_compra){this.cli_sem_compra = cli_sem_compra;}
     public void setObservacao(String obs){ this.obs = obs; }
     public void setDataCadastro(String data_cadastro){ this.data_cadastro = data_cadastro; }
 
@@ -186,6 +199,7 @@ public class sonicClientesHolder {
     public void setTitulos(int titulos) {
         this.titulos = titulos;
     }
+    public void setTitulosEmAtraso(int titulos_em_atraso){this.titulos_em_atraso = titulos_em_atraso;}
 
     public void setTabelaPreco(String tabela_preco){ this.tabela_preco = tabela_preco; }
     public void setStatus(String status){ this.status = status; }

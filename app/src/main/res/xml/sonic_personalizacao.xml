@@ -19,6 +19,11 @@
             android:entries="@array/prefClienteListOptions"
             android:entryValues="@array/prefClienteListValues" />
 
+        <PreferenceScreen
+            android:summary="@string/prefClienteListaDescription"
+            android:title="@string/prefClienteListaNome"
+            android:key="@string/clienteLista"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefProdutoCategory">

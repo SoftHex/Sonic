@@ -182,9 +182,6 @@ public class sonicClientesCPF extends Fragment {
             case R.id.itemFiltro:
                 exibirFiltro();
                 return false;
-            case R.id.itemPref:
-                //dialogDelete();
-                return false;
             default:
                 break;
         }

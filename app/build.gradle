@@ -12,6 +12,15 @@ android {
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    file("src/main/res/layouts/").listFiles(),
+                    "src/main/res/layouts",
+                    "src/main/res"
+            ]
+        }
+    }
     compileOptions {
         encoding "UTF-8"
     }

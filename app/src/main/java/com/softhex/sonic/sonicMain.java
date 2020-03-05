@@ -196,27 +196,6 @@ public class sonicMain extends AppCompatActivity{
         myTabLayout = findViewById(R.id.tab);
         myTabLayout.setupWithViewPager(myViewPager);
 
-        myTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getIcon()!=null){
-                    myTabLayout.getTabAt(tab.getPosition()).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                if(tab.getIcon()!=null){
-                    myTabLayout.getTabAt(tab.getPosition()).getIcon().setColorFilter(getResources().getColor(R.color.iconTabUnselected), PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
         createDrawerMenu();
         calcularPercentual("2200000",usuarioMeta);
         lerDadosUsuario();

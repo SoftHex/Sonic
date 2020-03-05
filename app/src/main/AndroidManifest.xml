@@ -78,7 +78,7 @@
             android:launchMode="singleTop"
             android:theme="@style/PreferenceAppTheme"/>
         <activity
-            android:name=".sonicPersonalizacao"
+            android:name=".sonicPerson"
             android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -95,6 +95,10 @@
         <activity
             android:name=".sonicClientesDetalhe"
             android:parentActivityName=".sonicClientes"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".sonicPersonClienteLista"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity

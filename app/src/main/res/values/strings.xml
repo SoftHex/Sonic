@@ -187,10 +187,26 @@
         <item name="2">Razão Social</item>
     </string-array>
 
+    <string name="clienteLista">Lista de Clientes</string>
+    <string name="prefClienteListaNome">Lista de clientes</string>
+    <string name="prefClienteListaDescription">Clientes sem compra, títulos em atraso...</string>
+
+    <string name="clienteSemCompra" translatable="false">clienteSemCompra</string>
+    <string name="prefClienteSemCompraNome">Cliente Sem Compra</string>
+    <string name="prefClienteSemCompraDescription">Destacar clientes que nunca compraram.</string>
+    <bool name="prefClienteSemCompraDefault">true</bool>
+
+    <string name="tituloEmAtraso" translatable="false">tutuloEmAtraso</string>
+    <string name="prefTituloEmAtrasoNome">Título Em Atraso</string>
+    <string name="prefTitulosEmAtrasoDescription">Destacar clientes com títulos em atraso.</string>
+    <bool name="prefTitulosEmAtrasoDefault">true</bool>
+
     <!-- PREFERENCES FOR USUARIOS -->
 
 
     <!-- PREFERENCES FOR TITULOS -->
+    <string name="prefTitulosCategory">Títulos</string>
+
 
 
     <!-- PREFERENCES FOR PRODUTOS -->

@@ -111,6 +111,22 @@ public class sonicPreferences{
             editor.putString(mContex.getResources().getString(R.string.clienteTipo), value);
             editor.apply();
         }
+        public void setClienteSemCompra(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(mContex.getResources().getString(R.string.clienteSemCompra), value);
+            editor.apply();
+        }
+        public Boolean getClienteSemCompra(){
+            return sharedpreferences.getBoolean(mContex.getResources().getString(R.string.clienteSemCompra),true);
+        }
+        public void setTituloEmTraso(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(mContex.getResources().getString(R.string.tituloEmAtraso), value);
+            editor.apply();
+        }
+        public Boolean getTituloEmAtraso(){
+            return sharedpreferences.getBoolean(mContex.getResources().getString(R.string.tituloEmAtraso), true);
+        }
     }
     public class Users {
 

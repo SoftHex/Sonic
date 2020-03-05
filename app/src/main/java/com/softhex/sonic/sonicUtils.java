@@ -312,8 +312,8 @@ public class sonicUtils {
     }
 
     public static int countFileLines(File file) throws IOException {
-        int lines = 0;
-
+        
+		int lines = 0;
         FileInputStream fis = new FileInputStream(file);
         byte[] buffer = new byte[8 * 1024]; // BUFFER_SIZE = 8 * 1024
         int read;

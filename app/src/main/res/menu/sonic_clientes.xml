@@ -16,11 +16,5 @@
         android:title=""
         app:showAsAction="ifRoom|collapseActionView"/>
 
-    <item
-        android:id="@+id/itemPref"
-        android:orderInCategory="100"
-        android:title="Preferências"
-        app:showAsAction="never" />
-
 
 </menu>
