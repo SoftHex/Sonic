@@ -10,7 +10,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class sonicMainConfiguracoes extends AppCompatActivity implements View.OnClickListener{
+public class sonicConfig extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar myToolbar;
     private LinearLayout myLayout;
@@ -55,11 +55,11 @@ public class sonicMainConfiguracoes extends AppCompatActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.llSeguranca:
-                //i = new Intent(this, go_main_pref_seguranca.class);
-                //startActivity(i);
+                i = new Intent(this, sonicConfigSeguranca.class);
+                startActivity(i);
                 break;
             case R.id.llPersonalizacao:
-                i = new Intent(this, sonicPerson.class);
+                i = new Intent(this, sonicConfigPerson.class);
                 startActivity(i);
                 break;
             case R.id.llNotificacoes:

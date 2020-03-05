@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -52,7 +51,6 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -509,7 +507,7 @@ public class sonicMain extends AppCompatActivity{
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_database_export_grey600_24dp));
 
-        myDrawerLock = new SwitchDrawerItem()
+        /*myDrawerLock = new SwitchDrawerItem()
                 .withIdentifier(19)
                 .withChecked(new sonicPreferences(mActivity).Users.getStatusLogin())
                 .withName("Sistema")
@@ -522,7 +520,7 @@ public class sonicMain extends AppCompatActivity{
                         new sonicPreferences(mActivity).Users.setStatusLogin(isChecked);
 
                     }
-        });
+        });*/
 
         myDrawer = new DrawerBuilder()
                 .withActivity(this)
@@ -919,7 +917,7 @@ public class sonicMain extends AppCompatActivity{
 
         switch (item.getItemId()){
             case R.id.itSettings:
-                i = new Intent(getBaseContext(), sonicMainConfiguracoes.class);
+                i = new Intent(getBaseContext(), sonicConfig.class);
                 startActivity(i);
                 break;
             case R.id.itNotificacao:

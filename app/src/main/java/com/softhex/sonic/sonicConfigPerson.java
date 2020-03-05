@@ -11,9 +11,9 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
 
-public class sonicPerson extends PreferenceActivity{
+public class sonicConfigPerson extends PreferenceActivity{
 
-    private Toolbar myToolbar;
+    private Toolbar mToolbar;
     private sonicPreferences mPreferences;
     private ListPreference mPreferenceCliente;
     private ListPreference mPreferenceCatalogoQtde;
@@ -25,9 +25,10 @@ public class sonicPerson extends PreferenceActivity{
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.sonic_personalizacao);
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        myToolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.sonic_preference_toolbar, root, false);
+        mToolbar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.sonic_preference_toolbar, root, false);
 
-        root.addView(myToolbar, 0);
+        mToolbar.setTitle("Personalização");
+        root.addView(mToolbar, 0);
 
         mPreferences = new sonicPreferences(getBaseContext());
 
@@ -49,11 +50,11 @@ public class sonicPerson extends PreferenceActivity{
             return true;
         });
         mPreferenceClientLista.setOnPreferenceClickListener((Preference) -> {
-                Intent i = new Intent(this, sonicPersonClienteLista.class);
-                startActivity(i);
-                return true;
+            Intent i = new Intent(this, sonicPersonClienteLista.class);
+            startActivity(i);
+            return true;
         });
-        myToolbar.setNavigationOnClickListener((View v) -> {
+        mToolbar.setNavigationOnClickListener((View v) -> {
                 onBackPressed();
         });
 

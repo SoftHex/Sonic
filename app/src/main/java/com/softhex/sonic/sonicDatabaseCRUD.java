@@ -172,7 +172,7 @@ public class sonicDatabaseCRUD {
         public Boolean saveData(String tabela, List<String> values){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result;
- 
+
             try{
 
                 ContentValues cv = new ContentValues();

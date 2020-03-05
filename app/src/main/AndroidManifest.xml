@@ -74,16 +74,22 @@
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".sonicMainConfiguracoes"
-            android:launchMode="singleTop"
+            android:name=".sonicConfig"
             android:theme="@style/PreferenceAppTheme"/>
         <activity
-            android:name=".sonicPerson"
+            android:name=".sonicConfigPerson"
             android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".sonicMainConfiguracoes" />
+                android:value=".sonicConfig" />
             </activity>
+        <activity
+            android:name=".sonicConfigSeguranca"
+            android:theme="@style/PreferenceAppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".sonicConfig" />
+        </activity>
         <activity
             android:name=".sonicSincronizacao"
             android:theme="@style/DefaultAppTheme"

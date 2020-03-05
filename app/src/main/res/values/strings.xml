@@ -203,6 +203,12 @@
 
     <!-- PREFERENCES FOR USUARIOS -->
 
+    <string name="prefLoginCategory">Login</string>
+
+    <string name="usuarioLogin" translatable="false">usuarioLogin</string>
+    <string name="prefUsuarioLoginNome">Senha</string>
+    <string name="prefUsuariosLoginDescription">Exigir senha ao entrar no aplicativo.</string>
+    <bool name="prefUsuarioLoginDefault">false</bool>
 
     <!-- PREFERENCES FOR TITULOS -->
     <string name="prefTitulosCategory">Títulos</string>
