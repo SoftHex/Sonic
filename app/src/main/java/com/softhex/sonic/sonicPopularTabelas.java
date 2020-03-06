@@ -44,6 +44,7 @@ public class sonicPopularTabelas {
             { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO },
             { "[USUARIOS]", sonicConstants.TB_USUARIO },
             { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO },
+            { "[GRUPO_EMPRESAS]", sonicConstants.TB_GRUPO_EMPRESAS },
             { "[CLIENTES]", sonicConstants.TB_CLIENTE },
             { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE },
             { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE },

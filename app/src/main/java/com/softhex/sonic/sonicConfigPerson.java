@@ -32,7 +32,6 @@ public class sonicConfigPerson extends PreferenceActivity{
 
         mPreferences = new sonicPreferences(getBaseContext());
 
-
         mPreferenceCliente = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteTipo));
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
         mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));

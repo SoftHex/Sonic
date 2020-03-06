@@ -152,6 +152,22 @@
     <string name="sinc_catalogo">CATÁLOGO</string>
     <string name="sinc_catalogo_info">CATÁLOGO DE IMAGENS DOS PRODUTOS.</string>
 
+    <!-- CONFIGURACOES-->
+    <string name="configSobreTitle">Sobre</string>
+    <string name="configSobreDesc">Detalhes, versão e cotatos</string>
+    <string name="configAjudaTitle">Ajuda</string>
+    <string name="configAjudaDesc">Documentações</string>
+    <string name="configNotificacaoTitle">Notificações</string>
+    <string name="configNotificacaoDesc">Notificaçoes, mensagens</string>
+    <string name="configPersonTitle">Personalizações</string>
+    <string name="configPersonDesc">Listas, layouts, exibições, cores</string>
+    <string name="configPSegurancaTitle">Segurança</string>
+    <string name="configSegurancaDesc">Login, senha</string>
+
+    <!-- LOREM IPSUM -->
+    <string name="loremIpsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
+    <string name="loremIpsumShort">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+
     <!-- PREFERENCES FOR CLIENTS -->
     <string name="pref_title_clientes_open">Clientes em aberto</string>
     <string name="pref_description_clientes_open">Permitir a vizualização de clientes que estejam com títulos em aberto.</string>

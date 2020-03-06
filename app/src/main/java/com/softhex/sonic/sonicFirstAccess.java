@@ -24,10 +24,12 @@ import java.util.List;
 public class sonicFirstAccess extends AppCompatActivity {
 
     private TextView myEmpresa, myUsuario, myCargo;
-    private Button myButton;
+    private Button mConfirm;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
-    List<sonicUsuariosHolder> listaUser;
+    private sonicPreferences mPref;
+    List<sonicUsuariosHolder> mListUser;
+    List<sonicGrupoEmpresasHolder> mListEmpresa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +39,19 @@ public class sonicFirstAccess extends AppCompatActivity {
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
         DBC = new sonicDatabaseCRUD(this);
+        mPref = new sonicPreferences(this);
 
         myEmpresa = findViewById(R.id.tvEmpresa);
         myUsuario = findViewById(R.id.usuario);
         myCargo = findViewById(R.id.cargo);
-        myButton = findViewById(R.id.confirmar);
+        mConfirm = findViewById(R.id.confirmar);
         myImage = findViewById(R.id.perfil);
 
         myEmpresa.setText(getIntent().getStringExtra("EMPRESA"));
         myUsuario.setText(new sonicPreferences(this).Users.getUsuarioNome());
         myCargo.setText("("+new sonicPreferences(this).Users.getUsuarioCargo()+")");
 
-        myButton.setOnClickListener((View v)-> {
+        mConfirm.setOnClickListener((View v)-> {
 
                 myProgress(v.getContext());
                 sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("Usuario");
@@ -98,14 +101,26 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         @Override
         protected ProgressDialog doInBackground(ProgressDialog... progressDialogs) {
-            new sonicDatabaseCRUD(getBaseContext()).Usuario.setAtivo(getIntent().getIntExtra("ID",0));
-            listaUser = DBC.Usuario.selectUsuarioAtivo();
-            sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
-            sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
-            sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
-            sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
-            sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
-            sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa(); //NOME FANTASIA
+            DBC.Usuario.setAtivo(getIntent().getIntExtra("ID",0));
+            mListUser = DBC.Usuario.selectUsuarioAtivo();
+            mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
+            mPref.GrupoEmpresas.setNome(mListEmpresa.get(0).getNome());
+            mPref.GrupoEmpresas.setDescricao(mListEmpresa.get(0).getDescricao());
+            mPref.GrupoEmpresas.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+            mPref.GrupoEmpresas.setEndereco(mListEmpresa.get(0).getEndereco());
+            mPref.GrupoEmpresas.setBairro(mListEmpresa.get(0).getBairro());
+            mPref.GrupoEmpresas.setMunicipio(mListEmpresa.get(0).getMunicipio());
+            mPref.GrupoEmpresas.setUF(mListEmpresa.get(0).getUf());
+            mPref.GrupoEmpresas.setCep(mListEmpresa.get(0).getCep());
+            mPref.GrupoEmpresas.setFone(mListEmpresa.get(0).getFone());
+            mPref.GrupoEmpresas.setEmail(mListEmpresa.get(0).getEmail());
+            mPref.GrupoEmpresas.setSite(mListEmpresa.get(0).getSite());
+            sonicConstants.USUARIO_ATIVO_NIVEL = mListUser.get(0).getNivelAcessoId();
+            sonicConstants.USUARIO_ATIVO_CARGO = mListUser.get(0).getCargo();
+            sonicConstants.USUARIO_ATIVO_META_VENDA = mListUser.get(0).getMetaVenda();
+            sonicConstants.USUARIO_ATIVO_META_VISITA = mListUser.get(0).getMetaVisita();
+            sonicConstants.EMPRESA_SELECIONADA_ID = mListUser.get(0).getEmpresaId();
+            sonicConstants.EMPRESA_SELECIONADA_NOME = mListUser.get(0).getEmpresa(); //NOME FANTASIA
             return progressDialogs[0];
         }
 

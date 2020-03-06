@@ -10,6 +10,7 @@
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="WineAppTheme" parent="Theme.AppCompat.Light.NoActionBar">

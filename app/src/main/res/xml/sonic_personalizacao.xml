@@ -42,6 +42,11 @@
             android:entries="@array/prefProdutoNovoOptions"
             android:entryValues="@array/prefProdutoNovoValues" />
 
+        <EditTextPreference android:title="Seu Nome"
+            android:summary="Personaliza seu nome.">
+
+        </EditTextPreference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -24,6 +24,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
     private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
+    private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
     private final String TABLE_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private final String TABLE_USUARIO = sonicConstants.TB_USUARIO;
     private final String TABLE_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
@@ -88,6 +89,7 @@ public class sonicDatabaseCRUD {
     Site Site = new Site();
     Ftp Ftp = new Ftp();
     Empresa Empresa = new Empresa();
+    GrupoEmpresas GrupoEmpresas = new GrupoEmpresas();
     Usuario Usuario = new Usuario();
     EmpresaUsuario EmpresaUsuario = new EmpresaUsuario();
     sonicDatabaseCRUD.NivelAcesso NivelAcesso = new NivelAcesso();
@@ -569,6 +571,41 @@ public class sonicDatabaseCRUD {
             }
 
         }
+    }
+
+    class GrupoEmpresas{
+
+        public List<sonicGrupoEmpresasHolder> selectGrupoEmpresas(){
+
+            List<sonicGrupoEmpresasHolder> grupoEmpresa = new ArrayList<>();
+
+            Cursor cursor = DB.getReadableDatabase().rawQuery(
+                    "SELECT * FROM " + TABLE_GRUPO_EMPRESAS, null);
+
+            if(cursor.moveToFirst()){
+
+                sonicGrupoEmpresasHolder grupoEmpresas = new sonicGrupoEmpresasHolder();
+
+                grupoEmpresas.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                grupoEmpresas.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                grupoEmpresas.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                grupoEmpresas.setDataFundacao(cursor.getString(cursor.getColumnIndex("data_fundacao")));
+                grupoEmpresas.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                grupoEmpresas.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                grupoEmpresas.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                grupoEmpresas.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                grupoEmpresas.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+                grupoEmpresas.setFone(cursor.getString(cursor.getColumnIndex("fone")));
+                grupoEmpresas.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+                grupoEmpresas.setSite(cursor.getString(cursor.getColumnIndex("endereco_eletronico")));
+                grupoEmpresa.add(grupoEmpresas);
+
+            }
+            cursor.close();
+            return grupoEmpresa;
+        }
+
+
     }
 
     class EmpresaCliente {

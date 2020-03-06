@@ -23,6 +23,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_SITE = sonicConstants.TB_SITE;
     private static final String DB_FTP = sonicConstants.TB_FTP;
     private static final String DB_EMPRESA = sonicConstants.TB_EMPRESA;
+    private static final String DB_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
     private static final String DB_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private static final String DB_USUARIO = sonicConstants.TB_USUARIO;
     private static final String DB_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
@@ -84,6 +85,22 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "selecionada int);";
     private static final String CREATE_INDEX_EMPRESA_CODIGO = "CREATE INDEX index_empresa_codigo ON "+DB_EMPRESA+" (codigo);";
     private static final String CREATE_INDEX_EMPRESA_SELECIONADO = "CREATE INDEX index_empresa_selecionada ON "+DB_EMPRESA+" (selecionada);";
+
+    private static final String CREATE_GRUPO_EMPRESAS = "CREATE TABLE IF NOT EXISTS "+DB_GRUPO_EMPRESAS+" (" +
+            "_id integer primary key autoincrement, " +
+            "codigo_empresa int not null, " +
+            "nome string not null, " +
+            "descricao string," +
+            "data_fundacao string," +
+            "endereco string," +
+            "bairro string," +
+            "municipio string," +
+            "uf string," +
+            "cep string," +
+            "fone string," +
+            "email string," +
+            "endereco_eletronico string);";
+    private static final String CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA = "CREATE INDEX index_grupo_empresas_codigo_empresa ON "+DB_GRUPO_EMPRESAS+" (codigo_empresa);";
 
     private static final String CREATE_NIVEL_ACESSO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
             "_id integer primary key autoincrement, " +
@@ -489,6 +506,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_EMPRESA);
         DB.execSQL(CREATE_INDEX_EMPRESA_CODIGO);
         DB.execSQL(CREATE_INDEX_EMPRESA_SELECIONADO);
+        DB.execSQL(CREATE_GRUPO_EMPRESAS);
+        DB.execSQL(CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA);
         DB.execSQL(CREATE_NIVEL_ACESSO);
         DB.execSQL(CREATE_INDEX_NIVEL_ACESSO_NIVEL);
         DB.execSQL(CREATE_USUARIO);

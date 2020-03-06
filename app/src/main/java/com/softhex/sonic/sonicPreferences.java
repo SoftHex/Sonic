@@ -26,10 +26,22 @@ public class sonicPreferences{
     private static final String USER_PATH = "userPath";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String SAUDACAO = "saudacao";
+    private static final String GRUPO_EMPRESA_NOME = "grupoEmpresaNome";
+    private static final String GRUPO_EMPRESA_DESCRICAO = "grupoEmpresaDescricao";
+    private static final String GRUPO_EMPRESA_DATA_FUNDACAO = "grupoEmpresaDataFundacao";
+    private static final String GRUPO_EMPRESA_ENDERECO = "grupoEmpresaEndereco";
+    private static final String GRUPO_EMPRESA_BAIRRO = "grupoEmpresaBairro";
+    private static final String GRUPO_EMPRESA_MUNICIPIO = "grupoEmpresaMunicipio";
+    private static final String GRUPO_EMPRESA_UF = "grupoEmpresaUF";
+    private static final String GRUPO_EMPRESA_CEP = "grupoEmpresaCep";
+    private static final String GRUPO_EMPRESA_FONE = "grupoEmpresaFone";
+    private static final String GRUPO_EMPRESA_EMAIL = "grupoEmpresaEmail";
+    private static final String GRUPO_EMPRESA_SITE = "grupoEmpresaSite";
 
     Users Users = new Users();
     Path Path = new Path();
     Clientes Clientes = new Clientes();
+    GrupoEmpresas GrupoEmpresas = new GrupoEmpresas();
     Produtos Produtos = new Produtos();
     Util Util = new Util();
 
@@ -100,6 +112,99 @@ public class sonicPreferences{
             editor.putString(mContex.getResources().getString(R.string.produtoNovoDias), value);
             editor.apply();
         }
+    }
+
+    public class GrupoEmpresas{
+
+        public void setNome(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_NOME, value);
+            editor.apply();
+        }
+        public String getNome(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_NOME, "");
+        }
+        public void setDescricao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_DESCRICAO, value);
+            editor.apply();
+        }
+        public String getDescricao(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_DESCRICAO, "");
+        }
+        public void setDataFundacao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_DATA_FUNDACAO, value);
+            editor.apply();
+        }
+        public String getDataFundacao(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_DATA_FUNDACAO, "");
+        }
+        public void setEndereco(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_ENDERECO, value);
+            editor.apply();
+        }
+        public String getEndereco(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_ENDERECO, "");
+        }
+        public void setBairro(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_BAIRRO, value);
+            editor.apply();
+        }
+        public String getBairro(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_BAIRRO, "");
+        }
+        public void setMunicipio(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_MUNICIPIO, value);
+            editor.apply();
+        }
+        public String getMunicipio(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_MUNICIPIO, "");
+        }
+        public void setUF(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_UF, value);
+            editor.apply();
+        }
+        public String getUF(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_UF, "");
+        }
+        public void setCep(String value){
+            editor = sharedpreferences.edit();
+                editor.putString(GRUPO_EMPRESA_CEP, value);
+            editor.apply();
+        }
+        public String getCep(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_CEP, "");
+        }
+        public void setFone(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_FONE, value);
+            editor.apply();
+        }
+        public String getFone(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_FONE, "");
+        }
+        public void setEmail(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_EMAIL, value);
+            editor.apply();
+        }
+        public String getEmail(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_EMAIL, "");
+        }
+        public void setSite(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_SITE, value);
+            editor.apply();
+        }
+        public String getSite(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_SITE, "");
+        }
+
     }
 
     public class Clientes{
