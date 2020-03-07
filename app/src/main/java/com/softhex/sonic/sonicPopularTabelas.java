@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -31,6 +30,7 @@ import java.util.List;
 public class sonicPopularTabelas {
 
     private Context myCtx;
+    private sonicPreferences mPref;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
@@ -70,6 +70,7 @@ public class sonicPopularTabelas {
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
+        this.mPref = new sonicPreferences(myCtx);
     }
 
     public void gravarDados(String arquivo){
@@ -83,7 +84,7 @@ public class sonicPopularTabelas {
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setTitle("Preparando arquivo...");
+                myProgress.setTitle("Gravando...");
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
@@ -212,33 +213,9 @@ public class sonicPopularTabelas {
 
             if(new sonicDatabaseCRUD(myCtx).Database.checkMinimumData()){
 
-                String imei = "";
+                mPref.Users.setUsuarioImei(android.os.Build.VERSION.SDK_INT >= 26 ? myPhoneManager.getImei() : myPhoneManager.getDeviceId());
 
-                if(android.os.Build.VERSION.SDK_INT >= 26) {
-                    imei = myPhoneManager.getImei();
-
-                }else{
-                    imei = myPhoneManager.getDeviceId();
-                }
-
-                Log.d("IMEI", imei);
-
-                if(sonicConstants.EMP_TESTE){
-                    imei = "0000000000000000000";
-                }
-
-                sonicConstants.USER_IMEI = imei;
-
-                List<sonicUsuariosHolder> lista;
-                lista = DBC.Usuario.selectUsuarioImei(imei);
-                if(!lista.isEmpty()){
-
-                    startActivity(lista.get(0).getEmpresa(), lista.get(0).getEmpresaId() , lista.get(0).getCodigo() ,lista.get(0).getNome(), lista.get(0).getCargo(), imei);
-
-                }else{
-                    new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + imei + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
-                    sonicConstants.EMP_TESTE = false;
-                }
+                new mAsyncTaskDownloadImagemPerfil().execute();
 
             }else{
 
@@ -255,23 +232,39 @@ public class sonicPopularTabelas {
 
     }
 
-    public void startActivity(String empresa, int empresa_id, int id, String usuario, String cargo, String imei){
+    private class mAsyncTaskDownloadImagemPerfil extends AsyncTask<String, String, List<sonicUsuariosHolder>>{
+        @Override
+        protected List<sonicUsuariosHolder> doInBackground(String... strings) {
+            //new Handler(Looper.getMainLooper()).post(()-> {
+
+                //new sonicFtp(myCtx).downloadFileSilent(sonicConstants.FTP_EMPRESA, sonicConstants.LOCAL_IMG_EMPRESA + "empresa.JPG");
+
+            //});
+            return DBC.Usuario.selectUsuarioImei(mPref.Users.getUsuarioImei());
+        }
+
+        @Override
+        protected void onPostExecute(List<sonicUsuariosHolder> mList) {
+            super.onPostExecute(mList);
+            if(!mList.isEmpty()){
+                startActivity(mList);
+            }
+            else{
+                new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
+                sonicConstants.EMP_TESTE = false;
+            }
+        }
+    }
+
+    public void startActivity(List<sonicUsuariosHolder> mList){
 
         Intent i = new Intent(myCtx, sonicFirstAccess.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putExtra("ID", id);
-        i.putExtra("EMPRESA", empresa);
-        i.putExtra("EMPRESA_ID", empresa_id);
-        i.putExtra("USUARIO", usuario);
-        i.putExtra("CARGO", cargo);
-        i.putExtra("IMEI", imei);
-
-        sonicPreferences pref = new sonicPreferences(myCtx);
-        pref.Users.setEmpresaId(empresa_id);
-        pref.Users.setEmpresaNome(empresa);
-        pref.Users.setUsuarioId(id);
-        pref.Users.setUsuarioNome(usuario);
-        pref.Users.setUsuarioCargo(cargo);
+        mPref.Users.setEmpresaId(mList.get(0).getEmpresaId());
+        mPref.Users.setEmpresaNome(mList.get(0).getEmpresa());
+        mPref.Users.setUsuarioId(mList.get(0).getCodigo());
+        mPref.Users.setUsuarioNome(mList.get(0).getNome());
+        mPref.Users.setUsuarioCargo(mList.get(0).getCargo());
         myCtx.startActivity(i);
         ((AppCompatActivity) myCtx).finish();
 

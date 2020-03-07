@@ -15,6 +15,8 @@ public class sonicPreferences{
     private static final String USUARIO_ID = "usuarioId";
     private static final String USUARIO_NOME = "usuarioNome";
     private static final String USUARIO_CARGO = "usuarioCargo";
+    private static final String USUARIO_IMEI = "usuarioImei";
+    private static final String USUARIO_PATH = "userPath";
     private static final String PRODUTO_ID = "produtoId";
     private static final String PRODUTO_NOME = "produtoNome";
     private static final String PRODUTO_GRUPO = "produtoGrupo";
@@ -23,7 +25,6 @@ public class sonicPreferences{
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
-    private static final String USER_PATH = "userPath";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String SAUDACAO = "saudacao";
     private static final String GRUPO_EMPRESA_NOME = "grupoEmpresaNome";
@@ -35,8 +36,11 @@ public class sonicPreferences{
     private static final String GRUPO_EMPRESA_UF = "grupoEmpresaUF";
     private static final String GRUPO_EMPRESA_CEP = "grupoEmpresaCep";
     private static final String GRUPO_EMPRESA_FONE = "grupoEmpresaFone";
+    private static final String GRUPO_EMPRESA_WHATS = "grupoEmpresaWhatsapp";
     private static final String GRUPO_EMPRESA_EMAIL = "grupoEmpresaEmail";
     private static final String GRUPO_EMPRESA_SITE = "grupoEmpresaSite";
+    private static final String GRUPO_EMPRESA_PICTURE = "grupoEmpresaPicture";
+    private static final String GRUPO_EMPRESA_PATH = "grupoEmpresaPath";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -188,6 +192,15 @@ public class sonicPreferences{
         public String getFone(){
             return sharedpreferences.getString(GRUPO_EMPRESA_FONE, "");
         }
+
+        public void setWhats(String value) {
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_EMPRESA_WHATS, value);
+            editor.apply();
+        }
+        public String getWhats(){
+            return sharedpreferences.getString(GRUPO_EMPRESA_WHATS, "");
+        }
         public void setEmail(String value){
             editor = sharedpreferences.edit();
             editor.putString(GRUPO_EMPRESA_EMAIL, value);
@@ -205,6 +218,9 @@ public class sonicPreferences{
             return sharedpreferences.getString(GRUPO_EMPRESA_SITE, "");
         }
 
+        public String getPicture(){
+            return sonicConstants.LOCAL_IMG_CATALOGO+"empresa.JPG";
+        }
     }
 
     public class Clientes{
@@ -235,6 +251,14 @@ public class sonicPreferences{
     }
     public class Users {
 
+        public void setUsuarioImei(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(USUARIO_IMEI, value);
+            editor.apply();
+        }
+        public String getUsuarioImei(){
+            return sharedpreferences.getString(USUARIO_IMEI, "");
+        }
         public void setStatusLogin(Boolean login){
             editor = sharedpreferences.edit();
             editor.putBoolean(KEEP_LOGGED, login);
@@ -283,6 +307,16 @@ public class sonicPreferences{
         public String getEmpresaNome(){
             return sharedpreferences.getString(EMPRESA_NOME, "");
         }
+        public String getPicture(){
+            return  sharedpreferences.getString(USUARIO_PATH,"")
+                    +sharedpreferences.getInt(EMPRESA_ID,0) +"_"
+                    +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
+        }
+        public String getPicture(int value){
+            return  sharedpreferences.getString(USUARIO_PATH,"")
+                    +value+"_"
+                    +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
+        }
     }
     public class Path{
         private void setEnvironment(){
@@ -296,12 +330,12 @@ public class sonicPreferences{
         }
         private void setProfilePath(){
             editor = sharedpreferences.edit();
-            editor.putString(USER_PATH, sonicConstants.LOCAL_IMG_USUARIO);
+            editor.putString(USUARIO_PATH, sonicConstants.LOCAL_IMG_USUARIO);
             editor.apply();
         }
         public String getProfilePath(){
             setProfilePath();
-            return sharedpreferences.getString(USER_PATH, sonicConstants.LOCAL_IMG_USUARIO);
+            return sharedpreferences.getString(USUARIO_PATH, sonicConstants.LOCAL_IMG_USUARIO);
         }
         private void setClientePath(){
             editor = sharedpreferences.edit();

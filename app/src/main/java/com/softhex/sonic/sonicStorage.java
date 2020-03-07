@@ -3,11 +3,8 @@ package com.softhex.sonic;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Created by Administrador on 02/08/2017.
@@ -38,6 +35,25 @@ public class sonicStorage {
 
                 folder.mkdirs();
 
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void createFolder(String[] folders){
+
+        try {
+
+            for (int i = 0; i< folders.length; i++) {
+                File folder = new File(Environment.getExternalStorageDirectory(), folders[i]);
+                if(!folder.exists()){
+
+                    folder.mkdirs();
+
+                }
             }
 
         }catch (Exception e){

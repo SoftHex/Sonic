@@ -596,6 +596,7 @@ public class sonicDatabaseCRUD {
                 grupoEmpresas.setUf(cursor.getString(cursor.getColumnIndex("uf")));
                 grupoEmpresas.setCep(cursor.getString(cursor.getColumnIndex("cep")));
                 grupoEmpresas.setFone(cursor.getString(cursor.getColumnIndex("fone")));
+                grupoEmpresas.setWhatsapp(cursor.getString(cursor.getColumnIndex("whatsapp")));
                 grupoEmpresas.setEmail(cursor.getString(cursor.getColumnIndex("email")));
                 grupoEmpresas.setSite(cursor.getString(cursor.getColumnIndex("endereco_eletronico")));
                 grupoEmpresa.add(grupoEmpresas);

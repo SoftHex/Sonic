@@ -1,10 +1,8 @@
 package com.softhex.sonic;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.SwitchPreference;
-import android.transition.Fade;
+import android.os.Environment;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,13 +14,17 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class sonicConfig extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar mToolbar;
     private LinearLayout seguranca, personalizacao, notificacoes, sobre, ajuda;
-    private SwitchPreference myVibrateSwitch;
     private Intent i;
     private LinearLayout llContent;
     private CircleImageView mImagem;
@@ -34,25 +36,14 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.sonic_config);
 
         mPref = new sonicPreferences(this);
-        mToolbar = findViewById(R.id.tbConfig);
+        mToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Configurações");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
-            Fade fade = new Fade();
-            View decor = getWindow().getDecorView();
-            fade.excludeTarget(R.id.appBar, true);
-            fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
-            fade.excludeTarget(android.R.id.statusBarBackground, true);
-            fade.excludeTarget(android.R.id.navigationBarBackground, true);
-            getWindow().setEnterTransition(fade);
-            getWindow().setExitTransition(fade);
-            getWindow().setSharedElementsUseOverlay(true);
-        }
+        sonicAppearence.removeFlashingTransition(getWindow());
 
         llContent = findViewById(R.id.llContent);
         mImagem = findViewById(R.id.ivImagem);
@@ -72,11 +63,17 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
         ajuda.setOnClickListener(this);
         sobre.setOnClickListener(this);
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO +"empresa.JPG");
+        if(file.exists()){
+
+            Glide.with(getApplicationContext())
+                    .load(file)
+                    .apply(new RequestOptions().override(100,100))
+                    .into(mImagem);
+
+        }
+        mToolbar.setNavigationOnClickListener((View) -> {
                 onBackPressed();
-            }
         });
 
     }
@@ -90,7 +87,7 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
                         ,Pair.create(mTitle, ViewCompat.getTransitionName(mTitle))
                         ,Pair.create(mDesc, ViewCompat.getTransitionName(mDesc))
                 );
-                i = new Intent(this,sonicEmpresaDetalhe.class);
+                i = new Intent(this, sonicConfigPerfil.class);
                 startActivity(i,activityOptionsCompat.toBundle());
                 break;
             case R.id.llSeguranca:

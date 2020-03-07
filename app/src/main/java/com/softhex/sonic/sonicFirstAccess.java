@@ -47,22 +47,18 @@ public class sonicFirstAccess extends AppCompatActivity {
         mConfirm = findViewById(R.id.confirmar);
         myImage = findViewById(R.id.perfil);
 
-        myEmpresa.setText(getIntent().getStringExtra("EMPRESA"));
-        myUsuario.setText(new sonicPreferences(this).Users.getUsuarioNome());
-        myCargo.setText("("+new sonicPreferences(this).Users.getUsuarioCargo()+")");
+        myEmpresa.setText(mPref.Users.getEmpresaNome());
+        myUsuario.setText(mPref.Users.getUsuarioNome());
+        myCargo.setText("("+mPref.Users.getUsuarioCargo()+")");
 
         mConfirm.setOnClickListener((View v)-> {
 
+                DBC.Usuario.setAtivo(mPref.Users.getUsuarioId());
                 myProgress(v.getContext());
-                sonicConstants.USUARIO_ATIVO_NOME = getIntent().getStringExtra("Usuario");
-                sonicConstants.EMPRESA_SELECIONADA_NOME = getIntent().getStringExtra("EMPRESA");
-                sonicConstants.USUARIO_ATIVO_ID = getIntent().getIntExtra("ID",0);
 
         });
 
-        String imagem = getIntent().getIntExtra("EMPRESA_ID",0)+"_"+getIntent().getIntExtra("ID",0)+".jpg";
-
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO+imagem);
+        File file = new File(Environment.getExternalStorageDirectory(), mPref.Users.getPicture());
 
         if(file.exists()){
 
@@ -101,7 +97,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         @Override
         protected ProgressDialog doInBackground(ProgressDialog... progressDialogs) {
-            DBC.Usuario.setAtivo(getIntent().getIntExtra("ID",0));
+
             mListUser = DBC.Usuario.selectUsuarioAtivo();
             mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
             mPref.GrupoEmpresas.setNome(mListEmpresa.get(0).getNome());
@@ -115,6 +111,7 @@ public class sonicFirstAccess extends AppCompatActivity {
             mPref.GrupoEmpresas.setFone(mListEmpresa.get(0).getFone());
             mPref.GrupoEmpresas.setEmail(mListEmpresa.get(0).getEmail());
             mPref.GrupoEmpresas.setSite(mListEmpresa.get(0).getSite());
+            mPref.GrupoEmpresas.setWhats(mListEmpresa.get(0).getWhatsapp());
             sonicConstants.USUARIO_ATIVO_NIVEL = mListUser.get(0).getNivelAcessoId();
             sonicConstants.USUARIO_ATIVO_CARGO = mListUser.get(0).getCargo();
             sonicConstants.USUARIO_ATIVO_META_VENDA = mListUser.get(0).getMetaVenda();

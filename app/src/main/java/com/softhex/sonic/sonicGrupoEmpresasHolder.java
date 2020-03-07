@@ -17,6 +17,7 @@ public class sonicGrupoEmpresasHolder {
     String uf;
     String cep;
     String fone;
+    String whatsapp;
     String email;
     String site;
 
@@ -34,6 +35,7 @@ public class sonicGrupoEmpresasHolder {
                                     String uf,
                                     String cep,
                                     String fone,
+                                    String whatsapp,
                                     String email,
                                     String site){
         this.id = id;
@@ -47,6 +49,7 @@ public class sonicGrupoEmpresasHolder {
         this.uf = uf;
         this.cep = cep;
         this.fone = fone;
+        this.whatsapp = whatsapp;
         this.email = email;
         this.site = site;
 
@@ -138,6 +141,14 @@ public class sonicGrupoEmpresasHolder {
 
     public void setFone(String fone) {
         this.fone = fone;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public String getEmail() {

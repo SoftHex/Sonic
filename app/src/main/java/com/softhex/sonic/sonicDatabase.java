@@ -98,6 +98,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "uf string," +
             "cep string," +
             "fone string," +
+            "whatsapp string," +
             "email string," +
             "endereco_eletronico string);";
     private static final String CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA = "CREATE INDEX index_grupo_empresas_codigo_empresa ON "+DB_GRUPO_EMPRESAS+" (codigo_empresa);";

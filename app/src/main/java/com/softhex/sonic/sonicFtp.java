@@ -13,10 +13,12 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamAdapter;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Created by Administrador on 26/07/2017.
@@ -315,6 +317,50 @@ public class sonicFtp {
             }
 
         }
+    }
+
+    public void downloadFileSilent(String fileName, String localFile){
+        new mAsynDwonloadSilet().execute(fileName, localFile);
+    }
+
+    private class mAsynDwonloadSilet extends AsyncTask<String, String, Boolean>{
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            if(sonicUtils.internetConnectionAvailable(3000)){
+                if(ftpConnect()){
+                    OutputStream outputStream = null;
+                    try{
+
+                        outputStream = new BufferedOutputStream(new FileOutputStream(
+                                strings[1]));
+                        //File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
+                        //FileOutputStream file = new FileOutputStream(destino);
+
+                        if(ftpClient.retrieveFile(strings[0], outputStream)){
+
+                            //outputStream.createNewFile();
+
+                            arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
+
+                        }
+
+                        outputStream.close();
+
+                    }catch (IOException e){
+                        e.printStackTrace();
+                        DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                                e.getMessage(),
+                                mySystem.System.getActivityName(),
+                                mySystem.System.getClassName(el),
+                                mySystem.System.getMethodNames(el));
+                    }
+
+                }
+            }
+            return null;
+        }
+
     }
 
 }

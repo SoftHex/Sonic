@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.softhex.timelineview.TimelineView;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -84,7 +83,6 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TimelineView timelineView;
         TextView tvNome;
         TextView tvEndereco;
         TextView tvStatus;

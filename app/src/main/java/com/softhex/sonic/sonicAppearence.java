@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
+import android.transition.Fade;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewConfiguration;
@@ -46,6 +47,21 @@ public class sonicAppearence {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             w.setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+
+    public static void removeFlashingTransition(Window w){
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
+            Fade fade = new Fade();
+            View decor = w.getDecorView();
+            fade.excludeTarget(R.id.appBar, true);
+            fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
+            fade.excludeTarget(android.R.id.statusBarBackground, true);
+            fade.excludeTarget(android.R.id.navigationBarBackground, true);
+            w.setEnterTransition(fade);
+            w.setExitTransition(fade);
+            w.setSharedElementsUseOverlay(true);
         }
     }
 

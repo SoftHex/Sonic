@@ -47,7 +47,7 @@ public class sonicLogin extends AppCompatActivity {
 
         String imagem = pref.Users.getEmpresaId()+"_"+pref.Users.getUsuarioId()+".JPG";
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO+imagem);
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO +imagem);
         Log.d("IMAGEM", file.toString());
         if(file.exists()){
 

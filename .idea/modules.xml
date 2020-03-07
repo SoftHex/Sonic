@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/materialdialog/materialdialog.iml" filepath="$PROJECT_DIR$/materialdialog/materialdialog.iml" />
       <module fileurl="file://$PROJECT_DIR$/progressprofile/progressprofile.iml" filepath="$PROJECT_DIR$/progressprofile/progressprofile.iml" />
-      <module fileurl="file://$PROJECT_DIR$/timelineview/timelineview.iml" filepath="$PROJECT_DIR$/timelineview/timelineview.iml" />
     </modules>
   </component>
 </project>

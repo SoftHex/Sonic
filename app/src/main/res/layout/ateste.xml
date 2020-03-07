@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.softhex.sonic.sonicEmpresaDetalhe">
+    android:fitsSystemWindows="true"
+    tools:context=".sonicClientesDetalhe">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -13,51 +15,65 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:layout_gravity="top"
-            android:id="@+id/tbConfig"
+            android:id="@+id/mToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.AppBarOverlay"
+            app:layout_scrollFlags="enterAlwaysCollapsed"
+            app:layout_collapseMode="pin">
 
-    </com.google.android.material.appbar.AppBarLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_below="@+id/appBar">
-
-        <!-- CONTEÚDO -->
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/mCollapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:orientation="vertical">
+            app:layout_scrollFlags="scroll"
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
+            app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance">
 
             <!-- IMAGEM -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/ivImagem"
                     android:transitionName="imagemTransition"
-                    android:layout_width="170dp"
-                    android:layout_height="170dp"
-                    android:src="@drawable/no_profile"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/no_profile">
+
+                </ImageView>
 
             </LinearLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- CONTEÚDO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <!-- TITLE AND DESCRIPTION-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp"
+                android:padding="10dp"
+                android:layout_margin="20dp"
                 android:layout_marginTop="20dp">
 
                 <TextView
@@ -86,6 +102,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:background="#DCDCDC" />
 
             <!-- ENDEREÇO -->
@@ -93,7 +111,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_margin="20dp"
+                android:padding="10dp">
 
                 <!-- ENDEREÇO -->
                 <TextView
@@ -109,13 +128,13 @@
                     android:text="ENDERECO"/>
                 <!-- BAIRRO -->
                 <TextView
-                        android:id="@+id/tvBairro"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="36dp"
+                    android:id="@+id/tvBairro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
                     android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp"
-                        android:text="BAIRRO"/>
+                    android:textSize="14sp"
+                    android:text="BAIRRO"/>
                 <!-- MUNICÍPIO -->
                 <TextView
                     android:id="@+id/tvMunicipio"
@@ -141,6 +160,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:background="#DCDCDC" />
 
             <!-- CONTATO -->
@@ -149,7 +170,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginBottom="50dp"
-                android:padding="20dp">
+                android:layout_margin="20dp"
+                android:padding="10dp">
 
                 <!-- FONE -->
                 <TextView
@@ -192,6 +214,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

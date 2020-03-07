@@ -11,6 +11,21 @@
         <item name="actionMenuTextColor">@color/colorTextDark</item>
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <!-- DEFFAULT APP THEME -->
+    <style name="TranslucedAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimaryWhite</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="actionMenuTextColor">@color/colorTextDark</item>
+        <item name="android:itemTextAppearance">@color/colorTextDark</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="WineAppTheme" parent="Theme.AppCompat.Light.NoActionBar">

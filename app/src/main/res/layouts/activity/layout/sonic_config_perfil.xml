@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context="com.softhex.sonic.sonicConfigPerfil">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_gravity="top"
+            android:id="@+id/mToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/appBar">
+
+        <!-- CONTEÚDO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- IMAGEM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_height="200dp">
+
+                <!--<de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivImagem"
+                    android:transitionName="imagemTransition"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
+                    android:src="@drawable/no_profile"/>-->
+                <ImageView
+                    android:id="@+id/ivImagem"
+                    android:transitionName="imagemTransition"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/nocompany">
+
+                </ImageView>
+
+            </LinearLayout>
+
+            <!-- TITLE AND DESCRIPTION-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="20dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:transitionName="titleTransition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="TITLE">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tvDescricao"
+                    android:transitionName="descTransition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="DESCRIPTION">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="#DCDCDC" />
+
+            <!-- ENDEREÇO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="20dp"
+                android:padding="10dp">
+
+                <!-- ENDEREÇO -->
+                <TextView
+                    android:id="@+id/tvEndereco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_24dp"
+                    android:drawableTint="@color/colorPrimaryGreen"
+                    android:drawablePadding="12dp"
+                    android:text="ENDERECO"/>
+                <!-- BAIRRO -->
+                <TextView
+                        android:id="@+id/tvBairro"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="36dp"
+                    android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp"
+                        android:text="BAIRRO"/>
+                <!-- MUNICÍPIO -->
+                <TextView
+                    android:id="@+id/tvMunicipio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:textSize="14sp"
+                    android:text="MUNICÍPIO"/>
+                <!-- CEP -->
+                <TextView
+                    android:id="@+id/tvCep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:textSize="14sp"
+                    android:text="CEP"/>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="#DCDCDC" />
+
+            <!-- CONTATO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="50dp"
+                android:layout_margin="20dp"
+                android:padding="10dp">
+
+                <!-- FONE -->
+                <TextView
+                    android:id="@+id/tvFone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:drawableLeft="@mipmap/ic_phone_grey600_24dp"
+                    android:drawableTint="@color/colorPrimaryBlue"
+                    android:drawablePadding="12dp"
+                    android:gravity="center"
+                    android:text="FONE"/>
+                <!-- SITE -->
+                <TextView
+                    android:id="@+id/tvWhats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_whatsapp_grey600_24dp"
+                    android:drawableTint="@color/colorPrimaryGreen"
+                    android:drawablePadding="12dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:textSize="14sp"
+                    android:text="WHATSAPP"/>
+                <!-- EMAIL -->
+                <TextView
+                    android:id="@+id/tvEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:drawableLeft="@mipmap/ic_mail_white_24dp"
+                    android:drawableTint="@color/colorPrimaryRed"
+                    android:drawablePadding="12dp"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:text="EMAIL"/>
+                <!-- SITE -->
+                <TextView
+                    android:id="@+id/tvSite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_web_grey600_24dp"
+                    android:drawableTint="@color/colorPrimaryBlack"
+                    android:drawablePadding="12dp"
+                    android:gravity="center"
+                    android:textColor="@color/colorTextAccentDark"
+                    android:textSize="14sp"
+                    android:text="SITE"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

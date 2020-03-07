@@ -1,12 +1,12 @@
 package com.softhex.sonic;
 
 import android.Manifest;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +15,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
     private static final int REQUEST_PERMISSION = 10;
     private Button myRegister;
     private EditText myCode;
-    private TextView myTest;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         setContentView(R.layout.sonic_empresa);
 
         //sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
-
+        mContext = this;
         myRegister = findViewById(R.id.btRegistrar);
         myCode = findViewById(R.id.etCodigo);
         //myTest = findViewById(R.id.teste);
@@ -92,11 +92,13 @@ public class sonicEmpresa extends sonicRuntimePermission {
     @Override
     public void onPermissionGaranted(int requestCode) {
 
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CATALOGO);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_CLIENTES);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_IMG_USUARIO);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_DATA_BACKUP);
-        new sonicStorage(sonicEmpresa.this).createFolder(sonicConstants.LOCAL_TEMP);
+        String[] folders = {sonicConstants.LOCAL_IMG_CATALOGO,
+                sonicConstants.LOCAL_IMG_CLIENTES,
+                sonicConstants.LOCAL_IMG_USUARIO,
+                sonicConstants.LOCAL_IMG_EMPRESA,
+                sonicConstants.LOCAL_DATA_BACKUP,
+                sonicConstants.LOCAL_TEMP};
+        new sonicStorage(mContext).createFolder(folders);
 
     }
 

@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,8 +24,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Administrador on 11/08/2017.
@@ -56,7 +54,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         TextView titulos;
         CardView card;
         String clienteStatus;
-        CircleImageView imagem;
+        ImageView mImage;
         String codigo;
         Boolean situacao;
         LinearLayout item;
@@ -72,7 +70,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             letra = view.findViewById(R.id.tvLetra);
             grupo = view.findViewById(R.id.tvGrupo);
             endereco = view.findViewById(R.id.tvDetalhe);
-            imagem = view.findViewById(R.id.ivImagem);
+            mImage = view.findViewById(R.id.ivImagem);
             lineraNew = view.findViewById(R.id.linearNew);
             llExtra = view.findViewById(R.id.llExtra);
 
@@ -142,21 +140,20 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         if(file.exists()){
 
-            holder.imagem.setVisibility(View.VISIBLE);
+            holder.mImage.setVisibility(View.VISIBLE);
             holder.letra.setVisibility(View.GONE);
             Glide.with(myCtx)
                     .load(file)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                    .into(holder.imagem);
+                    .into(holder.mImage);
 
         }else{
 
-            holder.imagem.setVisibility(View.GONE);
+            holder.mImage.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
             holder.letra.setText(letra);
-            holder.letra.setTypeface(Typeface.DEFAULT_BOLD);
 
         }
 

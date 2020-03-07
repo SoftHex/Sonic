@@ -109,10 +109,9 @@ public class sonicMain extends AppCompatActivity{
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String  vendido;
     private LinearLayout llStar, llChecked;
-    private Float percentualProgress, percentualTotal;
     private sonicFtp myFtp;
     private int back = sonicUtils.Randomizer.generate(0,4);
-    private sonicPreferences prefs;
+    private sonicPreferences mPrefs;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -125,7 +124,7 @@ public class sonicMain extends AppCompatActivity{
 
         mActivity = this;
         DBC = new sonicDatabaseCRUD(mActivity);
-        prefs = new sonicPreferences(mActivity);
+        mPrefs = new sonicPreferences(mActivity);
         sonicConstants.BACK = back;
 
         myToolbar = findViewById(R.id.toolbar);
@@ -167,16 +166,15 @@ public class sonicMain extends AppCompatActivity{
                         llDetail.setBackground(resource);
                     }
 
-                    @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
 
                     }
                 });
 
         // CARREGAR FOTO DO PERFIL
-        File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
+        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture());
+
         if(file.exists()){
-            Log.d("File", "EXISTE");
             Glide.get(getBaseContext()).clearMemory();
             Glide.with(getBaseContext())
                     .load(file)
@@ -219,8 +217,8 @@ public class sonicMain extends AppCompatActivity{
         // ATUALIZA A BADGE DE PRODUTOS
         new myAssyncTask().execute(4);
 
-        tvEmpresa.setText(prefs.Users.getEmpresaNome());
-        tvUsuario.setText(prefs.Users.getUsuarioNome());
+        tvEmpresa.setText(mPrefs.Users.getEmpresaNome());
+        tvUsuario.setText(mPrefs.Users.getUsuarioNome());
         tvSaudacao.setText(sonicUtils.saudacao());
 
     }
@@ -313,12 +311,12 @@ public class sonicMain extends AppCompatActivity{
                             new myAssyncTask().execute(4);
                         }
 
-                        sonicConstants.EMPRESA_SELECIONADA_NOME = profile.getEmail().toString();
-                        sonicConstants.EMPRESA_SELECIONADA_ID = (int)profile.getIdentifier();
+                        mPrefs.Users.setEmpresaNome(profile.getEmail().toString());
+                        mPrefs.Users.setEmpresaId((int)profile.getIdentifier());
                         usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
                         tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
-                        File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
+                        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture());
                         String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
                         sonicGlide.glideImageView(mActivity,myProgressProfile,picture);
                         calcularPercentual("2200000", usuarioMeta);
@@ -353,35 +351,32 @@ public class sonicMain extends AppCompatActivity{
                 })
                 .build();
 
-        for (int i = 0; i< listaEmpresa.size(); i++)
+        for (int x = 0; x < listaEmpresa.size() && x < 3 ; x++)
 
         {
 
-            File file = new File(prefs.Path.getEnvironmente()+prefs.Path.getProfilePath()+prefs.Users.getEmpresaId()+prefs.Users.getUsuarioId()+".JPG");
-
-            if(i<3){
+            File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(listaEmpresa.get(x).getCodigo()));
 
                 if(file.exists()){
                     myHeader.addProfiles(
                             new ProfileDrawerItem()
-                                    .withName(prefs.Users.getUsuarioNome() +" ("+ prefs.Users.getUsuarioCargo() +")")
-                                    .withEmail(listaEmpresa.get(i).getNomeFantasia())
+                                    .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
+                                    .withEmail(listaEmpresa.get(x).getNomeFantasia())
                                     .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
-                                    .withIdentifier(listaEmpresa.get(i).getCodigo())
+                                    .withIdentifier(listaEmpresa.get(x).getCodigo())
                     );
                 }else{
 
                     myHeader.addProfiles(
                             new ProfileDrawerItem()
-                                    .withName(prefs.Users.getUsuarioNome() +" ("+ prefs.Users.getUsuarioCargo() +")")
-                                    .withEmail(listaEmpresa.get(i).getNomeFantasia())
+                                    .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
+                                    .withEmail(listaEmpresa.get(x).getNomeFantasia())
                                     .withIcon(getResources().getDrawable(R.drawable.no_profile))
-                                    .withIdentifier(listaEmpresa.get(i).getCodigo())
+                                    .withIdentifier(listaEmpresa.get(x).getCodigo())
                     );
 
                 }
 
-            }
         }
 
         myDrawerSincronizar = new PrimaryDrawerItem()
@@ -405,7 +400,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.clientesTitulo)
                 .withDescription(R.string.clientesSubTitulo)
                 .withSelectable(false)
-                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_account_multiple_grey600_24dp));
 
         myDrawerProdutos = new PrimaryDrawerItem()
@@ -413,7 +408,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.produtosTitulo)
                 .withDescription(R.string.produtosSubTitulo)
                 .withSelectable(false)
-                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cube_grey600_24dp));
 
         myDrawerPedidos = new PrimaryDrawerItem()
@@ -421,7 +416,7 @@ public class sonicMain extends AppCompatActivity{
                 .withName(R.string.pedidosTitulo)
                 .withDescription(R.string.pedidosSubTitulo)
                 .withSelectable(false)
-                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimaryWhite)).withColor(getResources().getColor(R.color.colorSpotLight2)))
+                .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cart_grey600_24dp));
 
         myDrawerRetorno = new PrimaryDrawerItem()
@@ -625,8 +620,8 @@ public class sonicMain extends AppCompatActivity{
                                 //startActivity(i);
                                 //normalListDialogNoTitle("MENU");
                                 //mActivity.getSharedPreferences("PREFERENCE_DATA",0).edit().clear().apply();
-                                prefs.Util.deleteCache();
-                                prefs.Util.clearPreferences();
+                                mPrefs.Util.deleteCache();
+                                mPrefs.Util.clearPreferences();
                                 break;
                             case 11:
                                 new myAsyncStartActivity().execute(sonicSistema.class);
@@ -951,8 +946,8 @@ public class sonicMain extends AppCompatActivity{
                     sonicDatabaseCRUD DBC = new sonicDatabaseCRUD(mActivity);
                     DBC.Database.truncateAllTables();
                     new sonicStorage(sonicMain.this).deleteFiles(sonicConstants.LOCAL_TEMP);
-                    prefs.Util.clearPreferences();
-                    prefs.Util.deleteCache();
+                    mPrefs.Util.clearPreferences();
+                    mPrefs.Util.deleteCache();
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
                     int mPendingIntentId = 123456;
                     PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -981,9 +976,9 @@ public class sonicMain extends AppCompatActivity{
 
                 long empresaId = myHeader.getActiveProfile().getIdentifier();
 
-                myUtil.Arquivo.saveUriFile(imageUri, prefs.Path.getProfilePath(), prefs.Users.getEmpresaId(), prefs.Users.getUsuarioId());
+                myUtil.Arquivo.saveUriFile(imageUri, mPrefs.Path.getProfilePath(), mPrefs.Users.getEmpresaId(), mPrefs.Users.getUsuarioId());
 
-                String url = Environment.getExternalStorageDirectory().getPath() + prefs.Path.getProfilePath() + prefs.Users.getEmpresaId() + "_" + prefs.Users.getUsuarioId() + ".JPG";
+                String url = Environment.getExternalStorageDirectory().getPath() + mPrefs.Path.getProfilePath() + mPrefs.Users.getEmpresaId() + "_" + mPrefs.Users.getUsuarioId() + ".JPG";
 
                 myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 

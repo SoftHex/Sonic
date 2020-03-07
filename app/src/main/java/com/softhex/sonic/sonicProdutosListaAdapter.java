@@ -1,20 +1,26 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.GenericTransitionOptions;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -23,15 +29,15 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by Administrador on 11/08/2017.
  */
 
 public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private Context ctx;
+    private Context mContext;
+    private Activity mActivity;
+    private AppCompatActivity mCompatActitvity;
     private List<sonicProdutosHolder> produtos;
     private List<sonicProdutosHolder> produtos_filtered;
     private prodFilter prodFilter;
@@ -39,7 +45,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     private sonicUtils mUtil;
     private sonicPreferences mPrefs;
     private sonicConstants myCons;
-    private GradientDrawable shape;
     private final int VIEW_TYPE_ITEM = 0;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
     private String mDataAtual = mDateFormat.format(new Date());
@@ -52,8 +57,8 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         TextView codigoFull;
         TextView tvGrupo;
         String status;
-        CircleImageView imagem;
-        TextView letra;
+        ImageView mImage;
+        TextView tvLetra;
         CardView card;
         String dataCadastro;
         LinearLayout llItem, linearNew;
@@ -68,37 +73,35 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             tvNome = view.findViewById(R.id.tvNome);
             tvGrupo = view.findViewById(R.id.tvGrupo);
             codigoFull = view.findViewById(R.id.tvDetalhe);
-            letra = view.findViewById(R.id.tvLetra);
-            imagem = view.findViewById(R.id.ivImagem);
+            tvLetra = view.findViewById(R.id.tvLetra);
+            mImage = view.findViewById(R.id.ivImagem);
 
-            DBC = new sonicDatabaseCRUD(ctx);
+            DBC = new sonicDatabaseCRUD(mContext);
 
             llItem.setOnClickListener((View v) -> {
 
-                    Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    i.putExtra("PRODUTO_CODIGO", codigo);
-                    i.putExtra("PRODUTO_NOME", tvNome.getText());
-                    i.putExtra("PRODUTO_GRUPO", tvGrupo.getText());
-                    i.putExtra("PRODUTO_STATUS", status);
-                    mPrefs.Produtos.setProdutoId(codigo);
-                    mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
-                    mPrefs.Produtos.setProdutoGrupo(tvGrupo.getText().toString());
-                    mPrefs.Produtos.setProdutoDataCadastro(dataCadastro);
-                    v.getContext().startActivity(i);
+                mPrefs.Produtos.setProdutoId(codigo);
+                mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
+                mPrefs.Produtos.setProdutoGrupo(tvGrupo.getText().toString());
+                mPrefs.Produtos.setProdutoDataCadastro(dataCadastro);
+                Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
+                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (Activity)mContext, mImage, "imagemTransition");
+                v.getContext().startActivity(i, options.toBundle());
 
             });
 
         }
     }
 
-    public sonicProdutosListaAdapter(List<sonicProdutosHolder> produto, Context ctx) {
+    public sonicProdutosListaAdapter(List<sonicProdutosHolder> produto, Context mContext) {
 
         myCons = new sonicConstants();
         this.produtos = produto;
         this.produtos_filtered = produto;
-        this.ctx = ctx;
-        this.mUtil = new sonicUtils(ctx);
-        this.mPrefs = new sonicPreferences(ctx);
+        this.mContext = mContext;
+        this.mUtil = new sonicUtils(mContext);
+        this.mPrefs = new sonicPreferences(mContext);
     }
 
     public void updateList(){
@@ -117,10 +120,10 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         if(viewType == VIEW_TYPE_ITEM){
-            view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
             return new prodHolder(view);
         }else{
-            view = LayoutInflater.from(ctx).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
             return new prodHolder(view);
         }
     }
@@ -137,7 +140,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.codigo = prod.getCodigo();
         holder.tvGrupo.setText(prod.getGrupo());
         holder.dataCadastro = prod.getDataCadastro();
-        String[] array = ctx.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+        String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
         diasDiff = mUtil.Data.dateDiffDay(holder.dataCadastro, mDataAtual);
         dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
                 mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
@@ -149,16 +152,23 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         if(fileJpg.exists()){
 
-            sonicGlide.glideFile(ctx, holder.imagem, fileJpg);
-            holder.imagem.setVisibility(View.VISIBLE);
-            holder.letra.setVisibility(View.GONE);
+            Glide.with(mContext)
+                    .load(fileJpg)
+                    .circleCrop()
+                    .apply(new RequestOptions().override(100,100))
+                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                    .into(holder.mImage);
+
+            //sonicGlide.glideFile(mContext, holder.mImage, fileJpg);
+            //holder.mImage.setVisibility(View.VISIBLE);
+            holder.tvLetra.setVisibility(View.GONE);
 
 
         }else {
-            holder.imagem.setVisibility(View.GONE);
-            holder.letra.setVisibility(View.VISIBLE);
-            holder.letra.setText(String.valueOf(prod.getNome().charAt(0)));
-            holder.letra.setTypeface(Typeface.DEFAULT_BOLD);
+            //holder.mImage.setVisibility(View.GONE);
+            holder.tvLetra.setVisibility(View.VISIBLE);
+            holder.tvLetra.setText(String.valueOf(prod.getNome().charAt(0)));
+            //holder.tvLetra.setTypeface(Typeface.DEFAULT_BOLD);
         }
 
     }

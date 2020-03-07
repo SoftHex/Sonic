@@ -46,10 +46,13 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private ProgressBar mProgress;
     private List<sonicProdutosHolder> mList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sonic_produtos_detalhe);
+
+        sonicAppearence.removeFlashingTransition(getWindow());
 
         mContext = this;
         mUtil = new sonicUtils(mContext);
@@ -57,6 +60,8 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         DBC = new sonicDatabaseCRUD(this);
         myAppBar = findViewById(R.id.appbar);
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
+        tvNome = findViewById(R.id.tvNome);
+        tvNome.setText(mPrefs.Produtos.getProdutoNome());
         tvUnidadeMedida = findViewById(R.id.tvUnidade);
         tvDataCad = findViewById(R.id.tvDataCadastro);
         tvNcm = findViewById(R.id.tvNcm);

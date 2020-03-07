@@ -15,6 +15,7 @@ public class sonicSplash extends AppCompatActivity {
     private Intent i;
     private sonicDatabaseCRUD DBC;
     private Activity mActivity;
+    private sonicPreferences mPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class sonicSplash extends AppCompatActivity {
 
         mActivity = this;
         DBC = new sonicDatabaseCRUD(sonicSplash.this);
+        mPref = new sonicPreferences(this);
 
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
@@ -37,26 +39,31 @@ public class sonicSplash extends AppCompatActivity {
         protected Boolean doInBackground(Integer... integers) {
 
             Boolean res = DBC.Usuario.usuarioAtivo();
-            List<sonicUsuariosHolder> listaUser;
-            listaUser = DBC.Usuario.selectUsuarioAtivo();
+            List<sonicUsuariosHolder> mListUser;
+            List<sonicGrupoEmpresasHolder> mListEmpresa;
+            mListUser = DBC.Usuario.selectUsuarioAtivo();
+            mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
 
             if(res){
 
-                i  = new Intent(sonicSplash.this,sonicMain.class);
-                sonicConstants.USUARIO_ATIVO_ID = listaUser.get(0).getCodigo();
-                sonicConstants.USUARIO_ATIVO_NOME = listaUser.get(0).getNome();
-                sonicConstants.USUARIO_ATIVO_NIVEL = listaUser.get(0).getNivelAcessoId();
-                sonicConstants.USUARIO_ATIVO_CARGO = listaUser.get(0).getCargo();
-                sonicConstants.USUARIO_ATIVO_META_VENDA = listaUser.get(0).getMetaVenda();
-                sonicConstants.USUARIO_ATIVO_META_VISITA = listaUser.get(0).getMetaVisita();
-                sonicConstants.EMPRESA_SELECIONADA_NOME = listaUser.get(0).getEmpresa();
-                sonicConstants.EMPRESA_SELECIONADA_ID = listaUser.get(0).getEmpresaId();
-                sonicPreferences pref = new sonicPreferences(mActivity);
-                pref.Users.setUsuarioId(listaUser.get(0).getCodigo());
-                pref.Users.setUsuarioNome(listaUser.get(0).getNome());
-                pref.Users.setUsuarioCargo(listaUser.get(0).getCargo());
-                pref.Users.setEmpresaId(listaUser.get(0).getEmpresaId());
-                pref.Users.setEmpresaNome(listaUser.get(0).getEmpresa());
+                mPref.GrupoEmpresas.setNome(mListEmpresa.get(0).getNome());
+                mPref.GrupoEmpresas.setDescricao(mListEmpresa.get(0).getDescricao());
+                mPref.GrupoEmpresas.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+                mPref.GrupoEmpresas.setEndereco(mListEmpresa.get(0).getEndereco());
+                mPref.GrupoEmpresas.setBairro(mListEmpresa.get(0).getBairro());
+                mPref.GrupoEmpresas.setMunicipio(mListEmpresa.get(0).getMunicipio());
+                mPref.GrupoEmpresas.setUF(mListEmpresa.get(0).getUf());
+                mPref.GrupoEmpresas.setCep(mListEmpresa.get(0).getCep());
+                mPref.GrupoEmpresas.setFone(mListEmpresa.get(0).getFone());
+                mPref.GrupoEmpresas.setEmail(mListEmpresa.get(0).getEmail());
+                mPref.GrupoEmpresas.setSite(mListEmpresa.get(0).getSite());
+                mPref.GrupoEmpresas.setWhats(mListEmpresa.get(0).getWhatsapp());
+                mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
+                mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
+                mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());
+                mPref.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
+                mPref.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
+
 
             }else{
                 res = false;
@@ -71,7 +78,7 @@ public class sonicSplash extends AppCompatActivity {
 
             if(result){
 
-                // VERIFICA SE O USUARIO ESCOLHEU COLOCAR SENHA AO ENTRAR
+                // VERIFICA SE O USUARIO ESCOLHEU EXIGIR SENHA AO ENTRAR
                 if(new sonicPreferences(mActivity).Users.getStatusLogin()){
                     i  = new Intent(mActivity,sonicLogin.class);
                 }else {
@@ -90,7 +97,6 @@ public class sonicSplash extends AppCompatActivity {
 
     private void logar(Intent i){
 
-
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
@@ -103,7 +109,6 @@ public class sonicSplash extends AppCompatActivity {
                                 }
                             }
                 , 3000);
-
 
     }
 

@@ -23,13 +23,13 @@ import java.util.List;
 
 public class sonicClientesDetalhe extends AppCompatActivity {
 
-    private Toolbar myToolbar;
-    private ViewPager myViewpager;
+    private Toolbar mToolbar;
+    private ViewPager mViewpager;
     private TextView[] dots;
     private TextView tvCount;
     private LinearLayout dotsLayout;
     private sonicDatabaseCRUD DBC;
-    private CollapsingToolbarLayout myCollapsingToolbar;
+    private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private String clienteNome;
     private String clienteCod;
@@ -41,11 +41,9 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sonic_clientes_detalhe);
 
-        //sonicAppearence.layoutFullScreenMode(getWindow());
-
         DBC = new sonicDatabaseCRUD(this);
-        myViewpager = findViewById(R.id.pagerSlide);
-        myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
+        mViewpager = findViewById(R.id.pagerSlide);
+        mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
         tvCount = findViewById(R.id.tvCount);
 
@@ -69,8 +67,8 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
     private void createInterface() {
 
-        myToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+        mToolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(mToolbar);
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setTitle("Clientes");
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -81,29 +79,29 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        AppBarLayout myAppBar = findViewById(R.id.appbar);
-        myAppBar.setLayoutTransition(transition);
+        AppBarLayout mAppBar = findViewById(R.id.appBar);
+        mAppBar.setLayoutTransition(transition);
 
-        //myCollapsingToolbar.setTitle(clienteNome);
+        //mCollapsingToolbar.setTitle(clienteNome);
 
-        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
 
-        myAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if((myCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(myCollapsingToolbar))){
-                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
+                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.INVISIBLE);
-                    myCollapsingToolbar.setTitle(clienteNome);
+                    mCollapsingToolbar.setTitle(clienteNome);
                 }else {
-                    myToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.VISIBLE);
-                    myCollapsingToolbar.setTitle("");
+                    mCollapsingToolbar.setTitle("");
                 }
             }
         });
@@ -150,8 +148,8 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         //linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
 
         sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
-        myViewpager.setAdapter(myAdapter);
-        myViewpager.addOnPageChangeListener(viewListener);
+        mViewpager.setAdapter(myAdapter);
+        mViewpager.addOnPageChangeListener(viewListener);
         //addBottomDots(0);
         addCount(1);
 

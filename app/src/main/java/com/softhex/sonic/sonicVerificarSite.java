@@ -47,7 +47,7 @@ public class sonicVerificarSite{
             sonicConstants.EMP_TESTE = true;
         }
 
-        String fileName = "sites/"+ site +".TXT";
+        String fileName = sonicConstants.FTP_SITES+ site +".TXT";
         String fileFull = sonicConstants.LOCAL_TEMP + site +".TXT";
 
         myProgress = new ProgressDialog(myCtx);
@@ -97,7 +97,7 @@ public class sonicVerificarSite{
 
                         if (file.exists()) {
 
-                            publishProgress("Gravando dados...");
+                            publishProgress("Salvando configurações...");
 
                             sonicConstants.DOWNLOAD_TYPE = "SITE";
                             new sonicPopularTabelas(myCtx).gravarDados(strings[0]+".TXT");

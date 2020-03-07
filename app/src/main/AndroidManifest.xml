@@ -92,7 +92,7 @@
 
         </activity>
         <activity
-            android:name=".sonicEmpresaDetalhe"
+            android:name=".sonicConfigPerfil"
             android:theme="@style/DefaultAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -1,1 +1,1 @@
-include ':app', ':materialdialog', ':progressprofile', ':timelineview'
+include ':app', ':materialdialog', ':progressprofile'
