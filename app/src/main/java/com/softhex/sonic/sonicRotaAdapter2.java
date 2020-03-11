@@ -2,21 +2,19 @@ package com.softhex.sonic;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.StringDef;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -29,8 +27,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.ViewHolder> implements Filterable {
 
@@ -73,13 +69,8 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
     private List<sonicRotaHolder> filteredRotas;
     private List<sonicRotaHolder> alteredRotas;
     private RotaFilter rotaFilter;
-    private sonicDatabaseCRUD DBC;
-    private sonicConstants myCons;
-    private GradientDrawable shape;
-    private SharedPreferences myPrefs;
-    private Activity mActivity;
-    private Fragment mFragment;
-    private sonicDatabaseCRUD mDataBase;
+    private Boolean nFantasia;
+    private sonicPreferences mPref;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -91,15 +82,13 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         TextView tvAtendente;
         TextView tvDataHora;
         TextView tvSituacao;
-        CircleImageView ivImagem;
+        ImageView ivImagem;
         TextView tvLetra;
         LinearLayout linearItem;
 
         ViewHolder(View view) {
             super(view);
             linearItem = view.findViewById(R.id.linearItem);
-            //timelineView = view.findViewById(R.id.tlRota);
-            //tvOptions = view.findViewById(R.id.tvOptions);
             tvNome = view.findViewById(R.id.tvNome);
             tvLetra = view.findViewById(R.id.tvLetra);
             ivImagem = view.findViewById(R.id.ivImagem);
@@ -113,17 +102,16 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         }
     }
 
-    sonicRotaAdapter2(List<sonicRotaHolder> rotas, sonicRotaClientes fragment) {
-        this.myCtx = fragment.getActivity().getBaseContext();
+    sonicRotaAdapter2(List<sonicRotaHolder> rotas, Activity mActivity) {
+        this.myCtx = mActivity;
         if(sonicConstants.ROTA_ALTERADA){
             this.rotas = alteredRotas;
         }else{
             this.rotas = rotas;
         }
         this.filteredRotas = rotas;
-        this.mActivity = fragment.getActivity();
-        this.mFragment = fragment;
-        this.mDataBase = new sonicDatabaseCRUD(myCtx);
+        this.mPref = new sonicPreferences(myCtx);
+        this.nFantasia =  mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
     }
 
     public void updateAdapter(List<sonicRotaHolder> rotas){
@@ -142,8 +130,9 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         sonicRotaHolder rota = rotas.get(position);
         holder.setIsRecyclable(false);
         sonicUtils utils = new sonicUtils(myCtx);
+        String cliNome = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
 
-        holder.tvNome.setText(rota.getRazaoSocial());
+        holder.tvNome.setText(cliNome);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
         holder.tvDataHora.setText("Data Prevista: "+utils.Data.dataFotmatadaBarra(rota.getDataAgendamento())+" Ás "+utils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
@@ -158,13 +147,15 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
             sonicConstants.ROTA_EM_ATENDIMENTO = true;
         }*/
 
-        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + "_1.JPG");
+        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + ".JPG");
 
         if(file.exists()){
             holder.ivImagem.setVisibility(View.VISIBLE);
             holder.tvLetra.setVisibility(View.GONE);
             Glide.with(myCtx)
                     .load(file)
+                    .circleCrop()
+                    .override(100,100)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
@@ -173,7 +164,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
         }else{
 
-            holder.tvLetra.setText("A");
+            holder.tvLetra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
 
         }
 

@@ -236,7 +236,7 @@ public class sonicRotaClientes extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter2(myList, this);
+        myAdapter = new sonicRotaAdapter2(myList, this.getActivity());
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
