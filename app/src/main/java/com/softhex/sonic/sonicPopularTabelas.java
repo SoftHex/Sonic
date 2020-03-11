@@ -60,7 +60,7 @@ public class sonicPopularTabelas {
             { "[ROTA]", sonicConstants.TB_ROTA },
             { "[VENDAS]", sonicConstants.TB_VENDA },
             { "[VENDAS_ITENS]", sonicConstants.TB_VENDA_ITEM },
-            { "[CLIENTE_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA },
+            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA },
             { "[TITULOS]", sonicConstants.TB_TITULO },
 
     };

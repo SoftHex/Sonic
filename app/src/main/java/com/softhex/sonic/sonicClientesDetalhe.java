@@ -9,21 +9,28 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-public class sonicClientesDetalhe extends AppCompatActivity {
+public class sonicClientesDetalhe extends AppCompatActivity{
 
     private Toolbar mToolbar;
+    private TabLayout mTabLayout;
     private ViewPager mViewpager;
     private TextView[] dots;
     private TextView tvCount;
@@ -31,50 +38,117 @@ public class sonicClientesDetalhe extends AppCompatActivity {
     private sonicDatabaseCRUD DBC;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
-    private String clienteNome;
-    private String clienteCod;
-    private String clienteStatus;
     private LinearLayout linearNew;
+    private sonicPreferences mPref;
+    private TextView tvNome, tvFantRazao, tvGrupo, tvCnpjCpf, tvEndereco, tvBairro, tvMunicipio, tvCep, tvFone, tvWhats, tvEmail, tvCgf, tvObservacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sonic_clientes_detalhe);
+        setContentView(R.layout.sonic_clientes_detalhe);
 
+        mPref = new sonicPreferences(this);
         DBC = new sonicDatabaseCRUD(this);
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
         tvCount = findViewById(R.id.tvCount);
-
-        Bundle extras = getIntent().getExtras();
-        if(savedInstanceState==null){
-            if(extras!=null){
-                clienteNome = extras.getString("CLIENTE_NOME");
-                clienteCod = extras.getString("CLIENTE_CODIGO");
-                clienteStatus = extras.getString("CLIENTE_STATUS");
-            }
-        }else{
-            clienteNome = extras.getString("CLIENTE_NOME");
-            clienteCod = extras.getString("CLIENTE_CODIGO");
-            clienteStatus = extras.getString("CLIENTE_STATUS");
-        }
+        /*tvNome = findViewById(R.id.tvNome);
+        tvNome.setText(mPref.Clientes.getNome());
+        tvGrupo = findViewById(R.id.tvGrupo);
+        tvGrupo.setText(mPref.Clientes.getGrupo());
+        tvFantRazao = findViewById(R.id.tvFantRazao);
+        tvCnpjCpf = findViewById(R.id.tvCnpjCpf);
+        tvEndereco = findViewById(R.id.tvEndereco);
+        tvBairro = findViewById(R.id.tvBairro);
+        tvMunicipio = findViewById(R.id.tvMunicipio);
+        tvCep = findViewById(R.id.tvCep);
+        tvFone = findViewById(R.id.tvFone);
+        tvWhats = findViewById(R.id.tvWhats);
+        tvEmail = findViewById(R.id.tvEmail);
+        tvCgf = findViewById(R.id.tvInscEstadual);
+        tvObservacao = findViewById(R.id.tvObservacao);*/
 
         createInterface();
         slideImages();
+        //loadDetails();
 
     }
 
+    public void setUpViewPager(ViewPager viewpager){
+        ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Geral");
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Compras");
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Financeiro");
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Títulos");
+        viewpager.setAdapter(myAdapter);
+
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Integer> mIcon = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(mIcon.get(position)!=null){
+                mTabLayout.getTabAt(position).setIcon(mIcon.get(position));
+                if(mTabLayout.getTabAt(position).isSelected()){
+                    mTabLayout.getTabAt(position).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
+                }
+            }
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+            mIcon.add(null);
+        }
+
+        public void addFragment(Fragment fragment, String title, Integer icon) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+            mIcon.add(icon);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
+    }
     private void createInterface() {
 
         mToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
         ActionBar myActionBar = getSupportActionBar();
-        myActionBar.setTitle("Clientes");
+        myActionBar.setTitle("");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
+
+        ViewPager myViewPager = findViewById(R.id.mViewPager);
+        setUpViewPager(myViewPager);
+
+        mTabLayout = findViewById(R.id.mTabs);
+        //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+        mTabLayout.setupWithViewPager(myViewPager);
 
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
@@ -82,13 +156,10 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         AppBarLayout mAppBar = findViewById(R.id.appBar);
         mAppBar.setLayoutTransition(transition);
 
-        //mCollapsingToolbar.setTitle(clienteNome);
+        mCollapsingToolbar.setTitle("");
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mToolbar.setNavigationOnClickListener((View v)-> {
                 onBackPressed();
-            }
         });
 
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -97,7 +168,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
                 if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.INVISIBLE);
-                    mCollapsingToolbar.setTitle(clienteNome);
+                    mCollapsingToolbar.setTitle(mPref.Clientes.getNome());
                 }else {
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.VISIBLE);
@@ -110,16 +181,13 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
     public void slideImages(){
 
-        List<sonicClientesHolder> myList;
         int count = 0;
-
-        myList = DBC.Cliente.selectClienteID(12345);
         File file;
         String image = "";
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = clienteCod+"_"+(i+1)+".jpg";
+            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
@@ -129,9 +197,9 @@ public class sonicClientesDetalhe extends AppCompatActivity {
 
         myImages = new String[count];
 
-        for(int i = 0; i < myImages.length ; i++){
+        for(int i = 0; i < count ; i++){
 
-            image = clienteCod+"_"+(i+1)+".jpg";
+            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             myImages[i] = file.toString();
@@ -182,6 +250,7 @@ public class sonicClientesDetalhe extends AppCompatActivity {
         }
 
     }
+
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
         @Override

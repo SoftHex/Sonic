@@ -31,7 +31,7 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private Context myCtx;
+    private Context mContext;
     private List<sonicClientesHolder> clientes;
     private List<sonicClientesHolder> filteredClientes;
     private UserFilter userFilter;
@@ -46,47 +46,57 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public class cliHolder extends RecyclerView.ViewHolder {
 
 
-        TextView cliente;
-        TextView grupo;
-        TextView endereco;
+        int codigo;
+        TextView tvNome;
+        TextView tvGrupo;
+        TextView tvDetalhe;
         TextView letra;
         TextView sit;
         TextView titulos;
         CardView card;
         String clienteStatus;
         ImageView mImage;
-        String codigo;
         Boolean situacao;
         LinearLayout item;
         LinearLayout lineraNew;
         LinearLayout llExtra;
+        TextView tvSemCompra, tvAtraso;
 
         public cliHolder(View view) {
             super(view);
 
             card = view.findViewById(R.id.cardView);
             item = view.findViewById(R.id.linearItem);
-            cliente = view.findViewById(R.id.tvNome);
+            tvNome = view.findViewById(R.id.tvNome);
             letra = view.findViewById(R.id.tvLetra);
-            grupo = view.findViewById(R.id.tvGrupo);
-            endereco = view.findViewById(R.id.tvDetalhe);
+            tvGrupo = view.findViewById(R.id.tvGrupo);
+            tvDetalhe = view.findViewById(R.id.tvDetalhe);
             mImage = view.findViewById(R.id.ivImagem);
             lineraNew = view.findViewById(R.id.linearNew);
             llExtra = view.findViewById(R.id.llExtra);
+            tvSemCompra = view.findViewById(R.id.tvSemCompra);
+            tvAtraso = view.findViewById(R.id.tvAtraso);
 
-            DBC = new sonicDatabaseCRUD(myCtx);
+            DBC = new sonicDatabaseCRUD(mContext);
 
             item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    mPrefs.Clientes.setId(codigo);
+                    mPrefs.Clientes.setNome(tvNome.getText().toString());
+                    mPrefs.Clientes.setGrupo(tvGrupo.getText().toString());
 
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    i.putExtra("CLIENTE_CODIGO", codigo);
-                    i.putExtra("CLIENTE_NOME", cliente.getText());
-                    i.putExtra("CLIENTE_GRUPO", grupo.getText());
-                    i.putExtra("CLIENTE_STATUS", clienteStatus);
                     v.getContext().startActivity(i);
+
+                    /*ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext
+                            ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
+                            ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome))
+                            ,Pair.create(tvGrupo, ViewCompat.getTransitionName(tvGrupo)));
+
+                    v.getContext().startActivity(i, options.toBundle());*/
 
 
                 }
@@ -100,7 +110,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.myCons = new sonicConstants();
         this.clientes = cliente;
         this.filteredClientes = cliente;
-        this.myCtx = ctx;
+        this.mContext = ctx;
         this.clienteTipo = tipo;
         this.mPrefs = new sonicPreferences(ctx);
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
@@ -111,7 +121,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(myCtx).inflate(R.layout.sonic_layout_cards_list, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
         cliHolder clientes = new cliHolder(view);
         return clientes;
 
@@ -125,25 +135,27 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         sonicClientesHolder cli = clientes.get(position);
         String cliNome = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
 
-        holder.codigo = String.valueOf(cli.getCodigo());
+        holder.codigo = cli.getCodigo();
         holder.clienteStatus = cli.getStatus();
-        holder.cliente.setText(cliNome);
-        String letra = String.valueOf(cliNome.charAt(0)).toUpperCase();
+        holder.tvNome.setText(cliNome);
 
-        holder.llExtra.setVisibility(((cliSemCompra && cli.getCliSemCompra()>0) || cli.getTitulosEmAtraso()>0 ) ? View.VISIBLE : View.GONE);
-        holder.llExtra.setBackground(cli.getTitulosEmAtraso()>0 ? myCtx.getResources().getDrawable(R.drawable.rounded_box_right_orange) : myCtx.getResources().getDrawable(R.drawable.rounded_box_right_green));
+        holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
+        //holder.llExtra.setVisibility(((cliSemCompra && cli.getCliSemCompra()!=0) || cli.getTitulosEmAtraso()>0 ) ? View.VISIBLE : View.GONE);
+        //holder.llExtra.setBackground(cli.getTitulosEmAtraso()>0 ? mContext.getResources().getDrawable(R.drawable.rounded_box_right_orange) : mContext.getResources().getDrawable(R.drawable.rounded_box_right_green));
+        holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
 
-        holder.grupo.setText("ID:"+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
-        holder.endereco.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
+        holder.tvGrupo.setText("CÓD.: "+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
+        holder.tvDetalhe.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
 
-        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + "_1.JPG");
+        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + ".JPG");
 
         if(file.exists()){
 
             holder.mImage.setVisibility(View.VISIBLE);
             holder.letra.setVisibility(View.GONE);
-            Glide.with(myCtx)
+            Glide.with(mContext)
                     .load(file)
+                    .circleCrop()
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
@@ -153,7 +165,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             holder.mImage.setVisibility(View.GONE);
             holder.letra.setVisibility(View.VISIBLE);
-            holder.letra.setText(letra);
+            holder.letra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
 
         }
 

@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -40,12 +44,13 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     public class prodHolder extends RecyclerView.ViewHolder {
 
         TextView tvNome;
-        String codigo;
-        TextView grupo;
-        ImageView ivImagem, ivNew;
+        int codigo;
+        String tvGrupo;
+        ImageView mImage, ivNew;
         LinearLayout llDescription, linearNew;
         RelativeLayout rlCatalogo, linearItem;
         String status;
+        String tvDetalhe;
 
         public prodHolder(View view) {
             super(view);
@@ -55,25 +60,26 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             linearNew = view.findViewById(R.id.linearNew);
             llDescription = view.findViewById(R.id.llDescricao);
             tvNome = view.findViewById(R.id.tvNome);
-            grupo = view.findViewById(R.id.tvGrupo);
-            ivImagem = view.findViewById(R.id.ivImagem);
+            //tvGrupo = view.findViewById(R.id.tvGrupo);
+            mImage = view.findViewById(R.id.ivImagem);
             ivNew = view.findViewById(R.id.ivNew);
 
             DBC = new sonicDatabaseCRUD(mContext);
 
-            linearItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            linearItem.setOnClickListener((View v)-> {
 
+                    mPrefs.Produtos.setProdutoId(codigo);
+                    mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
+                    mPrefs.Produtos.setProdutoGrupo(tvGrupo);
+                    mPrefs.Produtos.setDetalhe(tvDetalhe);
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                    i.putExtra("PRODUTO_CODIGO", codigo);
-                    i.putExtra("PRODUTO_NOME", tvNome.getText());
-                    i.putExtra("PRODUTO_GRUPO", grupo.getText());
-                    i.putExtra("PRODUTO_STATUS", status);
-                    v.getContext().startActivity(i);
 
-                }
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            (Activity)mContext
+                            ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
+                            ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome)));
 
+                    v.getContext().startActivity(i, options.toBundle());
 
             });
 
@@ -116,8 +122,10 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = produtos.get(position);
-        holder.codigo = String.valueOf(prod.getCodigo());
+        holder.codigo = prod.getCodigo();
         holder.tvNome.setText(prod.getNome());
+        holder.tvGrupo = prod.getGrupo() == null ? "GRUPO:" : "GRUPO: "+prod.getGrupo();
+        holder.tvDetalhe = "CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo();
 
         String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
         int diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
@@ -136,7 +144,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         String fileJpg = prod.getCodigo()+".JPG";
 
-        sonicGlide.glideImageView(mContext, holder.ivImagem, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
+        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
 
     }
 

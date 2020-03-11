@@ -116,9 +116,9 @@
     <string name="placeholderLog">Sem logs por enquanto...</string>
     <string name="noLog">Sem logs por enquanto.</string>
     <string name="noClientesTitle">Sem clientes no momento...</string>
-    <string name="noClientesText">Faça uma sincronização para que seus clientes possam aparecer aqui.</string>
+    <string name="noClientesText">Refaça sua busca ou realize uma sincronização para que seus clientes possam aparecer aqui.</string>
     <string name="noProdutosTitle">Sem produtos no momento...</string>
-    <string name="noProdutosText">Faça uma sincronização para que produtos possam aparecer aqui.</string>
+    <string name="noProdutosText">Refaça sua busca ou realize uma sincronização para que produtos possam aparecer aqui.</string>
     <string name="networkError">Verifique sua conexão com a internet...</string>
     <string name="networkSuccess">Conexão com a internet OK.</string>
 
@@ -132,7 +132,7 @@
     <string name="go_erro_data">Dados não conferem...</string>
     <string name="go_erro_conn">Erro ao tentar conexão com o servidor...</string>
     <string name="go_erro_cod_inc">Código incompleto, digite novamente!</string>
-    <string name="go_erro_no_emp">Não existe tvEmpresa para este código!</string>
+    <string name="go_erro_no_emp">Não existe Empresa para este código!</string>
     <string name="go_erro_tabela">Erro ao gravar dados nas tabelas...</string>
     <string name="go_erro_file">Arquivo não encontrado...</string>
 

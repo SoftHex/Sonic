@@ -21,10 +21,14 @@ public class sonicPreferences{
     private static final String PRODUTO_NOME = "produtoNome";
     private static final String PRODUTO_GRUPO = "produtoGrupo";
     private static final String PRODUTO_NOVO = "produtoNovo";
+    private static final String PRODUTO_DETALHE = "produtoDetalhe";
     private static final String PRODUTO_DATA_CADASTRO = "produtoDataCadastro";
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
+    private static final String CLIENTE_ID = "clienteId";
+    private static final String CLIENTE_NOME = "clienteNome";
+    private static final String CLIENTE_GRUPO = "clienteGrupo";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String SAUDACAO = "saudacao";
     private static final String GRUPO_EMPRESA_NOME = "grupoEmpresaNome";
@@ -88,6 +92,14 @@ public class sonicPreferences{
             editor = sharedpreferences.edit();
             editor.putString(PRODUTO_DATA_CADASTRO, value);
             editor.apply();
+        }
+        public void setDetalhe(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(PRODUTO_DETALHE, value);
+            editor.apply();
+        }
+        public String getDetalhe(){
+            return sharedpreferences.getString(PRODUTO_DETALHE, "");
         }
         public String getProdutoDataCadastro(){
             return sharedpreferences.getString(PRODUTO_DATA_CADASTRO, "");
@@ -224,6 +236,31 @@ public class sonicPreferences{
     }
 
     public class Clientes{
+        public void setId(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(CLIENTE_ID, value);
+            editor.apply();
+
+        }
+        public int getId(){
+            return sharedpreferences.getInt(CLIENTE_ID, 0);
+        }
+        public void setNome(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_NOME, value);
+            editor.apply();
+        }
+        public String getNome(){
+            return sharedpreferences.getString(CLIENTE_NOME, "");
+        }
+        public void setGrupo(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_GRUPO, value);
+            editor.apply();
+        }
+        public String getGrupo(){
+            return sharedpreferences.getString(CLIENTE_GRUPO, "");
+        }
         public String getClienteExibicao(){
             return sharedpreferences.getString(mContex.getResources().getString(R.string.clienteTipo), mContex.getResources().getString(R.string.prefClienteTipoDefault));
         }
@@ -281,7 +318,7 @@ public class sonicPreferences{
             editor.apply();
         }
         public String getUsuarioNome(){
-            return sharedpreferences.getString(USUARIO_NOME, "USUÁRIO");
+            return sharedpreferences.getString(USUARIO_NOME, "");
         }
         public void setUsuarioCargo(String cargo){
             editor = sharedpreferences.edit();
@@ -312,10 +349,15 @@ public class sonicPreferences{
                     +sharedpreferences.getInt(EMPRESA_ID,0) +"_"
                     +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
         }
+        /*
+        *
+           @value = ID DA EMPRESA
+         */
         public String getPicture(int value){
-            return  sharedpreferences.getString(USUARIO_PATH,"")
-                    +value+"_"
-                    +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
+            return  sonicConstants.LOCAL_IMG_USUARIO
+                    + value +"_"
+                    + sharedpreferences.getInt(USUARIO_ID,0)
+                    + ".JPG";
         }
     }
     public class Path{

@@ -34,7 +34,7 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
     private AppBarLayout myAppBar;
     private String[] myImages = new String[1];
     private Context mContext;
-    private TextView tvNome, tvGrupo, tvDescricao, tvPreco, tvUnidadeMedida, tvCodigoAlternativo;
+    private TextView tvNome, tvGrupo, tvDetalhe, tvPreco, tvUnidadeMedida, tvCodigoAlternativo;
     private TextView tvDataCad, tvNcm, tvPesoBruto, tvPesoLiq, tvEstoqueMin, tvMultip, tvCodEan, tvCodEanTrib;
     private ActionBar myActionBar;
     private LinearLayout linearNew;
@@ -62,6 +62,10 @@ public class sonicProdutosDetalhe extends AppCompatActivity {
         myCollapsingToolbar = findViewById(R.id.collapsingToolbar);
         tvNome = findViewById(R.id.tvNome);
         tvNome.setText(mPrefs.Produtos.getProdutoNome());
+        tvGrupo = findViewById(R.id.tvGrupo);
+        tvGrupo.setText(mPrefs.Produtos.getProdutoGrupo());
+        tvDetalhe = findViewById(R.id.tvDetalhe);
+        tvDetalhe.setText(mPrefs.Produtos.getDetalhe());
         tvUnidadeMedida = findViewById(R.id.tvUnidade);
         tvDataCad = findViewById(R.id.tvDataCadastro);
         tvNcm = findViewById(R.id.tvNcm);

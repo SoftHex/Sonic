@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- LAYOUT CONTAINER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- TITLE AND DESCRIPTION-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/tvNome"
+                android:transitionName="nomeTransition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="NOME">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvFantRazao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="FANTASIA/RAZAO"/>
+
+            <TextView
+                android:id="@+id/tvGrupo"
+                android:transitionName="grupoTransition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="GRUPO"/>
+
+            <TextView
+                android:id="@+id/tvCnpjCpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="CNPJ/CPF:"/>
+
+
+        </LinearLayout>
+
+        <!-- SEPARADOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#DCDCDC" />
+
+        <!-- SEPARADOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#DCDCDC" />
+
+        <!-- ENDEREÇO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:padding="10dp">
+
+            <!-- ENDEREÇO -->
+            <TextView
+                android:id="@+id/tvEndereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textColor="@color/colorTextAccentDark"
+                android:drawableLeft="@mipmap/ic_map_marker_radius_grey600_24dp"
+                android:drawableTint="@color/colorPrimaryGreen"
+                android:drawablePadding="12dp"
+                android:text="ENDERECO"/>
+            <!-- BAIRRO -->
+            <TextView
+                android:id="@+id/tvBairro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:textColor="@color/colorTextAccentDark"
+                android:textSize="14sp"
+                android:text="BAIRRO"/>
+            <!-- MUNICÍPIO -->
+            <TextView
+                android:id="@+id/tvMunicipio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:textColor="@color/colorTextAccentDark"
+                android:textSize="14sp"
+                android:text="MUNICÍPIO"/>
+            <!-- CEP -->
+            <TextView
+                android:id="@+id/tvCep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:textColor="@color/colorTextAccentDark"
+                android:textSize="14sp"
+                android:text="CEP"/>
+
+            <!-- IE -->
+            <TextView
+                android:id="@+id/tvInscEstadual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:textColor="@color/colorTextAccentDark"
+                android:textSize="14sp"
+                android:text="IE: "/>
+
+        </LinearLayout>
+
+        <!-- SEPARADOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#DCDCDC" />
+
+        <!-- CONTATO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="50dp"
+            android:layout_margin="20dp"
+            android:padding="10dp">
+
+            <!-- FONE -->
+            <TextView
+                android:id="@+id/tvFone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorTextAccentDark"
+                android:drawableLeft="@mipmap/ic_phone_grey600_24dp"
+                android:drawableTint="@color/colorPrimaryBlue"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:text="FONE"/>
+            <!-- SITE -->
+            <TextView
+                android:id="@+id/tvWhats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_whatsapp_grey600_24dp"
+                android:drawableTint="@color/colorPrimaryGreen"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:textColor="@color/colorTextAccentDark"
+                android:textSize="14sp"
+                android:text="WHATSAPP"/>
+            <!-- EMAIL -->
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextAccentDark"
+                android:drawableLeft="@mipmap/ic_mail_white_24dp"
+                android:drawableTint="@color/colorPrimaryRed"
+                android:drawablePadding="12dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:text="EMAIL"/>
+            <!-- SITE -->
+
+        </LinearLayout>
+
+        <!-- SEPARADOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1px"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#DCDCDC" />
+
+        <!-- OBSERVAÇÃO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            android:layout_marginTop="20dp">
+
+            <!-- OBSERVAÇÃO -->
+            <TextView
+                android:id="@+id/tvObservacao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textColor="@color/colorTextAccentDark"
+                android:drawableLeft="@mipmap/ic_note_text_outline_grey600_24dp"
+                android:drawablePadding="12dp"
+                android:text="Observação"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

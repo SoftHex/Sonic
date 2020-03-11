@@ -82,6 +82,8 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 public class sonicUtils {
 
     private static final float BITMAP_SCALE = 0.4f;
+    private static final int CEP = 1;
+    private static final int CPF_CNPJ = 2;
 
     //Set the radius of the Blur. Supported range 0 < radius <= 25
     private static float BLUR_RADIUS = 10.5f;

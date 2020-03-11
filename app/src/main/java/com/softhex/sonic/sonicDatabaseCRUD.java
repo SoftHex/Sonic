@@ -938,7 +938,7 @@ public class sonicDatabaseCRUD {
 
                 String order = pref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? " ORDER BY C.nome_fantasia " : " ORDER BY C.razao_social ";
                 String grupo = tipo.equals("J") ? myCons.GRUPO_CLIENTES_CNPJ : myCons.GRUPO_CLIENTES_CPF;
-                String where = grupo != "TODOS" ? " AND gc.nome = '" + grupo + "' " : "";
+                String where = grupo != "TODOS" ? " AND GC.nome = '" + grupo + "' " : "";
 
                 String query = "SELECT " +
                         "C.codigo AS codigo, " +
@@ -958,13 +958,15 @@ public class sonicDatabaseCRUD {
                         "C.observacao AS obs, " +
                         "C.data_cadastro AS cadastro, " +
                         "C.situacao AS situacao, " +
-                        "(SELECT GC.nome FROM " + TABLE_GRUPO_CLIENTE + " GC WHERE GC.codigo = C.codigo_grupo) AS grupo, " +
+                        "GC.nome AS grupo," +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
-                        "(SELECT COUNT(CSC._id) FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
+                        "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
                         " FROM " + TABLE_CLIENTE +
                         " C LEFT JOIN " + TABLE_EMPRESA_CLIENTE +
                         " EC ON EC.codigo_cliente = C.codigo " +
+                        " LEFT JOIN " + TABLE_GRUPO_CLIENTE +
+                        " GC ON GC.codigo = C.codigo_grupo " +
                         " WHERE EC.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1)" +
                         " AND C.tipo= '" + tipo + "' ";
 
@@ -975,36 +977,39 @@ public class sonicDatabaseCRUD {
                     Cursor cursor = DB.getReadableDatabase().rawQuery(
                             query + where + order , null);
 
-                    while (cursor.moveToNext()) {
+                    Log.d("QUERY", query+" "+where+" "+order);
+                    if(cursor.moveToFirst()){
+                        while (cursor.moveToNext()) {
 
-                        sonicClientesHolder clientes = new sonicClientesHolder();
+                            sonicClientesHolder clientes = new sonicClientesHolder();
 
 
-                        clientes.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                        clientes.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
-                        clientes.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao")));
-                        clientes.setNomeFantasia(cursor.getString(cursor.getColumnIndex("fantasia")));
-                        clientes.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
-                        clientes.setInscEstadual(cursor.getString(cursor.getColumnIndex("ie")));
-                        clientes.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
-                        clientes.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                        clientes.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
-                        clientes.setUf(cursor.getString(cursor.getColumnIndex("uf")));
-                        clientes.setCep(cursor.getString(cursor.getColumnIndex("cep")));
-                        clientes.setFone(cursor.getString(cursor.getColumnIndex("fone")));
-                        clientes.setContato(cursor.getString(cursor.getColumnIndex("contato")));
-                        clientes.setEmail(cursor.getString(cursor.getColumnIndex("email")));
-                        clientes.setObservacao(cursor.getString(cursor.getColumnIndex("obs")));
-                        clientes.setDataCadastro(cursor.getString(cursor.getColumnIndex("cadastro")));
-                        clientes.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
-                        clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
-                        clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
-                        clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                        clientes.setCliSemCompra(cursor.getInt(cursor.getColumnIndex("cli_sem_compra")));
-                        cliente.add(clientes);
+                            clientes.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                            clientes.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
+                            clientes.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao")));
+                            clientes.setNomeFantasia(cursor.getString(cursor.getColumnIndex("fantasia")));
+                            clientes.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
+                            clientes.setInscEstadual(cursor.getString(cursor.getColumnIndex("ie")));
+                            clientes.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                            clientes.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                            clientes.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                            clientes.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                            clientes.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+                            clientes.setFone(cursor.getString(cursor.getColumnIndex("fone")));
+                            clientes.setContato(cursor.getString(cursor.getColumnIndex("contato")));
+                            clientes.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+                            clientes.setObservacao(cursor.getString(cursor.getColumnIndex("obs")));
+                            clientes.setDataCadastro(cursor.getString(cursor.getColumnIndex("cadastro")));
+                            clientes.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
+                            clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
+                            clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
+                            clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                            clientes.setCliSemCompra(cursor.getInt(cursor.getColumnIndex("cli_sem_compra")));
+                            cliente.add(clientes);
 
+                        }
+                        cursor.close();
                     }
-                    cursor.close();
 
                 } catch (SQLiteException e) {
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -2586,9 +2591,8 @@ public class sonicDatabaseCRUD {
                             "t.dias_atraso as atraso," +
                             "t.valor as valor," +
                             "t.saldo as saldo," +
-                            "t.situacao as situacao," +
-                            "t.situacao_cor as situacao_cor" +
-                            " FROM "+TABLE_TITULO +
+                            "t.situacao as situacao" +
+                            " FROM "+ TABLE_TITULO +
                             " t JOIN "+ TABLE_CLIENTE +
                             " c ON c.codigo_cliente = t.codigo_cliente" +
                             " WHERE c.selecionado = 1 ORDER BY t.data_vencimento" , null);
@@ -2607,7 +2611,6 @@ public class sonicDatabaseCRUD {
                 titulo.setValor(cursor.getString(cursor.getColumnIndex("valor")));
                 titulo.setSaldo(cursor.getString(cursor.getColumnIndex("saldo")));
                 titulo.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                titulo.setSituacaoCor(cursor.getString(cursor.getColumnIndex("situacao_cor")));
 
                 TITULO.add(titulo);
 

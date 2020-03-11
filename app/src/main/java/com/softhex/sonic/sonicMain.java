@@ -172,7 +172,7 @@ public class sonicMain extends AppCompatActivity{
                 });
 
         // CARREGAR FOTO DO PERFIL
-        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture());
+        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(mPrefs.Users.getEmpresaId()));
 
         if(file.exists()){
             Glide.get(getBaseContext()).clearMemory();
@@ -316,7 +316,7 @@ public class sonicMain extends AppCompatActivity{
                         usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
                         tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
-                        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture());
+                        File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture((int)profile.getIdentifier()));
                         String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
                         sonicGlide.glideImageView(mActivity,myProgressProfile,picture);
                         calcularPercentual("2200000", usuarioMeta);
@@ -357,6 +357,7 @@ public class sonicMain extends AppCompatActivity{
 
             File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(listaEmpresa.get(x).getCodigo()));
 
+            Log.d("IMAGEM", file.toString());
                 if(file.exists()){
                     myHeader.addProfiles(
                             new ProfileDrawerItem()
