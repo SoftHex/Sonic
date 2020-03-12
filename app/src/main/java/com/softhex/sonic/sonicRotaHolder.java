@@ -25,8 +25,8 @@ public class sonicRotaHolder{
     String hora_inicio;
     String data_fim;
     String hora_fim;
-    String conclusao;
-    int negativacao;
+    int situacao;
+    String negativacao;
     String cancelamento;
     String latitude;
     String longitude;
@@ -56,8 +56,8 @@ public class sonicRotaHolder{
                            String hora_inicio,
                            String data_fim,
                            String hora_fim,
-                           String conclusao,
-                           int negativacao,
+                           int situacao,
+                           String negativacao,
                            String cancelamento,
                            String latitude,
                            String longitude) {
@@ -89,6 +89,10 @@ public class sonicRotaHolder{
 
     public int getCodigo() {
         return codigo;
+    }
+
+    public int getCodigoEmpresa() {
+        return codigo_empresa;
     }
 
     public int getCodigoCliente() {
@@ -153,9 +157,9 @@ public class sonicRotaHolder{
 
     public String getHoraFim(){return hora_fim;}
 
-    public String getConclusao(){return conclusao;}
+    public int getSituacao(){return situacao;}
 
-    public int getNegativacao(){return negativacao;}
+    public String getNegativacao(){return negativacao;}
 
     public String getCancelamento(){return cancelamento;}
 
@@ -169,6 +173,10 @@ public class sonicRotaHolder{
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
+    }
+
+    public void setCodigoEmpresa(int codigo_empresa) {
+        this.codigo_empresa = codigo_empresa;
     }
 
     public void setCodigoCliente(int codigo_cliente) {
@@ -240,10 +248,10 @@ public class sonicRotaHolder{
     public void setHoraFim(String hora_fim) {
         this.hora_fim= hora_fim;
     }
-    public void setConclusao(String conclusao) {
-        this.conclusao = conclusao;
+    public void setSituacao(int situacao) {
+        this.situacao = situacao;
     }
-    public void setNegativacao(int negativacao) {
+    public void setNegativacao(String negativacao) {
         this.negativacao = negativacao;
     }
 

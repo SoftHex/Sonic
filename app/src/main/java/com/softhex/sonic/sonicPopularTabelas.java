@@ -38,30 +38,30 @@ public class sonicPopularTabelas {
     private String arquivo;
     private String[][] mTables = {
 
-            { "[SITE]", sonicConstants.TB_SITE },
-            { "[FTP]", sonicConstants.TB_FTP },
-            { "[EMPRESAS]", sonicConstants.TB_EMPRESA },
-            { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO },
-            { "[USUARIOS]", sonicConstants.TB_USUARIO },
-            { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO },
-            { "[GRUPO_EMPRESAS]", sonicConstants.TB_GRUPO_EMPRESAS },
-            { "[CLIENTES]", sonicConstants.TB_CLIENTE },
-            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE },
-            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE },
-            { "[PRODUTOS]", sonicConstants.TB_PRODUTO },
-            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO },
-            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO },
-            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO },
-            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA },
-            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO },
-            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA },
-            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO },
-            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA },
-            { "[ROTA]", sonicConstants.TB_ROTA },
-            { "[VENDAS]", sonicConstants.TB_VENDA },
-            { "[VENDAS_ITENS]", sonicConstants.TB_VENDA_ITEM },
-            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA },
-            { "[TITULOS]", sonicConstants.TB_TITULO },
+            { "[SITE]", sonicConstants.TB_SITE, "save" },
+            { "[FTP]", sonicConstants.TB_FTP ,"save" },
+            { "[EMPRESAS]", sonicConstants.TB_EMPRESA, "save" },
+            { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "save" },
+            { "[USUARIOS]", sonicConstants.TB_USUARIO, "save" },
+            { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "save" },
+            { "[GRUPO_EMPRESAS]", sonicConstants.TB_GRUPO_EMPRESAS, "save"},
+            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "save" },
+            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "save" },
+            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "save" },
+            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "save" },
+            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "save" },
+            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "save" },
+            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "save" },
+            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "save" },
+            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "save" },
+            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "save" },
+            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "save" },
+            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "save" },
+            { "[ROTA]", sonicConstants.TB_ROTA, "replace" },
+            { "[VENDAS]", sonicConstants.TB_VENDA, "save" },
+            { "[VENDAS_ITENS]", sonicConstants.TB_VENDA_ITEM, "save" },
+            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "save" },
+            { "[TITULOS]", sonicConstants.TB_TITULO, "save" },
 
     };
 
@@ -133,7 +133,10 @@ public class sonicPopularTabelas {
 
                             if(line!=null && (line.contains(arr[0]) || arr[0].contains(line))){
 
-                                DBC.Database.cleanData(arr[1]);
+                                if(arr[2].equals("save")){
+                                    DBC.Database.cleanData(arr[1]);
+                                }
+
                                 tabela = line;
                                 line = reader.readLine();
 
@@ -147,7 +150,7 @@ public class sonicPopularTabelas {
                                     int len = str.length();
                                     String str2 = str.substring(pos, len);
                                     List<String> data = Arrays.asList(str2.split(";", -1));
-                                    DBC.Database.saveData(arr[1], data);
+                                    DBC.Database.saveData(arr[1], data, arr[2]);
                                     line = reader.readLine();
 
                                 }

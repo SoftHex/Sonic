@@ -171,7 +171,7 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public Boolean saveData(String tabela, List<String> values){
+        public Boolean saveData(String tabela, List<String> values, String type){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result;
 
@@ -187,7 +187,9 @@ public class sonicDatabaseCRUD {
 
                 }
 
-                result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+                result = type.equals("save") ?
+                        DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0 :
+                        DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0;
 
             }catch (SQLiteException e){
 
@@ -3173,13 +3175,22 @@ public class sonicDatabaseCRUD {
 
                 String query = "SELECT " +
                         "R.codigo," +
+                        "R.codigo_empresa," +
                         "R.codigo_cliente," +
+                        "R.tipo," +
+                        "R.status," +
                         "R.data_agendamento," +
                         "R.hora_agendamento," +
                         "R.atendente," +
-                        "R.tipo," +
-                        "R.status," +
+                        "R.ordem," +
                         "R.observacao," +
+                        "R.data_inicio," +
+                        "R.data_fim," +
+                        "R.hora_inicio," +
+                        "R.hora_fim," +
+                        "R.situacao," +
+                        "R.negativacao," +
+                        "R.cancelamento," +
                         "C.razao_social," +
                         "C.nome_fantasia," +
                         "C.endereco," +
@@ -3193,30 +3204,38 @@ public class sonicDatabaseCRUD {
                     Cursor cursor = DB.getReadableDatabase().rawQuery(
                             query , null);
 
-                    while(cursor.moveToNext()){
 
-                        sonicRotaHolder rota = new sonicRotaHolder();
+                        while(cursor.moveToNext()){
 
-                        rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                        rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                        rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
-                        rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
-                        rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
-                        rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                        rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
-                        rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
-                        rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                        rota.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
-                        rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                        rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                            sonicRotaHolder rota = new sonicRotaHolder();
 
-                        rotas.add(rota);
+                            rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                            rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                            rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                            rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
+                            rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                            rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
+                            rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
+                            rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                            rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+                            rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+                            rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
+                            rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
+                            rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
+                            rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
+                            rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                            rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
+                            rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
+                            rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                            rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                            rota.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                            rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                            rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
 
-                    }
+                            rotas.add(rota);
 
-                    cursor.close();
-
+                        }
+                        cursor.close();
 
                 }catch (SQLiteException e){
                     DBCL.Log.saveLog(

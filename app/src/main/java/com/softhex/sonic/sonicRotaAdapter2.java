@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,20 +38,34 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO, Status.CANCELADO})
+    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO})
     public @interface Status{
         int NAO_INICIADO = 1;
         int EM_ATENDIMENTO = 2;
         int CONCLUIDO = 3;
-        int CANCELADO = 4;
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO, StatusText.CANCELADO})
+    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO})
     public @interface StatusText{
         String NAO_INICIADO = "Não Iniciado";
         String EM_ATENDIMENTO = "Em Atendimento";
         String CONCLUIDO = "Concluído";
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({Situacao.POSITIVADO, Situacao.NEGATIVADO, Situacao.CANCELADO})
+    public @interface Situacao{
+        int POSITIVADO = 1;
+        int NEGATIVADO = 2;
+        int CANCELADO = 3;
+    }
+
+    @Retention(RetentionPolicy.SOURCE)
+    @StringDef({SituacaoText.POSITIVADO, SituacaoText.NEGATIVADO, SituacaoText.CANCELADO})
+    public @interface SituacaoText{
+        String POSITIVADO = "Positivado";
+        String NEGATIVADO = "Negativado";
         String CANCELADO = "Cancelado";
     }
 
@@ -71,18 +84,20 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
     private RotaFilter rotaFilter;
     private Boolean nFantasia;
     private sonicPreferences mPref;
+    private sonicUtils mUtils;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvNome;
         TextView tvEndereco;
         TextView tvStatus;
-        TextView tvOptions;
         TextView tvObservacao;
         TextView tvAtendente;
         TextView tvDataHora;
-        TextView tvSituacao;
         ImageView ivImagem;
+        TextView tvPositivado;
+        TextView tvNegativado;
+        TextView tvCancelado;
         TextView tvLetra;
         LinearLayout linearItem;
 
@@ -94,7 +109,9 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
             ivImagem = view.findViewById(R.id.ivImagem);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
-            tvSituacao = view.findViewById(R.id.tvSituacao);
+            tvPositivado = view.findViewById(R.id.tvPositivado);
+            tvNegativado = view.findViewById(R.id.tvNegativado);
+            tvCancelado = view.findViewById(R.id.tvCancelado);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
             tvObservacao = view.findViewById(R.id.tvObservacao);
@@ -104,18 +121,11 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
     sonicRotaAdapter2(List<sonicRotaHolder> rotas, Activity mActivity) {
         this.myCtx = mActivity;
-        if(sonicConstants.ROTA_ALTERADA){
-            this.rotas = alteredRotas;
-        }else{
-            this.rotas = rotas;
-        }
         this.filteredRotas = rotas;
+        this.rotas = rotas;
+        mUtils = new sonicUtils(myCtx);
         this.mPref = new sonicPreferences(myCtx);
         this.nFantasia =  mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
-    }
-
-    public void updateAdapter(List<sonicRotaHolder> rotas){
-        this.alteredRotas = rotas;
     }
 
     @Override
@@ -129,23 +139,13 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
 
         sonicRotaHolder rota = rotas.get(position);
         holder.setIsRecyclable(false);
-        sonicUtils utils = new sonicUtils(myCtx);
         String cliNome = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
 
         holder.tvNome.setText(cliNome);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
-        holder.tvDataHora.setText("Data Prevista: "+utils.Data.dataFotmatadaBarra(rota.getDataAgendamento())+" Ás "+utils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
+        holder.tvDataHora.setText("Data Prevista: "+mUtils.Data.dataFotmatadaBarra(rota.getDataAgendamento())+" Ás "+mUtils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
         holder.tvObservacao.setText("Observação: "+rota.getObservacao());
-        /*holder.timelineView.setMarker(
-                rota.getTipo()==Tipo.PADRAO ?
-                        myCtx.getResources().getDrawable(R.mipmap.ic_map_grey600_36dp) :
-                        rota.getTipo()==Tipo.AGENDAMENTO ?
-                                myCtx.getResources().getDrawable(R.mipmap.ic_phone_grey600_36dp) : myCtx.getResources().getDrawable(R.mipmap.ic_phone_return_grey600_36dp));
-
-        if(rota.getStatus()==2){
-            sonicConstants.ROTA_EM_ATENDIMENTO = true;
-        }*/
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + ".JPG");
 
@@ -167,37 +167,32 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
             holder.tvLetra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
 
         }
+        holder.tvStatus.setBackground(rota.getStatus()==Status.NAO_INICIADO ?
+                myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
+                    rota.getStatus()==Status.EM_ATENDIMENTO ? myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
+                        myCtx.getResources().getDrawable(R.drawable.status_concluido));
 
-        String statusText = rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
+        holder.tvStatus.setText(rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
                 rota.getStatus()==Status.EM_ATENDIMENTO ? StatusText.EM_ATENDIMENTO :
-                        rota.getStatus()==Status.CONCLUIDO ? StatusText.CONCLUIDO :
-                                StatusText.CANCELADO;
-        Drawable statusDrawable = rota.getStatus()==Status.NAO_INICIADO  ?  myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
-                rota.getStatus()==Status.EM_ATENDIMENTO ? myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
-                        rota.getStatus()==Status.CONCLUIDO ? myCtx.getResources().getDrawable(R.drawable.status_concluido) :
-                                myCtx.getResources().getDrawable(R.drawable.status_cancelado);
-        int statusColor = rota.getStatus()==Status.NAO_INICIADO  ? myCtx.getResources().getColor(R.color.colorPrimaryBlue) :
-                rota.getStatus()==Status.EM_ATENDIMENTO ? myCtx.getResources().getColor(R.color.colorPrimaryOrange) :
-                        rota.getStatus()==Status.CONCLUIDO ? myCtx.getResources().getColor(R.color.colorPrimaryGreen) :
-                                myCtx.getResources().getColor(R.color.colorPrimaryRed);
-
-        int statusOptions = rota.getStatus()==Status.NAO_INICIADO  ? View.VISIBLE :
-                rota.getStatus()==Status.EM_ATENDIMENTO ? View.VISIBLE :
-                        rota.getStatus()==Status.CONCLUIDO ? View.GONE :
-                                View.GONE;
-        int statusSituacao = rota.getStatus()==Status.NAO_INICIADO  ? View.GONE :
-                rota.getStatus()==Status.EM_ATENDIMENTO ? View.GONE :
-                        rota.getStatus()==Status.CONCLUIDO ? View.VISIBLE :
-                                View.GONE;
-
-        holder.tvStatus.setText(statusText);
-        holder.tvStatus.setBackground(statusDrawable);
-
-        //holder.tvOptions.setVisibility(statusOptions);
-        //holder.tvSituacao.setVisibility(statusSituacao);
-
-        //holder.timelineView.setEndLineColor(statusColor, holder.getItemViewType());
-        //holder.timelineView.setMarkerColor(statusColor);
+                        StatusText.CONCLUIDO);
+        switch (rota.getSituacao()){
+            case Situacao.POSITIVADO:
+                holder.tvNegativado.setVisibility(View.GONE);
+                holder.tvCancelado.setVisibility(View.GONE);
+                break;
+            case Situacao.NEGATIVADO:
+                holder.tvPositivado.setVisibility(View.GONE);
+                holder.tvCancelado.setVisibility(View.GONE);
+                break;
+            case Situacao.CANCELADO:
+                holder.tvPositivado.setVisibility(View.GONE);
+                holder.tvNegativado.setVisibility(View.GONE);
+                    break;
+             default:
+                 holder.tvPositivado.setVisibility(View.GONE);
+                 holder.tvNegativado.setVisibility(View.GONE);
+                 holder.tvCancelado.setVisibility(View.GONE);
+        }
 
     }
 

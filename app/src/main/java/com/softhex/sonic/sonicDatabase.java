@@ -224,21 +224,22 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_empresa int not null, " +
             "codigo_cliente int not null, " +
             "codigo_usuario int not null, " +
-            "tipo int not null, " + // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
-            "status int not null, " + // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
+            "tipo int not null, " +             // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
+            "status int not null, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO
             "data_agendamento string, " +
             "hora_agendamento string, " +
             "atendente string, " +
+            "ordem int, " +
             "observacao string, " +
             "data_inicio string, " +
             "hora_inicio string, " +
             "data_fim string, " +
             "hora_fim string, " +
             "data_reagendamento string, " +
-            "conclusao string, " +
-            "negativacao int, " +
+            "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO, 3=CANCELADO
+            "negativacao string, " +
             "cancelamento string);";
-    private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
+    private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE UNIQUE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
     private static final String CREATE_INDEX_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
     private static final String CREATE_INDEX_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";
     private static final String CREATE_INDEX_ROTA_TIPO = "CREATE INDEX index_rota_tipo ON "+DB_ROTA+" (tipo);";

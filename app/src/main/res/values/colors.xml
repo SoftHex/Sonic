@@ -70,6 +70,12 @@
     <color name="colorPrimaryYellowDarkT">#90FFD700</color>
     <color name="colorPrimaryYellowT">#90FFFF00</color>
     <color name="colorPrimaryYellowLightT">#90F0E68C</color>
+    <color name="colorPrimaryGrayDark">#363636</color>
+    <color name="colorPrimaryGray">#696969</color>
+    <color name="colorPrimaryGrayLight">#A9A9A9</color>
+    <color name="colorPrimaryGrayDarkT">#90363636</color>
+    <color name="colorPrimaryGrayT">#90696969</color>
+    <color name="colorPrimaryGrayLightT">#90A9A9A9</color>
     <color name="colorPrimaryWhite">#FFFFFF</color>
     <color name="colorPrimaryGreen1">#59C354</color>
     <color name="colorPrimaryGreen2">#00FA9A</color>
