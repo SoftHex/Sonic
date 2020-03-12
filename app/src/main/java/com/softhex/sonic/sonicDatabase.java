@@ -190,12 +190,12 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_CLIENTE_SEM_COMPRA_CODIGO_USUARIO = "CREATE INDEX index_cliente_sem_compra_codigo_usuario ON "+DB_CLIENTE_SEM_COMPRA+" (codigo_usuario);";
 
     private static final String CREATE_PRODUTO = "CREATE TABLE IF NOT EXISTS "+DB_PRODUTO+" (" +
-            "_id integer primary key autoincrement, " +
-            "codigo int not null, " +
-            "codigo_empresa int not null," +
-            "codigo_unidade int not null, " +
-            "codigo_grupo int not null," +
-            "nome string not null, " +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo int NOT NULL, " +
+            "codigo_empresa int NOT NULL," +
+            "codigo_unidade int NOT NULL, " +
+            "codigo_grupo int NOT NULL," +
+            "nome string NOT NULL, " +
             "codigo_alternativo string, " +
             "descricao string, " +
             "data_cadastro string, " +
