@@ -46,18 +46,18 @@ public class sonicSplash extends AppCompatActivity {
 
             if(res){
 
-                mPref.GrupoEmpresas.setNome(mListEmpresa.get(0).getNome());
-                mPref.GrupoEmpresas.setDescricao(mListEmpresa.get(0).getDescricao());
-                mPref.GrupoEmpresas.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
-                mPref.GrupoEmpresas.setEndereco(mListEmpresa.get(0).getEndereco());
-                mPref.GrupoEmpresas.setBairro(mListEmpresa.get(0).getBairro());
-                mPref.GrupoEmpresas.setMunicipio(mListEmpresa.get(0).getMunicipio());
-                mPref.GrupoEmpresas.setUF(mListEmpresa.get(0).getUf());
-                mPref.GrupoEmpresas.setCep(mListEmpresa.get(0).getCep());
-                mPref.GrupoEmpresas.setFone(mListEmpresa.get(0).getFone());
-                mPref.GrupoEmpresas.setEmail(mListEmpresa.get(0).getEmail());
-                mPref.GrupoEmpresas.setSite(mListEmpresa.get(0).getSite());
-                mPref.GrupoEmpresas.setWhats(mListEmpresa.get(0).getWhatsapp());
+                mPref.Matriz.setNome(mListEmpresa.get(0).getNome());
+                mPref.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
+                mPref.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+                mPref.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
+                mPref.Matriz.setBairro(mListEmpresa.get(0).getBairro());
+                mPref.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
+                mPref.Matriz.setUF(mListEmpresa.get(0).getUf());
+                mPref.Matriz.setCep(mListEmpresa.get(0).getCep());
+                mPref.Matriz.setFone(mListEmpresa.get(0).getFone());
+                mPref.Matriz.setEmail(mListEmpresa.get(0).getEmail());
+                mPref.Matriz.setSite(mListEmpresa.get(0).getSite());
+                mPref.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
                 mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
                 mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
                 mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());

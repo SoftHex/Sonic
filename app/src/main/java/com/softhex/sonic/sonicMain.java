@@ -127,7 +127,7 @@ public class sonicMain extends AppCompatActivity{
         mPrefs = new sonicPreferences(mActivity);
         sonicConstants.BACK = back;
 
-        myToolbar = findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
         myActionBar.setTitle(R.string.appName);
@@ -186,10 +186,10 @@ public class sonicMain extends AppCompatActivity{
                     .into(myProgressProfile);
         }
 
-        myViewPager = findViewById(R.id.pagerSlide);
+        myViewPager = findViewById(R.id.mViewPager);
         setUpViewPager(myViewPager);
 
-        myTabLayout = findViewById(R.id.tab);
+        myTabLayout = findViewById(R.id.mTabs);
         myTabLayout.setupWithViewPager(myViewPager);
 
         createDrawerMenu();
@@ -712,9 +712,9 @@ public class sonicMain extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicMainHome1(), "", R.mipmap.ic_chart_line_variant_white_24dp);
-        myAdapter.addFragment(new sonicMainHome1(), "Perform");
-        myAdapter.addFragment(new sonicMainHome1(), "Atuação");
+        myAdapter.addFragment(new sonicMainHome1(), "Vendas");
+        myAdapter.addFragment(new sonicMainHome1(), "Pedidos");
+        myAdapter.addFragment(new sonicMainHome1(), "Visitas");
 
         viewpager.setAdapter(myAdapter);
 

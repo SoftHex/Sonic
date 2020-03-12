@@ -31,25 +31,25 @@ public class sonicPreferences{
     private static final String CLIENTE_GRUPO = "clienteGrupo";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String SAUDACAO = "saudacao";
-    private static final String GRUPO_EMPRESA_NOME = "grupoEmpresaNome";
-    private static final String GRUPO_EMPRESA_DESCRICAO = "grupoEmpresaDescricao";
-    private static final String GRUPO_EMPRESA_DATA_FUNDACAO = "grupoEmpresaDataFundacao";
-    private static final String GRUPO_EMPRESA_ENDERECO = "grupoEmpresaEndereco";
-    private static final String GRUPO_EMPRESA_BAIRRO = "grupoEmpresaBairro";
-    private static final String GRUPO_EMPRESA_MUNICIPIO = "grupoEmpresaMunicipio";
-    private static final String GRUPO_EMPRESA_UF = "grupoEmpresaUF";
-    private static final String GRUPO_EMPRESA_CEP = "grupoEmpresaCep";
-    private static final String GRUPO_EMPRESA_FONE = "grupoEmpresaFone";
-    private static final String GRUPO_EMPRESA_WHATS = "grupoEmpresaWhatsapp";
-    private static final String GRUPO_EMPRESA_EMAIL = "grupoEmpresaEmail";
-    private static final String GRUPO_EMPRESA_SITE = "grupoEmpresaSite";
-    private static final String GRUPO_EMPRESA_PICTURE = "grupoEmpresaPicture";
-    private static final String GRUPO_EMPRESA_PATH = "grupoEmpresaPath";
+    private static final String MATRIZ_NOME = "matrizNome";
+    private static final String MATRIZ_DESCRICAO = "matrizDescricao";
+    private static final String MATRIZ_DATA_FUNDACAO = "matrizDataFundacao";
+    private static final String MATRIZ_ENDERECO = "matrizEndereco";
+    private static final String MATRIZ_BAIRRO = "matrizBairro";
+    private static final String MATRIZ_MUNICIPIO = "matrizMunicipio";
+    private static final String MATRIZ_UF = "matrizUF";
+    private static final String MATRIZ_CEP = "matrizCep";
+    private static final String MATRIZ_FONE = "matrizFone";
+    private static final String MATRIZ_WHATS = "matrizWhatsapp";
+    private static final String MATRIZ_EMAIL = "matrizEmail";
+    private static final String MATRIZ_SITE = "matrizSite";
+    private static final String MATRIZ_PICTURE = "matrizPicture";
+    private static final String MATRIZ_PATH = "matrizPath";
 
     Users Users = new Users();
     Path Path = new Path();
     Clientes Clientes = new Clientes();
-    GrupoEmpresas GrupoEmpresas = new GrupoEmpresas();
+    Matriz Matriz = new Matriz();
     Produtos Produtos = new Produtos();
     Util Util = new Util();
 
@@ -130,108 +130,108 @@ public class sonicPreferences{
         }
     }
 
-    public class GrupoEmpresas{
+    public class Matriz {
 
         public void setNome(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_NOME, value);
+            editor.putString(MATRIZ_NOME, value);
             editor.apply();
         }
         public String getNome(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_NOME, "");
+            return sharedpreferences.getString(MATRIZ_NOME, "");
         }
         public void setDescricao(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_DESCRICAO, value);
+            editor.putString(MATRIZ_DESCRICAO, value);
             editor.apply();
         }
         public String getDescricao(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_DESCRICAO, "");
+            return sharedpreferences.getString(MATRIZ_DESCRICAO, "");
         }
         public void setDataFundacao(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_DATA_FUNDACAO, value);
+            editor.putString(MATRIZ_DATA_FUNDACAO, value);
             editor.apply();
         }
         public String getDataFundacao(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_DATA_FUNDACAO, "");
+            return sharedpreferences.getString(MATRIZ_DATA_FUNDACAO, "");
         }
         public void setEndereco(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_ENDERECO, value);
+            editor.putString(MATRIZ_ENDERECO, value);
             editor.apply();
         }
         public String getEndereco(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_ENDERECO, "");
+            return sharedpreferences.getString(MATRIZ_ENDERECO, "");
         }
         public void setBairro(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_BAIRRO, value);
+            editor.putString(MATRIZ_BAIRRO, value);
             editor.apply();
         }
         public String getBairro(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_BAIRRO, "");
+            return sharedpreferences.getString(MATRIZ_BAIRRO, "");
         }
         public void setMunicipio(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_MUNICIPIO, value);
+            editor.putString(MATRIZ_MUNICIPIO, value);
             editor.apply();
         }
         public String getMunicipio(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_MUNICIPIO, "");
+            return sharedpreferences.getString(MATRIZ_MUNICIPIO, "");
         }
         public void setUF(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_UF, value);
+            editor.putString(MATRIZ_UF, value);
             editor.apply();
         }
         public String getUF(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_UF, "");
+            return sharedpreferences.getString(MATRIZ_UF, "");
         }
         public void setCep(String value){
             editor = sharedpreferences.edit();
-                editor.putString(GRUPO_EMPRESA_CEP, value);
+                editor.putString(MATRIZ_CEP, value);
             editor.apply();
         }
         public String getCep(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_CEP, "");
+            return sharedpreferences.getString(MATRIZ_CEP, "");
         }
         public void setFone(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_FONE, value);
+            editor.putString(MATRIZ_FONE, value);
             editor.apply();
         }
         public String getFone(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_FONE, "");
+            return sharedpreferences.getString(MATRIZ_FONE, "");
         }
 
         public void setWhats(String value) {
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_WHATS, value);
+            editor.putString(MATRIZ_WHATS, value);
             editor.apply();
         }
         public String getWhats(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_WHATS, "");
+            return sharedpreferences.getString(MATRIZ_WHATS, "");
         }
         public void setEmail(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_EMAIL, value);
+            editor.putString(MATRIZ_EMAIL, value);
             editor.apply();
         }
         public String getEmail(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_EMAIL, "");
+            return sharedpreferences.getString(MATRIZ_EMAIL, "");
         }
         public void setSite(String value){
             editor = sharedpreferences.edit();
-            editor.putString(GRUPO_EMPRESA_SITE, value);
+            editor.putString(MATRIZ_SITE, value);
             editor.apply();
         }
         public String getSite(){
-            return sharedpreferences.getString(GRUPO_EMPRESA_SITE, "");
+            return sharedpreferences.getString(MATRIZ_SITE, "");
         }
 
         public String getPicture(){
-            return sonicConstants.LOCAL_IMG_CATALOGO+"empresa.JPG";
+            return sonicConstants.LOCAL_IMG_CATALOGO+"matriz.JPG";
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,12 +15,12 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class sonicConfig extends AppCompatActivity implements View.OnClickListener{
 
@@ -27,7 +28,7 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
     private LinearLayout seguranca, personalizacao, notificacoes, sobre, ajuda;
     private Intent i;
     private LinearLayout llContent;
-    private CircleImageView mImagem;
+    private ImageView mImagem;
     private TextView mTitle, mDesc;
     private sonicPreferences mPref;
     @Override
@@ -48,9 +49,9 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
         llContent = findViewById(R.id.llContent);
         mImagem = findViewById(R.id.ivImagem);
         mTitle = findViewById(R.id.tvTitle);
-        mTitle.setText(mPref.GrupoEmpresas.getNome());
+        mTitle.setText(mPref.Matriz.getNome());
         mDesc = findViewById(R.id.tvDescricao);
-        mDesc.setText(mPref.GrupoEmpresas.getDescricao());
+        mDesc.setText(mPref.Matriz.getDescricao());
         seguranca = findViewById(R.id.llSeguranca);
         personalizacao = findViewById(R.id.llPersonalizacao);
         notificacoes = findViewById(R.id.llNotificacoes);
@@ -63,12 +64,18 @@ public class sonicConfig extends AppCompatActivity implements View.OnClickListen
         ajuda.setOnClickListener(this);
         sobre.setOnClickListener(this);
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO +"empresa.JPG");
+        File file = new File(Environment.getExternalStorageDirectory(), mPref.Matriz.getPicture());
         if(file.exists()){
 
+            Glide.with(this).clear(mImagem);
+            Glide.get(this).clearMemory();
             Glide.with(getApplicationContext())
                     .load(file)
-                    .apply(new RequestOptions().override(100,100))
+                    .circleCrop()
+                    .apply(new RequestOptions().override(300,100))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(mImagem);
 
         }

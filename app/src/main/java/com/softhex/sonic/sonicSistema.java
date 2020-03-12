@@ -1,64 +1,58 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
-import android.content.Context;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.View;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class sonicSistema extends AppCompatActivity {
 
-    private Context _this;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //sonicAppearence.onActivityCreateSetTheme(this, sonicAppearence.THEME_NIGHT);
         setContentView(R.layout.sonic_sistema);
 
-        _this = this;
-
         createInterface();
-
 
     }
 
     private void createInterface(){
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Sistema");
+        Toolbar mToolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(mToolbar);
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Sistema");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager viewPager = findViewById(R.id.pagerSlide);
-        setUpViewPager(viewPager);
+        ViewPager mViewPager = findViewById(R.id.mViewPager);
+        setUpViewPager(mViewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout mTabLayout = findViewById(R.id.mTabs);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        AppBarLayout myAppBar = findViewById(R.id.appbar);
+        AppBarLayout myAppBar = findViewById(R.id.appBar);
         myAppBar.setLayoutTransition(transition);
 
-        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();

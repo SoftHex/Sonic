@@ -87,9 +87,9 @@ public class sonicProdutosLista extends Fragment {
 
         myCons = new sonicConstants();
 
-        myToolBar = getActivity().findViewById(R.id.toolbar);
+        myToolBar = getActivity().findViewById(R.id.mToolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.tab);
+        myTabLayout = getActivity().findViewById(R.id.mTabs);
 
         tvSearch = myView.findViewById(R.id.tvSearch);
 

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
@@ -59,23 +60,27 @@ public class sonicConfigPerfil extends AppCompatActivity{
         mEmail = findViewById(R.id.tvEmail);
         mSite = findViewById(R.id.tvSite);
 
-        mTitle.setText(mPref.GrupoEmpresas.getNome());
-        mDesc.setText(mPref.GrupoEmpresas.getDescricao());
-        mEndereco.setText(mPref.GrupoEmpresas.getEndereco());
-        mBairro.setText(mPref.GrupoEmpresas.getBairro());
-        mMunicipio.setText(mPref.GrupoEmpresas.getMunicipio()+" - "+mPref.GrupoEmpresas.getUF());
-        mCep.setText("Cep: "+mPref.GrupoEmpresas.getCep());
-        mFone.setText(mPref.GrupoEmpresas.getFone());
-        mWhats.setText(mPref.GrupoEmpresas.getWhats());
-        mEmail.setText(mPref.GrupoEmpresas.getEmail());
-        mSite.setText(mPref.GrupoEmpresas.getSite());
+        mTitle.setText(mPref.Matriz.getNome());
+        mDesc.setText(mPref.Matriz.getDescricao());
+        mEndereco.setText(mPref.Matriz.getEndereco());
+        mBairro.setText(mPref.Matriz.getBairro());
+        mMunicipio.setText(mPref.Matriz.getMunicipio()+" - "+mPref.Matriz.getUF());
+        mCep.setText("Cep: "+mPref.Matriz.getCep());
+        mFone.setText(mPref.Matriz.getFone());
+        mWhats.setText(mPref.Matriz.getWhats());
+        mEmail.setText(mPref.Matriz.getEmail());
+        mSite.setText(mPref.Matriz.getSite());
 
-        File file = new File(Environment.getExternalStorageDirectory(), mPref.GrupoEmpresas.getPicture());
+        File file = new File(Environment.getExternalStorageDirectory(), mPref.Matriz.getPicture());
         if(file.exists()){
 
+            Glide.with(this).clear(mImage);
+            Glide.get(this).clearMemory();
             Glide.with(getApplicationContext())
                     .load(file)
-                    .apply(new RequestOptions().override(600,300))
+                    .apply(new RequestOptions().override(600,300)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true))
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(mImage);
 

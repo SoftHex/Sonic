@@ -24,7 +24,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
     private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
-    private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
+    private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_MATRIZ;
     private final String TABLE_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private final String TABLE_USUARIO = sonicConstants.TB_USUARIO;
     private final String TABLE_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;

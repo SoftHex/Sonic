@@ -2,16 +2,16 @@
 <resources>
 
     <!-- DEFAULT APP COLORS -->
-    <color name="colorPrimaryDark">#1C1F2B</color>
-    <color name="colorPrimary">#272936</color>
-    <color name="colorAccent">#363C4C</color>
-    <color name="colorAccent2">#343B4B</color>
-    <color name="colorAccentLight">#666C7C</color>
+    <color name="colorPrimaryDark">#184165</color>
+    <color name="colorPrimary">#1A4B74</color>
+    <color name="colorAccent">#225C8F</color>
+    <color name="colorAccent2">#286DA9</color>
+    <color name="colorAccentLight">#3399CC</color>
     <color name="colorSpotLight">#6959CD</color>
     <color name="colorSpotLight2">#4682B4</color>
-    <color name="colorPrimaryDarkT">#991C1F2B</color>
-    <color name="colorPrimaryT">#90272936</color>
-    <color name="colorAccentT">#9073879C</color>
+    <color name="colorPrimaryDarkT">#99184165</color>
+    <color name="colorPrimaryT">#901A4B74</color>
+    <color name="colorAccentT">#90225C8F</color>
     <color name="colorPrimaryLight">#9EB4C8</color>
     <color name="colorPrimaryLightT">#909EB4C8</color>
     <color name="colorPrimaryOrangeDark">#DD4D0F</color>
@@ -87,6 +87,9 @@
     <color name="colorTypeWrong">#ed7861</color>
     <color name="colorTypeWarning">#e8bd4b</color>
     <color name="colorTypeSuccess">#90b06e</color>
+    <color name="colorLogin">#286DA9</color>
+    <color name="colorLoginT">#99286DA9</color>
+    <color name="colorLoginStatusBar">#184165</color>
 
     <!-- WINE THEME -->
     <color name="colorWinePrimaryDark">#610B0B</color>

@@ -75,17 +75,17 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicConfig"
-            android:theme="@style/DefaultAppTheme"/>
+            android:theme="@style/PreferenceAppTheme"/>
         <activity
             android:name=".sonicConfigPerson"
-            android:theme="@style/DefaultAppTheme">
+            android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".sonicConfig" />
             </activity>
         <activity
             android:name=".sonicConfigSeguranca"
-            android:theme="@style/DefaultAppTheme">
+            android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".sonicConfig" />

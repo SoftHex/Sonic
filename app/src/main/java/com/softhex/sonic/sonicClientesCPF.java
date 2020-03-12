@@ -87,9 +87,9 @@ public class sonicClientesCPF extends Fragment {
 
         myCons = new sonicConstants();
 
-        myToolBar = getActivity().findViewById(R.id.toolbar);
+        myToolBar = getActivity().findViewById(R.id.mToolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.tabs);
+        myTabLayout = getActivity().findViewById(R.id.mTabs);
 
         tvTexto = myView.findViewById(R.id.tvText);
 
