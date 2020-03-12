@@ -58,7 +58,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         });
 
-        File file = new File(Environment.getExternalStorageDirectory(), mPref.Users.getPicture());
+        File file = new File(Environment.getExternalStorageDirectory(), mPref.Users.getPicture(mPref.Users.getEmpresaId()));
 
         if(file.exists()){
 
