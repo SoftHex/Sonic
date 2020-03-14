@@ -59,25 +59,19 @@ public class sonicRotaClientes extends Fragment {
     private TextView myTextView, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private Context _this;
+    private Context mContext;
     private ImageView myImage;
     Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
-        _this = getActivity();
+        mContext = getActivity();
 
         loadFragment();
 
         return myView;
-
-    }
-
-    public void bindRecyclerView(){
-
-        new myAsyncTask().execute();
 
     }
 
@@ -87,9 +81,9 @@ public class sonicRotaClientes extends Fragment {
 
         myCons = new sonicConstants();
 
-        myToolBar = getActivity().findViewById(R.id.toolbar);
+        myToolBar = getActivity().findViewById(R.id.mToolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.tabs);
+        myTabLayout = getActivity().findViewById(R.id.mTabs);
 
         myTextView = myView.findViewById(R.id.tvText);
 
@@ -99,7 +93,7 @@ public class sonicRotaClientes extends Fragment {
 
         myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
-        myShimmer = myView.findViewById(R.id.shimmer);
+        myShimmer = myView.findViewById(R.id.mShimmerLayout);
 
         myRecycler =  myView.findViewById(R.id.recyclerList);
 
@@ -123,6 +117,12 @@ public class sonicRotaClientes extends Fragment {
 
     }
 
+    public void bindRecyclerView(){
+
+        new myAsyncTask().execute();
+
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -130,7 +130,7 @@ public class sonicRotaClientes extends Fragment {
         mySearch = menu.findItem(R.id.itSearch);
 
         final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
-        searchView.setQueryHint("ID, N.Fantas, R.Social, Atendente...");
+        searchView.setQueryHint("Pesquisar");
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -196,7 +196,7 @@ public class sonicRotaClientes extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Rota.selectRota();
+            myList =  new sonicDatabaseCRUD(mContext).Rota.selectRota();
             return myList.size();
 
         }
@@ -257,7 +257,7 @@ public class sonicRotaClientes extends Fragment {
         myTextView.setVisibility(VISIBLE);
         myTextView.startAnimation(fadeIn);
         myTextView.setText(R.string.noClientesText);
-        Glide.with(_this)
+        Glide.with(mContext)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)

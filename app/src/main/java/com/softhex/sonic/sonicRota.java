@@ -1,5 +1,10 @@
 package com.softhex.sonic;
 
+import android.animation.LayoutTransition;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,25 +12,23 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import android.animation.LayoutTransition;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class sonicRota extends AppCompatActivity{
 
-    private Context _this;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rota);
+        setContentView(R.layout.sonic_layout_padrao);
 
-        _this = this;
+        mContext = this;
 
         createInterface();
 
@@ -33,7 +36,7 @@ public class sonicRota extends AppCompatActivity{
 
     private void createInterface(){
 
-        Toolbar myToolbar = findViewById(R.id.toolbar);
+        Toolbar myToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(myToolbar);
         ActionBar myActionBar = getSupportActionBar();
         myActionBar.setTitle("Rota");
@@ -42,28 +45,24 @@ public class sonicRota extends AppCompatActivity{
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
 
-        ViewPager myViewPager = findViewById(R.id.pagerSlide);
+        ViewPager myViewPager = findViewById(R.id.mViewPager);
         setUpViewPager(myViewPager);
 
-        TabLayout myTabLayout = findViewById(R.id.tabs);
+        TabLayout myTabLayout = findViewById(R.id.mTabs);
         myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
         myTabLayout.setupWithViewPager(myViewPager);
 
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        AppBarLayout myAppBar = findViewById(R.id.appbar);
+        AppBarLayout myAppBar = findViewById(R.id.appBar);
         myAppBar.setLayoutTransition(transition);
 
-        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        myToolbar.setNavigationOnClickListener((View v)-> {
                 onBackPressed();
-            }
         });
 
     }
-
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());

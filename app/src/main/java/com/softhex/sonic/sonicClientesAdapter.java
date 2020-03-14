@@ -18,7 +18,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -40,13 +39,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private List<sonicClientesHolder> filteredClientes;
     private List<sonicClientesHolder> mPartialList;
     private UserFilter userFilter;
-    private sonicDatabaseCRUD DBC;
     private sonicConstants myCons;
     private sonicPreferences mPrefs;
     private Boolean nFantasia;
     private Boolean cliSemCompra;
     private RecyclerView mRecycler;
-    private boolean isLoading = false;;
+    private boolean isLoading = false;
+    private LinearLayoutManager linearLayoutManager;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -58,7 +57,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         TextView letra;
         TextView sit;
         TextView titulos;
-        CardView card;
+        CardView cardView;
         String clienteStatus;
         ImageView mImage;
         Boolean situacao;
@@ -71,7 +70,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         public cliHolder(View view) {
             super(view);
 
-            card = view.findViewById(R.id.cardView);
+            cardView = view.findViewById(R.id.cardView);
             linearItem = view.findViewById(R.id.linearItem);
             tvNome = view.findViewById(R.id.tvNome);
             letra = view.findViewById(R.id.tvLetra);
@@ -82,9 +81,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             llExtra = view.findViewById(R.id.llExtra);
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
-
-            DBC = new sonicDatabaseCRUD(mContext);
-
 
 
         }
@@ -115,7 +111,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             }
         }
 
-        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+        linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
 
         mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -155,22 +151,21 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             if(getItemViewType(position)==VIEW_ITEM){
 
+                String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
+
                 holder.linearItem.setOnClickListener((View v)-> {
 
                     mPrefs.Clientes.setId(cli.getCodigo());
-                    mPrefs.Clientes.setNome(cli.getNome());
+                    mPrefs.Clientes.setNome(cliNomeExibicao);
                     mPrefs.Clientes.setGrupo(cli.getGrupo());
-
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    v.getContext().startActivity(i);
+                    mContext.startActivity(i);
 
                 });
 
-                String cliNome = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
-
                 holder.codigo = cli.getCodigo();
                 holder.clienteStatus = cli.getStatus();
-                holder.tvNome.setText(cliNome);
+                holder.tvNome.setText(cliNomeExibicao);
                 holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
                 holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
                 holder.tvGrupo.setText("CÓD.: "+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
@@ -187,14 +182,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                             .circleCrop()
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
-                            .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                             .into(holder.mImage);
 
                 }else{
 
                     holder.mImage.setVisibility(View.GONE);
                     holder.letra.setVisibility(View.VISIBLE);
-                    holder.letra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
+                    holder.letra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
 
                 }
 
@@ -211,36 +205,36 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private void loadMore(){
         isLoading = true;
         mPartialList.add(null);
-        mRecycler.post(new Runnable() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                notifyItemInserted(mPartialList.size()-1);
+                notifyDataSetChanged();
             }
-        });
-
-        Handler handler = new Handler();
+        },0);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
 
                 mPartialList.remove(mPartialList.size()-1);
-                int scrollPosition = mPartialList.size();
-                notifyItemRemoved(scrollPosition);
-                int currentSize = scrollPosition;
-                int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
+                notifyItemRemoved(mPartialList.size());
 
-                for(int i = currentSize; i < nextLimit; i++) {
-                    if(currentSize<clientes.size()){
-                        mPartialList.add(clientes.get(i));
-                        currentSize++;
-                    }
-                }
-                if(mRecycler.isComputingLayout()){
+                if(!mRecycler.isComputingLayout()){
                     notifyDataSetChanged();
+                    int scrollPosition = mPartialList.size();
+                    int currentSize = scrollPosition;
+                    int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
+                    for(int i = currentSize; i < nextLimit; i++) {
+                        if(currentSize<clientes.size()){
+                            mPartialList.add(clientes.get(i));
+                            currentSize++;
+                        }
+                    }
                 }
                 isLoading = false;
             }
         }, 1000);
+
 
     }
 

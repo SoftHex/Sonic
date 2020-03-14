@@ -101,7 +101,7 @@ public class sonicProdutosLista extends Fragment {
 
         myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
-        myShimmer = myView.findViewById(R.id.shimmer);
+        myShimmer = myView.findViewById(R.id.mShimmerLayout);
 
         myRecycler =  myView.findViewById(R.id.recyclerList);
 

@@ -2,7 +2,7 @@
 <resources>
 
     <!-- DEFAULT APP COLORS -->
-    <color name="colorPrimaryDark">#184165</color>
+    <color name="colorPrimaryDark">#194165</color>
     <color name="colorPrimary">#1A4B74</color>
     <color name="colorAccent">#225C8F</color>
     <color name="colorAccent2">#286DA9</color>
@@ -90,7 +90,7 @@
     <color name="colorTypeSuccess">#90b06e</color>
     <color name="colorLogin">#286DA9</color>
     <color name="colorLoginT">#99286DA9</color>
-    <color name="colorLoginStatusBar">#184165</color>
+    <color name="colorLoginStatusBar">#194165</color>
 
     <!-- WINE THEME -->
     <color name="colorWinePrimaryDark">#610B0B</color>

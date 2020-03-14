@@ -59,9 +59,9 @@ public class sonicAppearence {
             fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
             fade.excludeTarget(android.R.id.statusBarBackground, true);
             fade.excludeTarget(android.R.id.navigationBarBackground, true);
-            w.setEnterTransition(fade);
-            w.setExitTransition(fade);
-            w.setSharedElementsUseOverlay(true);
+            w.setExitTransition(null);
+            w.setEnterTransition(null);
+            //w.setSharedElementsUseOverlay(true);
         }
     }
 

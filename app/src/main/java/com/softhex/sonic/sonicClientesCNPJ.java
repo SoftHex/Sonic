@@ -58,15 +58,13 @@ public class sonicClientesCNPJ extends Fragment {
     private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
-    private sonicDatabaseCRUD DBC;
+
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         mContext = getActivity();
-
-        DBC = new sonicDatabaseCRUD(this.getActivity());
 
         loadFragment();
 
@@ -272,7 +270,7 @@ public class sonicClientesCNPJ extends Fragment {
 
         List<sonicGrupoClientesHolder> grupo;
 
-        grupo = DBC.GrupoCliente.selectGrupoCliente("J");
+        grupo = new sonicDatabaseCRUD(mContext).GrupoCliente.selectGrupoCliente("J");
 
         List<String> l = new ArrayList<>();
 

@@ -35,7 +35,7 @@ public class sonicClientesDetalheGeral extends Fragment {
         tvNome = myView.findViewById(R.id.tvNome);
         tvNome.setText(mPref.Clientes.getNome());
         tvGrupo = myView.findViewById(R.id.tvGrupo);
-        tvGrupo.setText(mPref.Clientes.getGrupo());
+        tvGrupo.setText("CÓD.: "+mPref.Clientes.getId()+" / GRUPO: " +mPref.Clientes.getGrupo());
         tvFantRazao = myView.findViewById(R.id.tvFantRazao);
         tvCnpjCpf = myView.findViewById(R.id.tvCnpjCpf);
         tvEndereco = myView.findViewById(R.id.tvEndereco);
