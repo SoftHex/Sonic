@@ -47,6 +47,7 @@ public class sonicClientesCPF extends Fragment {
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesAdapter myAdapter;
+    ArrayList<String> rowsArrayList = new ArrayList<>();
     private List<sonicClientesHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
@@ -56,7 +57,7 @@ public class sonicClientesCPF extends Fragment {
     private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private Context _this;
+    private Context mContext;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
     Intent i;
@@ -65,9 +66,9 @@ public class sonicClientesCPF extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
-        _this = getActivity();
+        mContext = getActivity();
 
-        DBC = new sonicDatabaseCRUD(_this);
+        DBC = new sonicDatabaseCRUD(mContext);
 
         loadFragment();
 
@@ -101,7 +102,7 @@ public class sonicClientesCPF extends Fragment {
 
         myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
-        myShimmer = myView.findViewById(R.id.shimmer);
+        myShimmer = myView.findViewById(R.id.mShimmerLayout);
 
         myRecycler =  myView.findViewById(R.id.recyclerList);
 
@@ -194,7 +195,7 @@ public class sonicClientesCPF extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Cliente.selectClienteTipo("F");
+            myList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("F");
             return myList.size();
 
         }
@@ -244,7 +245,10 @@ public class sonicClientesCPF extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(myList, _this, "F");
+        myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler);
+        if(!myAdapter.hasObservers()){
+            myAdapter.setHasStableIds(true);
+        }
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -268,7 +272,7 @@ public class sonicClientesCPF extends Fragment {
         tvTexto.startAnimation(fadeIn);
         tvTitle.setText(R.string.noClientesTitle);
         tvTexto.setText(R.string.noClientesText);
-        /*Glide.with(_this)
+        /*Glide.with(mContext)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)

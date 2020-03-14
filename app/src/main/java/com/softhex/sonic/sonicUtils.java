@@ -657,11 +657,11 @@ public class sonicUtils {
                         //ADD THIS//
                         /*if (filename.contains("/")) {
                             String[] folders = filename.split("/");
-                            for (String item : folders) {
-                                java.io.File fmd = new java.io.File(path + item);
-                                if (!item.contains(".") && !fmd.exists()) {
+                            for (String linearItem : folders) {
+                                java.io.File fmd = new java.io.File(path + linearItem);
+                                if (!linearItem.contains(".") && !fmd.exists()) {
                                     fmd.mkdirs();
-                                    Log.d("created folder", item);
+                                    Log.d("created folder", linearItem);
                                 }
                             }
                         }*/
@@ -778,10 +778,10 @@ public class sonicUtils {
                         String idArr[] = documentId.split(":");
                         if(idArr.length == 2)
                         {
-                            // First item is document type.
+                            // First linearItem is document type.
                             String docType = idArr[0];
 
-                            // Second item is document real id.
+                            // Second linearItem is document real id.
                             String realDocId = idArr[1];
 
                             // Get content uri by document type.

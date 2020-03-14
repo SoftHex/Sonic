@@ -980,12 +980,12 @@ public class sonicDatabaseCRUD {
                             query + where + order , null);
 
                     Log.d("QUERY", query+" "+where+" "+order);
-                    if(cursor.moveToFirst()){
+
+                    if(cursor!=null){
+
                         while (cursor.moveToNext()) {
 
                             sonicClientesHolder clientes = new sonicClientesHolder();
-
-
                             clientes.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             clientes.setTipo(cursor.getString(cursor.getColumnIndex("tipo")));
                             clientes.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao")));

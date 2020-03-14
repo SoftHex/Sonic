@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,7 +46,8 @@ public class sonicClientesCNPJ extends Fragment {
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesAdapter myAdapter;
-    private List<sonicClientesHolder> myList;
+    private List<sonicClientesHolder> mPartialList;
+    private List<sonicClientesHolder> mList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
@@ -56,28 +56,21 @@ public class sonicClientesCNPJ extends Fragment {
     private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private Context _this;
+    private Context mContext;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
-    Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
-        _this = getActivity();
+        mContext = getActivity();
 
-        DBC = new sonicDatabaseCRUD(_this);
+        DBC = new sonicDatabaseCRUD(this.getActivity());
 
         loadFragment();
 
         return myView;
-
-    }
-
-    public void bindRecyclerView(){
-
-        new myAsyncTask().execute();
 
     }
 
@@ -101,7 +94,7 @@ public class sonicClientesCNPJ extends Fragment {
 
         myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
-        myShimmer = myView.findViewById(R.id.shimmer);
+        myShimmer = myView.findViewById(R.id.mShimmerLayout);
 
         myRecycler =  myView.findViewById(R.id.recyclerList);
 
@@ -118,6 +111,12 @@ public class sonicClientesCNPJ extends Fragment {
 
         bindRecyclerView();
 
+
+    }
+
+    public void bindRecyclerView(){
+
+        new myAsyncTask().execute();
 
     }
 
@@ -146,7 +145,7 @@ public class sonicClientesCNPJ extends Fragment {
                                     tvSearch.setVisibility(VISIBLE);
                                     tvSearch.setText("Nenhum resultado para '"+newText+"'");
                                 } else {
-                                    tvSearch.setVisibility(View.INVISIBLE);
+                                    tvSearch.setVisibility(GONE);
                                 }
                             }
                         }
@@ -193,8 +192,8 @@ public class sonicClientesCNPJ extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Cliente.selectClienteTipo("J");
-            return myList.size();
+            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("J");
+            return mList.size();
 
         }
 
@@ -231,14 +230,17 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(myList, _this, "J");
+        myAdapter = new sonicClientesAdapter(mContext, mList, myRecycler);
+        if(!myAdapter.hasObservers()){
+            myAdapter.setHasStableIds(true);
+        }
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+
 
     }
 
@@ -257,7 +259,7 @@ public class sonicClientesCNPJ extends Fragment {
         tvTexto.startAnimation(fadeIn);
         tvTitle.setText(R.string.noClientesTitle);
         tvTexto.setText(R.string.noClientesText);
-        /*Glide.with(_this)
+        /*Glide.with(mContext)
                 .load(R.drawable.nopeople)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
@@ -283,7 +285,7 @@ public class sonicClientesCNPJ extends Fragment {
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um grupo...");
+        //builder.setTitle("Selecione um grupo...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

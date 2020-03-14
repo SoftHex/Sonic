@@ -41,6 +41,7 @@
     <color name="colorPrimaryBlackLightT">#90696969</color>
     <color name="colorPrimaryBlackExtraLightT">#90DCDCDC</color>
     <color name="colorTextWhite">#FFFFFF</color>
+    <color name="colorTextWhiteLight">#F8F8FF</color>
     <color name="colorTextDark">#000</color>
     <color name="colorTextPrimary">#363636</color>
     <color name="colorTextAccent">#A9A9A9</color>

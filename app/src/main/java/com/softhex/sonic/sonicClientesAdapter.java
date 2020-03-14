@@ -2,8 +2,8 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -31,17 +33,20 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
+    private final int VIEW_ITEM = 123456789;
+    private final int VIEW_PROG = 987654321;
     private Context mContext;
     private List<sonicClientesHolder> clientes;
     private List<sonicClientesHolder> filteredClientes;
+    private List<sonicClientesHolder> mPartialList;
     private UserFilter userFilter;
     private sonicDatabaseCRUD DBC;
     private sonicConstants myCons;
-    private GradientDrawable shape;
     private sonicPreferences mPrefs;
-    private String clienteTipo;
     private Boolean nFantasia;
     private Boolean cliSemCompra;
+    private RecyclerView mRecycler;
+    private boolean isLoading = false;;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -57,16 +62,17 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         String clienteStatus;
         ImageView mImage;
         Boolean situacao;
-        LinearLayout item;
+        LinearLayout linearItem;
         LinearLayout lineraNew;
         LinearLayout llExtra;
         TextView tvSemCompra, tvAtraso;
+
 
         public cliHolder(View view) {
             super(view);
 
             card = view.findViewById(R.id.cardView);
-            item = view.findViewById(R.id.linearItem);
+            linearItem = view.findViewById(R.id.linearItem);
             tvNome = view.findViewById(R.id.tvNome);
             letra = view.findViewById(R.id.tvLetra);
             tvGrupo = view.findViewById(R.id.tvGrupo);
@@ -79,96 +85,162 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             DBC = new sonicDatabaseCRUD(mContext);
 
-            item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    mPrefs.Clientes.setId(codigo);
-                    mPrefs.Clientes.setNome(tvNome.getText().toString());
-                    mPrefs.Clientes.setGrupo(tvGrupo.getText().toString());
-
-                    Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    v.getContext().startActivity(i);
-
-                    /*ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            (Activity)mContext
-                            ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
-                            ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome))
-                            ,Pair.create(tvGrupo, ViewCompat.getTransitionName(tvGrupo)));
-
-                    v.getContext().startActivity(i, options.toBundle());*/
-
-
-                }
-            });
 
         }
+
     }
 
-    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context ctx, String tipo) {
+
+    public sonicClientesAdapter(Context mContex, List<sonicClientesHolder> cliente, RecyclerView mRecycler) {
 
         this.myCons = new sonicConstants();
         this.clientes = cliente;
         this.filteredClientes = cliente;
-        this.mContext = ctx;
-        this.clienteTipo = tipo;
-        this.mPrefs = new sonicPreferences(ctx);
+        this.mContext = mContex;
+        this.mPrefs = new sonicPreferences(mContext);
+        this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
+
+        mPartialList = new ArrayList();
+
+        if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
+            for(int i = 0; i < cliente.size(); i++){
+                mPartialList.add(cliente.get(i));
+            }
+        }else{
+            for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
+                mPartialList.add(cliente.get(i));
+            }
+        }
+
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(!isLoading){
+                    if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
+                        if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
+                            loadMore();
+                        }
+                    }
+                }
+            }
+        });
 
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
-        cliHolder clientes = new cliHolder(view);
-        return clientes;
+        View view;
+        if(viewType==VIEW_ITEM){
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
+        }else{
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
+        }
+        return new cliHolder(view);
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
-        cliHolder holder = (cliHolder) viewHolder;
-        holder.setIsRecyclable(false);
-        sonicClientesHolder cli = clientes.get(position);
-        String cliNome = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
+            cliHolder holder = (cliHolder) viewHolder;
+            holder.setIsRecyclable(false);
+            sonicClientesHolder cli = mPartialList.get(position);
 
-        holder.codigo = cli.getCodigo();
-        holder.clienteStatus = cli.getStatus();
-        holder.tvNome.setText(cliNome);
+            if(getItemViewType(position)==VIEW_ITEM){
 
-        holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
-        //holder.llExtra.setVisibility(((cliSemCompra && cli.getCliSemCompra()!=0) || cli.getTitulosEmAtraso()>0 ) ? View.VISIBLE : View.GONE);
-        //holder.llExtra.setBackground(cli.getTitulosEmAtraso()>0 ? mContext.getResources().getDrawable(R.drawable.rounded_box_right_orange) : mContext.getResources().getDrawable(R.drawable.rounded_box_right_green));
-        holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
+                holder.linearItem.setOnClickListener((View v)-> {
 
-        holder.tvGrupo.setText("CÓD.: "+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
-        holder.tvDetalhe.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
+                    mPrefs.Clientes.setId(cli.getCodigo());
+                    mPrefs.Clientes.setNome(cli.getNome());
+                    mPrefs.Clientes.setGrupo(cli.getGrupo());
 
-        File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + ".JPG");
+                    Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                    v.getContext().startActivity(i);
 
-        if(file.exists()){
+                });
 
-            holder.mImage.setVisibility(View.VISIBLE);
-            holder.letra.setVisibility(View.GONE);
-            Glide.with(mContext)
-                    .load(file)
-                    .circleCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                    .into(holder.mImage);
+                String cliNome = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
 
-        }else{
+                holder.codigo = cli.getCodigo();
+                holder.clienteStatus = cli.getStatus();
+                holder.tvNome.setText(cliNome);
+                holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
+                holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
+                holder.tvGrupo.setText("CÓD.: "+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
+                holder.tvDetalhe.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
 
-            holder.mImage.setVisibility(View.GONE);
-            holder.letra.setVisibility(View.VISIBLE);
-            holder.letra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
+                File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + ".JPG");
 
-        }
+                if(file.exists()){
 
+                    holder.mImage.setVisibility(View.VISIBLE);
+                    holder.letra.setVisibility(View.GONE);
+                    Glide.with(mContext)
+                            .load(file)
+                            .circleCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                            .into(holder.mImage);
+
+                }else{
+
+                    holder.mImage.setVisibility(View.GONE);
+                    holder.letra.setVisibility(View.VISIBLE);
+                    holder.letra.setText(String.valueOf(cliNome.charAt(0)).toUpperCase());
+
+                }
+
+            }
+
+    }
+
+
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
+    }
+
+    private void loadMore(){
+        isLoading = true;
+        mPartialList.add(null);
+        mRecycler.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemInserted(mPartialList.size()-1);
+            }
+        });
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                mPartialList.remove(mPartialList.size()-1);
+                int scrollPosition = mPartialList.size();
+                notifyItemRemoved(scrollPosition);
+                int currentSize = scrollPosition;
+                int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
+
+                for(int i = currentSize; i < nextLimit; i++) {
+                    if(currentSize<clientes.size()){
+                        mPartialList.add(clientes.get(i));
+                        currentSize++;
+                    }
+                }
+                if(mRecycler.isComputingLayout()){
+                    notifyDataSetChanged();
+                }
+                isLoading = false;
+            }
+        }, 1000);
 
     }
 
@@ -182,17 +254,18 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+        //return super.getItemViewType(position);
+        return mPartialList.get(position) == null ? VIEW_PROG : VIEW_ITEM;
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return super.getItemId(position);
     }
 
     @Override
     public int getItemCount() {
-        return clientes.size();
+        return mPartialList.size();
     }
 
 
@@ -215,8 +288,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         protected FilterResults performFiltering(CharSequence constraint) {
             filteredList.clear();
             final FilterResults results = new FilterResults();
-
-
 
             if (constraint.length() == 0) {
                 filteredList.addAll(originalList);
