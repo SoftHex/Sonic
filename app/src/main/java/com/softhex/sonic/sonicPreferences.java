@@ -45,6 +45,7 @@ public class sonicPreferences{
     private static final String MATRIZ_SITE = "matrizSite";
     private static final String MATRIZ_PICTURE = "matrizPicture";
     private static final String MATRIZ_PATH = "matrizPath";
+    private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -52,6 +53,7 @@ public class sonicPreferences{
     Matriz Matriz = new Matriz();
     Produtos Produtos = new Produtos();
     Util Util = new Util();
+    Geral Geral = new Geral();
 
     public sonicPreferences(Context context) {
         sharedpreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -129,7 +131,6 @@ public class sonicPreferences{
             editor.apply();
         }
     }
-
     public class Matriz {
 
         public void setNome(String value){
@@ -234,7 +235,6 @@ public class sonicPreferences{
             return sonicConstants.LOCAL_IMG_CATALOGO+"matriz.JPG";
         }
     }
-
     public class Clientes{
         public void setId(int value){
             editor = sharedpreferences.edit();
@@ -432,6 +432,16 @@ public class sonicPreferences{
             } else {
                 return false;
             }
+        }
+    }
+    public class Geral{
+        public void setListagemCompleta(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_LISTAGEM_COMPLETA, value);
+            editor.apply();
+        }
+        public boolean getListagemCompleta(){
+            return sharedpreferences.getBoolean(GERAL_LISTAGEM_COMPLETA, false);
         }
     }
 }

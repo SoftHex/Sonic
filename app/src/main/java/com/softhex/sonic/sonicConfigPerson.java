@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -19,6 +20,7 @@ public class sonicConfigPerson extends PreferenceActivity{
     private ListPreference mPreferenceCatalogoQtde;
     private ListPreference mPreferenceProdutoNovo;
     private PreferenceScreen mPreferenceClientLista;
+    private CheckBoxPreference mPreferenceListagemCompleta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class sonicConfigPerson extends PreferenceActivity{
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
         mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));
         mPreferenceClientLista = (PreferenceScreen)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteLista));
+        mPreferenceListagemCompleta = (CheckBoxPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.listagemCompleta));
         mPreferenceCliente.setOnPreferenceChangeListener((preference, newValue) -> {
             mPreferences.Clientes.setClienteExibicao(newValue.toString());
             return true;
@@ -51,6 +54,10 @@ public class sonicConfigPerson extends PreferenceActivity{
         mPreferenceClientLista.setOnPreferenceClickListener((Preference) -> {
             Intent i = new Intent(this, sonicPersonClienteLista.class);
             startActivity(i);
+            return true;
+        });
+        mPreferenceListagemCompleta.setOnPreferenceChangeListener((preference ,newValue)->{
+            mPreferences.Geral.setListagemCompleta((Boolean)newValue);
             return true;
         });
         mToolbar.setNavigationOnClickListener((View v) -> {

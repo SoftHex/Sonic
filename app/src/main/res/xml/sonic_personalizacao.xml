@@ -3,10 +3,11 @@
 
     <PreferenceCategory android:title="@string/prefGeralCategory">
 
-        <EditTextPreference android:title="Seu Nome"
-            android:summary="Personaliza seu nome.">
-
-        </EditTextPreference>
+        <CheckBoxPreference
+            android:summary="@string/prefListagemCompletaDescription"
+            android:title="@string/prefListagemCompletaNome"
+            android:defaultValue="@bool/prefListagemCompletaDefault"
+            android:key="@string/listagemCompleta"/>
 
     </PreferenceCategory>
 
@@ -42,11 +43,7 @@
             android:entries="@array/prefProdutoNovoOptions"
             android:entryValues="@array/prefProdutoNovoValues" />
 
-        <EditTextPreference android:title="Seu Nome"
-            android:summary="Personaliza seu nome.">
-
-        </EditTextPreference>
-
     </PreferenceCategory>
+
 
 </PreferenceScreen>

@@ -35,8 +35,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private final int VIEW_ITEM = 123456789;
     private final int VIEW_PROG = 987654321;
     private Context mContext;
-    private List<sonicClientesHolder> clientes;
-    private List<sonicClientesHolder> filteredClientes;
+    private List<sonicClientesHolder> mTotalList;
+    private List<sonicClientesHolder> mFilteredList;
     private List<sonicClientesHolder> mPartialList;
     private UserFilter userFilter;
     private sonicConstants myCons;
@@ -91,41 +91,42 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public sonicClientesAdapter(Context mContex, List<sonicClientesHolder> cliente, RecyclerView mRecycler) {
 
         this.myCons = new sonicConstants();
-        this.clientes = cliente;
-        this.filteredClientes = cliente;
+        this.mTotalList = cliente;
+        this.mFilteredList = cliente;
         this.mContext = mContex;
         this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
 
-        mPartialList = new ArrayList();
 
-        if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
-            for(int i = 0; i < cliente.size(); i++){
-                mPartialList.add(cliente.get(i));
+            mPartialList = new ArrayList();
+
+            if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
+                for(int i = 0; i < cliente.size(); i++){
+                    mPartialList.add(cliente.get(i));
+                }
+            }else{
+                for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
+                    mPartialList.add(cliente.get(i));
+                }
             }
-        }else{
-            for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
-                mPartialList.add(cliente.get(i));
-            }
-        }
 
-        linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+            linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
 
-        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if(!isLoading){
-                    if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
-                        if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
-                            loadMore();
+            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if(!isLoading){
+                        if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
+                            if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
+                                loadMore();
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
 
     }
 
@@ -147,7 +148,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             cliHolder holder = (cliHolder) viewHolder;
             holder.setIsRecyclable(false);
-            sonicClientesHolder cli = mPartialList.get(position);
+            sonicClientesHolder cli = (!mPrefs.Geral.getListagemCompleta() ? mPartialList.get(position) : mTotalList.get(position));
 
             if(getItemViewType(position)==VIEW_ITEM){
 
@@ -225,8 +226,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     int currentSize = scrollPosition;
                     int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
                     for(int i = currentSize; i < nextLimit; i++) {
-                        if(currentSize<clientes.size()){
-                            mPartialList.add(clientes.get(i));
+                        if(currentSize< mTotalList.size()){
+                            mPartialList.add(mTotalList.get(i));
                             currentSize++;
                         }
                     }
@@ -235,13 +236,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             }
         }, 1000);
 
-
     }
 
     @Override
     public Filter getFilter() {
         if(userFilter == null)
-            userFilter = new UserFilter(this, clientes);
+            userFilter = new UserFilter(this, mTotalList);
         return userFilter;
 
     }
@@ -259,7 +259,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemCount() {
-        return mPartialList.size();
+        return mTotalList.size();
     }
 
 
@@ -310,8 +310,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.clientes.clear();
-            adapter.filteredClientes.addAll((ArrayList<sonicClientesHolder>) results.values);
+            adapter.mTotalList.clear();
+            adapter.mFilteredList.addAll((ArrayList<sonicClientesHolder>) results.values);
             adapter.notifyDataSetChanged();
         }
     }

@@ -186,6 +186,11 @@
     <!-- PREFERENCES FOR GERAL -->
     <string name="prefGeralCategory">Geral</string>
 
+    <string name="listagemCompleta">listagemCompleta</string>
+    <string name="prefListagemCompletaNome">Listagem Completa</string>
+    <string name="prefListagemCompletaDescription">Listar todos os itens de uma só vez. Requer maior processamento.</string>
+    <bool name="prefListagemCompletaDefault">false</bool>
+
     <!-- PREFERENCES FOR CLIENTS -->
     <string name="prefClienteCategory">Clientes</string>
 
@@ -203,8 +208,8 @@
         <item name="2">Razão Social</item>
     </string-array>
 
-    <string name="clienteLista">Lista de Clientes</string>
-    <string name="prefClienteListaNome">Lista de clientes</string>
+    <string name="clienteLista">clienteLista</string>
+    <string name="prefClienteListaNome">Detalhe - Lista de clientes</string>
     <string name="prefClienteListaDescription">Clientes sem compra, títulos em atraso...</string>
 
     <string name="clienteSemCompra" translatable="false">clienteSemCompra</string>
@@ -236,7 +241,7 @@
 
     <string name="catalogoQtde" translatable="false">catalogoQtde</string>
     <string name="prefProdutoCatalogoNome">Catálogo</string>
-    <string name="prefProdutoCatalogoDescription">Quantidade de colunas para exibição catálogo de produtos.</string>
+    <string name="prefProdutoCatalogoDescription">Quantidade de colunas para exibir no catálogo de produtos.</string>
     <string name="prefProdutoCatalogoDefault">Três Colunas</string>
     <string-array name="prefProdutoCatalogoOptions">
         <item name="1">Duas Colunas</item>
@@ -287,4 +292,25 @@
     <string name="button_sinc_error">Erro, tente novamente...</string>
 
 
+    <string-array name="cource_title">
+        <item>ANDROID</item>
+        <item>JAVA</item>
+        <item>PHP</item>
+    </string-array>
+    <string-array name="android_item">
+        <item>Activity Life Circle</item>
+        <item>Fragments</item>
+        <item>Recycler View</item>
+    </string-array>
+    <string-array name="java_item">
+        <item>Exception</item>
+        <item>Multithreading Multithreading Multithreading Multithreading</item>
+        <item>Inheritance</item>
+    </string-array>
+    <string-array name="php_item">
+        <item>Looping</item>
+        <item>Mysql</item>
+        <item>Session</item>
+        <item>Post</item>
+    </string-array>
 </resources>

@@ -1,6 +1,7 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class sonicClientesDetalhe extends AppCompatActivity{
 
+    private Context mContex;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewpager;
@@ -78,7 +80,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Geral");
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Compras");
+        myAdapter.addFragment(new sonicClientesDetalheCompras(), "Compras");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Financeiro");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Títulos");
         viewpager.setAdapter(myAdapter);

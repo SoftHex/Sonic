@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Parent Group"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorTextPrimary"/>
+                <TextView
+                    android:id="@+id/tvPag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Á Vista"
+                    android:drawableLeft="@mipmap/ic_cash_grey600_24dp"
+                    android:drawableTint="@color/colorPrimaryGreen"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTextPrimary"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvGroup2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="R$ 232,15"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"/>
+                <TextView
+                    android:id="@+id/tvPag2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="10,32"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryGreen"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
