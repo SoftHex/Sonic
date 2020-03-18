@@ -25,11 +25,11 @@ public class sonicClientesDetalheCompras extends Fragment {
     private Context mContext;
     private sonicClientesDetalheComprasAdapter mAdapter;
     private ExpandableListView mExpandableList;
-    List<String> main_title = new ArrayList<>();
-    List<String> android_list = new ArrayList<>();
-    List<String> java_list = new ArrayList<>();
-    List<String> php_list = new ArrayList<>();
-    HashMap<String,List<String>> child_list = new HashMap<String,List<String>>();
+    private List<sonicClientesDetalheComprasHolder> mList;
+    private List<sonicClientesDetalheComprasItensHolder> mListItens;
+    private sonicDatabaseCRUD mData;
+    private sonicPreferences mPrefs;
+    HashMap<List<sonicClientesDetalheComprasHolder>,List<sonicClientesDetalheComprasItensHolder>> childList = new HashMap<>();
     private int previousGroup = -1;
 
 
@@ -38,7 +38,8 @@ public class sonicClientesDetalheCompras extends Fragment {
         myView = inflater.inflate(R.layout.sonic_clientes_detalhe_compras, container, false);
 
         mContext = getContext();
-
+        mPrefs = new sonicPreferences(mContext);
+        mData = new sonicDatabaseCRUD(mContext);
         mExpandableList = myView.findViewById(R.id.mExpandableList);
         mExpandableList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
@@ -59,37 +60,26 @@ public class sonicClientesDetalheCompras extends Fragment {
 
     private void loadDetails(){
 
-        String[] cource_title = getResources().getStringArray(R.array.cource_title);
-        String[] android_items = getResources().getStringArray(R.array.android_item);
-        String[] java_items = getResources().getStringArray(R.array.java_item);
-        String[] php_items = getResources().getStringArray(R.array.php_item);
+        HashMap<List<sonicClientesDetalheComprasHolder>, List<sonicClientesDetalheComprasItensHolder>> hashMap = new HashMap<>();
+        List<sonicClientesDetalheComprasHolder> header = new ArrayList<>();
+        List<sonicClientesDetalheComprasItensHolder> child = new ArrayList<>();
 
-        main_title.clear();
-        android_list.clear();
-        java_list.clear();
-        php_list.clear();
-        for(String heading : cource_title)
-        {
-            main_title.add(heading);
+        mList = mData.Cliente.selectComprasPorCliente(mPrefs.Clientes.getId(), 5);
+        mListItens  = mData.Cliente.selectComprasPorClienteItens(mPrefs.Clientes.getId());
+
+        for(int i=0; i< mList.size();i++){
+            header.add(mList.get(i));
         }
-        for (String android : android_items)
-        {
-            android_list.add(android);
-        }
-        for (String java : java_items)
-        {
-            java_list.add(java);
-        }
-        for (String php : php_items)
-        {
-            php_list.add(php);
+        for(int i=0; i< mListItens.size();i++){
+            child.add(mListItens.get(i));
+
         }
 
-        child_list.put(main_title.get(0),android_list);
-        child_list.put(main_title.get(1),java_list);
-        child_list.put(main_title.get(2),php_list);
+        //for(int i =0 ; i< header.size(); i++){
+            hashMap.put(header, child);
+        //}
 
-        mAdapter = new sonicClientesDetalheComprasAdapter(mContext, main_title, child_list);
+        mAdapter = new sonicClientesDetalheComprasAdapter(mContext, header, hashMap);
         mExpandableList.setAdapter(mAdapter);
 
     }

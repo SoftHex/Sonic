@@ -56,6 +56,7 @@ public class sonicPopularTabelas {
             { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "replace" },
             { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "replace" },
             { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "replace" },
+            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" },
             { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "replace" },
             { "[ROTA]", sonicConstants.TB_ROTA, "replace" },
             { "[VENDAS]", sonicConstants.TB_VENDA, "replace" },

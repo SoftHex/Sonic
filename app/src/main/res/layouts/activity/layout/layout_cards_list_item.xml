@@ -7,27 +7,97 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_margin="10dp">
-
+            android:layout_height="wrap_content">
+            <!-- IMAGEM -->
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:id="@+id/ivImagem"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/nophoto"/>
 
-            <TextView
-                android:id="@+id/tvItem"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Parent Item"
-                android:textSize="14sp"
-                android:textColor="@color/colorTextAccent"/>
+               android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvNomeProduto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Nome do Produto"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextPrimary"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvCodigoUnidade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Código/Unidade"
+                        android:textSize="12sp"
+                        android:textColor="@color/colorTextAccent"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tvQtdPrecoValor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="QtdePrecoValor"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorTextAccent"/>
+
+                    </LinearLayout>
+
+                    <!-- DESCONTO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:visibility="gone"
+                        android:layout_weight="3">
+
+                        <TextView
+                            android:id="@+id/tvDesconto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Desconto"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorPrimaryGreen"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

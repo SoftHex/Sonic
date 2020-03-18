@@ -14,62 +14,89 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <!-- FROMA DE PAGAMENTO E DATA -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="10dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1">
-
+                android:padding="6dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="2">
+                <!-- FORMA PGTO E PRAZO -->
                 <TextView
-                    android:id="@+id/tvGroup"
+                    android:id="@+id/tvTipoCobranca"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Parent Group"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorTextPrimary"/>
-                <TextView
-                    android:id="@+id/tvPag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Á Vista"
+                    android:text="00"
                     android:drawableLeft="@mipmap/ic_cash_grey600_24dp"
                     android:drawableTint="@color/colorPrimaryGreen"
+                    android:drawablePadding="8dp"
+                    android:layout_marginLeft="-3dp"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTextPrimary"/>
+                <!-- CODIGO MOBILE -->
+                <TextView
+                    android:id="@+id/tvPrazo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="00"
+                    android:textSize="14sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTextPrimary"/>
+                <!-- CODIGO MOBILE -->
+                <TextView
+                    android:id="@+id/tvCodigoMobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="00"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTextPrimary"/>
 
             </LinearLayout>
 
+            <!-- DATA, VALOR GERAL E DESCONTO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_weight="1">
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="14dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="3">
 
                 <TextView
-                    android:id="@+id/tvGroup2"
+                    android:id="@+id/tvData"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="R$ 232,15"
+                    android:text="00"
                     android:layout_gravity="right"
                     android:gravity="right"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textSize="14sp"/>
+
                 <TextView
-                    android:id="@+id/tvPag2"
+                    android:id="@+id/tvValor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="10,32"
+                    android:text="00"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvValorDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryGreen"/>
+                    android:textColor="@color/colorPrimaryRed"/>
 
             </LinearLayout>
 

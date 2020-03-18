@@ -274,7 +274,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "situacao int," +
             "data string," +
             "valor decimal(9,2)," +
-            "valor_deconto decimal(9,2));";
+            "valor_desconto decimal(9,2));";
     private static final String CREATE_INDEX_VENDAS_CODIGO = "CREATE UNIQUE INDEX index_vendas_codigo ON "+DB_VENDA+" (codigo);";
     private static final String CREATE_INDEX_VENDAS_CODIGO_USUARIO = "CREATE INDEX index_vendas_codigo_usuario ON "+DB_VENDA+" (codigo_usuario);";
     private static final String CREATE_INDEX_VENDAS_CODIGO_EMPRESA = "CREATE INDEX index_vendas_codigo_empresa ON "+DB_VENDA+" (codigo_empresa);";
@@ -431,7 +431,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo int, " +
             "nome string, " +
-            "prazo_venda bit);";
+            "prazo_venda int);";
 
     private static final String CREATE_PRECO_CLIENTE = "CREATE TABLE IF NOT EXISTS "+DB_TABELA_PRECO_CLIENTE+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +

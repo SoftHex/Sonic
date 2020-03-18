@@ -121,7 +121,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     if(!isLoading){
                         if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
                             if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
-                                loadMore();
+                                //loadMore();
                             }
                         }
                     }
@@ -134,11 +134,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view;
-        if(viewType==VIEW_ITEM){
+        //if(viewType==VIEW_ITEM){
             view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
-        }else{
-            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
-        }
+        //}else{
+           // view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
+        //}
         return new cliHolder(view);
 
     }
@@ -148,9 +148,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             cliHolder holder = (cliHolder) viewHolder;
             holder.setIsRecyclable(false);
-            sonicClientesHolder cli = (!mPrefs.Geral.getListagemCompleta() ? mPartialList.get(position) : mTotalList.get(position));
+            sonicClientesHolder cli = mTotalList.get(position);
 
-            if(getItemViewType(position)==VIEW_ITEM){
+            //if(getItemViewType(position)==VIEW_ITEM){
 
                 String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
 
@@ -193,7 +193,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                 }
 
-            }
+            //}
 
     }
 
@@ -248,8 +248,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        //return super.getItemViewType(position);
-        return mPartialList.get(position) == null ? VIEW_PROG : VIEW_ITEM;
+        return super.getItemViewType(position);
+        //return mPartialList.get(position) == null ? VIEW_PROG : VIEW_ITEM;
     }
 
     @Override
