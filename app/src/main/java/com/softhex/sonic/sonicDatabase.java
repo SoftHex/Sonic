@@ -265,13 +265,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_VENDAS = "CREATE TABLE IF NOT EXISTS "+DB_VENDA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_usuario int NOT NULL, " +
-            "codigo_vendedor int NOT NULL, " +
             "codigo int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "codigo_tipo_cobranca int NOT NULL, " +
             "codigo_prazo int NOT NULL," +
             "codigo_mobile string," +
+            "vendedor string, " +
             "situacao int," +
             "data string," +
             "valor decimal(9,2)," +
@@ -286,7 +286,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_VENDAS_ITENS = "CREATE TABLE IF NOT EXISTS "+DB_VENDA_ITEM+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_usuario int NOT NULL, " +
-            "codigo_vendedor int NOT NULL, " +
             "codigo int NOT NULL, " +
             "codigo_venda int NOT NULL, " +
             "codigo_produto int NOT NULL, " +
