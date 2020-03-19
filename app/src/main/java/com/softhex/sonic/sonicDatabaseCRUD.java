@@ -792,17 +792,18 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT " +
                         "IV._id AS id, " +
                         "IV.codigo AS codigo_item, " +
-                        "(SELECT P.nome FROM " + TABLE_PRODUTO + " P WHERE P.codigo = IV.codigo_produto) AS produto, " +
-                        "(SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP JOIN "+ TABLE_PRODUTO +" P ON P.codigo_grupo = GP.codigo WHERE P.codigo = IV.codigo_produto) AS grupo_produto, " +
+                        "P.nome AS produto, " +
+                        "(SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto, " +
                         "IV.codigo_produto AS codigo_produto, " +
-                        "(SELECT P.codigo_alternativo FROM " + TABLE_PRODUTO + " P WHERE P.codigo = IV.codigo_produto) AS referencia, " +
+                        "P.codigo_alternativo AS referencia, " +
                         "IV.codigo_venda AS codigo_venda, " +
                         "(SELECT UM.nome FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida, " +
                         "(SELECT UM.sigla FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida_sigla, " +"IV.quantidade AS quantidade, " +
                         "IV.preco AS preco_unitario, " +
                         "IV.valor AS valor, " +
                         "IV.valor_desconto AS desconto " +
-                        " FROM " + TABLE_VENDA_ITEM + " IV  WHERE IV.codigo_venda = "+codigo+" ORDER BY IV.codigo";
+                        " FROM " + TABLE_VENDA_ITEM +
+                        " IV JOIN "+ TABLE_PRODUTO + " P ON P.codigo = IV.codigo_produto WHERE IV.codigo_venda = "+codigo+" ORDER BY IV.codigo";
 
                 try {
 

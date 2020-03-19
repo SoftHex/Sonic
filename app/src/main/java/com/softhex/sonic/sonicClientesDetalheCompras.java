@@ -66,7 +66,7 @@ public class sonicClientesDetalheCompras extends Fragment {
         if(mList.size()==0){
             linearPedidos.setVisibility(View.GONE);
             llSemResultado.setVisibility(View.VISIBLE);
-            tvSemResultado.setText(mPrefs.Clientes.getClienteSemCompra() ? "Cliente ainda não possui compra com a empresa..." : "Cliente sem compra nos últimos seis meses...");
+            tvSemResultado.setText(mPrefs.Clientes.getClienteNuncaComprou() ? "Cliente ainda não possui compra com a empresa..." : "Cliente sem compra nos últimos seis meses...");
         }else{
             tvTotalPedidos.setText(mList.size()==1 ? "Total de "+mList.size()+" pedido nos últimos seis mêses..." : "Total de "+mList.size()+" pedidos nos últimos seis meses...");
             mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);

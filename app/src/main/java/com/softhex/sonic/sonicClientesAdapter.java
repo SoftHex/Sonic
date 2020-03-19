@@ -155,6 +155,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     mPrefs.Clientes.setId(cli.getCodigo());
                     mPrefs.Clientes.setNome(cliNomeExibicao);
                     mPrefs.Clientes.setGrupo(cli.getGrupo());
+                    mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra()>0 ? true : false);
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
                     mContext.startActivity(i);
 

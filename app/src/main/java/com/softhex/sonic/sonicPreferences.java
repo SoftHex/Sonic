@@ -30,6 +30,7 @@ public class sonicPreferences{
     private static final String CLIENTE_NOME = "clienteNome";
     private static final String CLIENTE_GRUPO = "clienteGrupo";
     private static final String CLIENTE_PATH = "clientePath";
+    private static final String CLIENTE_NUNCA_COMPROU = "clienteNuncaComprou";
     private static final String SAUDACAO = "saudacao";
     private static final String MATRIZ_NOME = "matrizNome";
     private static final String MATRIZ_DESCRICAO = "matrizDescricao";
@@ -273,6 +274,14 @@ public class sonicPreferences{
             editor = sharedpreferences.edit();
             editor.putBoolean(mContex.getResources().getString(R.string.clienteSemCompra), value);
             editor.apply();
+        }
+        public void setClienteNuncaComprou(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(CLIENTE_NUNCA_COMPROU, value);
+            editor.apply();
+        }
+        public  Boolean getClienteNuncaComprou(){
+            return sharedpreferences.getBoolean(CLIENTE_NUNCA_COMPROU, false);
         }
         public Boolean getClienteSemCompra(){
             return sharedpreferences.getBoolean(mContex.getResources().getString(R.string.clienteSemCompra),true);
