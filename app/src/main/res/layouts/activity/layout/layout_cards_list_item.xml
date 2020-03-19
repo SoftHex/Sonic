@@ -7,36 +7,76 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
-        android:orientation="vertical"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="10dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <!-- IMAGEM -->
-            <ImageView
-                android:id="@+id/ivImagem"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/nophoto"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="4dp">
+            <!-- TEXTO E FOTO -->
+            <RelativeLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvLetra"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="A"
+                    android:background="@drawable/circle_textview"
+                    android:elevation="1dp"
+                    android:textSize="20sp"/>
+
+                <ImageView
+                    android:id="@+id/ivImagem"
+                    android:layout_width="40dp"
+                    android:src="@drawable/nophoto"
+                    android:layout_height="40dp"/>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvNomeProduto"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:text="Nome do Produto"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textSize="12sp"
-                    android:textColor="@color/colorTextPrimary"/>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvNomeProduto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="Nome do Produto"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_weight="1"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/tvDescontoItem"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="00"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_weight="3"
+                        android:textColor="@color/colorPrimaryGreen"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -49,8 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:text="Código/Unidade"
-                        android:textSize="12sp"
-                        android:textColor="@color/colorTextAccent"/>
+                        android:textSize="12sp"/>
 
                 </LinearLayout>
 
@@ -69,8 +108,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="QtdePrecoValor"
-                            android:textSize="12sp"
-                            android:textColor="@color/colorTextAccent"/>
+                            android:textSize="12sp"/>
 
                     </LinearLayout>
 

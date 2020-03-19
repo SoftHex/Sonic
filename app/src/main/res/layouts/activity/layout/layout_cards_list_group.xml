@@ -30,11 +30,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
-                    android:drawableLeft="@mipmap/ic_cash_grey600_24dp"
-                    android:drawableTint="@color/colorPrimaryGreen"
-                    android:drawablePadding="8dp"
-                    android:layout_marginLeft="-3dp"
                     android:textSize="14sp"
+                    android:layout_marginLeft="-6dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTextPrimary"/>
                 <!-- CODIGO MOBILE -->
@@ -92,11 +89,11 @@
                     android:id="@+id/tvValorDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="00"
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryRed"/>
+                    android:textColor="@color/colorPrimaryGreen"/>
 
             </LinearLayout>
 

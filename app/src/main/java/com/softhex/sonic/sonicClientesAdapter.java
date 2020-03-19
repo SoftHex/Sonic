@@ -32,8 +32,6 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private final int VIEW_ITEM = 123456789;
-    private final int VIEW_PROG = 987654321;
     private Context mContext;
     private List<sonicClientesHolder> mTotalList;
     private List<sonicClientesHolder> mFilteredList;
@@ -150,8 +148,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             holder.setIsRecyclable(false);
             sonicClientesHolder cli = mTotalList.get(position);
 
-            //if(getItemViewType(position)==VIEW_ITEM){
-
                 String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
 
                 holder.linearItem.setOnClickListener((View v)-> {
@@ -193,7 +189,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                 }
 
-            //}
 
     }
 

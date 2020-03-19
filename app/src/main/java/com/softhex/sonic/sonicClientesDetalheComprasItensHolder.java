@@ -5,7 +5,10 @@ public class sonicClientesDetalheComprasItensHolder {
     int id;
     int codigo;
     String produto;
+    String letra;
+    String grupo;
     int codigo_produto;
+    String referencia;
     int codigo_venda;
     String unidade_medida;
     String unidade_medida_sigla;
@@ -21,7 +24,10 @@ public class sonicClientesDetalheComprasItensHolder {
     public sonicClientesDetalheComprasItensHolder(int id,
                                                   int codigo,
                                                   String produto,
+                                                  String letra,
+                                                  String grupo,
                                                   int codigo_produto,
+                                                  String referencia,
                                                   int codigo_venda,
                                                   String unidade_medida,
                                                   String unidade_medida_sigla,
@@ -34,7 +40,10 @@ public class sonicClientesDetalheComprasItensHolder {
         this.id = id;
         this.codigo = codigo;
         this.produto = produto;
+        this.letra = letra;
+        this.grupo = grupo;
         this.codigo_produto = codigo_produto;
+        this.referencia = referencia;
         this.codigo_venda = codigo_venda;
         this.unidade_medida = unidade_medida;
         this.unidade_medida_sigla = unidade_medida_sigla;
@@ -71,6 +80,22 @@ public class sonicClientesDetalheComprasItensHolder {
 
     public void setProduto(String produto) {
         this.produto = produto;
+    }
+
+    public String getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(String grupo) {
+        this.grupo = grupo;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
     }
 
     public int getCodigoVenda() {
@@ -127,5 +152,9 @@ public class sonicClientesDetalheComprasItensHolder {
 
     public void setDesconto(String desconto) {
         this.desconto = desconto;
+    }
+
+    public String getLetra() {
+        return String.valueOf(produto.charAt(0));
     }
 }

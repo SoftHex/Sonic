@@ -79,7 +79,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
                             ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
                             ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome)));
 
-                    v.getContext().startActivity(i, options.toBundle());
+                    v.getContext().startActivity(i);
 
             });
 

@@ -188,9 +188,9 @@ public class sonicDatabaseCRUD {
 
                 }
 
-                result = type.equals("save") ?
-                        DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0 :
-                        DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0;
+                result = DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0;
+
+                    //result = DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0;
 
             }catch (SQLiteException e){
 
@@ -747,7 +747,7 @@ public class sonicDatabaseCRUD {
                                 "V.data AS data, " +
                                 "V.valor AS valor, " +
                                 "V.valor_desconto AS valor_desc " +
-                                " FROM " + TABLE_VENDA + " V  WHERE V.codigo_cliente= "+codigo+" ORDER BY V._id DESC LIMIT "+limit;
+                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_empresa = (SELECT E.codigo FROM  "+ TABLE_EMPRESA + " E WHERE E.selecionada=1) AND V.codigo_cliente= "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
 
                 try {
 
@@ -793,14 +793,16 @@ public class sonicDatabaseCRUD {
                         "IV._id AS id, " +
                         "IV.codigo AS codigo_item, " +
                         "(SELECT P.nome FROM " + TABLE_PRODUTO + " P WHERE P.codigo = IV.codigo_produto) AS produto, " +
+                        "(SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP JOIN "+ TABLE_PRODUTO +" P ON P.codigo_grupo = GP.codigo WHERE P.codigo = IV.codigo_produto) AS grupo_produto, " +
                         "IV.codigo_produto AS codigo_produto, " +
+                        "(SELECT P.codigo_alternativo FROM " + TABLE_PRODUTO + " P WHERE P.codigo = IV.codigo_produto) AS referencia, " +
                         "IV.codigo_venda AS codigo_venda, " +
                         "(SELECT UM.nome FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida, " +
                         "(SELECT UM.sigla FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida_sigla, " +"IV.quantidade AS quantidade, " +
                         "IV.preco AS preco_unitario, " +
                         "IV.valor AS valor, " +
                         "IV.valor_desconto AS desconto " +
-                        " FROM " + TABLE_VENDA_ITEM + " IV  WHERE IV.codigo_venda IN(SELECT V.codigo FROM " + TABLE_VENDA + " V WHERE V.codigo_cliente = "+codigo+" ORDER BY V.codigo DESC) ORDER BY IV.codigo_venda DESC";
+                        " FROM " + TABLE_VENDA_ITEM + " IV  WHERE IV.codigo_venda = "+codigo+" ORDER BY IV.codigo";
 
                 try {
 
@@ -812,7 +814,9 @@ public class sonicDatabaseCRUD {
                             sonicClientesDetalheComprasItensHolder itens = new sonicClientesDetalheComprasItensHolder();
                             itens.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_item")));
                             itens.setProduto(cursor.getString(cursor.getColumnIndex("produto")));
+                            itens.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
                             itens.setCodigoProduto(cursor.getInt(cursor.getColumnIndex("codigo_produto")));
+                            itens.setReferencia(cursor.getString(cursor.getColumnIndex("referencia")));
                             itens.setCodigoVenda(cursor.getInt(cursor.getColumnIndex("codigo_venda")));
                             itens.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
                             itens.setUnidadeMedidaSigla(cursor.getString(cursor.getColumnIndex("unidade_medida_sigla")));

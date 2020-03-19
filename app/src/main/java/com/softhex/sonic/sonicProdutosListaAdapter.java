@@ -96,7 +96,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                         ,Pair.create(tvGrupo, ViewCompat.getTransitionName(tvGrupo))
                         ,Pair.create(tvDetalhe, ViewCompat.getTransitionName(tvDetalhe)));
 
-                        v.getContext().startActivity(i, options.toBundle());
+                        v.getContext().startActivity(i);
 
             });
 

@@ -45,7 +45,7 @@ public class sonicPopularTabelas {
             { "[USUARIOS]", sonicConstants.TB_USUARIO, "save" },
             { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "save" },
             { "[MATRIZ]", sonicConstants.TB_MATRIZ, "save"},
-            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "replace" },
+            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "save" },
             { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "replace" },
             { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "replace" },
             { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "replace" },
@@ -56,13 +56,13 @@ public class sonicPopularTabelas {
             { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "replace" },
             { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "replace" },
             { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "replace" },
-            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" },
             { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "replace" },
             { "[ROTA]", sonicConstants.TB_ROTA, "replace" },
             { "[VENDAS]", sonicConstants.TB_VENDA, "replace" },
             { "[VENDAS_ITENS]", sonicConstants.TB_VENDA_ITEM, "replace" },
             { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "save" },
             { "[TITULOS]", sonicConstants.TB_TITULO, "save" },
+            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" }
 
     };
 
@@ -134,9 +134,7 @@ public class sonicPopularTabelas {
 
                             if(line!=null && (line.contains(arr[0]) || arr[0].contains(line))){
 
-                                if(arr[2].equals("save")){
-                                    DBC.Database.cleanData(arr[1]);
-                                }
+                                DBC.Database.cleanData(arr[1]);
 
                                 tabela = line;
                                 line = reader.readLine();

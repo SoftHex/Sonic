@@ -1291,8 +1291,8 @@ public class sonicUtils {
 
             try{
                 String ano = ano_.substring(0,4);
-                String mes = mes_.substring(5,7);
-                String dia = dia_.substring(8,10);
+                String mes = mes_.substring(4,6);
+                String dia = dia_.substring(6,8);
                 data_completa = dia+"/"+mes+"/"+ano;
             }catch (Exception e){
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),

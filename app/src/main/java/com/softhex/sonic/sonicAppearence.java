@@ -61,7 +61,7 @@ public class sonicAppearence {
             fade.excludeTarget(android.R.id.navigationBarBackground, true);
             w.setExitTransition(null);
             w.setEnterTransition(null);
-            //w.setSharedElementsUseOverlay(true);
+            w.setSharedElementsUseOverlay(true);
         }
     }
 

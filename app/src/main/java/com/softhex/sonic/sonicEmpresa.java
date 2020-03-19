@@ -34,7 +34,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         mContext = this;
         myRegister = findViewById(R.id.btRegistrar);
         myCode = findViewById(R.id.etCodigo);
-        //myTest = findViewById(R.id.teste);
+        //myTest = findViewById(R.id.background_expandable);
 
         /*myTest.setOnClickListener(new View.OnClickListener() {
             @Override
