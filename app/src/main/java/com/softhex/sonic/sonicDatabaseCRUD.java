@@ -672,6 +672,7 @@ public class sonicDatabaseCRUD {
                         "GC.nome AS grupo," +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
+                        "(SELECT COUNT(V._id) FROM " + TABLE_VENDA + " V WHERE V.codigo_cliente = C.codigo) AS compras, " +
                         "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
                         " FROM " + TABLE_CLIENTE +
                         " C LEFT JOIN " + TABLE_EMPRESA_CLIENTE +
@@ -714,6 +715,7 @@ public class sonicDatabaseCRUD {
                             clientes.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
                             clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
                             clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
+                            clientes.setCompras(cursor.getInt(cursor.getColumnIndex("compras")));
                             clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
                             clientes.setCliSemCompra(cursor.getInt(cursor.getColumnIndex("cli_sem_compra")));
                             cliente.add(clientes);
@@ -748,7 +750,7 @@ public class sonicDatabaseCRUD {
                                 "V.data AS data, " +
                                 "V.valor AS valor, " +
                                 "V.valor_desconto AS valor_desc " +
-                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_empresa = (SELECT E.codigo FROM  "+ TABLE_EMPRESA + " E WHERE E.selecionada=1) AND V.codigo_cliente = "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
+                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_cliente = "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
 
                 try {
 

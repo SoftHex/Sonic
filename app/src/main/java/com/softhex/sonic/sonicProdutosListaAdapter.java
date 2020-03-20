@@ -15,9 +15,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -54,10 +51,10 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
-        TextView tvNome;
         int codigo;
-        TextView tvDetalhe;
-        TextView tvGrupo;
+        TextView tvLinha1;
+        TextView tvLinha2;
+        TextView tvLinha3;
         String status;
         ImageView mImage;
         TextView tvLetra;
@@ -72,9 +69,9 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             card = view.findViewById(R.id.cardView);
             llItem = view.findViewById(R.id.linearItem);
             linearNew = view.findViewById(R.id.linearNew);
-            tvNome = view.findViewById(R.id.tvNome);
-            tvGrupo = view.findViewById(R.id.tvGrupo);
-            tvDetalhe = view.findViewById(R.id.tvDetalhe);
+            tvLinha1 = view.findViewById(R.id.tvLinha1);
+            tvLinha2 = view.findViewById(R.id.tvLinha2);
+            tvLinha3 = view.findViewById(R.id.tvLinha3);
             tvLetra = view.findViewById(R.id.tvLetra);
             mImage = view.findViewById(R.id.ivImagem);
 
@@ -83,20 +80,13 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             llItem.setOnClickListener((View v) -> {
 
                 mPrefs.Produtos.setProdutoId(codigo);
-                mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
-                mPrefs.Produtos.setProdutoGrupo(tvGrupo.getText().toString());
+                mPrefs.Produtos.setProdutoNome(tvLinha1.getText().toString());
+                mPrefs.Produtos.setProdutoGrupo(tvLinha2.getText().toString());
                 mPrefs.Produtos.setProdutoDataCadastro(dataCadastro);
-                mPrefs.Produtos.setDetalhe(tvDetalhe.getText().toString());
+                mPrefs.Produtos.setDetalhe(tvLinha3.getText().toString());
                 Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
 
-                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        (Activity)mContext
-                        ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
-                        ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome))
-                        ,Pair.create(tvGrupo, ViewCompat.getTransitionName(tvGrupo))
-                        ,Pair.create(tvDetalhe, ViewCompat.getTransitionName(tvDetalhe)));
-
-                        v.getContext().startActivity(i);
+                v.getContext().startActivity(i);
 
             });
 
@@ -143,11 +133,11 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = produtos.get(position);
 
-        holder.tvNome.setText(prod.getNome());
+        holder.tvLinha1.setText(prod.getNome());
         //holder.tvNome.setTextColor(Color.parseColor(prod.getSituacaoCor()));
-        holder.tvDetalhe.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+        holder.tvLinha3.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
         holder.codigo = prod.getCodigo();
-        holder.tvGrupo.setText(prod.getGrupo() == null ? "GRUPO:" : "GRUPO: "+prod.getGrupo());
+        holder.tvLinha2.setText(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
         holder.dataCadastro = prod.getDataCadastro();
         String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
         diasDiff = mUtil.Data.dateDiffDay(holder.dataCadastro, mDataAtual);

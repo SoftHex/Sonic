@@ -1,6 +1,5 @@
 package com.softhex.sonic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,9 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.util.Pair;
-import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -74,11 +70,6 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
                     mPrefs.Produtos.setDetalhe(tvDetalhe);
                     Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
 
-                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                            (Activity)mContext
-                            ,Pair.create(mImage, ViewCompat.getTransitionName(mImage))
-                            ,Pair.create(tvNome, ViewCompat.getTransitionName(tvNome)));
-
                     v.getContext().startActivity(i);
 
             });
@@ -124,7 +115,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         sonicProdutosHolder prod = produtos.get(position);
         holder.codigo = prod.getCodigo();
         holder.tvNome.setText(prod.getNome());
-        holder.tvGrupo = prod.getGrupo() == null ? "GRUPO:" : "GRUPO: "+prod.getGrupo();
+        holder.tvGrupo = prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo();
         holder.tvDetalhe = "CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo();
 
         String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);

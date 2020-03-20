@@ -19,25 +19,38 @@ import java.util.List;
 public class sonicClientesDetalheGeral extends Fragment {
 
     private View myView;
-    private Context _this;
+    private Context mContext;
     private sonicDatabaseCRUD DBC;
-    private TextView tvNome, tvFantRazao, tvGrupo, tvCnpjCpf, tvEndereco, tvBairro, tvMunicipio, tvCep, tvFone, tvWhats, tvEmail, tvCgf, tvObservacao;
+    private TextView tvNome;
+    private TextView tvFantRazao;
+    private TextView tvGrupo;
+    private TextView tvCnpjCpf;
+    private TextView tvEndereco;
+    private TextView tvBairro;
+    private TextView tvMunicipio;
+    private TextView tvCep;
+    private TextView tvFone;
+    private TextView tvWhats;
+    private TextView tvEmail;
+    private TextView tvCgf;
+    private TextView tvObservacao;
     private sonicPreferences mPref;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_clientes_detalhe_geral, container, false);
 
-        _this = getContext();
+        mContext = getContext();
 
-        DBC = new sonicDatabaseCRUD(_this);
+        DBC = new sonicDatabaseCRUD(mContext);
         mPref = new sonicPreferences(getContext());
         tvNome = myView.findViewById(R.id.tvNome);
         tvNome.setText(mPref.Clientes.getNome());
         tvGrupo = myView.findViewById(R.id.tvGrupo);
-        tvGrupo.setText("CÓD.: "+mPref.Clientes.getId()+" / GRUPO: " +mPref.Clientes.getGrupo());
+        tvGrupo.setText("CÓD.: "+mPref.Clientes.getId()+" / " +mPref.Clientes.getGrupo());
         tvFantRazao = myView.findViewById(R.id.tvFantRazao);
         tvCnpjCpf = myView.findViewById(R.id.tvCnpjCpf);
+        tvCnpjCpf.setText(mPref.Clientes.getCnpjCpf());
         tvEndereco = myView.findViewById(R.id.tvEndereco);
         tvBairro = myView.findViewById(R.id.tvBairro);
         tvMunicipio = myView.findViewById(R.id.tvMunicipio);
@@ -58,13 +71,12 @@ public class sonicClientesDetalheGeral extends Fragment {
 
         List<sonicClientesHolder> mList;
         mList = DBC.Cliente.selectClienteID(mPref.Clientes.getId());
-        tvCnpjCpf.setText("CPF/CNPJ: "+mList.get(0).getCpfCnpj());
         tvFantRazao.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getRazaoSocial() : mList.get(0).getNomeFantasia());
         tvEndereco.setText(mList.get(0).getEndereco());
         tvBairro.setText(mList.get(0).getBairro());
         tvMunicipio.setText(mList.get(0).getMunicipio()+" - "+mList.get(0).getUf());
         tvCep.setText("Cep: "+mList.get(0).getCep());
-        tvCgf.setText("IE: "+mList.get(0).getInscEstadual());
+        tvCgf.setText("INSC. ESTADUAL: "+mList.get(0).getInscEstadual());
         tvFone.setText(mList.get(0).getFone().equals("") ? "--" : mList.get(0).getFone()+(mList.get(0).getContato().equals("") ? "" : " / "+mList.get(0).getContato()));
         tvEmail.setText(mList.get(0).getEmail().equals("") ? "--" : mList.get(0).getEmail());
         tvWhats.setText("--");

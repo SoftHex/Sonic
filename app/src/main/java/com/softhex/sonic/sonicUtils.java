@@ -29,7 +29,10 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 
@@ -438,6 +441,99 @@ public class sonicUtils {
         }
     }
 
+    public static String stringToCnpjCpf(String value){
+        String result;
+        Log.d("TAMANHO", value.length()+"");
+        switch (value.length()){
+            case 11:
+                result = value.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+                break;
+            case 14:
+                result = value.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+                break;
+                default:
+                result = value;
+                break;
+        }
+
+        return result;
+    }
+
+    public static String stringToInscEstadual(String value){
+        String result;
+
+        switch (value.length()){
+            case 9:
+                result = value.replaceAll("(\\d{2})(\\d{6})(\\d{1})", "$1.$2.$3");
+                break;
+            default:
+                result = value;
+                break;
+        }
+
+        return result;
+    }
+
+    public static String unmask(String s) {
+        return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
+    }
+
+    public class MaskEditUtil {
+
+        public static final String FORMAT_CPF = "###.###.###-##";
+        public static final String FORMAT_FONE = "(###)####-#####";
+        public static final String FORMAT_CEP = "#####-###";
+        public static final String FORMAT_DATE = "##/##/####";
+        public static final String FORMAT_HOUR = "##:##";
+
+        /**
+         * Método que deve ser chamado para realizar a formatação
+         *
+         * @param ediTxt
+         * @param mask
+         * @return
+         */
+        public TextWatcher mask(final EditText ediTxt, final String mask) {
+            return new TextWatcher() {
+                boolean isUpdating;
+                String old = "";
+
+                @Override
+                public void afterTextChanged(final Editable s) {}
+
+                @Override
+                public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
+
+                @Override
+                public void onTextChanged(final CharSequence s, int start, int before, int count) {
+                    String str = unmask(s.toString());
+                    String mascara = "";
+                    if (isUpdating) {
+                        old = str;
+                        isUpdating = false;
+                        return;
+                    }
+                    int i = 0;
+                    for (final char m : mask.toCharArray()) {
+                        if (m != '#' && str.length() > old.length()) {
+                            mascara += m;
+                            continue;
+                        }
+                        try {
+                            mascara += str.charAt(i);
+                        } catch (final Exception e) {
+                            break;
+                        }
+                        i++;
+                    }
+                    isUpdating = true;
+                    ediTxt.setText(mascara);
+                    ediTxt.setSelection(mascara.length());
+                }
+            };
+        }
+
+    }
     class Feedback{
 
             public  boolean statusNetwork() {

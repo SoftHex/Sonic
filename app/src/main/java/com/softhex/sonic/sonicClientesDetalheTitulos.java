@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,14 +41,14 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicClientesCNPJ extends Fragment {
+public class sonicClientesDetalheTitulos extends Fragment {
 
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesAdapter myAdapter;
-    private List<sonicClientesHolder> mPartialList;
-    private List<sonicClientesHolder> mList;
+    ArrayList<String> rowsArrayList = new ArrayList<>();
+    private List<sonicClientesHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
@@ -58,7 +59,8 @@ public class sonicClientesCNPJ extends Fragment {
     private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
-
+    private sonicDatabaseCRUD DBC;
+    Intent i;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -66,9 +68,17 @@ public class sonicClientesCNPJ extends Fragment {
 
         mContext = getActivity();
 
+        DBC = new sonicDatabaseCRUD(mContext);
+
         loadFragment();
 
         return myView;
+
+    }
+
+    public void bindRecyclerView(){
+
+        new myAsyncTask().execute();
 
     }
 
@@ -112,12 +122,6 @@ public class sonicClientesCNPJ extends Fragment {
 
     }
 
-    public void bindRecyclerView(){
-
-        new myAsyncTask().execute();
-
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -143,7 +147,7 @@ public class sonicClientesCNPJ extends Fragment {
                                     tvSearch.setVisibility(VISIBLE);
                                     tvSearch.setText("Nenhum resultado para '"+newText+"'");
                                 } else {
-                                    tvSearch.setVisibility(GONE);
+                                    tvSearch.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }
@@ -182,6 +186,7 @@ public class sonicClientesCNPJ extends Fragment {
             default:
                 break;
         }
+
         return false;
     }
 
@@ -190,8 +195,8 @@ public class sonicClientesCNPJ extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("J");
-            return mList.size();
+            myList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("F");
+            return myList.size();
 
         }
 
@@ -199,24 +204,34 @@ public class sonicClientesCNPJ extends Fragment {
         protected void onPostExecute(final Integer result) {
             super.onPostExecute(result);
 
+            AlphaAnimation fadeOut;
+            fadeOut = new AlphaAnimation(1,0);
+            fadeOut.setDuration(500);
+            fadeOut.setFillAfter(true);
+            myShimmer.setAnimation(fadeOut);
+
             Handler handler = new Handler();
-            handler.postDelayed(() -> {
 
-                        if(result>0){
+            handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
 
-                            showResult();
+                                        if(result>0){
 
-                        }else{
+                                           showResult();
 
-                            showNoResult();
+                                        }else{
 
-                        }
+                                           showNoResult();
 
-                        myShimmer.stopShimmer();
-                        myShimmer.setVisibility(GONE);
+                                        }
 
-                    }
-                    ,sonicUtils.Randomizer.generate(500,1000));
+                                        myShimmer.stopShimmer();
+                                        myShimmer.setVisibility(GONE);
+
+                                    }
+                                }
+                    , 700);
 
 
         }
@@ -228,8 +243,9 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
+
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mContext, mList, myRecycler, "CNPJ: ");
+        myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler, "CPF: ");
         if(!myAdapter.hasObservers()){
             myAdapter.setHasStableIds(true);
         }
@@ -238,7 +254,6 @@ public class sonicClientesCNPJ extends Fragment {
         myRecycler.startAnimation(fadeIn);
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-
 
     }
 
@@ -270,12 +285,12 @@ public class sonicClientesCNPJ extends Fragment {
 
         List<sonicGrupoClientesHolder> grupo;
 
-        grupo = new sonicDatabaseCRUD(mContext).GrupoCliente.selectGrupoCliente("J");
+        grupo = DBC.GrupoCliente.selectGrupoCliente("F");
 
-        List<String> l = new ArrayList<>();
+        List<String> l = new ArrayList<String>();
 
         for(int i=0; i < grupo.size(); i++ ){
-            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CNPJ){
+            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CPF){
                 l.add(grupo.get(i).getNome());
             }
         }
@@ -283,12 +298,12 @@ public class sonicClientesCNPJ extends Fragment {
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        //builder.setTitle("Selecione um grupo...");
+        builder.setTitle("Selecione um grupo...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
-                sonicConstants.GRUPO_CLIENTES_CNPJ = chars[item].toString();
-                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "LIMPAR FILTRO";
+                sonicConstants.GRUPO_CLIENTES_CPF = chars[item].toString();
+                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "LIMPAR FILTRO";
                 dialog.dismiss();
                 refreshFragment();
 
@@ -298,16 +313,17 @@ public class sonicClientesCNPJ extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
-        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR, new DialogInterface.OnClickListener() {
+        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                sonicConstants.GRUPO_CLIENTES_CNPJ = "TODOS";
-                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "";
+                sonicConstants.GRUPO_CLIENTES_CPF = "TODOS";
+                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "";
                 refreshFragment();
             }
         }).show();
 
     }
+
 
     public void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();

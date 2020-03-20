@@ -29,8 +29,16 @@ public class sonicPreferences{
     private static final String CLIENTE_ID = "clienteId";
     private static final String CLIENTE_NOME = "clienteNome";
     private static final String CLIENTE_GRUPO = "clienteGrupo";
+    private static final String CLIENTE_CNPJ_CPF = "clienteCnpjCpf";
+    private static final String CLIENTE_TELEFONE = "clienteTelefone";
+    private static final String CLIENTE_EMAIL = "clienteEmail";
+    private static final String CLIENTE_WHATSAPP = "clienteWhatsApp";
+    private static final String CLIENTE_BLOQUEADO = "clienteBloqueado";
+    private static final String CLIENTE_ENDERECO_COMPLETO = "clienteEnderecoCompleto";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String CLIENTE_NUNCA_COMPROU = "clienteNuncaComprou";
+    private static final String CLIENTE_COMPRAS = "clienteCompras";
+    private static final String CLIENTE_TITULOS = "clienteTitulos";
     private static final String SAUDACAO = "saudacao";
     private static final String MATRIZ_NOME = "matrizNome";
     private static final String MATRIZ_DESCRICAO = "matrizDescricao";
@@ -252,7 +260,7 @@ public class sonicPreferences{
             editor.apply();
         }
         public String getNome(){
-            return sharedpreferences.getString(CLIENTE_NOME, "");
+            return sharedpreferences.getString(CLIENTE_NOME, null);
         }
         public void setGrupo(String value){
             editor = sharedpreferences.edit();
@@ -260,20 +268,68 @@ public class sonicPreferences{
             editor.apply();
         }
         public String getGrupo(){
-            return sharedpreferences.getString(CLIENTE_GRUPO, "");
+            return sharedpreferences.getString(CLIENTE_GRUPO, null);
         }
         public String getClienteExibicao(){
             return sharedpreferences.getString(mContex.getResources().getString(R.string.clienteTipo), mContex.getResources().getString(R.string.prefClienteTipoDefault));
+        }
+        public void setEnderecoCompleto(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_ENDERECO_COMPLETO, value);
+            editor.apply();
+        }
+        public String getEnderecoCompleto(){
+            return sharedpreferences.getString(CLIENTE_ENDERECO_COMPLETO, null);
+        }
+        public void setCnpjCpf(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_CNPJ_CPF, value);
+            editor.apply();
+        }
+        public String getCnpjCpf(){
+            return sharedpreferences.getString(CLIENTE_CNPJ_CPF, null);
         }
         public void  setClienteExibicao(String value){
             editor = sharedpreferences.edit();
             editor.putString(mContex.getResources().getString(R.string.clienteTipo), value);
             editor.apply();
         }
+        public void setTelefone(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_TELEFONE, value);
+            editor.apply();
+        }
+        public String getTelefone(){
+            return sharedpreferences.getString(CLIENTE_TELEFONE, null);
+        }
+        public void setEmail(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_EMAIL, value);
+            editor.apply();
+        }
+        public String getEmail(){
+            return sharedpreferences.getString(CLIENTE_EMAIL, null);
+        }
+        public void setWhatsApp(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_WHATSAPP, value);
+            editor.apply();
+        }
+        public String getWhatsApp(){
+            return sharedpreferences.getString(CLIENTE_WHATSAPP, null);
+        }
         public void setClienteSemCompra(Boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(mContex.getResources().getString(R.string.clienteSemCompra), value);
             editor.apply();
+        }
+        public void getBloqueado(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(CLIENTE_BLOQUEADO, value);
+            editor.apply();
+        }
+        public Boolean getBloquado(){
+            return sharedpreferences.getBoolean(CLIENTE_BLOQUEADO,false);
         }
         public void setClienteNuncaComprou(Boolean value){
             editor = sharedpreferences.edit();
@@ -293,6 +349,24 @@ public class sonicPreferences{
         }
         public Boolean getTituloEmAtraso(){
             return sharedpreferences.getBoolean(mContex.getResources().getString(R.string.tituloEmAtraso), true);
+        }
+        public void setCompras(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(CLIENTE_COMPRAS, value);
+            editor.apply();
+
+        }
+        public int getCompras(){
+            return sharedpreferences.getInt(CLIENTE_COMPRAS, 0);
+        }
+
+        public void setTitulos(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(CLIENTE_TITULOS, value);
+            editor.apply();
+        }
+        public int getTitulos(){
+            return sharedpreferences.getInt(CLIENTE_TITULOS, 0);
         }
     }
     public class Users {

@@ -13,6 +13,7 @@ public class sonicClientesHolder {
      String nome_fantasia;
      String cpf_cnpj;
      String insc_estadual;
+     String endereco_completo;
      String endereco;
      String bairro;
      String municipio;
@@ -28,60 +29,11 @@ public class sonicClientesHolder {
      String grupo;
      int titulos;
      int titulos_em_atraso;
+     int compras;
      String tabela_preco;
      String status;
 
     public sonicClientesHolder(){
-
-    }
-    public sonicClientesHolder(int codigo_cliente,
-                               String tipo,
-                               String nome,
-                               String razao_social,
-                               String nome_fantasia,
-                               String cpf_cnpj,
-                               String insc_estadual,
-                               String endereco,
-                               String bairro,
-                               String municipio,
-                               String uf,
-                               String cep,
-                               String fone,
-                               String contato,
-                               String email,
-                               int situacao,
-                               int cli_sem_compra,
-                               String obs,
-                               String data_cadastro,
-                               String grupo,
-                               int titulos,
-                               int titulos_em_atraso,
-                               String tabela_preco,
-                               String status){
-
-        this.codigo_cliente = codigo_cliente;
-        this.tipo = tipo;
-        this.nome = nome;
-        this.razao_social = razao_social;
-        this.nome_fantasia = nome_fantasia;
-        this.cpf_cnpj = cpf_cnpj;
-        this.insc_estadual = insc_estadual;
-        this.endereco = endereco;
-        this.bairro = bairro;
-        this.municipio = municipio;
-        this.uf = uf;
-        this.cep = cep;
-        this.fone = fone;
-        this.contato = contato;
-        this.email = email;
-        this.situacao = situacao;
-        this.cli_sem_compra = cli_sem_compra;
-        this.obs = obs;
-        this.data_cadastro = data_cadastro;
-        this.grupo = grupo;
-        this.titulos = titulos;
-        this.tabela_preco = tabela_preco;
-        this.status = status;
 
     }
 
@@ -104,6 +56,15 @@ public class sonicClientesHolder {
     public String getInscEstadual(){
         return this.insc_estadual;
     }
+
+    public String getEnderecoCompleto() {
+        return endereco+", "+bairro+", "+municipio+" - "+uf;
+    }
+
+    public void setEnderecoCompleto(String endereco_completo) {
+        this.endereco_completo = endereco_completo;
+    }
+
     public String getEndereco(){
         return this.endereco;
     }
@@ -200,6 +161,14 @@ public class sonicClientesHolder {
         this.titulos = titulos;
     }
     public void setTitulosEmAtraso(int titulos_em_atraso){this.titulos_em_atraso = titulos_em_atraso;}
+
+    public int getCompras() {
+        return compras;
+    }
+
+    public void setCompras(int compras) {
+        this.compras = compras;
+    }
 
     public void setTabelaPreco(String tabela_preco){ this.tabela_preco = tabela_preco; }
     public void setStatus(String status){ this.status = status; }

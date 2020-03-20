@@ -68,7 +68,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_SITE = "CREATE TABLE IF NOT EXISTS "+DB_SITE+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
-            "site string NOT NULL, " +
+            "site varchar NOT NULL, " +
             "licensa string);";
 
     private static final String CREATE_FTP = "CREATE TABLE IF NOT EXISTS "+DB_FTP+" (" +
@@ -91,14 +91,14 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_empresa int NOT NULL, " +
             "nome string NOT NULL, " +
             "descricao string," +
-            "data_fundacao string," +
+            "data_fundacao varchar," +
             "endereco string," +
             "bairro string," +
             "municipio string," +
             "uf string," +
-            "cep string," +
-            "fone string," +
-            "whatsapp string," +
+            "cep varchar," +
+            "fone varchar," +
+            "whatsapp varchar," +
             "email string," +
             "endereco_eletronico string);";
     private static final String CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA = "CREATE UNIQUE INDEX index_grupo_empresas_codigo_empresa ON "+ DB_MATRIZ +" (codigo_empresa);";
@@ -114,8 +114,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "nome string NOT NULL, " +
             "login string NOT NULL, " +
-            "senha string, " +
-            "imei string NOT NULL, " +
+            "senha varchar, " +
+            "imei varchr NOT NULL, " +
             "nivel_acesso int NOT NULL, " +
             "usuario_superior int, " +
             "ativo bit);";
@@ -141,15 +141,15 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "tipo character(1) NOT NULL, " +
             "razao_social string NOT NULL, " +
             "nome_fantasia string NOT NULL, " +
-            "cpf_cnpj string NOT NULL, " +
-            "insc_estadual string, " +
+            "cpf_cnpj varchar NOT NULL, " +
+            "insc_estadual varchar, " +
             "endereco string NOT NULL, " +
             "bairro string NOT NULL, " +
             "municipio string NOT NULL, " +
             "uf character(2) NOT NULL, " +
-            "data_cadastro string, " +
+            "data_cadastro varchar, " +
             "cep character(10), " +
-            "fone string, " +
+            "fone varchar, " +
             "contato string, " +
             "email string, " +
             "observacao string, " +
@@ -198,16 +198,16 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_unidade int NOT NULL, " +
             "codigo_grupo int NOT NULL," +
             "nome string NOT NULL, " +
-            "codigo_alternativo string, " +
+            "codigo_alternativo varchar, " +
             "descricao string, " +
-            "data_cadastro string, " +
-            "ncm string, " +
+            "data_cadastro varchar, " +
+            "ncm varchar, " +
             "peso_bruto string, " +
             "peso_liquido string, " +
             "estoque_minimo int, " +
             "estoque_maximo int, " +
             "multiplicidade int, " +
-            "codigo_ean string, " +
+            "codigo_ean varchar, " +
             "codigo_ean_tributavel string," +
             "FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo)," +
             "FOREIGN KEY (codigo_unidade) REFERENCES "+DB_UNIDADE_MEDIDA+"(codigo)," +
@@ -231,16 +231,16 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_cliente int NOT NULL, " +
             "tipo int NOT NULL, " +             // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
             "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO
-            "data_agendamento string, " +
-            "hora_agendamento string, " +
+            "data_agendamento varchar, " +
+            "hora_agendamento varchar, " +
             "atendente string, " +
             "ordem int, " +
             "observacao string, " +
-            "data_inicio string, " +
-            "hora_inicio string, " +
-            "data_fim string, " +
-            "hora_fim string, " +
-            "data_reagendamento string, " +
+            "data_inicio varchar, " +
+            "hora_inicio varchar, " +
+            "data_fim varchar, " +
+            "hora_fim varchar, " +
+            "data_reagendamento varchar, " +
             "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO, 3=CANCELADO
             "negativacao string, " +
             "cancelamento string);";
@@ -270,10 +270,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_cliente int NOT NULL, " +
             "codigo_tipo_cobranca int NOT NULL, " +
             "codigo_prazo int NOT NULL," +
-            "codigo_mobile string," +
+            "codigo_mobile varchar," +
             "vendedor string, " +
             "situacao int," +
-            "data string," +
+            "data varchar," +
             "valor decimal(9,2)," +
             "valor_desconto decimal(9,2));";
     private static final String CREATE_INDEX_VENDAS_CODIGO = "CREATE UNIQUE INDEX index_vendas_codigo ON "+DB_VENDA+" (codigo);";
@@ -327,9 +327,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
-            "numero string, " +
-            "data_emissao string, " +
-            "data_vencimento string, " +
+            "numero varchar, " +
+            "data_emissao varchar, " +
+            "data_vencimento varchar, " +
             "valor decimal(9,2), " +
 			"saldo decimal(9,2), " +
             "situacao int);";
@@ -343,14 +343,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_cliente int, " +
             "codigo_pedido int, " +
-            "numero_pedido_mobile string, " +
-            "data_pedido string, " +
+            "numero_pedido_mobile varchar, " +
+            "data_pedido varchar, " +
             "valor_pedido decimal(9,2), " +
 			"valor_desconto decimal(9,2), " +
             "codigo_tipo_pedido int," +
             "codigo_prazo int," +
-            "situacao int," +
-			"situacao_cor string);";
+            "situacao int);";
 			
 	private static final String CREATE_RETORNO_PEDIDO_ITENS = "CREATE TABLE IF NOT EXISTS "+DB_RETORNO_PEDIDO_ITENS+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -444,10 +443,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
-            "data string NOT NULL, " +
+            "data varchar NOT NULL, " +
             "vendedor string, " +
-            "numero string, " +
-            "numero_mobile string, " +
+            "numero varchar, " +
+            "numero_mobile varchar, " +
             "prazo string, " +
             "tipo_cobranca string, " +
             "observacao string, " +
@@ -483,8 +482,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "tabela string, " +
             "tipo string, " +
-            "data_sinc string, " +
-            "hora_sinc string);";
+            "data_sinc varchar, " +
+            "hora_sinc varchar);";
 
     private static final String CREATE_LOG_ERRO = "CREATE TABLE IF NOT EXISTS "+DB_LOG_ERRO+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -498,16 +497,16 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "method string,"+
             "line int,"+
             "log string, " +
-            "data string, " +
-            "hora string);";
+            "data varchar, " +
+            "hora varchar);";
 
     private static final String CREATE_LOCALIZACAO = "CREATE TABLE IF NOT EXISTS "+DB_LOCALIZACAO+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_vendedor int, " +
-            "data string, " +
-            "hora string, " +
-            "latitude string, " +
-            "longitude string);";
+            "data varchar, " +
+            "hora varchar, " +
+            "latitude varchar, " +
+            "longitude varchar);";
 
     private static final String DROP_TABLE = " DROP TABLE [IF EXISTS] ";
     private static final int DB_VERSION = 2;

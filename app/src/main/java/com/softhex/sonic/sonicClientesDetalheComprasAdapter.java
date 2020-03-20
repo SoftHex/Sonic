@@ -104,7 +104,7 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
         holder.tvC2L2.setText("R$ "+mList.get(groupPosition).getValor());
 
          if(mList.get(groupPosition).getValorDesc().equals("0,00")){
-             holder.tvC2L3.setVisibility(View.GONE);
+             holder.tvC2L3.setVisibility(View.INVISIBLE);
          }else{
              SpannableString stringEstilizada = new SpannableString("R$ "+mList.get(groupPosition).getValorDesc());
              stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);

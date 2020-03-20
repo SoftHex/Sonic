@@ -137,11 +137,7 @@ public class sonicClientesDetalheCompras extends Fragment {
         if(mList.size()>0){
             mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
             mExpandableList.setAdapter(mAdapter);
-            mTabLayout.getTabAt(1).setText("COMPRAS("+mList.size()+")");
-            //mTabLayout.getTabAt(1).setText(mTabLayout.getTabAt(1).getText()+"("+mList.size()+")");
-            //mTabLayout.getTabAt(1).getOrCreateBadge().setNumber(mList.size());
-            //mTabLayout.getTabAt(1).getBadge().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            //mTabLayout.getTabAt(1).getBadge().setBadgeTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+
         }
     }
 

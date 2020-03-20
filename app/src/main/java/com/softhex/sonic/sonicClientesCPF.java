@@ -245,7 +245,7 @@ public class sonicClientesCPF extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler);
+        myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler, "CPF: ");
         if(!myAdapter.hasObservers()){
             myAdapter.setHasStableIds(true);
         }

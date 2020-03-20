@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,6 +21,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -42,6 +45,11 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private LinearLayout linearNew;
     private sonicPreferences mPref;
+    private FloatingActionMenu fbMenu;
+    private FloatingActionButton fbTelefone;
+    private FloatingActionButton fbEmail;
+    private FloatingActionButton fbWhatsApp;
+    private FloatingActionButton fbPedido;
     private TextView tvNome, tvFantRazao, tvGrupo, tvCnpjCpf, tvEndereco, tvBairro, tvMunicipio, tvCep, tvFone, tvWhats, tvEmail, tvCgf, tvObservacao;
 
     @Override
@@ -55,25 +63,36 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
         tvCount = findViewById(R.id.tvCount);
-        /*tvNome = findViewById(R.id.tvNome);
-        tvNome.setText(mPref.Clientes.getNome());
-        tvGrupo = findViewById(R.id.tvGrupo);
-        tvGrupo.setText(mPref.Clientes.getGrupo());
-        tvFantRazao = findViewById(R.id.tvFantRazao);
-        tvCnpjCpf = findViewById(R.id.tvCnpjCpf);
-        tvEndereco = findViewById(R.id.tvEndereco);
-        tvBairro = findViewById(R.id.tvBairro);
-        tvMunicipio = findViewById(R.id.tvMunicipio);
-        tvCep = findViewById(R.id.tvCep);
-        tvFone = findViewById(R.id.tvFone);
-        tvWhats = findViewById(R.id.tvWhats);
-        tvEmail = findViewById(R.id.tvEmail);
-        tvCgf = findViewById(R.id.tvInscEstadual);
-        tvObservacao = findViewById(R.id.tvObservacao);*/
+        fbMenu = findViewById(R.id.fbMenu);
+        fbTelefone = findViewById(R.id.fbTelefone);
+        fbEmail = findViewById(R.id.fbEmail);
+        fbWhatsApp = findViewById(R.id.fbWhatsApp);
 
         createInterface();
         slideImages();
-        //loadDetails();
+        handlerFloatMenu();
+
+    }
+
+    private void handlerFloatMenu(){
+
+        fbTelefone.setVisibility((mPref.Clientes.getTelefone()==null || mPref.Clientes.getTelefone().equals("")) ? View.GONE : View.VISIBLE);
+        fbEmail.setVisibility((mPref.Clientes.getEmail()==null || mPref.Clientes.getEmail().equals("")) ? View.GONE : View.VISIBLE);
+        fbWhatsApp.setVisibility((mPref.Clientes.getWhatsApp()==null || mPref.Clientes.getEmail().equals("")) ? View.GONE : View.VISIBLE);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fbMenu.open(true);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fbMenu.close(true);
+                    }
+                },2000);
+            }
+        },700);
 
     }
 
@@ -81,8 +100,8 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Geral");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Financeiro");
-        myAdapter.addFragment(new sonicClientesDetalheCompras(), "Compras");
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Títulos");
+        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mPref.Clientes.getCompras()>0 ? "COMPRAS("+mPref.Clientes.getCompras()+")" : "COMPRAS"));
+        myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mPref.Clientes.getTitulos()>0 ? "TÍTULOS("+mPref.Clientes.getTitulos()+")" : "TÍTULOS"));
         viewpager.setAdapter(myAdapter);
 
     }
@@ -91,6 +110,12 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final List<Integer> mIcon = new ArrayList<>();
+        private int mScrollingX, mScrollingY;
+        private CustomOnScrollChangeListener mListener;
+
+        public void setCustomScrollChangeListener(CustomOnScrollChangeListener listener){
+            mListener = listener;
+        }
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
@@ -133,6 +158,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         public int getItemPosition(@NonNull Object object) {
             return super.getItemPosition(object);
         }
+
     }
     private void createInterface() {
 

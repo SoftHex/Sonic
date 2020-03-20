@@ -44,14 +44,15 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private RecyclerView mRecycler;
     private boolean isLoading = false;
     private LinearLayoutManager linearLayoutManager;
+    private String mPrefix;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
 
         int codigo;
-        TextView tvNome;
-        TextView tvGrupo;
-        TextView tvDetalhe;
+        TextView tvLinha1;
+        TextView tvLinha2;
+        TextView tvLinha3;
         TextView letra;
         TextView sit;
         TextView titulos;
@@ -70,10 +71,10 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             cardView = view.findViewById(R.id.cardView);
             linearItem = view.findViewById(R.id.linearItem);
-            tvNome = view.findViewById(R.id.tvNome);
+            tvLinha1 = view.findViewById(R.id.tvLinha1);
             letra = view.findViewById(R.id.tvLetra);
-            tvGrupo = view.findViewById(R.id.tvGrupo);
-            tvDetalhe = view.findViewById(R.id.tvDetalhe);
+            tvLinha2 = view.findViewById(R.id.tvLinha2);
+            tvLinha3 = view.findViewById(R.id.tvLinha3);
             mImage = view.findViewById(R.id.ivImagem);
             lineraNew = view.findViewById(R.id.linearNew);
             llExtra = view.findViewById(R.id.llExtra);
@@ -86,7 +87,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     }
 
 
-    public sonicClientesAdapter(Context mContex, List<sonicClientesHolder> cliente, RecyclerView mRecycler) {
+    public sonicClientesAdapter(Context mContex, List<sonicClientesHolder> cliente, RecyclerView mRecycler, String mPrefix) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = cliente;
@@ -94,6 +95,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.mContext = mContex;
         this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = mRecycler;
+        this.mPrefix = mPrefix;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
 
@@ -155,6 +157,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     mPrefs.Clientes.setId(cli.getCodigo());
                     mPrefs.Clientes.setNome(cliNomeExibicao);
                     mPrefs.Clientes.setGrupo(cli.getGrupo());
+                    mPrefs.Clientes.setCompras(cli.getCompras());
+                    mPrefs.Clientes.setTitulos(cli.getTitulos());
+                    mPrefs.Clientes.setTelefone(cli.getFone());
+                    mPrefs.Clientes.setEmail(cli.getEmail());
+                    mPrefs.Clientes.setCnpjCpf(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
                     mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra()>0 ? true : false);
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
                     mContext.startActivity(i);
@@ -163,11 +170,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                 holder.codigo = cli.getCodigo();
                 holder.clienteStatus = cli.getStatus();
-                holder.tvNome.setText(cliNomeExibicao);
+                holder.tvLinha1.setText(cliNomeExibicao);
                 holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
                 holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
-                holder.tvGrupo.setText("CÓD.: "+cli.getCodigo()+" / GRUPO: "+cli.getGrupo());
-                holder.tvDetalhe.setText(cli.getEndereco()+", "+cli.getBairro()+", "+cli.getMunicipio()+" - "+cli.getUf());
+                holder.tvLinha2.setText(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
+                holder.tvLinha3.setText(cli.getEnderecoCompleto());
 
                 File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + ".JPG");
 
