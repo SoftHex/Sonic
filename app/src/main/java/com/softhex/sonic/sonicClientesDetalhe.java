@@ -80,8 +80,8 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Geral");
-        myAdapter.addFragment(new sonicClientesDetalheCompras(), "Compras");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Financeiro");
+        myAdapter.addFragment(new sonicClientesDetalheCompras(), "Compras");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "Títulos");
         viewpager.setAdapter(myAdapter);
 

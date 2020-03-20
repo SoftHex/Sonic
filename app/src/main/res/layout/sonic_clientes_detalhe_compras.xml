@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.softhex.sonic.NoScrollExpandableListView
+            android:id="@+id/mExpandableList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/expandable_divider"
+            android:groupIndicator="@null"
+            android:transcriptMode="alwaysScroll"
+            android:childDivider="@android:color/transparent"
+            android:background="@drawable/background_expandable">
+
+        </com.softhex.sonic.NoScrollExpandableListView>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,14 +34,12 @@ public class sonicClientesDetalheCompras extends Fragment {
     private List<sonicClientesDetalheComprasItensHolder> mListItens;
     private sonicDatabaseCRUD mData;
     private sonicPreferences mPrefs;
-    private int previousGroup = -1;
-    private TextView tvTotalPedidos;
     private HashMap<String, List<sonicClientesDetalheComprasItensHolder>> mHash;
     private List<String> headerData;
     private List<sonicClientesDetalheComprasItensHolder> childData;
-    private LinearLayout linearPedidos;
-    private LinearLayout llSemResultado;
-    private TextView tvSemResultado;
+    private ProgressBar pbGroup;
+    private ArrayList<Integer> groupClicked;
+    private TabLayout mTabLayout;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -48,59 +48,47 @@ public class sonicClientesDetalheCompras extends Fragment {
         mContext = getContext();
         mPrefs = new sonicPreferences(mContext);
         mData = new sonicDatabaseCRUD(mContext);
-        linearPedidos = myView.findViewById(R.id.linearPedidos);
-        tvTotalPedidos = myView.findViewById(R.id.tvTotalPedidos);
+        mTabLayout = getActivity().findViewById(R.id.mTabs);
         mExpandableList = myView.findViewById(R.id.mExpandableList);
-        llSemResultado = myView.findViewById(R.id.llSemResultado);
-        tvSemResultado = myView.findViewById(R.id.tvSeResultado);
+        groupClicked = new ArrayList<>();
 
-        //loadDetails();
-        new mAsyncTask().execute();
+        new mAsyncLoadGroups().execute();
+
+        mExpandableList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                pbGroup = mAdapter.getGroupView(mExpandableList, groupPosition).findViewById(R.id.pbGroup);
+                if(mExpandableList.isGroupExpanded(groupPosition)){
+                    mExpandableList.collapseGroup(groupPosition);
+                }else{
+                    if(!groupClicked.contains(groupPosition)){
+                        pbGroup.setVisibility(View.VISIBLE);
+                    }
+                    new mAsyncLoadItens().execute(groupPosition);
+                }
+                return true;
+            }
+        });
+        mExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                sonicClientesDetalheComprasItensHolder mItens = (sonicClientesDetalheComprasItensHolder)mAdapter.getChild(groupPosition,childPosition);
+                mPrefs.Produtos.setProdutoId(mItens.getCodigoProduto());
+                mPrefs.Produtos.setProdutoNome(mItens.getProduto());
+                mPrefs.Produtos.setProdutoGrupo(mItens.getGrupo());
+                mPrefs.Produtos.setDetalhe("CÓD.: "+mItens.getCodigoProduto()+" / REFERÊNCIA: "+mItens.getReferencia());
+                Intent i = new Intent(mContext, sonicProdutosDetalhe.class);
+                mContext.startActivity(i);
+
+                return false;
+            }
+        });
 
         return myView;
 
     }
 
-    public void loadDetails(){
-
-        if(mList.size()==0){
-            linearPedidos.setVisibility(View.GONE);
-            llSemResultado.setVisibility(View.VISIBLE);
-            tvSemResultado.setText(mPrefs.Clientes.getClienteNuncaComprou() ? "Cliente ainda não possui compra com a empresa..." : "Cliente sem compra nos últimos seis meses...");
-        }else{
-            tvTotalPedidos.setText(mList.size()==1 ? "Total de "+mList.size()+" pedido nos últimos seis mêses..." : "Total de "+mList.size()+" pedidos nos últimos seis meses...");
-            mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
-            mExpandableList.setAdapter(mAdapter);
-            mExpandableList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-                @Override
-                public void onGroupExpand(int groupPosition) {
-                    if(groupPosition != previousGroup)
-                        mExpandableList.collapseGroup(previousGroup);
-                    previousGroup = groupPosition;
-                }
-            });
-            mExpandableList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                @Override
-                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                    sonicClientesDetalheComprasItensHolder mItens = (sonicClientesDetalheComprasItensHolder)mAdapter.getChild(groupPosition,childPosition);
-
-                        mPrefs.Produtos.setProdutoId(mItens.getCodigoProduto());
-                        mPrefs.Produtos.setProdutoNome(mItens.getProduto());
-                        mPrefs.Produtos.setProdutoGrupo(mItens.getGrupo());
-                        mPrefs.Produtos.setDetalhe("CÓD.: "+mItens.getCodigoProduto()+" / REFERÊNCIA: "+mItens.getReferencia());
-                        Intent i = new Intent(mContext, sonicProdutosDetalhe.class);
-                        mContext.startActivity(i);
-
-                    return false;
-                }
-            });
-            //DisplayMetrics metrics = new DisplayMetrics();
-            //int width = metrics.widthPixels;
-            //mExpandableList.setIndicatorBounds(width- GetPixelFromDips(50), width - GetPixelFromDips(10));
-        }
-    }
-
-    class mAsyncTask extends AsyncTask<Void, Void, Void>{
+    class mAsyncLoadGroups extends AsyncTask<Void, Void, Void>{
         @Override
         protected Void doInBackground(Void... voids) {
             headerData = new ArrayList<>();
@@ -110,10 +98,6 @@ public class sonicClientesDetalheCompras extends Fragment {
             for(int i=0; i < mList.size(); i++){
                 headerData.add(String.valueOf(mList.get(i).getCodigo()));
                 childData = new ArrayList<>();
-                mListItens = mData.Cliente.selectComprasPorClienteItens(mList.get(i).getCodigo());
-                for(int x=0 ; x < mListItens.size(); x++){
-                    childData.add(mListItens.get(x));
-                }
                 mHash.put(headerData.get(i),childData);
             }
 
@@ -123,15 +107,63 @@ public class sonicClientesDetalheCompras extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            loadDetails();
+            checkResultGroup();
         }
     }
 
-    public int GetPixelFromDips(float pixels) {
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        return (int) (pixels * scale + 0.5f);
+    class mAsyncLoadItens extends AsyncTask<Integer, Void, Integer>{
+        @Override
+        protected Integer doInBackground(Integer... integer) {
+
+            mHash = new HashMap<>();
+            childData = new ArrayList<>();
+            mListItens = mData.Cliente.selectComprasPorClienteItens(mList.get(integer[0]).getCodigo());
+            for(int x=0 ; x < mListItens.size(); x++){
+                childData.add(mListItens.get(x));
+            }
+            mHash.put(headerData.get(integer[0]),childData);
+
+            return integer[0];
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+            checkResultItem(result);
+        }
+    }
+
+    public void checkResultGroup(){
+        if(mList.size()>0){
+            mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
+            mExpandableList.setAdapter(mAdapter);
+            mTabLayout.getTabAt(1).setText("COMPRAS("+mList.size()+")");
+            //mTabLayout.getTabAt(1).setText(mTabLayout.getTabAt(1).getText()+"("+mList.size()+")");
+            //mTabLayout.getTabAt(1).getOrCreateBadge().setNumber(mList.size());
+            //mTabLayout.getTabAt(1).getBadge().setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            //mTabLayout.getTabAt(1).getBadge().setBadgeTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+        }
+    }
+
+    public void checkResultItem(Integer result){
+
+        Handler handler = new Handler();
+        if(!groupClicked.contains(result)){
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
+                    mExpandableList.setAdapter(mAdapter);
+                    mExpandableList.expandGroup(result);
+                    pbGroup.setVisibility(View.INVISIBLE);
+                }
+             },mListItens.size()*100);
+        }else{
+            mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
+            mExpandableList.setAdapter(mAdapter);
+            mExpandableList.expandGroup(result);
+        }
+        groupClicked.add(result);
     }
 
 }

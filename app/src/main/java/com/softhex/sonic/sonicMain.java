@@ -9,10 +9,8 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -26,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,8 +38,6 @@ import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -110,7 +104,7 @@ public class sonicMain extends AppCompatActivity{
     private String  vendido;
     private LinearLayout llStar, llChecked;
     private sonicFtp myFtp;
-    private int back = sonicUtils.Randomizer.generate(0,4);
+    private int back = sonicUtils.Randomizer.generate(0,1);
     private sonicPreferences mPrefs;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
@@ -153,8 +147,8 @@ public class sonicMain extends AppCompatActivity{
         myProgressProfile = findViewById(R.id.myProgressProfile);
 
         // DISPLAY DRAWABLE FILE IN LINEAR LAYOUT
-        Glide.with(getBaseContext())
-                .load(getResources().getDrawable(sonicConstants.BACKS[back]))
+        /*Glide.with(getBaseContext())
+                .load(getResources().getDrawable(R.drawable.backhome))
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
@@ -169,7 +163,7 @@ public class sonicMain extends AppCompatActivity{
                     public void onLoadCleared(@Nullable Drawable placeholder) {
 
                     }
-                });
+                });*/
 
         // CARREGAR FOTO DO PERFIL
         File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(mPrefs.Users.getEmpresaId()));
@@ -299,7 +293,7 @@ public class sonicMain extends AppCompatActivity{
 
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(sonicConstants.BACKS[back])
+                .withHeaderBackground(R.drawable.backhome)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
                     @Override
@@ -358,25 +352,25 @@ public class sonicMain extends AppCompatActivity{
             File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(listaEmpresa.get(x).getCodigo()));
 
             Log.d("IMAGEM", file.toString());
-                if(file.exists()){
-                    myHeader.addProfiles(
-                            new ProfileDrawerItem()
-                                    .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
-                                    .withEmail(listaEmpresa.get(x).getNomeFantasia())
-                                    .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
-                                    .withIdentifier(listaEmpresa.get(x).getCodigo())
-                    );
-                }else{
+            if(file.exists()){
+                myHeader.addProfiles(
+                        new ProfileDrawerItem()
+                                .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
+                                .withEmail(listaEmpresa.get(x).getNomeFantasia())
+                                .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
+                                .withIdentifier(listaEmpresa.get(x).getCodigo())
+                );
+            }else{
 
-                    myHeader.addProfiles(
-                            new ProfileDrawerItem()
-                                    .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
-                                    .withEmail(listaEmpresa.get(x).getNomeFantasia())
-                                    .withIcon(getResources().getDrawable(R.drawable.no_profile))
-                                    .withIdentifier(listaEmpresa.get(x).getCodigo())
-                    );
+                myHeader.addProfiles(
+                        new ProfileDrawerItem()
+                                .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
+                                .withEmail(listaEmpresa.get(x).getNomeFantasia())
+                                .withIcon(getResources().getDrawable(R.drawable.no_profile))
+                                .withIdentifier(listaEmpresa.get(x).getCodigo())
+                );
 
-                }
+            }
 
         }
 
@@ -512,9 +506,7 @@ public class sonicMain extends AppCompatActivity{
                 .withOnCheckedChangeListener(new OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
-
                         new sonicPreferences(mActivity).Users.setStatusLogin(isChecked);
-
                     }
         });*/
 
@@ -535,15 +527,12 @@ public class sonicMain extends AppCompatActivity{
 
                         /*int result = DBC.Avisos.countNaoLidos();
                         if(result != avisoNaoLido) {
-
                             if(result>0){
                                 updateBadge(result + "", 2);
                             }else{
                                 updateBadge(null, 2);
                             }
-
                         }
-
                         avisoNaoLido = result;*/
 
                     }
@@ -560,7 +549,7 @@ public class sonicMain extends AppCompatActivity{
 
                 })
                 //.addStickyDrawerItems(
-                        //myDrawerAvisos
+                //myDrawerAvisos
                 //)
                 .addDrawerItems(
                         myDrawerSincronizar,
@@ -930,7 +919,7 @@ public class sonicMain extends AppCompatActivity{
 
         }
 
-       return false;
+        return false;
     }
 
 

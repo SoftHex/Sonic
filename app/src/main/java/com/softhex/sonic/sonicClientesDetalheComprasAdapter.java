@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -68,7 +70,6 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        //return mChild.get(mHeader.get(groupPosition)).get(childPosition).getCodigoVenda();
         return childPosition;
     }
 
@@ -88,30 +89,29 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             holder = (ViewHolderGroup) convertView.getTag();
         }
 
-        try{
-            holder.tvData = convertView.findViewById(R.id.tvData);
-            holder.tvTipoCobranca = convertView.findViewById(R.id.tvTipoCobranca);
-            holder.tvCodigoMobile = convertView.findViewById(R.id.tvCodigoMobile);
-            holder.tvPrazo = convertView.findViewById(R.id.tvPrazo);
-            holder.tvValor = convertView.findViewById(R.id.tvValor);
-            holder.tvValorDesc = convertView.findViewById(R.id.tvValorDesc);
-            holder.tvData.setText(mUtils.Data.dataFotmatadaBR(mList.get(groupPosition).getData()));
-            holder.tvTipoCobranca.setText(mList.get(groupPosition).getTipoCobranca());
-            holder.tvCodigoMobile.setText("CÓD. PEDIDO: " + (mList.get(groupPosition).getCodigo()));
-            holder.tvPrazo.setText("PRAZO: "+mList.get(groupPosition).getPrazo());
-            holder.tvValor.setText("R$ "+mList.get(groupPosition).getValor());
+        holder.pbGroup =  convertView.findViewById(R.id.pbGroup);
+        holder.tvC1L1 = convertView.findViewById(R.id.tvC1L1);
+        holder.tvC1L2 = convertView.findViewById(R.id.tvC1L2);
+        holder.tvC1L3 = convertView.findViewById(R.id.tvC1L3);
+        holder.tvC2L1 = convertView.findViewById(R.id.tvC2L1);
+        holder.tvC2L2 = convertView.findViewById(R.id.tvC2L2);
+        holder.tvC2L3 = convertView.findViewById(R.id.tvC2L3);
 
-            if(mList.get(groupPosition).getValorDesc().equals("0,00")){
-                holder.tvValorDesc.setVisibility(View.GONE);
-            }else{
-                SpannableString stringEstilizada = new SpannableString("R$ "+mList.get(groupPosition).getValorDesc());
-                stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                holder.tvValorDesc.setVisibility(View.VISIBLE);
-                holder.tvValorDesc.setText(stringEstilizada);
-            }
-        }catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
-        }
+        holder.tvC2L1.setText(mUtils.Data.dataFotmatadaBR(mList.get(groupPosition).getData()));
+        holder.tvC1L1.setText(mList.get(groupPosition).getTipoCobranca());
+        holder.tvC1L3.setText("CÓD.: " + (mList.get(groupPosition).getCodigo())+" / "+mList.get(groupPosition).getVendedor());
+        holder.tvC1L2.setText("PRAZO: "+mList.get(groupPosition).getPrazo());
+        holder.tvC2L2.setText("R$ "+mList.get(groupPosition).getValor());
+
+         if(mList.get(groupPosition).getValorDesc().equals("0,00")){
+             holder.tvC2L3.setVisibility(View.GONE);
+         }else{
+             SpannableString stringEstilizada = new SpannableString("R$ "+mList.get(groupPosition).getValorDesc());
+             stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+             holder.tvC2L3.setVisibility(View.VISIBLE);
+             holder.tvC2L3.setText(stringEstilizada);
+         }
+
         List<TextView> mList;
         mList =  holder.getAllViews();
         if(isExpanded){
@@ -119,15 +119,22 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             for(int i=0; i< mList.size(); i++){
                 mList.get(i).setTypeface(Typeface.DEFAULT_BOLD);
             }
-            holder.tvTipoCobranca.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.ic_chevron_up_grey600_24dp, 0, 0, 0);
+            holder.tvC1L1.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.ic_chevron_up_grey600_24dp, 0, 0, 0);
         }else{
             for(int i=0; i< mList.size(); i++){
                 mList.get(i).setTypeface(Typeface.DEFAULT);
             }
-            holder.tvTipoCobranca.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.ic_chevron_down_grey600_24dp, 0, 0, 0);
+            holder.tvC1L1.setCompoundDrawablesWithIntrinsicBounds( R.mipmap.ic_chevron_down_grey600_24dp, 0, 0, 0);
         }
 
         return convertView;
+    }
+
+    public View getGroupView(ExpandableListView listView, int groupPosition) {
+        long packedPosition = ExpandableListView.getPackedPositionForGroup(groupPosition);
+        int flatPosition = listView.getFlatListPosition(packedPosition);
+        int first = listView.getFirstVisiblePosition();
+        return listView.getChildAt(flatPosition - first);
     }
 
     @Override
@@ -167,8 +174,8 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             holder.tvLetra.setText(mItens.getLetra());
         }
         holder.tvNomeProduto.setText(mItens.getProduto());
-        holder.tvCodigoUnidade.setText("Cód.: "+mItens.getCodigoProduto()+ " / Unid.: " + mItens.getUnidadeMedidaSigla());
-        holder.tvQtdPrecoValor.setText("Qtd.: "+mItens.getQuantidade()+ " / Preço: R$ " + mItens.getPrecoUnitario()+ " / Total: R$ "+mItens.getValorGeral());
+        holder.tvCodigoUnidade.setText("CÓD.: "+mItens.getCodigoProduto()+ " / UNID.: " + mItens.getUnidadeMedidaSigla());
+        holder.tvQtdPrecoValor.setText("QTD.: "+mItens.getQuantidade()+ " / PREÇO: R$ " + mItens.getPrecoUnitario()+ " / TOTAL: R$ "+mItens.getValorGeral());
         if(mItens.getDesconto().equals("0,00")){
             holder.tvDesconto.setVisibility(View.GONE);
         }else{
@@ -177,26 +184,26 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             holder.tvDesconto.setText(stringEstilizada);
         }
-        //tvDesconto.setText("Desc.: "+mList.get(childPosition).getValorDesc());*/
+
         return convertView;
     }
 
     class ViewHolderGroup{
-        TextView tvData;
-        TextView tvTipoCobranca;
-        TextView tvCodigoMobile;
-        TextView tvCodigo;
-        TextView tvValor;
-        TextView tvValorDesc;
-        TextView tvPrazo;
+        TextView tvC1L1;
+        TextView tvC1L2;
+        TextView tvC1L3;
+        TextView tvC2L1;
+        TextView tvC2L2;
+        TextView tvC2L3;
+        ProgressBar pbGroup;
         public List<TextView> getAllViews(){
             List<TextView> mList = new ArrayList<>();
-            mList.add(tvData);
-            mList.add(tvTipoCobranca);
-            mList.add(tvCodigoMobile);
-            mList.add(tvValor);
-            mList.add(tvValorDesc);
-            mList.add(tvPrazo);
+            mList.add(tvC1L1);
+            mList.add(tvC1L2);
+            mList.add(tvC1L3);
+            mList.add(tvC2L1);
+            mList.add(tvC2L2);
+            mList.add(tvC2L3);
             return mList;
         }
     }

@@ -739,6 +739,7 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT " +
                                 "V._id AS id, " +
                                 "(SELECT U.nome FROM " + TABLE_USUARIO + " U WHERE U.codigo = V.codigo_usuario) AS usuario, " +
+                                "V.vendedor AS vendedor, " +
                                 "V.codigo AS codigo, " +
                                 "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = V.codigo_tipo_cobranca) AS tipo_cobranca, " +
                                 "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = V.codigo_prazo) AS prazo, " +
@@ -747,7 +748,7 @@ public class sonicDatabaseCRUD {
                                 "V.data AS data, " +
                                 "V.valor AS valor, " +
                                 "V.valor_desconto AS valor_desc " +
-                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_empresa = (SELECT E.codigo FROM  "+ TABLE_EMPRESA + " E WHERE E.selecionada=1) AND V.codigo_cliente= "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
+                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_empresa = (SELECT E.codigo FROM  "+ TABLE_EMPRESA + " E WHERE E.selecionada=1) AND V.codigo_cliente = "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
 
                 try {
 
@@ -758,6 +759,7 @@ public class sonicDatabaseCRUD {
                         while (cursor.moveToNext()){
                             sonicClientesDetalheComprasHolder compras = new sonicClientesDetalheComprasHolder();
                             compras.setUsuario(cursor.getString(cursor.getColumnIndex("usuario")));
+                            compras.setVendedor(cursor.getString(cursor.getColumnIndex("vendedor")));
                             compras.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             compras.setTipoCobranca(cursor.getString(cursor.getColumnIndex("tipo_cobranca")));
                             compras.setPrazo(cursor.getString(cursor.getColumnIndex("prazo")));

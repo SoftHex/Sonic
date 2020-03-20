@@ -11,65 +11,67 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="4dp"
             android:orientation="horizontal">
 
-            <!-- FROMA DE PAGAMENTO E DATA -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="6dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="6dp"
                 android:layout_weight="2">
-                <!-- FORMA PGTO E PRAZO -->
                 <TextView
-                    android:id="@+id/tvTipoCobranca"
+                    android:id="@+id/tvC1L1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="14sp"
                     android:layout_marginLeft="-6dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTextPrimary"/>
-                <!-- CODIGO MOBILE -->
                 <TextView
-                    android:id="@+id/tvPrazo"
+                    android:id="@+id/tvC1L2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTextPrimary"/>
-                <!-- CODIGO MOBILE -->
                 <TextView
-                    android:id="@+id/tvCodigoMobile"
+                    android:id="@+id/tvC1L3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTextPrimary"/>
 
             </LinearLayout>
 
-            <!-- DATA, VALOR GERAL E DESCONTO -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="6dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="14dp"
-                android:layout_marginBottom="6dp"
-                android:layout_weight="3">
+                android:layout_weight="5">
 
                 <TextView
-                    android:id="@+id/tvData"
+                    android:id="@+id/tvC2L1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
@@ -78,7 +80,7 @@
                     android:textSize="14sp"/>
 
                 <TextView
-                    android:id="@+id/tvValor"
+                    android:id="@+id/tvC2L2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
@@ -86,7 +88,7 @@
                     android:gravity="right"
                     android:textSize="14sp" />
                 <TextView
-                    android:id="@+id/tvValorDesc"
+                    android:id="@+id/tvC2L3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="00"
@@ -97,6 +99,20 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <ProgressBar
+                android:id="@+id/pbGroup"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:indeterminate="true"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:visibility="invisible"/>
         </LinearLayout>
 
     </LinearLayout>
