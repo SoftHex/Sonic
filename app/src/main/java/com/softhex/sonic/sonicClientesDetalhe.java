@@ -50,7 +50,6 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private FloatingActionButton fbEmail;
     private FloatingActionButton fbWhatsApp;
     private FloatingActionButton fbPedido;
-    private TextView tvNome, tvFantRazao, tvGrupo, tvCnpjCpf, tvEndereco, tvBairro, tvMunicipio, tvCep, tvFone, tvWhats, tvEmail, tvCgf, tvObservacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

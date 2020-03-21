@@ -37,10 +37,10 @@ public class sonicAppearence {
     public final static int THEME_NIGHT = 3;
 
     private static int sTheme;
-    private AppCompatActivity _activity;
+    private AppCompatActivity activity;
 
-    public sonicAppearence(AppCompatActivity _activity) {
-        this._activity = _activity;
+    public sonicAppearence(AppCompatActivity activity) {
+        this.activity = activity;
     }
 
     public static void layoutWhitTransparentStatusBar(Context ctx, Window w){
@@ -62,6 +62,13 @@ public class sonicAppearence {
             w.setExitTransition(null);
             w.setEnterTransition(null);
             w.setSharedElementsUseOverlay(true);
+        }
+    }
+
+    public static void layoutWthiStatusBarColorPrimery(Context c, Window w){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            w.setStatusBarColor(c.getResources().getColor(R.color.colorPrimaryDark));
         }
     }
 

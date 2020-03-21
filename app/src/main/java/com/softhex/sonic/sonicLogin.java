@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,6 +33,8 @@ public class sonicLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_login);
 
+        sonicAppearence.layoutWhitTransparentStatusBar(this, getWindow());
+
         mActivity = this;
         tvUsuario = findViewById(R.id.tvUsuario);
         tvCargo = findViewById(R.id.tvCargo);
@@ -48,7 +49,7 @@ public class sonicLogin extends AppCompatActivity {
         String imagem = pref.Users.getEmpresaId()+"_"+pref.Users.getUsuarioId()+".JPG";
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO +imagem);
-        Log.d("IMAGEM", file.toString());
+
         if(file.exists()){
 
             Glide.with(getApplicationContext())
@@ -59,13 +60,11 @@ public class sonicLogin extends AppCompatActivity {
 
         }
 
-
         btEntrar.setOnClickListener((View v)-> {
 
             mProgress = new ProgressDialog(mActivity);
             mProgress.setCancelable(false);
             mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgress.setTitle("Users");
             mProgress.setMessage("Autenticando...");
             mProgress.setIndeterminate(true);
             mProgress.show();

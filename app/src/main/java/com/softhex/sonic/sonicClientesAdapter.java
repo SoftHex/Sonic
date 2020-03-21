@@ -32,6 +32,8 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
+    private static final int VIEW_PROG = 123456789;
+    private static final int VIEW_ITEM = 987654321;
     private Context mContext;
     private List<sonicClientesHolder> mTotalList;
     private List<sonicClientesHolder> mFilteredList;
@@ -100,6 +102,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
 
 
+        if(mPrefs.Geral.getListagemCompleta()){
+
+            mPartialList = mTotalList;
+
+        }else{
+
             mPartialList = new ArrayList();
 
             if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
@@ -121,12 +129,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     if(!isLoading){
                         if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
                             if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
-                                //loadMore();
+                                loadMore();
                             }
                         }
                     }
                 }
             });
+        }
 
     }
 
@@ -134,11 +143,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view;
-        //if(viewType==VIEW_ITEM){
+        if(viewType==VIEW_ITEM){
             view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
-        //}else{
-           // view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
-        //}
+        }else{
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
+        }
         return new cliHolder(view);
 
     }
@@ -147,9 +156,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
             cliHolder holder = (cliHolder) viewHolder;
-            holder.setIsRecyclable(false);
             sonicClientesHolder cli = mTotalList.get(position);
 
+            if(holder.getItemViewType()==VIEW_ITEM){
                 String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
 
                 holder.linearItem.setOnClickListener((View v)-> {
@@ -196,17 +205,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     holder.letra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
 
                 }
+            }
 
-
-    }
-
-
-    @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(hasStableIds);
     }
 
     private void loadMore(){
+
         isLoading = true;
         mPartialList.add(null);
         Handler handler = new Handler();
@@ -251,8 +255,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
-        //return mPartialList.get(position) == null ? VIEW_PROG : VIEW_ITEM;
+        //return super.getItemViewType(position);
+        return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
     }
 
     @Override
@@ -295,11 +299,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                 for (final sonicClientesHolder cli : originalList) {
                     if(mPrefs.Clientes.getClienteExibicao().contains("Nome Fantasia")){
-                        if (cli.getNomeFantasia().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern)) {
+                        if (cli.getNomeFantasia().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern) || cli.getCpfCnpj().contains(filterPattern)) {
                             filteredList.add(cli);
                         }
                     }else {
-                        if (cli.getRazaoSocial().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern)) {
+                        if (cli.getRazaoSocial().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern) || cli.getCpfCnpj().contains(filterPattern)) {
                             filteredList.add(cli);
                         }
                     }

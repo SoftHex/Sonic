@@ -246,9 +246,6 @@ public class sonicClientesCPF extends Fragment {
 
         allowSearch = true;
         myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler, "CPF: ");
-        if(!myAdapter.hasObservers()){
-            myAdapter.setHasStableIds(true);
-        }
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

@@ -2,11 +2,8 @@ package com.softhex.sonic;
 
 import android.Manifest;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,12 +22,8 @@ public class sonicEmpresa extends sonicRuntimePermission {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_empresa);
 
-        //sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
+        sonicAppearence.layoutWhitTransparentStatusBar(this, getWindow());
+
         mContext = this;
         myRegister = findViewById(R.id.btRegistrar);
         myCode = findViewById(R.id.etCodigo);

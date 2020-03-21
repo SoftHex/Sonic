@@ -95,24 +95,12 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     public sonicProdutosListaAdapter(List<sonicProdutosHolder> produto, Context mContext) {
 
-        myCons = new sonicConstants();
+        this.myCons = new sonicConstants();
         this.produtos = produto;
         this.produtos_filtered = produto;
         this.mContext = mContext;
         this.mUtil = new sonicUtils(mContext);
         this.mPrefs = new sonicPreferences(mContext);
-    }
-
-    public void updateList(){
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public Filter getFilter() {
-        if(prodFilter == null)
-            prodFilter = new prodFilter(this, produtos);
-        return prodFilter;
-
     }
 
     @Override
@@ -173,6 +161,14 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     }
 
     @Override
+    public Filter getFilter() {
+        if(prodFilter == null)
+            prodFilter = new prodFilter(this, produtos);
+        return prodFilter;
+
+    }
+
+    @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
         }
@@ -209,16 +205,14 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
             if (constraint.length() == 0) {
                 filteredList.addAll(originalList);
-                sonicConstants.SEARCH_COUNT = originalList.size();
+
             } else {
 
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicProdutosHolder prod : originalList) {
 
-                    String codigo = String.valueOf(prod.getCodigo());
-
-                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
+                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) || String.valueOf(prod.getCodigo()).contains(filterPattern)) {
                         filteredList.add(prod);
 
                     }

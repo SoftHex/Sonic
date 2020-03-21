@@ -443,7 +443,7 @@ public class sonicUtils {
 
     public static String stringToCnpjCpf(String value){
         String result;
-        Log.d("TAMANHO", value.length()+"");
+
         switch (value.length()){
             case 11:
                 result = value.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
