@@ -649,6 +649,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
         onCreate(DB);
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        this.close();
+        super.finalize();
+    }
 
     public String exportDatabase() {
 
