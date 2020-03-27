@@ -1617,7 +1617,7 @@ public class sonicUtils {
                     e.printStackTrace();
                 }
 
-            return format.format(v).replace("R$", WITH_SYMBOL ? "R$ " : "");
+            return format.format(v).replace("R$", symbol ? "R$ " : "");
         }
 
         public String stringToMoeda(String number) {

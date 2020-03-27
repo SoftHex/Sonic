@@ -135,13 +135,13 @@ public class sonicMainHome1 extends Fragment {
         mChart.getAxisRight().setTextColor(Color.WHITE);
         mChart.getLegend().setTextColor(Color.WHITE);
         mChart.getLegend().setEnabled(false);
-        mChart.setViewPortOffsets(6,0,6,56);
+        mChart.setViewPortOffsets(0,0,0,56);
         YAxis yAxisRight = mChart.getAxisRight();
         yAxisRight.setEnabled(false);
         yAxisRight = mChart.getAxisLeft();
         yAxisRight.setEnabled(false);
         XAxis xAxis = mChart.getXAxis();
-        xAxis.setGranularity(1f);
+        xAxis.setGranularity(0.5f);
         xAxis.setGranularityEnabled(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
