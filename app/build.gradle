@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.softhex.sonic"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.diogobernardino:williamchart:3.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart-Realm:v3.0.3@aar'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.highsoft.highcharts:highcharts:6.1r'
     implementation project(':materialdialog')
     implementation project(':progressprofile')
     testImplementation 'junit:junit:4.13'

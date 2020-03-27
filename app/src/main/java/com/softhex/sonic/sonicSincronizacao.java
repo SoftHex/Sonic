@@ -1,18 +1,20 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import com.google.android.material.tabs.TabLayout;
+import android.view.View;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.view.View;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +27,15 @@ public class sonicSincronizacao extends AppCompatActivity{
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
     SharedPreferences prefs;
+    private Activity mAct;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_sincronizacao);
-
+        mPrefs = new sonicPreferences(this);
+        mAct = this;
         createInterface();
 
     }
@@ -119,6 +124,7 @@ public class sonicSincronizacao extends AppCompatActivity{
     @Override
     public void onDestroy() {
         super.onDestroy();
+
     }
 
     @Override

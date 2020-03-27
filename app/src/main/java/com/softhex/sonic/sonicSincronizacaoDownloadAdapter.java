@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,14 +21,16 @@ import java.util.List;
 public class sonicSincronizacaoDownloadAdapter extends RecyclerView.Adapter<sonicSincronizacaoDownloadAdapter.myViewHolder> {
 
     private Context myCtx;
+    private Activity mAct;
     private List<sonicSincronizacaoDownloadHolder> myList;
     private List<sonicUsuariosHolder> myListUsers;
     private sonicFtp myFtp;
 
-    public sonicSincronizacaoDownloadAdapter(Context myCtx, List<sonicSincronizacaoDownloadHolder> mList) {
-        this.myCtx = myCtx;
+    public sonicSincronizacaoDownloadAdapter(Activity act, List<sonicSincronizacaoDownloadHolder> mList) {
+        this.myCtx = act.getApplicationContext();
+        this.mAct = act;
         this.myList = mList;
-        this.myFtp = new sonicFtp(myCtx);
+        this.myFtp = new sonicFtp(act);
         this.myListUsers = new sonicDatabaseCRUD(myCtx).Usuario.selectUsuarioAtivo();
     }
 

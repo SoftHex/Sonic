@@ -4,7 +4,7 @@ package com.softhex.sonic;
  * Created by Administrador on 04/08/2017.
  */
 
-public class sonicVendasHolder {
+public class sonicVendasValorHolder {
 
 
     String mes;
@@ -12,7 +12,7 @@ public class sonicVendasHolder {
     String valor;
 
 
-    public sonicVendasHolder() {
+    public sonicVendasValorHolder() {
     }
 
     public String getMes() {

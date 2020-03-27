@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import java.util.List;
 public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
     private Context myCtx;
+    private Activity mAct;
     private List<sonicSincronizacaoDownloadHolder> myList;
     private List<sonicUsuariosHolder> myListUsers;
     private sonicFtp myFtp;
+    private sonicPreferences mPrefs;
 
     public class sincHolder extends RecyclerView.ViewHolder {
 
@@ -47,6 +50,7 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
                     switch (v.getId()){
                         case 0:
+                            mPrefs.Geral.setSincRefresh(true);
                             sonicConstants.DOWNLOAD_TYPE = "DADOS";
                             file = String.format("%5s",myListUsers.get(0).getCodigo()).replace(" ", "0")+".TXT";
                             myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
@@ -81,10 +85,12 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
     }
 
 
-    public sonicSincronizacaoDownloadAdapterT(Context myCtx, List<sonicSincronizacaoDownloadHolder> mList) {
-        this.myCtx = myCtx;
+    public sonicSincronizacaoDownloadAdapterT(Activity act, List<sonicSincronizacaoDownloadHolder> mList) {
+        this.myCtx = act;
+        this.mAct = act;
+        this.mPrefs = new sonicPreferences(act);
         this.myList = mList;
-        this.myFtp = new sonicFtp(myCtx);
+        this.myFtp = new sonicFtp(act);
         this.myListUsers = new sonicDatabaseCRUD(myCtx).Usuario.selectUsuarioAtivo();
     }
 

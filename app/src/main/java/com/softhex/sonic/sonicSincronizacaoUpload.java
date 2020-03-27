@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,7 +35,8 @@ public class sonicSincronizacaoUpload extends Fragment {
     private sonicUtils util;
     private sonicConstants myCons;
     private GridView myGridView;
-    private Context _this;
+    private Context mContext;
+    private Activity mAct;
     List<sonicUsuariosHolder> list;
 
     int[] gridViewString = {
@@ -49,11 +51,12 @@ public class sonicSincronizacaoUpload extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
-        _this = getActivity();
-        ftp = new sonicFtp(_this);
-        DBC = new sonicDatabaseCRUD(_this);
-        util = new sonicUtils(_this);
-        popularTabelas = new sonicPopularTabelas(_this);
+        mContext = getActivity();
+        //ftp = new sonicFtp(mContext);
+       // mAct =
+        DBC = new sonicDatabaseCRUD(mContext);
+        util = new sonicUtils(mContext);
+        //popularTabelas = new sonicPopularTabelas(mContext);
         myCons = new sonicConstants();
         list = DBC.Usuario.selectUsuarioAtivo();
 
@@ -74,7 +77,7 @@ public class sonicSincronizacaoUpload extends Fragment {
 
     public void myProgress(int id){
 
-        if(new sonicUtils(_this).Feedback.statusNetwork()){
+        if(new sonicUtils(mContext).Feedback.statusNetwork()){
 
             myProgress = new ProgressDialog(getContext());
             myProgress.setCancelable(false);

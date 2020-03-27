@@ -55,6 +55,8 @@ public class sonicPreferences{
     private static final String MATRIZ_PICTURE = "matrizPicture";
     private static final String MATRIZ_PATH = "matrizPath";
     private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
+    private static final String GERAL_HOME_REFRESH = "homeRefresh";
+    private static final String GERAL_SINC_REFRESH = "sincRefresh";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -432,10 +434,6 @@ public class sonicPreferences{
                     +sharedpreferences.getInt(EMPRESA_ID,0) +"_"
                     +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
         }
-        /*
-        *
-           @value = ID DA EMPRESA
-         */
         public String getPicture(int value){
             return  sonicConstants.LOCAL_IMG_USUARIO
                     + value +"_"
@@ -525,6 +523,22 @@ public class sonicPreferences{
         }
         public boolean getListagemCompleta(){
             return sharedpreferences.getBoolean(GERAL_LISTAGEM_COMPLETA, false);
+        }
+        public void setHomeRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_HOME_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getHomeRefresh(){
+            return sharedpreferences.getBoolean(GERAL_HOME_REFRESH ,false);
+        }
+        public void setSincRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_SINC_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getSincRefresh(){
+            return sharedpreferences.getBoolean(GERAL_SINC_REFRESH, false);
         }
     }
 }

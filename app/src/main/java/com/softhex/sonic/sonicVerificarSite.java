@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import java.io.File;
 public class sonicVerificarSite{
 
     private Context myCtx;
+    private Activity mAct;
     private ProgressDialog myProgress;
     private sonicFtp myFtp;
     private sonicDialog myMessage;
@@ -27,15 +29,16 @@ public class sonicVerificarSite{
     private TelephonyManager myPhonyManager;
     private Boolean appTest;
 
-    public sonicVerificarSite(Context ctx){
-        this.myCtx = ctx;
+    public sonicVerificarSite(Activity act){
+        this.mAct = act;
+        this.myCtx = act;
         this.myProgress = new ProgressDialog(myCtx);
-        this.myFtp = new sonicFtp(myCtx);
+        this.myFtp = new sonicFtp(act);
         this.myMessage = new sonicDialog(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
-        this.myPopTable = new sonicPopularTabelas(myCtx);
+        this.myPopTable = new sonicPopularTabelas(act);
         this.myUtil = new sonicUtils(myCtx);
         this.myPhonyManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
         this.appTest = false;
@@ -100,7 +103,7 @@ public class sonicVerificarSite{
                             publishProgress("Salvando configurações...");
 
                             sonicConstants.DOWNLOAD_TYPE = "SITE";
-                            new sonicPopularTabelas(myCtx).gravarDados(strings[0]+".TXT");
+                            new sonicPopularTabelas(mAct).gravarDados(strings[0]+".TXT");
 
                             res = true;
 

@@ -1,12 +1,12 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -27,6 +27,7 @@ import java.io.OutputStream;
 public class sonicFtp {
 
     private FTPClient ftpClient = new FTPClient();
+    private Activity mAct;
     private Context myCtx;
     private ProgressDialog myProgress;
     private ProgressDialog myProgress2;
@@ -37,13 +38,14 @@ public class sonicFtp {
     private sonicPopularTabelas myPopTable;
     private String arquivo;
 
-    public sonicFtp(Context ctx){
-        this.myCtx = ctx;
+    public sonicFtp(Activity act){
+        this.myCtx = act;
+        this.mAct = act;
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.myMessage = new sonicDialog(myCtx);
         this.mySystem = new sonicSystem(myCtx);
-        this.myPopTable = new sonicPopularTabelas(myCtx);
+        this.myPopTable = new sonicPopularTabelas(act);
         this.myProgress2 = new ProgressDialog(myCtx);
     }
 
@@ -164,7 +166,7 @@ public class sonicFtp {
         return  result;
     }
 
-    public void downloadFile2(String fileName, String localFile) {
+    public String downloadFile2(String fileName, String localFile) {
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -187,6 +189,7 @@ public class sonicFtp {
             }
         });
 
+        return fileName.substring(fileName.lastIndexOf("/")+1, fileName.length());
     }
 
     public class myAsyncTaskDownload extends AsyncTask<String, String, Boolean>{
@@ -242,7 +245,6 @@ public class sonicFtp {
                                 destino.createNewFile();
 
                                 arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
-                                Log.d("ARQUIVO", arquivo);
 
                                 return true;
 
@@ -298,7 +300,7 @@ public class sonicFtp {
 
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        new sonicPopularTabelas(mAct).gravarDados(arquivo);
                         break;
                     case "CATALOGO":
                         new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
@@ -309,7 +311,7 @@ public class sonicFtp {
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
                         break;
                     case "ESTOQUE":
-                        new sonicPopularTabelas(myCtx).gravarDados(arquivo);
+                        new sonicPopularTabelas(mAct).gravarDados(arquivo);
                         break;
 
                 }

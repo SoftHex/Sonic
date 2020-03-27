@@ -15,6 +15,8 @@ import android.telephony.TelephonyManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.softhex.materialdialog.PromptDialog;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,6 +32,7 @@ import java.util.List;
 public class sonicPopularTabelas {
 
     private Context myCtx;
+    private Activity mAct;
     private sonicPreferences mPref;
     private sonicDatabaseLogCRUD DBCL;
     private sonicDatabaseCRUD DBC;
@@ -68,13 +71,15 @@ public class sonicPopularTabelas {
 
     };
 
-    sonicPopularTabelas(Context ctx){
-        this.myCtx = ctx;
+    sonicPopularTabelas(Activity act){
+        this.myCtx = act;
+        this.mAct = act;
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.mPref = new sonicPreferences(myCtx);
     }
+
 
     public void gravarDados(String arquivo){
 
@@ -92,8 +97,8 @@ public class sonicPopularTabelas {
                 myProgress.setProgress(0);
                 myProgress.show();
                 new myAsyncTaskGravar().execute(arquivo);
-
             });
+
         }else {
             new sonicDialog(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicDialog.MSG_WARNING);
         }
@@ -105,7 +110,7 @@ public class sonicPopularTabelas {
         return String.valueOf(sequence).indexOf(sequence.toString()) > -1;
     }
 
-    class myAsyncTaskGravar extends AsyncTask<String, String, Boolean>{
+    public class myAsyncTaskGravar extends AsyncTask<String, String, Boolean>{
         @Override
         protected Boolean doInBackground(String... strings) {
 
@@ -197,7 +202,21 @@ public class sonicPopularTabelas {
             if(aBoolean){
                 switch (sonicConstants.DOWNLOAD_TYPE){
                     case "DADOS":
-                        new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.dadosSincronizados, sonicDialog.MSG_SUCCESS);
+                        new PromptDialog(myCtx)
+                                .setDialogType(sonicDialog.MSG_SUCCESS)
+                                .setAnimationEnable(true)
+                                .setTitleText(R.string.headerSuccess)
+                                .setContentText(R.string.dadosSincronizados)
+                                .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                    @Override
+                                    public void onClick(PromptDialog dialog) {
+                                        dialog.dismiss();
+                                        if(mPref.Geral.getHomeRefresh()){
+                                            ((sonicMain)mAct).refreshHomeFragment();
+                                        }
+                                        mPref.Geral.setHomeRefresh(false);
+                                    }
+                                }).show();
                         new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","geral");
                         break;
                     case "ESTOQUE":

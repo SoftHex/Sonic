@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -74,11 +75,10 @@ public class sonicMain extends AppCompatActivity{
     private ViewPager myViewPager;
     private ViewPagerAdapter myAdapter;
     private AccountHeader myHeader;
-    private Context mActivity;
+    private Activity mActivity;
     private sonicUtils myUtil;
     private Drawer myDrawer;
     private String usuarioMeta;
-    private Boolean allowHomeUpdate = false;
     private PrimaryDrawerItem myDrawerSincronizar;
     private PrimaryDrawerItem myDrawerAvisos;
     private PrimaryDrawerItem myDrawerClientes;
@@ -102,10 +102,10 @@ public class sonicMain extends AppCompatActivity{
     private ProgressProfileView myProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String  vendido;
-    private LinearLayout llStar, llChecked;
     private sonicFtp myFtp;
     private int back = sonicUtils.Randomizer.generate(0,1);
     private sonicPreferences mPrefs;
+    private Context mContext;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -118,6 +118,7 @@ public class sonicMain extends AppCompatActivity{
         sonicAppearence.transparentStatusAndNavigation(this);
 
         mActivity = this;
+        mContext = getApplicationContext();
         DBC = new sonicDatabaseCRUD(mActivity);
         mPrefs = new sonicPreferences(mActivity);
         sonicConstants.BACK = back;
@@ -579,7 +580,9 @@ public class sonicMain extends AppCompatActivity{
 
                         switch (view.getId()){
                             case 1:
-                                new myAsyncStartActivity().execute(sonicSincronizacao.class);
+                                i = new Intent(sonicMain.this, sonicSincronizacao.class);
+                                startActivityForResult(i,1);
+                                //new myAsyncStartActivity().execute(sonicSincronizacao.class);
                                 break;
                             case 2:
                                 new myAsyncStartActivity().execute(sonicAvisos.class);
@@ -703,9 +706,9 @@ public class sonicMain extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicMainHome1(), "Vendas");
-        myAdapter.addFragment(new sonicMainHome1(), "Pedidos");
-        myAdapter.addFragment(new sonicMainHome1(), "Visitas");
+        myAdapter.addFragment(new sonicMainVendas(), "Vendas");
+        myAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
+        //myAdapter.addFragment(new sonicMainVendas(), "Visitas");
 
         viewpager.setAdapter(myAdapter);
 
@@ -862,7 +865,7 @@ public class sonicMain extends AppCompatActivity{
 
     public void setTvEmpresa(long tvEmpresa){
 
-        allowHomeUpdate = true;
+        //allowHomeUpdate = true;
 
         if(tvEmpresa ==0){
             DBC.Empresa.marcarEmpresa();
@@ -878,12 +881,10 @@ public class sonicMain extends AppCompatActivity{
 
     public void refreshHomeFragment(){
 
-        if(allowHomeUpdate){
+        for(int i=0; i<myAdapter.getCount();i++){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(myAdapter.getItem(0)).attach(myAdapter.getItem(0)).commit();
-            allowHomeUpdate = false;
+            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
         }
-
     }
 
     @Override
@@ -911,12 +912,11 @@ public class sonicMain extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
                 return false;
             case R.id.itSincronizar:
+                mPrefs.Geral.setHomeRefresh(true);
                 myFtp = new sonicFtp(mActivity);
                 sonicConstants.DOWNLOAD_TYPE = "DADOS";
                 String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                Log.d("FILE", file);
                 myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
-                //Toast.makeText(getApplicationContext(), "Sincronizar", Toast.LENGTH_SHORT).show();
                 return false;
 
         }
@@ -958,6 +958,11 @@ public class sonicMain extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(mPrefs.Geral.getSincRefresh()){
+            refreshHomeFragment();
+            mPrefs.Geral.setSincRefresh(false);
+        }
+
         if (resultCode != RESULT_CANCELED && data != null) {
 
             if (requestCode == IMAGE_GALLERY_REQUEST) {
@@ -991,6 +996,17 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("PAUSE","");
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.d("POST RESUME","");
+    }
 
 }
 

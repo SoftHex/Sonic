@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -31,14 +32,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class sonicMainHome1 extends Fragment {
+public class sonicMainVendas extends Fragment {
 
     private View myView;
     private ProgressBar pbChart;
     private sonicDatabaseCRUD mData;
-    private List<sonicVendasHolder> mList;
+    private List<sonicVendasValorHolder> mList;
     private BarChart mChart;
     private Context mContex;
+    private Locale meuLocal = new Locale( "pt", "BR" );
+    private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
+    private TextView tvMaxValue, tvMinValue;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,19 +51,33 @@ public class sonicMainHome1 extends Fragment {
         mContex = getContext();
         pbChart = myView.findViewById(R.id.pbChart);
         mData = new sonicDatabaseCRUD(getContext());
-        mChart = myView.findViewById(R.id.mChart);
-
+        mChart = myView.findViewById(R.id.mBarChart);
+        tvMaxValue = myView.findViewById(R.id.tvMaxValue);
+        tvMinValue = myView.findViewById(R.id.tvMinValue);
+        mList = mData.Venda.selectVendas();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //pbChart.setVisibility(View.GONE);
+                pbChart.setVisibility(View.GONE);
+                mChart.setVisibility(View.VISIBLE);
+                loadChart();
             }
-        },2000);
+        },1000);
 
+        return myView;
 
-        mList = mData.Venda.selectVendas();
-        Long a = Long.parseLong("999999999");
+    }
+
+    private void loadChart(){
+
+        Float maxValue = 0f;
+        Float minValue = 99999999999f;
+        String max = "";
+        String min = "";
+        String mes;
+        int[] barColors = new int[mList.size()];
+        List<Integer> textColors = new ArrayList<>();
         ArrayList<String> xAxisLabel = new ArrayList<>();
         ArrayList<BarEntry> valueSet = new ArrayList<>();
         ArrayList<IBarDataSet> dataSets = null;
@@ -67,49 +85,85 @@ public class sonicMainHome1 extends Fragment {
         for(int i=0 ; i<mList.size() ; i++){
             switch (mList.get(i).getMes()){
                 case "01":
-                    xAxisLabel.add("Jan/"+mList.get(i).getAno());
+                    mes = "Jan/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "02":
-                    xAxisLabel.add("Fev/"+mList.get(i).getAno());
+                    mes = "Fev/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "03":
-                    xAxisLabel.add("Mar/"+mList.get(i).getAno());
+                    mes = "Mar/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "04":
-                    xAxisLabel.add("Abr/"+mList.get(i).getAno());
+                    mes = "Abr/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "05":
-                    xAxisLabel.add("Mai/"+mList.get(i).getAno());
+                    mes = "Mai/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "06":
-                    xAxisLabel.add("Jun/"+mList.get(i).getAno());
+                    mes = "Jun/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "07":
-                    xAxisLabel.add("Jul/"+mList.get(i).getAno());
+                    mes = "Jul/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "08":
-                    xAxisLabel.add("Ago/"+mList.get(i).getAno());
+                    mes = "Ago/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "09":
-                    xAxisLabel.add("Sep/"+mList.get(i).getAno());
+                    mes = "Set/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "10":
-                    xAxisLabel.add("Out/"+mList.get(i).getAno());
+                    mes = "Out/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "11":
-                    xAxisLabel.add("Nov/"+mList.get(i).getAno());
+                    mes = "Nov/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
                 case "12":
-                    xAxisLabel.add("Dez/"+mList.get(i).getAno());
+                    mes = "Dez/";
+                    xAxisLabel.add(mes+mList.get(i).getAno());
                     break;
-                    default:
-                        xAxisLabel.add("--");
+                default:
+                    mes = "--";
+                    xAxisLabel.add("--");
+            }
+            if(i==5){
+                barColors[i] = getResources().getColor(R.color.colorPrimaryRed);
+                textColors.add(getResources().getColor(R.color.colorPrimaryRed));
+            }else{
+                barColors[i] = getResources().getColor(R.color.colorTypeInfo);
+                textColors.add(getResources().getColor(R.color.colorTextWhite));
+            }
+            if(Float.valueOf(mList.get(i).getValor())> maxValue){
+                maxValue = Float.valueOf(mList.get(i).getValor());
+                nfVal.setMaximumFractionDigits(2);
+                double v = (double)maxValue/100;
+                max = nfVal.format(v).replace("R$", "R$ ")+" - "+mes+mList.get(i).getAno();// "R$ "+mList.get(i).getValor()+" - "+mes+mList.get(i).getAno();
+            }
+            if(Float.valueOf(mList.get(i).getValor())< minValue){
+                minValue = Float.valueOf(mList.get(i).getValor());
+                nfVal.setMaximumFractionDigits(2);
+                double v = (double)minValue/100;
+                min = nfVal.format(v).replace("R$", "R$ ")+" - "+mes+mList.get(i).getAno();// "R$ "+mList.get(i).getValor()+" - "+mes+mList.get(i).getAno();
             }
             valueSet.add(new BarEntry(i, Float.valueOf(mList.get(i).getValor())));
         }
+        tvMaxValue.setText(max);
+        tvMinValue.setText(min);
         BarDataSet barDataSet = new BarDataSet(valueSet, "");
-        barDataSet.setColor(getResources().getColor(R.color.colorTypeInfo));
-        barDataSet.setValueTextColor(Color.WHITE);
+        //barDataSet.setColor(getResources().getColor(R.color.colorTypeInfo));
+        barDataSet.setColors(barColors);
+        //barDataSet.setValueTextColor(Color.WHITE);
+        barDataSet.setValueTextColors(textColors);
         barDataSet.setValueTextSize(10f);
 
         barDataSet.setValueFormatter(new MyXAxisValueFormatter(valueSet));
@@ -148,8 +202,6 @@ public class sonicMainHome1 extends Fragment {
         LabelFormatter formatter = new LabelFormatter(xAxisLabel);
         xAxis.setValueFormatter(formatter);
 
-        return myView;
-
     }
 
     public class MyXAxisValueFormatter implements IValueFormatter {
@@ -161,8 +213,6 @@ public class sonicMainHome1 extends Fragment {
 
         @Override
         public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-            Locale meuLocal = new Locale( "pt", "BR" );
-            NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
             nfVal.setMaximumFractionDigits(2);
             double v = (double)value/100;
             return nfVal.format(v).replace("R$", "");
