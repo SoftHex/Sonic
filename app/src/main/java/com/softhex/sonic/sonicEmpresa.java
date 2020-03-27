@@ -22,7 +22,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_empresa);
 
-        sonicAppearence.layoutWhitTransparentStatusBar(this, getWindow());
+        sonicAppearence.layoutWithStatusBarColorPrimary(this, getWindow());
 
         mContext = this;
         myRegister = findViewById(R.id.btRegistrar);

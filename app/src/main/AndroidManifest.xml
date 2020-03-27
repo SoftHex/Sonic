@@ -71,7 +71,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicMain"
-            android:theme="@style/DefaultAppTheme"
+            android:theme="@style/TranslucedAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicConfig"

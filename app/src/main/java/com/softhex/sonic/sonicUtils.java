@@ -1641,7 +1641,7 @@ public class sonicUtils {
 
             try{
 
-                String numero_final = number.substring(0, tamanho-2)+"."+number.substring(tamanho-2, tamanho);
+                String numero_final = number.substring(0, tamanho-2)+","+number.substring(tamanho-2, tamanho);
 
                 valor = Double.valueOf(numero_final);
 

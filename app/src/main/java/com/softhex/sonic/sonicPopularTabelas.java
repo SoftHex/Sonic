@@ -58,11 +58,13 @@ public class sonicPopularTabelas {
             { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "replace" },
             { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "replace" },
             { "[ROTA]", sonicConstants.TB_ROTA, "replace" },
-            { "[VENDAS]", sonicConstants.TB_VENDA, "replace" },
-            { "[VENDAS_ITENS]", sonicConstants.TB_VENDA_ITEM, "replace" },
             { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "save" },
             { "[TITULOS]", sonicConstants.TB_TITULO, "save" },
-            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" }
+            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" },
+            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "replace" },
+            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "replace" },
+            { "[VENDAS]", sonicConstants.TB_VENDA, "replace" },
+            { "[]", sonicConstants.TB_VENDA, "replace" }
 
     };
 

@@ -60,6 +60,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     // Matarial Fab Buttons
     implementation 'com.github.clans:fab:1.6.4'
+    // CHARTS
+    implementation 'com.diogobernardino:williamchart:3.3.0'
+    implementation 'com.github.PhilJay:MPAndroidChart-Realm:v3.0.3@aar'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation project(':materialdialog')
     implementation project(':progressprofile')
     testImplementation 'junit:junit:4.13'

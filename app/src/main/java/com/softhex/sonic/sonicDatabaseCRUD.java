@@ -46,6 +46,8 @@ public class sonicDatabaseCRUD {
     private final String TABLE_CONDICAO_PAGAMENTO = sonicConstants.TB_CONDICAO_PAGAMENTO;
     private final String TABLE_PRECO_PRODUTO = sonicConstants.TB_TABELA_PRECO_PRODUTO;
     private final String TABLE_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
+    private final String TABLE_ULTIMAS_COMPRAS = sonicConstants.TB_ULTIMAS_COMPRAS;
+    private final String TABLE_ULTIMAS_COMPRAS_ITENS = sonicConstants.TB_ULTIMAS_COMPRAS_ITENS;
     private final String TABLE_VENDA = sonicConstants.TB_VENDA;
     private final String TABLE_VENDA_ITEM = sonicConstants.TB_VENDA_ITEM;
     private final String TABLE_RANKING_PRODUTO = sonicConstants.TB_RANKING_PRODUTO;
@@ -672,7 +674,7 @@ public class sonicDatabaseCRUD {
                         "GC.nome AS grupo," +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
-                        "(SELECT COUNT(V._id) FROM " + TABLE_VENDA + " V WHERE V.codigo_cliente = C.codigo) AS compras, " +
+                        "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
                         "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
                         " FROM " + TABLE_CLIENTE +
                         " C LEFT JOIN " + TABLE_EMPRESA_CLIENTE +
@@ -739,20 +741,18 @@ public class sonicDatabaseCRUD {
                 List<sonicClientesDetalheComprasHolder> compra = new ArrayList<>();
 
                 String query = "SELECT " +
-                                "V._id AS id, " +
-                                "(SELECT U.nome FROM " + TABLE_USUARIO + " U WHERE U.codigo = V.codigo_usuario) AS usuario, " +
-                                "V.vendedor AS vendedor, " +
-                                "V.codigo AS codigo, " +
-                                "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = V.codigo_tipo_cobranca) AS tipo_cobranca, " +
-                                "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = V.codigo_prazo) AS prazo, " +
-                                "V.codigo_mobile AS codigo_mobile, " +
-                                "V.situacao AS situacao, " +
-                                "V.data AS data, " +
-                                "V.valor AS valor, " +
-                                "V.valor_desconto AS valor_desc " +
-                                " FROM " + TABLE_VENDA + " V WHERE V.codigo_cliente = "+codigo+" ORDER BY V.data DESC LIMIT "+limit;
+                                "UC._id, " +
+                                "UC.vendedor, " +
+                                "UC.codigo, " +
+                                "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = UC.codigo_tipo_cobranca) AS tipo_cobranca, " +
+                                "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = UC.codigo_prazo) AS prazo, " +
+                                "UC.data, " +
+                                "UC.valor, " +
+                                "UC.valor_desconto " +
+                                " FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = "+codigo+" ORDER BY UC.data DESC LIMIT "+limit;
 
                 try {
+                    Log.d("QUERY", query);
 
                     Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -760,16 +760,13 @@ public class sonicDatabaseCRUD {
 
                         while (cursor.moveToNext()){
                             sonicClientesDetalheComprasHolder compras = new sonicClientesDetalheComprasHolder();
-                            compras.setUsuario(cursor.getString(cursor.getColumnIndex("usuario")));
                             compras.setVendedor(cursor.getString(cursor.getColumnIndex("vendedor")));
                             compras.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             compras.setTipoCobranca(cursor.getString(cursor.getColumnIndex("tipo_cobranca")));
                             compras.setPrazo(cursor.getString(cursor.getColumnIndex("prazo")));
-                            compras.setCodigoMobile(cursor.getString(cursor.getColumnIndex("codigo_mobile")));
-                            compras.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
                             compras.setData(cursor.getString(cursor.getColumnIndex("data")));
                             compras.setValor(cursor.getString(cursor.getColumnIndex("valor")));
-                            compras.setValorDesc(cursor.getString(cursor.getColumnIndex("valor_desc")));
+                            compras.setValorDesc(cursor.getString(cursor.getColumnIndex("valor_desconto")));
                             compra.add(compras);
 
                         }
@@ -793,21 +790,19 @@ public class sonicDatabaseCRUD {
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 List<sonicClientesDetalheComprasItensHolder> item = new ArrayList<>();
 
-                String query = "SELECT " +
-                        "IV._id AS id, " +
-                        "IV.codigo AS codigo_item, " +
-                        "P.nome AS produto, " +
-                        "(SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto, " +
-                        "IV.codigo_produto AS codigo_produto, " +
-                        "P.codigo_alternativo AS referencia, " +
-                        "IV.codigo_venda AS codigo_venda, " +
-                        "(SELECT UM.nome FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida, " +
-                        "(SELECT UM.sigla FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = IV.codigo_unidade) AS unidade_medida_sigla, " +"IV.quantidade AS quantidade, " +
-                        "IV.preco AS preco_unitario, " +
-                        "IV.valor AS valor, " +
-                        "IV.valor_desconto AS desconto " +
-                        " FROM " + TABLE_VENDA_ITEM +
-                        " IV JOIN "+ TABLE_PRODUTO + " P ON P.codigo = IV.codigo_produto WHERE IV.codigo_venda = "+codigo+" ORDER BY IV.codigo";
+                String query = "SELECT * FROM (SELECT " +
+                        "UCI._id, " +
+                        "(SELECT IFNULL(P.nome,'--') FROM " + TABLE_PRODUTO + " P WHERE P.codigo = UCI.codigo_produto) AS produto, " +
+                        "UCI.codigo_produto AS codigo_produto, " +
+                        "UCI.codigo AS codigo_venda, " +
+                        "(SELECT UM.nome FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = UCI.codigo_unidade) AS unidade_medida, " +
+                        "(SELECT UM.sigla FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = UCI.codigo_unidade) AS unidade_medida_sigla, " +
+                        "UCI.quantidade AS quantidade, " +
+                        "UCI.preco AS preco_unitario, " +
+                        "UCI.valor AS valor, " +
+                        "UCI.valor_desconto AS desconto " +
+                        " FROM " + TABLE_ULTIMAS_COMPRAS_ITENS +
+                        " UCI WHERE UCI.codigo = "+codigo+") X ORDER BY X.produto";
 
                 try {
 
@@ -817,11 +812,8 @@ public class sonicDatabaseCRUD {
 
                         while (cursor.moveToNext()){
                             sonicClientesDetalheComprasItensHolder itens = new sonicClientesDetalheComprasItensHolder();
-                            itens.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo_item")));
                             itens.setProduto(cursor.getString(cursor.getColumnIndex("produto")));
-                            itens.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
                             itens.setCodigoProduto(cursor.getInt(cursor.getColumnIndex("codigo_produto")));
-                            itens.setReferencia(cursor.getString(cursor.getColumnIndex("referencia")));
                             itens.setCodigoVenda(cursor.getInt(cursor.getColumnIndex("codigo_venda")));
                             itens.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
                             itens.setUnidadeMedidaSigla(cursor.getString(cursor.getColumnIndex("unidade_medida_sigla")));
@@ -936,6 +928,86 @@ public class sonicDatabaseCRUD {
             }
 
             return count;
+        }
+
+        public List<sonicVendasHolder> selectVendas() {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicVendasHolder> venda = new ArrayList<>();
+
+            try {
+
+                String query = "SELECT * FROM (" +
+
+                        "SELECT " +
+                        "5 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
+                        "UNION " +
+                        "SELECT " +
+                        "4 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-1 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-1 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
+                        "UNION " +
+                        "SELECT " +
+                        "3 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-2 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-2 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
+                        "UNION " +
+                        "SELECT " +
+                        "2 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-3 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-3 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
+                        "UNION " +
+                        "SELECT " +
+                        "1 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-4 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-4 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
+                        "UNION " +
+                        "SELECT " +
+                        "0 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-5 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-5 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')));";
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
+
+                if(cursor!=null){
+                    while (cursor.moveToNext()){
+                        sonicVendasHolder vendas = new sonicVendasHolder();
+
+                        vendas.setMes(cursor.getString(cursor.getColumnIndex("mes")));
+                        vendas.setAno(cursor.getString(cursor.getColumnIndex("ano")));
+                        vendas.setValor(cursor.getString(cursor.getColumnIndex("valor")));
+                        venda.add(vendas);
+
+                    }
+
+                    cursor.close();
+                }
+
+            } catch (SQLiteException e) {
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+            Log.d("VENDAS", venda.toString());
+            return venda;
+
         }
 
     }

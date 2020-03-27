@@ -98,7 +98,7 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
     private LinearLayout llDetail;
-    private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendido, tvMeta;
+    private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendas, tvMeta;
     private ProgressProfileView myProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String  vendido;
@@ -115,6 +115,7 @@ public class sonicMain extends AppCompatActivity{
         setContentView(R.layout.sonic_main);
 
         AndroidRemoteDebugger.init(this);
+        sonicAppearence.transparentStatusAndNavigation(this);
 
         mActivity = this;
         DBC = new sonicDatabaseCRUD(mActivity);
@@ -133,17 +134,17 @@ public class sonicMain extends AppCompatActivity{
         tvSaudacao = findViewById(R.id.tvSaudacao);
         tvUsuario = findViewById(R.id.tvUsuario);
         tvPedidos = findViewById(R.id.tvPedidos);
-        tvDesemprenho = findViewById(R.id.tvDesemprenho);
-        tvVendido = findViewById(R.id.tvVendido);
-        tvMeta = findViewById(R.id.tvMeta);
+        tvDesemprenho = findViewById(R.id.tvDesempenho);
+        tvVendas = findViewById(R.id.tvVendas);
+        //tvMeta = findViewById(R.id.tvMeta);
         pbEmpresa = findViewById(R.id.pbEmpresa);
         pbSaudacaoUsuario = findViewById(R.id.pbSaudacaoUsuario);
-        pbPedidos = findViewById(R.id.pbPedidos);
-        pbDesempenho = findViewById(R.id.pbDesempenho);
-        pbVendido = findViewById(R.id.pbVendido);
-        pbMeta = findViewById(R.id.pbMeta);
-        llStar = findViewById(R.id.llStar);
-        llChecked = findViewById(R.id.llChecked);
+        //pbPedidos = findViewById(R.id.pbPedidos);
+        //pbDesempenho = findViewById(R.id.pbDesempenho);
+        //pbVendido = findViewById(R.id.pbVendido);
+        //pbMeta = findViewById(R.id.pbMeta);
+        //llStar = findViewById(R.id.llStar);
+        //llChecked = findViewById(R.id.llChecked);
         myProgressProfile = findViewById(R.id.myProgressProfile);
 
         // DISPLAY DRAWABLE FILE IN LINEAR LAYOUT
@@ -242,8 +243,8 @@ public class sonicMain extends AppCompatActivity{
         //percentualProgress = (Float.valueOf(vend)/Float.valueOf(uMeta))*100;
         //percentualTotal = percentualProgress;
         int [] progress2 = null;
-        llStar.setVisibility(View.INVISIBLE);
-        llChecked.setVisibility(View.INVISIBLE);
+        //llStar.setVisibility(View.INVISIBLE);
+        //llChecked.setVisibility(View.INVISIBLE);
         /*tvDesemprenho.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
         if(percentualProgress <=25.0){
@@ -263,25 +264,25 @@ public class sonicMain extends AppCompatActivity{
             tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
         }*/
         //progress = mActivity.getResources().getIntArray(R.array.progressProfile75to100);
-        myProgressProfile.setProgressGradient(mActivity.getResources().getIntArray(R.array.progressProfile100));
-        myProgressProfile.setProgress(10f);
+        myProgressProfile.setProgressGradient(mActivity.getResources().getIntArray(R.array.progressProfile25t050));
+        myProgressProfile.setProgress(70f);
         myProgressProfile.startAnimation();
     }
 
     public void lerDadosUsuario(){
 
         // ESCONDE O PROGRESS E EXIBE OS VALORES
-        pbPedidos.setVisibility(View.GONE);
-        pbDesempenho.setVisibility(View.GONE);
-        pbVendido.setVisibility(View.GONE);
-        pbMeta.setVisibility(View.GONE);
+        //pbPedidos.setVisibility(View.GONE);
+        //pbDesempenho.setVisibility(View.GONE);
+        //pbVendido.setVisibility(View.GONE);
+        //pbMeta.setVisibility(View.GONE);
         tvPedidos.setVisibility(View.VISIBLE);
-        tvPedidos.setText("12");
+        tvPedidos.setText("130");
         tvDesemprenho.setVisibility(View.VISIBLE);
         //tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
-        tvVendido.setVisibility(View.VISIBLE);
-        //tvVendido.setText(new sonicUtils(mActivity).Number.stringToMoeda2(vendido));
-        tvMeta.setVisibility(View.VISIBLE);
+        tvVendas.setVisibility(View.VISIBLE);
+        //tvVendas.setText(new sonicUtils(mActivity).Number.stringToMoeda2(vendido));
+        //tvMeta.setVisibility(View.VISIBLE);
         //tvMeta.setText(new sonicUtils(mActivity).Number.stringToMoeda2(usuarioMeta));
 
     }
@@ -309,7 +310,7 @@ public class sonicMain extends AppCompatActivity{
                         mPrefs.Users.setEmpresaId((int)profile.getIdentifier());
                         usuarioMeta = listaUser.get(0).getMetaVenda();
                         tvEmpresa.setText(profile.getEmail().toString());
-                        tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
+                        //tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
                         File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture((int)profile.getIdentifier()));
                         String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
                         sonicGlide.glideImageView(mActivity,myProgressProfile,picture);

@@ -57,7 +57,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_PRAZO = sonicConstants.TB_PRAZO;
     private static final String DB_TABELA_PRECO_CLIENTE = sonicConstants.TB_TABELA_PRECO_CLIENTE;
     private static final String DB_FRETE = sonicConstants.TB_FRETE;
-    private static final String DB_ULTIMA_COMPRA = sonicConstants.TB_ULTIMA_COMPRA;
+    private static final String DB_ULTIMAS_COMPRAS = sonicConstants.TB_ULTIMAS_COMPRAS;
+    private static final String DB_ULTIMAS_COMPRAS_ITENS = sonicConstants.TB_ULTIMAS_COMPRAS_ITENS;
     private static final String DB_IMPRESSORA = sonicConstants.TB_IMPRESSORA;
     private static final String DB_AVISOS = sonicConstants.TB_AVISO;
     private static final String DB_AVISO_LIDO = sonicConstants.TB_AVISO_LIDO;
@@ -150,6 +151,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "data_cadastro varchar, " +
             "cep character(10), " +
             "fone varchar, " +
+            "whatsapp varchar, " +
             "contato string, " +
             "email string, " +
             "observacao string, " +
@@ -265,40 +267,12 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_VENDAS = "CREATE TABLE IF NOT EXISTS "+DB_VENDA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_usuario int NOT NULL, " +
-            "codigo int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
-            "codigo_cliente int NOT NULL, " +
-            "codigo_tipo_cobranca int NOT NULL, " +
-            "codigo_prazo int NOT NULL," +
-            "codigo_mobile varchar," +
-            "vendedor string, " +
-            "situacao int," +
             "data varchar," +
-            "valor decimal(9,2)," +
-            "valor_desconto decimal(9,2));";
-    private static final String CREATE_INDEX_VENDAS_CODIGO = "CREATE UNIQUE INDEX index_vendas_codigo ON "+DB_VENDA+" (codigo);";
+            "valor numeric," +
+            "valor_desconto numeric);";
     private static final String CREATE_INDEX_VENDAS_CODIGO_USUARIO = "CREATE INDEX index_vendas_codigo_usuario ON "+DB_VENDA+" (codigo_usuario);";
     private static final String CREATE_INDEX_VENDAS_CODIGO_EMPRESA = "CREATE INDEX index_vendas_codigo_empresa ON "+DB_VENDA+" (codigo_empresa);";
-    private static final String CREATE_INDEX_VENDAS_CODIGO_CLIENTE = "CREATE INDEX index_vendas_codigo_cliente ON "+DB_VENDA+" (codigo_cliente);";
-    private static final String CREATE_INDEX_VENDAS_CODIGO_TIPO_COBRANCA = "CREATE INDEX index_vendas_codigo_tipo_cobranca ON "+DB_VENDA+" (codigo_tipo_cobranca);";
-    private static final String CREATE_INDEX_VENDAS_CODIGO_PRAZO = "CREATE INDEX index_vendas_codigo_prazo ON "+DB_VENDA+" (codigo_prazo);";
-
-    private static final String CREATE_VENDAS_ITENS = "CREATE TABLE IF NOT EXISTS "+DB_VENDA_ITEM+" (" +
-            "_id integer PRIMARY KEY AUTOINCREMENT, " +
-            "codigo_usuario int NOT NULL, " +
-            "codigo int NOT NULL, " +
-            "codigo_venda int NOT NULL, " +
-            "codigo_produto int NOT NULL, " +
-            "codigo_unidade int NOT NULL, " +
-            "quantidade int," +
-            "preco decimal(9,2)," +
-            "valor decimal(9,2)," +
-            "valor_desconto decimal(9,2));";
-    private static final String CREATE_INDEX_VENDAS_ITENS_CODIGO = "CREATE UNIQUE INDEX index_vendas_itens_codigo ON "+DB_VENDA_ITEM+" (codigo);";
-    private static final String CREATE_INDEX_VENDAS_ITENS_CODIGO_VENDA = "CREATE INDEX index_vendas_itens_codigo_venda ON "+DB_VENDA_ITEM+" (codigo_venda);";
-    private static final String CREATE_INDEX_VENDAS_ITENS_CODIGO_USUARIO = "CREATE INDEX index_vendas_itens_usuario ON "+DB_VENDA_ITEM+" (codigo_usuario);";
-    private static final String CREATE_INDEX_VENDAS_ITENS_CODIGO_PRODUTO = "CREATE INDEX index_vendas_itens_codigo_produto ON "+DB_VENDA_ITEM+" (codigo_produto);";
-    private static final String CREATE_INDEX_VENDAS_ITENS_CODIGO_UNIDADE= "CREATE INDEX index_vendas_itens_codigo_unidade ON "+DB_VENDA_ITEM+" (codigo_unidade);";
 
     private static final String CREATE_RANKING_PRODUTO = "CREATE TABLE IF NOT EXISTS "+DB_RANKING_PRODUTO+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -438,26 +412,40 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_tabela int, " +
             "condicao_cliente);";
 
-    private static final String CREATE_ULTIMA_COMPRA = "CREATE TABLE IF NOT EXISTS "+DB_ULTIMA_COMPRA+" (" +
+    private static final String CREATE_ULTIMAS_COMPRAS = "CREATE TABLE IF NOT EXISTS "+DB_ULTIMAS_COMPRAS+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo_usuario int NOT NULL, " +
             "codigo int NOT NULL, " +
-            "codigo_cliente int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
-            "data varchar NOT NULL, " +
+            "codigo_cliente int NOT NULL, " +
+            "codigo_tipo_cobranca int NOT NULL, " +
+            "codigo_prazo int, " +
+            "data varchar, " +
             "vendedor string, " +
-            "numero varchar, " +
-            "numero_mobile varchar, " +
-            "prazo string, " +
-            "tipo_cobranca string, " +
-            "observacao string, " +
-            "valor_total string, " +
-            "valor_desconto string, " +
-            "valor_final string, " +
-            "usuario int);";
-    private static final String CREATE_INDEX_ULTIMA_COMPRA_CODIGO = "CREATE INDEX index_ultima_compra_codigo ON "+DB_ULTIMA_COMPRA+" (codigo);";
-    private static final String CREATE_INDEX_ULTIMA_COMPRA_CODIGO_CLIENTE = "CREATE INDEX index_ultima_compra_codigo_cliente ON "+DB_ULTIMA_COMPRA+" (codigo_cliente);";
-    private static final String CREATE_INDEX_ULTIMA_COMPRA_CODIGO_EMPRESA = "CREATE INDEX index_ultima_compra_codigo_empresa ON "+DB_ULTIMA_COMPRA+" (codigo_empresa);";
-    
+            "valor decimal(9,2), " +
+            "valor_desconto decimal(9,2));";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_USUARIO = "CREATE INDEX index_ultimas_compras_codigo_usuario ON "+DB_ULTIMAS_COMPRAS+" (codigo_usuario);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO = "CREATE UNIQUE INDEX index_ultimas_compras_codigo ON "+DB_ULTIMAS_COMPRAS+" (codigo);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_EMPRESA = "CREATE INDEX index_ultimas_compras_codigo_empresa ON "+DB_ULTIMAS_COMPRAS+" (codigo_empresa);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_CLIENTE = "CREATE INDEX index_ultimas_compras_codigo_cliente ON "+DB_ULTIMAS_COMPRAS+" (codigo_cliente);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_TIPO_COBRANCA = "CREATE INDEX index_ultimas_compras_codigo_tipo_cobranca ON "+DB_ULTIMAS_COMPRAS+" (codigo_tipo_cobranca);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_PRAZO = "CREATE INDEX index_ultimas_compras_codigo_prazo ON "+DB_ULTIMAS_COMPRAS+" (codigo_prazo);";
+
+    private static final String CREATE_ULTIMAS_COMPRAS_ITENS = "CREATE TABLE IF NOT EXISTS "+DB_ULTIMAS_COMPRAS_ITENS+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo_usuario int NOT NULL, " +
+            "codigo int NOT NULL, " +
+            "codigo_produto int NOT NULL, " +
+            "codigo_unidade int NOT NULL, " +
+            "quantidade int," +
+            "preco decimal(9,2)," +
+            "valor decimal(9,2)," +
+            "valor_desconto decimal(9,2));";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_USUARIO = "CREATE INDEX index_ultimas_compras_itens_codigo_usuario ON "+DB_ULTIMAS_COMPRAS_ITENS+" (codigo_usuario);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO = "CREATE INDEX index_ultimas_compras_itens_codigo ON "+DB_ULTIMAS_COMPRAS_ITENS+" (codigo);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_PRODUTO = "CREATE INDEX index_ultimas_compras_itens_codigo_produto ON "+DB_ULTIMAS_COMPRAS_ITENS+" (codigo_produto);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_UNIDADE = "CREATE INDEX index_ultimas_compras_itens_codigo_unidade ON "+DB_ULTIMAS_COMPRAS_ITENS+" (codigo_unidade);";
+
     private static final String CREATE_IMPRESSORAS = "CREATE TABLE IF NOT EXISTS "+DB_IMPRESSORA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_tabela int, " +
@@ -581,11 +569,21 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_USUARIO);
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_EMPRESA);
-        DB.execSQL(CREATE_ULTIMA_COMPRA);
-        DB.execSQL(CREATE_INDEX_ULTIMA_COMPRA_CODIGO);
-        DB.execSQL(CREATE_INDEX_ULTIMA_COMPRA_CODIGO_CLIENTE);
-        DB.execSQL(CREATE_INDEX_ULTIMA_COMPRA_CODIGO_EMPRESA);
+        // TABELA ULTIMAS COMPRAS
+        DB.execSQL(CREATE_ULTIMAS_COMPRAS);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_USUARIO);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_TIPO_COBRANCA);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_PRAZO);
         DB.execSQL(CREATE_RANKING_PRODUTO);
+        // TABELA ULTIMAS XOMPRAS ITENS
+        DB.execSQL(CREATE_ULTIMAS_COMPRAS_ITENS);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_PRODUTO);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_UNIDADE);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_ITENS_CODIGO_USUARIO);
         // TABELA PRECO
         DB.execSQL(CREATE_TABELA_PRECO);
         DB.execSQL(CREATE_INDEX_TABELA_PRECO_CODIGO);
@@ -602,19 +600,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TABELA_PRECO_PRODUTO_CODIGO_UNIDADE);
         // TABELA VENDAS
         DB.execSQL(CREATE_VENDAS);
-        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO);
-        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_CLIENTE);
-        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_EMPRESA);
         DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_USUARIO);
-        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_TIPO_COBRANCA);
-        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_PRAZO);
-        // TABELA VENADS ITENS
-        DB.execSQL(CREATE_VENDAS_ITENS);
-        DB.execSQL(CREATE_INDEX_VENDAS_ITENS_CODIGO);
-        DB.execSQL(CREATE_INDEX_VENDAS_ITENS_CODIGO_VENDA);
-        DB.execSQL(CREATE_INDEX_VENDAS_ITENS_CODIGO_PRODUTO);
-        DB.execSQL(CREATE_INDEX_VENDAS_ITENS_CODIGO_USUARIO);
-        DB.execSQL(CREATE_INDEX_VENDAS_ITENS_CODIGO_UNIDADE);
+        DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_EMPRESA);
+
         DB.execSQL(CREATE_TABELA_PRECO);
         //DB.execSQL(CREATE_TABELA_PRECO_PRODUTO);
         //DB.execSQL(CREATE_TABELA_PRECO_CLIENTE);

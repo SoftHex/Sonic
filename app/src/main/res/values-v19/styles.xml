@@ -12,6 +12,12 @@
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
     </style>
 
+    <!-- TRANSLUCED APP THEME -->
+    <style name="TranslucedAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="WineAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorWinePrimary</item>
         <item name="colorPrimaryDark">@color/colorWinePrimaryDark</item>

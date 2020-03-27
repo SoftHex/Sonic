@@ -65,21 +65,46 @@ public class sonicAppearence {
         }
     }
 
-    public static void layoutWthiStatusBarColorPrimery(Context c, Window w){
+    public static void layoutWithStatusBarColorPrimary(Context c, Window w){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            w.setStatusBarColor(c.getResources().getColor(R.color.colorPrimaryDark));
+            w.setStatusBarColor(c.getResources().getColor(R.color.colorLoginStatusBar));
         }
     }
 
     public static void layoutWhitLogicalMenu(Context ctx, Window w){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && ViewConfiguration.get(ctx).hasPermanentMenuKey()) {
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         }
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
             w.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             w.setStatusBarColor(Color.TRANSPARENT);
         }
+    }
+
+    public static void transparentStatusAndNavigation(Activity mActivity) {
+        Window w = mActivity.getWindow();
+        if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 21) {
+            setWindowFlag(mActivity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true);
+        }
+        if (Build.VERSION.SDK_INT >= 19) {
+            w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            setWindowFlag(mActivity, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false);
+            w.setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+
+    private static void setWindowFlag(Activity activity, final int bits, boolean on) {
+        Window win = activity.getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
     }
 
     public static void layoutFullScreenMode(Window w){

@@ -2,18 +2,18 @@
 <resources>
 
     <!-- DEFAULT APP COLORS -->
-    <color name="colorPrimaryDark">#194165</color>
-    <color name="colorPrimary">#1A4B74</color>
-    <color name="colorAccent">#225C8F</color>
-    <color name="colorAccent2">#286DA9</color>
-    <color name="colorAccentLight">#3399CC</color>
-    <color name="colorSpotLight">#6959CD</color>
-    <color name="colorSpotLight2">#4682B4</color>
-    <color name="colorPrimaryDarkT">#99184165</color>
-    <color name="colorPrimaryT">#901A4B74</color>
-    <color name="colorAccentT">#90225C8F</color>
-    <color name="colorPrimaryLight">#9EB4C8</color>
-    <color name="colorPrimaryLightT">#909EB4C8</color>
+    <color name="colorPrimaryDark">#151515</color>
+    <color name="colorPrimary">#1C1C1C</color>
+    <color name="colorAccent">#6E6E6E</color>
+    <color name="colorAccent2">#A4A4A4</color>
+    <color name="colorAccentLight">#D8D8D8</color>
+    <color name="colorSpotLight">#6E6E6E</color>
+    <color name="colorSpotLight2">#848484</color>
+    <color name="colorPrimaryDarkT">#99151515</color>
+    <color name="colorPrimaryT">#901C1C1C</color>
+    <color name="colorAccentT">#906E6E6E</color>
+    <color name="colorPrimaryLight">#A4A4A4</color>
+    <color name="colorPrimaryLightT">#90A4A4A4</color>
     <color name="colorPrimaryOrangeDark">#DD4D0F</color>
     <color name="colorPrimaryOrange">#FF8C00</color>
     <color name="colorPrimaryOrangeLight">#FFD700</color>
@@ -88,9 +88,9 @@
     <color name="colorTypeWrong">#ed7861</color>
     <color name="colorTypeWarning">#e8bd4b</color>
     <color name="colorTypeSuccess">#90b06e</color>
-    <color name="colorLogin">#286DA9</color>
-    <color name="colorLoginT">#99286DA9</color>
-    <color name="colorLoginStatusBar">#194165</color>
+    <color name="colorLogin">#6E6E6E</color>
+    <color name="colorLoginT">#996E6E6E</color>
+    <color name="colorLoginStatusBar">#424242</color>
 
     <!-- WINE THEME -->
     <color name="colorWinePrimaryDark">#610B0B</color>
