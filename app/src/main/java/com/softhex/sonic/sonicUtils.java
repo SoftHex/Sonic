@@ -61,7 +61,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -87,6 +86,9 @@ public class sonicUtils {
     private static final float BITMAP_SCALE = 0.4f;
     private static final int CEP = 1;
     private static final int CPF_CNPJ = 2;
+    private boolean WITH_SYMBOL;
+    boolean WITH_DECIMAL;
+
 
     //Set the radius of the Blur. Supported range 0 < radius <= 25
     private static float BLUR_RADIUS = 10.5f;
@@ -1593,24 +1595,18 @@ public class sonicUtils {
 
             }
 
-        public String stringToMoeda2(String number){
-
+        public String stringToMoeda(String number, boolean symbol, boolean decimal){
+                WITH_SYMBOL = symbol;
+                WITH_DECIMAL = decimal;
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
 
-            NumberFormat format = NumberFormat.getCurrencyInstance();
-
-            Float res;
-
-            if(number.length()>=3){
-                res = Float.valueOf(number.substring(0,number.length()-2));
-            }else{
-                res = Float.valueOf(number);
-            }
-
+            Locale meuLocal = new Locale( "pt", "BR" );
+            NumberFormat format = NumberFormat.getCurrencyInstance(meuLocal);
+            double v=0;
                 try{
 
-                    format.setMaximumFractionDigits(sonicConstants.CURRENCY_DIGITS);
-                    format.setCurrency(Currency.getInstance(sonicConstants.CURRENCY));
+                    format.setMaximumFractionDigits(symbol ? 2 : 0);
+                    v = (double)Float.valueOf(number)/(decimal ? 100 : 0);
 
                 }catch (Exception e){
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
@@ -1621,7 +1617,7 @@ public class sonicUtils {
                     e.printStackTrace();
                 }
 
-            return format.format(res).replace("R$","R$ ");
+            return format.format(v).replace("R$", WITH_SYMBOL ? "R$ " : "");
         }
 
         public String stringToMoeda(String number) {
