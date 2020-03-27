@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="cards main container">
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp">
+
+        <LinearLayout
+            android:id="@+id/linearItem"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:background="?selectableItemBackground">
+
+            <!--LATERAL -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="-10dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="6dp">
+
+                <!-- START DASH -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp">
+
+                    <com.softhex.sonic.DividerView
+                        android:layout_width="wrap_content"
+                        android:layout_height="6dp"
+                        android:layerType="software"
+                        custom:color="@color/colorPrimaryBlackLightT"
+                        custom:orientation="vertical"
+                        custom:dashLength="6dp"
+                        custom:dashGap="6dp"
+                        custom:dashThickness="1dp" />
+
+                </LinearLayout>
+
+                <!-- TEXTO E FOTO -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center_vertical">
+
+                    <RelativeLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvLetra"
+                            android:transitionName="imagemTransition"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="A"
+                            android:background="@drawable/circle_textview"
+                            android:textSize="25sp"/>
+
+                        <ImageView
+                            android:id="@+id/ivImagem"
+                            android:transitionName="imagemTransition"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <!-- END DASH -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.softhex.sonic.DividerView
+                        android:layout_width="wrap_content"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="6dp"
+                        android:layerType="software"
+                        custom:color="@color/colorPrimaryBlackLightT"
+                        custom:orientation="vertical"
+                        custom:dashLength="6dp"
+                        custom:dashGap="6dp"
+                        custom:dashThickness="1dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- CONTEUDO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="6dp">
+
+                <!-- CABEÇALHO - FOTO, NOME E ENDEREÇO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="NOME DO CLIENTE"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvEndereco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Endereço do Cliente"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- CABEÇALHO - STATUS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@drawable/status_nao_iniciado"
+                        android:text="Não Iniciado"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textColor="@color/colorTextWhite"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvPositivado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@drawable/status_positivado"
+                        android:text="Positivado"
+                        android:layout_marginLeft="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textColor="@color/colorTextWhite"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvNegativado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@drawable/status_negativado"
+                        android:text="Negativado"
+                        android:layout_marginLeft="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textColor="@color/colorTextWhite"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tvCancelado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:background="@drawable/status_cancelado"
+                        android:text="Cancelado"
+                        android:layout_marginLeft="4dp"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textColor="@color/colorTextWhite"
+                        android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                <!-- INFORMAÇOES GERAIS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvAtendente"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Atendente"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvDataHora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Data Prevista:"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvObservacao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Observação:"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvTempo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Duração:"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- SEPARADOR -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1px"
+        android:layout_marginLeft="26dp"
+        android:background="#DCDCDC" />
+
+</LinearLayout>

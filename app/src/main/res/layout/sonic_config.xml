@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:theme="@style/PreferenceAppTheme"
+    tools:context="com.softhex.sonic.sonicConfig">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mToolbar"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/appBar">
+
+        <!-- CONTEÚDO -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <!-- DETALHE DO CLIENTE -->
+            <LinearLayout
+                android:id="@+id/llContent"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="?selectableItemBackground"
+                android:minHeight="90dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <!-- IMAGEM PRINCIPAL -->
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/ivImagem"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:scaleType="centerCrop"
+                            android:transitionName="imagemTransition"
+                            android:src="@drawable/nocompany"/>
+
+                    </LinearLayout>
+
+                    <!-- TÍTULO E DESCRIÇÃO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <!-- TÍTULO -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvTitle"
+                                android:transitionName="titleTransition"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:textColor="@color/colorTextPrimary"
+                                android:text="NOME DA EMPRESA"/>
+
+                        </LinearLayout>
+
+                        <!-- DESCRIÇÃO -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvDescricao"
+                                android:transitionName="descTransition"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:text="DESCRIPTION"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:background="#DCDCDC" />
+
+            <!-- SEGURANÇA -->
+            <LinearLayout
+                android:id="@+id/llSeguranca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="?selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/ic_key_variant_grey600_24dp"
+                        android:drawablePadding="20dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="@string/configPSegurancaTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:text="@string/configSegurancaDesc" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- PERSONALIZAÇÃO -->
+            <LinearLayout
+                android:id="@+id/llPersonalizacao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="?selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/ic_palette_outline_grey600_24dp"
+                        android:drawablePadding="20dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="@string/configPersonTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:text="@string/configPersonDesc" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- NOTIFICAÇÕES -->
+            <LinearLayout
+                android:id="@+id/llNotificacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="?selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/ic_bell_outline_grey600_24dp"
+                        android:drawablePadding="20dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="@string/configNotificacaoTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:text="@string/configNotificacaoDesc" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- AJUDA -->
+            <LinearLayout
+                android:id="@+id/llAjuda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="?selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/ic_help_circle_outline_grey600_24dp"
+                        android:drawablePadding="20dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="@string/configAjudaTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:text="@string/configAjudaDesc" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- SOBRE -->
+            <LinearLayout
+                android:id="@+id/llSobre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:background="?selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@mipmap/ic_information_outline_grey600_24dp"
+                        android:drawablePadding="20dp">
+
+                    </TextView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:textColor="@color/colorTextPrimary"
+                        android:text="@string/configSobreTitle" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:text="@string/configSobreDesc" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="20dp"
+                android:background="#DCDCDC" />
+
+            <!-- LOGO -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="40dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pBy"
+                    android:textColor="@color/colorPrimaryBlackLight"
+                    android:textStyle="bold"
+                    android:textSize="12dp" />
+
+                <!--<com.facebook.shimmer.ShimmerFrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:shimmer_duration="2000"
+                    app:shimmer_tilt="0"
+                    app:shimmer_highlight_color="@color/colorPrimary"
+                    app:shimmer_direction="left_to_right">
+
+
+
+                </com.facebook.shimmer.ShimmerFrameLayout>-->
+
+                <TextView
+                    android:id="@+id/splash_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/appCompany"
+                    android:textColor="@color/colorSpotLight2"
+                    android:textStyle="bold"
+                    android:textSize="32dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

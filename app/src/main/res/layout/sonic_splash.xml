@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <!-- LOGO -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="55dp"
+        android:gravity="bottom|center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pBy"
+            android:textColor="@color/colorPrimaryBlackLight"
+            android:textStyle="bold"
+            android:textSize="12dp" />
+
+        <!--<com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:shimmer_duration="2000"
+            app:shimmer_tilt="0"
+            app:shimmer_highlight_color="@color/colorPrimary"
+            app:shimmer_direction="left_to_right">
+
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>-->
+
+        <TextView
+            android:id="@+id/splash_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/appCompany"
+            android:textColor="@color/colorSpotLight2"
+            android:textStyle="bold"
+            android:textSize="32dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

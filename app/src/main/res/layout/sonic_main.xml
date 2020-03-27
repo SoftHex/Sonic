@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    android:fitsSystemWindows="true">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- APPBAR -->
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:elevation="0dp"
+            android:background="@android:color/transparent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_gravity="top"
+                android:id="@+id/mToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                android:theme="@style/ToolBarTheme"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!-- DETALHE USUARIO -->
+        <LinearLayout
+            android:id="@+id/llDetail"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/appBar"
+            android:layout_height="220dp">
+
+            <!-- NOME, EMPRESA E FOTO -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <!-- NOME DA EMPRESA -->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ProgressBar
+                            android:id="@+id/pbEmpresa"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:indeterminate="true"
+                            android:layout_marginTop="11dp"
+                            android:visibility="gone"
+                            android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                        <TextView
+                            android:id="@+id/tvEmpresa"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Empresa Nome"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textColor="@color/colorTextWhite"
+                            android:textStyle="bold"
+                            android:textSize="24sp"
+                            android:gravity="center_vertical"/>
+
+                    </LinearLayout>
+
+                    <!-- SAUDAÇÃO, NOME DO USUÁRIO -->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ProgressBar
+                            android:id="@+id/pbSaudacaoUsuario"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:indeterminate="true"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"
+                            android:indeterminateTint="@color/colorPrimaryWhite"/>
+
+                        <TextView
+                            android:id="@+id/tvSaudacao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Bem vindo,"
+                            android:textColor="@color/colorTextAccent"
+                            android:textSize="18sp"
+                            android:gravity="center_vertical"/>
+
+                        <TextView
+                            android:id="@+id/tvUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="12dp"
+                            android:text="Usuario"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorTextWhite"
+                            android:textSize="18sp"
+                            android:visibility="visible"
+                            android:gravity="center_vertical"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- IMAGEM DO USUARIO COM PERCENTUAL -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|right"
+                    android:layout_gravity="center"
+                    android:layout_weight="0">
+
+
+                        <com.softhex.view.ProgressProfileView
+                            android:id="@+id/myProgressProfile"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="65dp"
+                            android:layout_height="65dp"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
+                            app:progress="0"
+                            app:max="100"
+                            app:joinGradient="true"
+                            app:gradientFactor="5.0"
+                            app:progressRingSize="4dp"
+                            app:progressRingCorner="RECT"
+                            app:progressRingOutline="true"
+                            app:progressRingColor="@color/colorPrimaryRed"
+                            app:backgroundRingColor="@android:color/transparent"
+                            android:src="@drawable/no_profile"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:drawableTop="@mipmap/ic_currency_usd_white_24dp"
+                        android:text="Vendas"/>
+
+                    <TextView
+                        android:id="@+id/tvVendas"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:gravity="center"
+                        android:text="R$ 50.000,00"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:gravity="center"
+                        android:drawableTop="@mipmap/ic_package_variant_white_24dp"
+                        android:text="Pedidos"/>
+
+                    <TextView
+                        android:id="@+id/tvPedidos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:gravity="center"
+                        android:text="12"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:drawableTop="@mipmap/ic_chart_line_variant_white_24dp"
+                        android:text="Desempenho"/>
+
+                    <TextView
+                        android:id="@+id/tvDesempenho"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextWhite"
+                        android:gravity="center"
+                        android:text="70%"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            android:layout_below="@+id/llDetail">
+
+            <!-- TABLAYOUT -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/mTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="false"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layout_scrollFlags="scroll"
+                android:background="@android:color/transparent"
+                app:tabIndicator="@drawable/tab_indicator_white"
+                style="@style/TabsTheme2"
+                android:theme="@style/TabsTheme2"
+                app:tabIndicatorFullWidth="true"
+                app:tabMode="fixed"
+                app:tabGravity="fill"/>
+
+            <!-- VIEWPAGER -->
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/mViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/mTabs"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </androidx.viewpager.widget.ViewPager>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+</LinearLayout>

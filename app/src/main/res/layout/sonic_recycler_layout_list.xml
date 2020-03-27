@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:gravity="center"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="20sp"
+        android:elevation="1dp"
+        android:padding="40dp"
+        android:visibility="gone"
+        android:text="Titulo"
+        android:layout_margin="10sp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:elevation="1dp"
+        android:translationZ="1dp"
+        android:layout_marginTop="-100dp"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/ivImage"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:contentDescription="@string/placeholderText"
+            android:scaleType="center" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="20sp"
+            android:text="Titulo"
+            android:paddingBottom="2sp"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"/>
+
+        <TextView
+            android:id="@+id/tvText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@color/colorTextAccent"
+            android:textSize="16sp"
+            android:text="Texto"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"/>
+
+    </LinearLayout>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/mShimmerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_duration="1000"
+        app:shimmer_tilt="0"
+        app:shimmer_direction="left_to_right">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:visibility="gone"/>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
