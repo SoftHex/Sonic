@@ -103,7 +103,7 @@
         <item name="tabBackground">@android:color/transparent</item>
         <item name="tabTextColor">@color/colorTextWhiteLight</item>
         <item name="android:textColor">@color/colorTextWhiteLight</item>
-        <item name="tabSelectedTextColor">@color/colorPrimaryWhite</item>
+        <item name="tabSelectedTextColor">@color/colorAccent2</item>
     </style>
 
     <style name="HomeTabsTheme" parent="Theme.AppCompat.Light.NoActionBar">

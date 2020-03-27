@@ -186,6 +186,7 @@ public class sonicMain extends AppCompatActivity{
 
         myTabLayout = findViewById(R.id.mTabs);
         myTabLayout.setupWithViewPager(myViewPager);
+        //myTabLayout.setSelectedTabIndicator(R.color.colorAccent2);
 
         createDrawerMenu();
         calcularPercentual("2200000",usuarioMeta);
