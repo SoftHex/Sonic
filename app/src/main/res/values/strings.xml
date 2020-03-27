@@ -183,13 +183,26 @@
         <item>2</item>
     </string-array>
 
-    <!-- PREFERENCES FOR GERAL -->
+    <!-- PREFERENCES GERAL -->
     <string name="prefGeralCategory">Geral</string>
 
-    <string name="listagemCompleta">listagemCompleta</string>
+    <string name="listagemCompleta" translatable="false">listagemCompleta</string>
     <string name="prefListagemCompletaNome">Listagem Completa</string>
     <string name="prefListagemCompletaDescription">Listar todos os itens de uma só vez. Requer maior processamento.</string>
     <bool name="prefListagemCompletaDefault">false</bool>
+
+    <string name="homeChartaType" translatable="false">homeChartType</string>
+    <string name="prefHomeChartaTypeNome">Gráfico - Tela Inicial</string>
+    <string name="prefHomeChartaTypeDescription">Tipo de gráfico exibido na tela inicial.</string>
+    <string name="prefHomeChartaTypeDefault">Linhas</string>
+    <string-array name="prefHomeChartaTypeOptions">
+        <item name="1">Linhas</item>
+        <item name="2">Barras</item>
+    </string-array>
+    <string-array name="prefHomeChartaTypeValues">
+        <item name="1">Linhas</item>
+        <item name="2">Barras</item>
+    </string-array>
 
     <!-- PREFERENCES FOR CLIENTS -->
     <string name="prefClienteCategory">Clientes</string>
@@ -208,8 +221,8 @@
         <item name="2">Razão Social</item>
     </string-array>
 
-    <string name="clienteLista">clienteLista</string>
-    <string name="prefClienteListaNome">Detalhe - Lista de clientes</string>
+    <string name="clienteLista" translatable="false">clienteLista</string>
+    <string name="prefClienteListaNome">Detalhe - Lista de Clientes</string>
     <string name="prefClienteListaDescription">Clientes sem compra, títulos em atraso...</string>
 
     <string name="clienteSemCompra" translatable="false">clienteSemCompra</string>

@@ -57,6 +57,7 @@ public class sonicPreferences{
     private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
     private static final String GERAL_HOME_REFRESH = "homeRefresh";
     private static final String GERAL_SINC_REFRESH = "sincRefresh";
+    private static final String GERAL_HOME_CHART_TYPE = "homeChartType";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -539,6 +540,14 @@ public class sonicPreferences{
         }
         public boolean getSincRefresh(){
             return sharedpreferences.getBoolean(GERAL_SINC_REFRESH, false);
+        }
+        public void setHomeChartType(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_HOME_CHART_TYPE, value);
+            editor.apply();
+        }
+        public String getHomeChartType(){
+            return sharedpreferences.getString(GERAL_HOME_CHART_TYPE, "Linhas");
         }
     }
 }

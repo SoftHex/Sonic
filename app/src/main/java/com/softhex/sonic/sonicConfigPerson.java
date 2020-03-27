@@ -19,6 +19,7 @@ public class sonicConfigPerson extends PreferenceActivity{
     private ListPreference mPreferenceCliente;
     private ListPreference mPreferenceCatalogoQtde;
     private ListPreference mPreferenceProdutoNovo;
+    private ListPreference mPreferenceHomeChartType;
     private PreferenceScreen mPreferenceClientLista;
     private CheckBoxPreference mPreferenceListagemCompleta;
 
@@ -37,6 +38,7 @@ public class sonicConfigPerson extends PreferenceActivity{
         mPreferenceCliente = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteTipo));
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
         mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));
+        mPreferenceHomeChartType = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.homeChartaType));
         mPreferenceClientLista = (PreferenceScreen)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteLista));
         mPreferenceListagemCompleta = (CheckBoxPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.listagemCompleta));
         mPreferenceCliente.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -51,8 +53,13 @@ public class sonicConfigPerson extends PreferenceActivity{
             mPreferences.Produtos.setDiasNovo(newValue.toString());
             return true;
         });
+        mPreferenceHomeChartType.setOnPreferenceChangeListener((preference, newValue) -> {
+            mPreferences.Geral.setHomeChartType(newValue.toString());
+            mPreferences.Geral.setHomeRefresh(!mPreferences.Geral.getHomeRefresh());
+            return true;
+        });
         mPreferenceClientLista.setOnPreferenceClickListener((Preference) -> {
-            Intent i = new Intent(this, sonicPersonClienteLista.class);
+            Intent i = new Intent(this, sonicConfigPersonClienteLista.class);
             startActivity(i);
             return true;
         });

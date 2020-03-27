@@ -11,7 +11,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class sonicPersonClienteLista extends AppCompatActivity {
+public class sonicConfigPersonClienteLista extends AppCompatActivity {
 
     private Switch sCliSemCompra;
     private Switch sTituloEmAtraso;
@@ -28,7 +28,7 @@ public class sonicPersonClienteLista extends AppCompatActivity {
         Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         ActionBar myActionBar = getSupportActionBar();
-        myActionBar.setTitle(getResources().getString(R.string.clienteLista));
+        myActionBar.setTitle("Lista de Clientes");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);

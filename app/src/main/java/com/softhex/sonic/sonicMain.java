@@ -906,7 +906,7 @@ public class sonicMain extends AppCompatActivity{
         switch (item.getItemId()){
             case R.id.itSettings:
                 i = new Intent(getBaseContext(), sonicConfig.class);
-                startActivity(i);
+                startActivityForResult(i, 2);
                 break;
             case R.id.itNotificacao:
                 Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
@@ -958,9 +958,10 @@ public class sonicMain extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(mPrefs.Geral.getSincRefresh()){
+        if(mPrefs.Geral.getSincRefresh() || mPrefs.Geral.getHomeRefresh()){
             refreshHomeFragment();
             mPrefs.Geral.setSincRefresh(false);
+            mPrefs.Geral.setHomeRefresh(false);
         }
 
         if (resultCode != RESULT_CANCELED && data != null) {

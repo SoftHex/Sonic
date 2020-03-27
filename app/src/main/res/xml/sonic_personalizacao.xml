@@ -9,6 +9,14 @@
             android:defaultValue="@bool/prefListagemCompletaDefault"
             android:key="@string/listagemCompleta"/>
 
+        <ListPreference
+            android:title="@string/prefHomeChartaTypeNome"
+            android:summary="@string/prefHomeChartaTypeDescription"
+            android:key="@string/homeChartaType"
+            android:defaultValue="@string/prefHomeChartaTypeDefault"
+            android:entries="@array/prefHomeChartaTypeOptions"
+            android:entryValues="@array/prefHomeChartaTypeValues" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/prefClienteCategory">
