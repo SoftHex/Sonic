@@ -43,7 +43,7 @@ public class sonicMainPedidos extends Fragment {
     private LineChart mLineChart;
     private BarChart mBarChart;
     private Context mContex;
-    private TextView tvMaxValue;
+    private TextView tvMaxValue, tvTitulo;
     private sonicPreferences mPrefs;
 
     @Nullable
@@ -57,11 +57,13 @@ public class sonicMainPedidos extends Fragment {
         mLineChart = myView.findViewById(R.id.mLineChart);
         mBarChart = myView.findViewById(R.id.mBarChart);
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
+        tvTitulo = myView.findViewById(R.id.tvTitulo);
         mList = mData.Venda.selectPedidos();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
+                tvTitulo.setText("Pedidos");
                 pbChart.setVisibility(View.GONE);
                 switch (mPrefs.Geral.getHomeChartType()){
                     case "Linhas":
@@ -149,7 +151,7 @@ public class sonicMainPedidos extends Fragment {
             }
             if(mList.get(i).getTotal()> maxValue){
                 maxValue = mList.get(i).getTotal();
-                max = maxValue+(maxValue>1? " Pedidos - " : " Pedido - ")+mes+mList.get(i).getAno();
+                max = maxValue+" - "+mes+mList.get(i).getAno();
             }
             valueSet.add(new BarEntry(i, Float.valueOf(mList.get(i).getTotal())));
         }
@@ -174,6 +176,9 @@ public class sonicMainPedidos extends Fragment {
         mBarChart.getAxisLeft().setDrawGridLines(false);
         mBarChart.getAxisRight().setDrawAxisLine(false);
         mBarChart.getAxisRight().setDrawGridLines(false);
+        mBarChart.setDoubleTapToZoomEnabled(false);
+        mBarChart.setPinchZoom(false);
+        mBarChart.setScaleEnabled(false);
         mBarChart.getXAxis().setDrawGridLines(false);
         mBarChart.getXAxis().setEnabled(true);
         mBarChart.getXAxis().setTextColor(Color.WHITE);
@@ -267,7 +272,7 @@ public class sonicMainPedidos extends Fragment {
             }
             if(mList.get(i-1).getTotal()> maxValue){
                 maxValue = mList.get(i-1).getTotal();
-                max = maxValue+(maxValue>1? " Pedidos - " : " Pedido - ")+mes+mList.get(i-1).getAno();
+                max = maxValue+" - "+mes+mList.get(i).getAno();
             }
             valueSet.add(new Entry(i, mList.get(i-1).getTotal()));
         }
@@ -305,6 +310,8 @@ public class sonicMainPedidos extends Fragment {
         mLineChart.getAxisRight().setDrawAxisLine(false);
         mLineChart.getAxisRight().setDrawGridLines(false);
         mLineChart.setDoubleTapToZoomEnabled(false);
+        mLineChart.setPinchZoom(false);
+        mLineChart.setScaleEnabled(false);
         mLineChart.getXAxis().setTextColor(Color.WHITE);
         mLineChart.getAxisLeft().setTextColor(Color.WHITE);
         mLineChart.getAxisRight().setTextColor(Color.WHITE);

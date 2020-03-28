@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,6 +107,8 @@ public class sonicMain extends AppCompatActivity{
     private int back = sonicUtils.Randomizer.generate(0,1);
     private sonicPreferences mPrefs;
     private Context mContext;
+    private TextView[] dots;
+    private LinearLayout dotsLayout;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
 
@@ -137,6 +140,7 @@ public class sonicMain extends AppCompatActivity{
         tvPedidos = findViewById(R.id.tvPedidos);
         tvDesemprenho = findViewById(R.id.tvDesempenho);
         tvVendas = findViewById(R.id.tvVendas);
+        dotsLayout = findViewById(R.id.layoutDots);
         //tvMeta = findViewById(R.id.tvMeta);
         pbEmpresa = findViewById(R.id.pbEmpresa);
         pbSaudacaoUsuario = findViewById(R.id.pbSaudacaoUsuario);
@@ -186,8 +190,27 @@ public class sonicMain extends AppCompatActivity{
         setUpViewPager(myViewPager);
 
         myTabLayout = findViewById(R.id.mTabs);
-        myTabLayout.setupWithViewPager(myViewPager);
+        //myTabLayout.setupWithViewPager(myViewPager);
         //myTabLayout.setSelectedTabIndicator(R.color.colorAccent2);
+
+        myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                addBottomDots(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        addBottomDots(0);
 
         createDrawerMenu();
         calcularPercentual("2200000",usuarioMeta);
@@ -567,7 +590,7 @@ public class sonicMain extends AppCompatActivity{
                         myDrawerVendedores,
                         new SectionDrawerItem().withName(R.string.relatoriosTitulo),
                         myDrawerRelatorios,
-                        new SectionDrawerItem().withName("Segurança"),
+                        //new SectionDrawerItem().withName("Segurança"),
                         myDrawerLock,
                         new SectionDrawerItem().withName(R.string.extraTitulo),
                         myDrawerSistema,
@@ -582,7 +605,6 @@ public class sonicMain extends AppCompatActivity{
                             case 1:
                                 i = new Intent(sonicMain.this, sonicSincronizacao.class);
                                 startActivityForResult(i,1);
-                                //new myAsyncStartActivity().execute(sonicSincronizacao.class);
                                 break;
                             case 2:
                                 new myAsyncStartActivity().execute(sonicAvisos.class);
@@ -887,6 +909,28 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
+
+    private void addBottomDots(int position){
+
+        dots = new TextView[myAdapter.getCount()];
+        dotsLayout.removeAllViews();
+        if(myAdapter.getCount()>1){
+            for(int i=0; i < dots.length; i++)
+            {
+                dots[i] = new TextView(this);
+                dots[i].setText(Html.fromHtml("&#8226;"));
+                dots[i].setTextSize(30);
+                dots[i].setTextColor(getResources().getColor(R.color.dotSlideInactive));
+                dotsLayout.addView(dots[i]);
+            }
+            if(dots.length>1){
+                dots[position].setTextColor(getResources().getColor(R.color.dotSlideActive));
+                //dots[position].setTextSize(40);
+            }
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sonic_main, menu);
@@ -923,7 +967,6 @@ public class sonicMain extends AppCompatActivity{
 
         return false;
     }
-
 
     public void dialogRedefinir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -972,8 +1015,6 @@ public class sonicMain extends AppCompatActivity{
 
                 myUtil = new sonicUtils(mActivity);
 
-                long empresaId = myHeader.getActiveProfile().getIdentifier();
-
                 myUtil.Arquivo.saveUriFile(imageUri, mPrefs.Path.getProfilePath(), mPrefs.Users.getEmpresaId(), mPrefs.Users.getUsuarioId());
 
                 String url = Environment.getExternalStorageDirectory().getPath() + mPrefs.Path.getProfilePath() + mPrefs.Users.getEmpresaId() + "_" + mPrefs.Users.getUsuarioId() + ".JPG";
@@ -985,7 +1026,7 @@ public class sonicMain extends AppCompatActivity{
                 Glide.with(getBaseContext())
                         .load(url)
                         .placeholder(R.drawable.no_profile)
-                        .apply(new RequestOptions().override(300,300))
+                        .apply(new RequestOptions().override(100,100))
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .transition(GenericTransitionOptions.with(android.R.anim.fade_in))

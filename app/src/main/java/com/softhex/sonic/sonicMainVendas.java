@@ -47,7 +47,7 @@ public class sonicMainVendas extends Fragment {
     private Context mContex;
     private Locale meuLocal = new Locale( "pt", "BR" );
     private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
-    private TextView tvMaxValue;
+    private TextView tvMaxValue, tvTitulo;
     private sonicPreferences mPrefs;
 
     @Nullable
@@ -61,12 +61,14 @@ public class sonicMainVendas extends Fragment {
         mBarChart = myView.findViewById(R.id.mBarChart);
         mLineChart = myView.findViewById(R.id.mLineChart);
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
+        tvTitulo = myView.findViewById(R.id.tvTitulo);
         mList = mData.Venda.selectVendas();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
                 pbChart.setVisibility(View.GONE);
+                tvTitulo.setText("Vendas");
                 switch (mPrefs.Geral.getHomeChartType()){
                     case "Linhas":
                         mLineChart.setVisibility(View.VISIBLE);
@@ -179,6 +181,9 @@ public class sonicMainVendas extends Fragment {
         mBarChart.getAxisLeft().setDrawGridLines(false);
         mBarChart.getAxisRight().setDrawAxisLine(false);
         mBarChart.getAxisRight().setDrawGridLines(false);
+        mBarChart.setDoubleTapToZoomEnabled(false);
+        mBarChart.setPinchZoom(false);
+        mBarChart.setScaleEnabled(false);
         mBarChart.getXAxis().setDrawGridLines(false);
         mBarChart.getXAxis().setEnabled(true);
         mBarChart.getXAxis().setTextColor(Color.WHITE);
@@ -312,6 +317,8 @@ public class sonicMainVendas extends Fragment {
         mLineChart.getAxisRight().setDrawAxisLine(false);
         mLineChart.getAxisRight().setDrawGridLines(false);
         mLineChart.setDoubleTapToZoomEnabled(false);
+        mLineChart.setPinchZoom(false);
+        mLineChart.setScaleEnabled(false);
         mLineChart.getXAxis().setTextColor(Color.WHITE);
         mLineChart.getAxisLeft().setTextColor(Color.WHITE);
         mLineChart.getAxisRight().setTextColor(Color.WHITE);

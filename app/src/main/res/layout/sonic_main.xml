@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/back"
+    android:background="@drawable/backhome1"
     android:fitsSystemWindows="true">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -40,7 +40,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_below="@+id/appBar"
-            android:layout_height="220dp">
+            android:layout_height="260dp">
 
             <!-- NOME, EMPRESA E FOTO -->
             <LinearLayout
@@ -245,8 +245,21 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layoutDots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
+                android:layout_gravity="bottom|center"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
         </LinearLayout>
 
+        <!-- CONTENT -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -268,6 +281,7 @@
                 style="@style/TabsTheme2"
                 android:theme="@style/TabsTheme2"
                 app:tabIndicatorFullWidth="true"
+                android:visibility="gone"
                 app:tabMode="fixed"
                 app:tabGravity="fill"/>
 

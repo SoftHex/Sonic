@@ -119,8 +119,8 @@
     <!-- dots colors -->
     <color name="dotActive">@color/colorPrimary</color>
     <color name="dotInactive">#90C0C0C0</color>
-    <color name="dotSlideActive">@color/colorPrimaryOrange</color>
-    <color name="dotSlideInactive">@color/colorPrimaryWhite</color>
+    <color name="dotSlideActive">@color/colorPrimaryWhite</color>
+    <color name="dotSlideInactive">#90C0C0C0</color>
 
     <!-- tab colors -->
     <color name="iconTabSelected">@color/colorPrimaryOrange</color>
