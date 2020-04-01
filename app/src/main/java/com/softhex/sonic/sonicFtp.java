@@ -13,12 +13,10 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.io.CopyStreamAdapter;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by Administrador on 26/07/2017.
@@ -37,10 +35,12 @@ public class sonicFtp {
     private sonicSystem mySystem;
     private sonicPopularTabelas myPopTable;
     private String arquivo;
+    private sonicPreferences mPrefs;
 
     public sonicFtp(Activity act){
         this.myCtx = act;
         this.mAct = act;
+        this.mPrefs = new sonicPreferences(act);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.DBC = new sonicDatabaseCRUD(myCtx);
         this.myMessage = new sonicDialog(myCtx);
@@ -123,7 +123,7 @@ public class sonicFtp {
     public Boolean downloadFile(final String fileName, String localFile) {
 
         StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-        Boolean result = false;
+        Boolean result;
 
         try {
 
@@ -298,17 +298,17 @@ public class sonicFtp {
 
             if(aBoolean){
 
-                switch (sonicConstants.DOWNLOAD_TYPE){
+                switch (mPrefs.Sincronizacao.getDownloadType()){
                     case "DADOS":
                         new sonicPopularTabelas(mAct).gravarDados(arquivo);
                         break;
                     case "CATALOGO":
-                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","catalogo");
+                        new sonicUtils(mAct).Arquivo.unzipFile(arquivo);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_PRODUTO, sonicConstants.TIPO_SINC_IMAGENS);
                         break;
                     case "CLIENTES":
-                        new sonicUtils(myCtx).Arquivo.unzipFile(arquivo);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("imagens","clientes");
+                        new sonicUtils(mAct).Arquivo.unzipFile(arquivo);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_CLIENTE, sonicConstants.TIPO_SINC_IMAGENS);
                         break;
                     case "ESTOQUE":
                         new sonicPopularTabelas(mAct).gravarDados(arquivo);
@@ -320,49 +320,4 @@ public class sonicFtp {
 
         }
     }
-
-    public void downloadFileSilent(String fileName, String localFile){
-        new mAsynDwonloadSilet().execute(fileName, localFile);
-    }
-
-    private class mAsynDwonloadSilet extends AsyncTask<String, String, Boolean>{
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            if(sonicUtils.internetConnectionAvailable(3000)){
-                if(ftpConnect()){
-                    OutputStream outputStream = null;
-                    try{
-
-                        outputStream = new BufferedOutputStream(new FileOutputStream(
-                                strings[1]));
-                        //File destino = new File(Environment.getExternalStorageDirectory()+strings[1]);
-                        //FileOutputStream file = new FileOutputStream(destino);
-
-                        if(ftpClient.retrieveFile(strings[0], outputStream)){
-
-                            //outputStream.createNewFile();
-
-                            arquivo = strings[0].substring(strings[0].lastIndexOf("/")+1, strings[0].length());
-
-                        }
-
-                        outputStream.close();
-
-                    }catch (IOException e){
-                        e.printStackTrace();
-                        DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
-                                e.getMessage(),
-                                mySystem.System.getActivityName(),
-                                mySystem.System.getClassName(el),
-                                mySystem.System.getMethodNames(el));
-                    }
-
-                }
-            }
-            return null;
-        }
-
-    }
-
 }

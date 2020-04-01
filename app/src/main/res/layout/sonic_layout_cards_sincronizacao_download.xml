@@ -1,50 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:layout_margin="16dp"
-    android:clickable="true"
-    android:layout_gravity="center_horizontal"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="4dp">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="cards main container">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mCard"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp">
 
-        <ImageView
-            android:id="@+id/imagem"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_margin="2dp" />
-
-        <TextView
-            android:id="@+id/titulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@color/colorTextPrimary"
-            android:text="Nome da ação"/>
-
-        <TextView
-            android:id="@+id/descricao"
+        <!-- CONTEUDO SELECIONAVEL-->
+        <LinearLayout
+            android:id="@+id/linearItem"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="12sp"
-            android:layout_margin="2dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:textColor="@color/colorTextAccent"
-            android:text="Descrição da ação."/>
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?selectableItemBackground">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <ImageView
+                        android:id="@+id/ivImagem"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/dados"
+                        android:contentDescription="TODO" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginLeft="6dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:text="TITULO"/>
+
+                    <TextView
+                        android:id="@+id/tvDescricao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/colorTextAccent"
+                        android:text="DESCRIÇÃO"/>
+
+
+                    <TextView
+                        android:id="@+id/tvSincronizacao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textStyle="italic"
+                        android:textColor="@color/colorTextAccent"
+                        android:text="SINCRONIZAÇÃO"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+        </LinearLayout>
 
 </androidx.cardview.widget.CardView>
+
+    <!-- SEPARADOR -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1px"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/colorSeparador" />
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -35,6 +36,7 @@ import android.util.Log;
 import android.widget.EditText;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.softhex.materialdialog.PromptDialog;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
@@ -92,6 +94,8 @@ public class sonicUtils {
 
     //Set the radius of the Blur. Supported range 0 < radius <= 25
     private static float BLUR_RADIUS = 10.5f;
+    private sonicPreferences mPrefs;
+    private Activity mAct;
     private Context myCtx;
     private sonicDatabaseLogCRUD DBCL;
     private sonicSystem mySystem;
@@ -102,8 +106,18 @@ public class sonicUtils {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     Locale brasil = new Locale("pt", "BR");
 
-    sonicUtils(Context context){
-        this.myCtx = context;
+    sonicUtils(Activity act){
+        this.myCtx = act;
+        this.mAct = act;
+        this.mPrefs = new sonicPreferences(act);
+        this.DBCL = new sonicDatabaseLogCRUD(myCtx);
+        this.mySystem = new sonicSystem(myCtx);
+        this.myCons = new sonicConstants();
+    }
+
+    sonicUtils(Context ctx){
+        this.myCtx = ctx;
+        this.mPrefs = new sonicPreferences(ctx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.myCons = new sonicConstants();
@@ -702,13 +716,11 @@ public class sonicUtils {
 
                 String toFolder="";
 
-                switch (sonicConstants.DOWNLOAD_TYPE){
+                switch (mPrefs.Sincronizacao.getDownloadType()){
                     case "CATALOGO":
-                        sonicConstants.DOWNLOAD_TYPE = "";
                         toFolder = sonicConstants.LOCAL_IMG_CATALOGO;
                         break;
                     case "CLIENTES":
-                        sonicConstants.DOWNLOAD_TYPE = "";
                         toFolder = sonicConstants.LOCAL_IMG_CLIENTES;
                         break;
 
@@ -747,22 +759,6 @@ public class sonicUtils {
 
                         count2++;
                         publishProgress("Extraindo arquivos...",String.valueOf(count2));
-                        /*if (ze.isDirectory()) {
-                            java.io.File fmd = new java.io.File(filename);
-                            fmd.mkdirs();
-                            continue;
-                        }*/
-                        //ADD THIS//
-                        /*if (filename.contains("/")) {
-                            String[] folders = filename.split("/");
-                            for (String linearItem : folders) {
-                                java.io.File fmd = new java.io.File(path + linearItem);
-                                if (!linearItem.contains(".") && !fmd.exists()) {
-                                    fmd.mkdirs();
-                                    Log.d("created folder", linearItem);
-                                }
-                            }
-                        }*/
 
                         fout = new FileOutputStream(destination + ze.getName());
 
@@ -801,7 +797,19 @@ public class sonicUtils {
                 super.onPostExecute(aBoolean);
                 myProgress.dismiss();
                 if(aBoolean){
-                    new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.imagesSaved, sonicDialog.MSG_SUCCESS);
+                    new PromptDialog(myCtx)
+                            .setDialogType(sonicDialog.MSG_SUCCESS)
+                            .setAnimationEnable(true)
+                            .setTitleText(R.string.headerSuccess)
+                            .setContentText(R.string.imagesSaved)
+                            .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                @Override
+                                public void onClick(PromptDialog dialog) {
+                                    dialog.dismiss();
+                                    ((sonicSincronizacao)mAct).refreshSincFragment();
+                                    mPrefs.Geral.setSincRefresh(false);
+                                }
+                            }).show();
                 }else{
                     new sonicDialog(myCtx).showMI(R.string.headerWarning,R.string.fileDownloadedNotFound, sonicDialog.MSG_WARNING);
                 }
@@ -1401,8 +1409,6 @@ public class sonicUtils {
                 e.printStackTrace();
             }
 
-
-
             return data_completa;
 
         }
@@ -1579,7 +1585,22 @@ public class sonicUtils {
 
         }
 
-
+        public String dataSocial(String date){
+            String result="";
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
+            String hoje = data.format(c.getTime());
+            c.add(Calendar.DATE, -1);
+            String ontem = data.format(c.getTime());
+            if(date.equals(hoje) || date == hoje){
+                result = "hoje";
+            }else if(date.equals(ontem) || date==ontem){
+                result = "ontem";
+            }else{
+                result = "em "+date;
+            }
+            return result;
+        }
     }
 
 

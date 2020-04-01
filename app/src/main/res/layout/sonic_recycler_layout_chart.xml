@@ -112,11 +112,6 @@
                         android:layout_marginBottom="16dp"
                         android:visibility="gone"/>
 
-                    <com.highsoft.highcharts.Core.HIChartView
-                        android:id="@+id/mHiChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone"/>
 
                 </LinearLayout>
 

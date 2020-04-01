@@ -58,6 +58,8 @@ public class sonicPreferences{
     private static final String GERAL_HOME_REFRESH = "homeRefresh";
     private static final String GERAL_SINC_REFRESH = "sincRefresh";
     private static final String GERAL_HOME_CHART_TYPE = "homeChartType";
+    private static final String GERAL_TIPO_HORA = "tipoHora";
+    private static final String SINC_DOWNLOAD_TYPE = "downloadType";
 
     Users Users = new Users();
     Path Path = new Path();
@@ -66,6 +68,7 @@ public class sonicPreferences{
     Produtos Produtos = new Produtos();
     Util Util = new Util();
     Geral Geral = new Geral();
+    Sincronizacao Sincronizacao = new Sincronizacao();
 
     public sonicPreferences(Context context) {
         sharedpreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -548,6 +551,24 @@ public class sonicPreferences{
         }
         public String getHomeChartType(){
             return sharedpreferences.getString(GERAL_HOME_CHART_TYPE, "Linhas");
+        }
+        public void setTipoHora(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_TIPO_HORA, value);
+            editor.apply();
+        }
+        public String getTipoHora(){
+            return sharedpreferences.getString(GERAL_TIPO_HORA, "12 Horas");
+        }
+    }
+    public class Sincronizacao{
+        public void setDownloadType(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(SINC_DOWNLOAD_TYPE,    value);
+            editor.apply();
+        }
+        public String getDownloadType(){
+            return sharedpreferences.getString(SINC_DOWNLOAD_TYPE, "DADOS");
         }
     }
 }

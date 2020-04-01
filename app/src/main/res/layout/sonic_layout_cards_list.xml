@@ -54,8 +54,8 @@
                         android:id="@+id/ivImagem"
                         android:transitionName="imagemTransition"
                         android:layout_width="52dp"
-                        android:src="@drawable/no_profile"
-                        android:layout_height="52dp"/>
+                        android:layout_height="52dp"
+                        android:src="@drawable/no_profile"/>
 
                 </RelativeLayout>
 
@@ -185,6 +185,6 @@
         android:layout_height="0.1px"
         android:layout_marginLeft="73dp"
         android:layout_marginRight="12dp"
-        android:background="#DCDCDC" />
+        android:background="@color/colorSeparador" />
 
 </LinearLayout>

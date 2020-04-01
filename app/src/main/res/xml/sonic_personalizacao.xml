@@ -3,6 +3,14 @@
 
     <PreferenceCategory android:title="@string/prefGeralCategory">
 
+        <ListPreference
+            android:title="@string/prefTipoHoraNome"
+            android:summary="@string/prefTipoHoraDescription"
+            android:key="@string/tipoHora"
+            android:defaultValue="@string/prefTipoHoraDefault"
+            android:entries="@array/prefTipoHoraOptions"
+            android:entryValues="@array/prefTipoHoraValues" />
+
         <CheckBoxPreference
             android:summary="@string/prefListagemCompletaDescription"
             android:title="@string/prefListagemCompletaNome"

@@ -41,7 +41,7 @@ public class sonicPopularTabelas {
     private String arquivo;
     private String[][] mTables = {
 
-            { "[SITE]", sonicConstants.TB_SITE, "save" },
+            { "[SITE]", sonicConstants.TB_SITE, "save"},
             { "[FTP]", sonicConstants.TB_FTP ,"save" },
             { "[EMPRESAS]", sonicConstants.TB_EMPRESA, "save" },
             { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "save" },
@@ -92,7 +92,7 @@ public class sonicPopularTabelas {
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setTitle("Gravando...");
+                myProgress.setTitle("Gravando...\n");
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
@@ -200,7 +200,7 @@ public class sonicPopularTabelas {
             myProgress.dismiss();
             new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
             if(aBoolean){
-                switch (sonicConstants.DOWNLOAD_TYPE){
+                switch (mPref.Sincronizacao.getDownloadType()){
                     case "DADOS":
                         new PromptDialog(myCtx)
                                 .setDialogType(sonicDialog.MSG_SUCCESS)
@@ -211,17 +211,27 @@ public class sonicPopularTabelas {
                                     @Override
                                     public void onClick(PromptDialog dialog) {
                                         dialog.dismiss();
+                                        if(mPref.Geral.getSincRefresh()){
+                                            ((sonicSincronizacao)mAct).refreshSincFragment();
+                                            mPref.Geral.setSincRefresh(false);
+                                        }
                                         if(mPref.Geral.getHomeRefresh()){
                                             ((sonicMain)mAct).refreshHomeFragment();
+                                            mPref.Geral.setHomeRefresh(false);
                                         }
-                                        mPref.Geral.setHomeRefresh(false);
+
                                     }
                                 }).show();
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","geral");
+                        sonicDatabaseCRUD mData = new sonicDatabaseCRUD(myCtx);
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_TODAS, sonicConstants.TIPO_SINC_DADOS);
+                        List<String[]> list = Arrays.asList(mTables);
+                        for(String[] arr: list){
+                            mData.Sincronizacao.saveSincronizacao(arr[1], sonicConstants.TIPO_SINC_DADOS);
+                        }
                         break;
                     case "ESTOQUE":
                         new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.estoqueSincronizado, sonicDialog.MSG_SUCCESS);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados","estoque");
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados", sonicConstants.TB_ESTOQUE_PRODUTO);
                         break;
                     case "SITE":
                         primeiroAcesso();

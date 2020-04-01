@@ -31,11 +31,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DBC = new sonicDatabaseCRUD(getBaseContext());
         setContentView(R.layout.activity_main);
 
-        DBC = new sonicDatabaseCRUD(getBaseContext());
+        DBC = new sonicDatabaseCRUD(this);
 
         if (DBC.Database.checkMinimumData()){
 

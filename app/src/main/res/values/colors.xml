@@ -174,4 +174,7 @@
         <item>@color/colorPrimaryGreen</item>
     </array>
 
+    <!-- OTHER COLORS -->
+    <color name="colorSeparador">#DCDCDC</color>
+
 </resources>

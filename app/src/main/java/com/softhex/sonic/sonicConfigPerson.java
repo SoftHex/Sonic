@@ -20,6 +20,7 @@ public class sonicConfigPerson extends PreferenceActivity{
     private ListPreference mPreferenceCatalogoQtde;
     private ListPreference mPreferenceProdutoNovo;
     private ListPreference mPreferenceHomeChartType;
+    private ListPreference mPreferenceTipoHora;
     private PreferenceScreen mPreferenceClientLista;
     private CheckBoxPreference mPreferenceListagemCompleta;
 
@@ -39,6 +40,7 @@ public class sonicConfigPerson extends PreferenceActivity{
         mPreferenceCatalogoQtde = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.catalogoQtde));
         mPreferenceProdutoNovo = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.produtoNovoDias));
         mPreferenceHomeChartType = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.homeChartaType));
+        mPreferenceTipoHora = (ListPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.tipoHora));
         mPreferenceClientLista = (PreferenceScreen)getPreferenceScreen().findPreference(getResources().getString(R.string.clienteLista));
         mPreferenceListagemCompleta = (CheckBoxPreference)getPreferenceScreen().findPreference(getResources().getString(R.string.listagemCompleta));
         mPreferenceCliente.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -56,6 +58,10 @@ public class sonicConfigPerson extends PreferenceActivity{
         mPreferenceHomeChartType.setOnPreferenceChangeListener((preference, newValue) -> {
             mPreferences.Geral.setHomeChartType(newValue.toString());
             mPreferences.Geral.setHomeRefresh(!mPreferences.Geral.getHomeRefresh());
+            return true;
+        });
+        mPreferenceTipoHora.setOnPreferenceChangeListener((preference, newValue) -> {
+            mPreferences.Geral.setTipoHora(newValue.toString());
             return true;
         });
         mPreferenceClientLista.setOnPreferenceClickListener((Preference) -> {

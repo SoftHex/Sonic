@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -44,23 +45,20 @@ public class sonicSincronizacao extends AppCompatActivity{
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        myToolbar = findViewById(R.id.toolbar);
+        myToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(myToolbar);
         myActionBar = getSupportActionBar();
-        myActionBar.setTitle("Sincronizar");
+        myActionBar.setTitle("Sincronização");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
 
-        myViewPager = findViewById(R.id.pagerSlide);
+        myViewPager = findViewById(R.id.mViewPager);
         setUpViewPager(myViewPager);
 
-        myTabLayout = findViewById(R.id.tabs);
-        myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
+        myTabLayout = findViewById(R.id.mTabs);
         myTabLayout.setupWithViewPager(myViewPager);
-
-        setUpTabText();
 
         myToolbar.setNavigationOnClickListener((View view)-> {
 
@@ -72,17 +70,9 @@ public class sonicSincronizacao extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicSincronizacaoDownload(), "");
-        myAdapter.addFragment(new sonicSincronizacaoDownload(), "");
+        myAdapter.addFragment(new sonicSincronizacaoDownload(), "RECEBER");
+        myAdapter.addFragment(new sonicSincronizacaoDownload(), "ENVIAR");
         viewpager.setAdapter(myAdapter);
-
-    }
-
-    public void setUpTabText(){
-
-        myTabLayout.getTabAt(0).setText(R.string.tabSinronizarReceber);
-        myTabLayout.getTabAt(1).setText(R.string.tabSinronizarEnviar);
-
 
     }
 
@@ -90,7 +80,7 @@ public class sonicSincronizacao extends AppCompatActivity{
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        private ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
@@ -104,7 +94,7 @@ public class sonicSincronizacao extends AppCompatActivity{
             return mFragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title) {
+        private void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
@@ -115,6 +105,15 @@ public class sonicSincronizacao extends AppCompatActivity{
         }
 
     }
+
+    public void refreshSincFragment(){
+
+        for(int i=0; i<myAdapter.getCount();i++){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
+        }
+    }
+
 
     @Override
     public void onResume() {

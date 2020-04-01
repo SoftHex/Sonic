@@ -4,19 +4,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -34,12 +36,21 @@ public class sonicSincronizacaoDownload extends Fragment {
     private List<sonicSincronizacaoDownloadHolder> myList;
     private sonicSincronizacaoDownloadAdapterT myAdapter;
     private RecyclerView myRecycler;
+    private sonicDatabaseCRUD mData;
+    private String[][] mSincs = {
+            {"DADOS GERAIS","Clientes, Produtos, Estoque.", sonicConstants.TB_TODAS, "dados"},
+            {"CATÁLOGO","Imagem dos Produtos.", sonicConstants.TB_PRODUTO, "imagens"},
+            {"IMAGENS","Imagem das Lojas dos Clientes.", sonicConstants.TB_CLIENTE ,"imagens"},
+            {"ESTOQUE","Estoque dos Produtos.", sonicConstants.TB_ESTOQUE_PRODUTO,  "dados"}
+    };
+    private Integer[] mImages = {R.mipmap.dados, R.mipmap.catalogo, R.mipmap.lojas, R.mipmap.estoque};
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_sincronizacao_download, container, false);
 
+        mData = new sonicDatabaseCRUD(getContext());
         loadFragment(myView);
 
         return myView;
@@ -57,7 +68,6 @@ public class sonicSincronizacaoDownload extends Fragment {
         myRecycler = view.findViewById(R.id.recycler);
         myShimmer = view.findViewById(R.id.shimmer);
         myShimmer.startShimmer();
-        myLinearLayout = myView.findViewById(R.id.sync);
 
         bindRecyclerView();
 
@@ -68,12 +78,17 @@ public class sonicSincronizacaoDownload extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
+            List<String[]> list = Arrays.asList(mSincs);
+            List<sonicSincronizacaoDownloadHolder> lDtHora = new ArrayList<>();
             myList = new ArrayList<>();
-            myList.add(new sonicSincronizacaoDownloadHolder("Dados Gerais", "Clientes, Produtos, retorno...", R.mipmap.dados));
-            myList.add(new sonicSincronizacaoDownloadHolder("Catálogo", "Foto dos produtos.", R.mipmap.catalogo));
-            myList.add(new sonicSincronizacaoDownloadHolder("Imagens", "Foto da loja dos clientes.", R.mipmap.lojas));
-            myList.add(new sonicSincronizacaoDownloadHolder("Estoque", "Atualiza estoque dos produtos.", R.mipmap.estoque));
-            myList.add(new sonicSincronizacaoDownloadHolder("Localização", "Localização dos vendedores", R.mipmap.lugar));
+            for(int i=0; i<list.size(); i++){
+                lDtHora = mData.Sincronizacao.selectLastSinc(mSincs[i][2],mSincs[i][3]);
+                myList.add(new sonicSincronizacaoDownloadHolder(
+                        mSincs[i][0],mSincs[i][1],
+                        lDtHora.get(0).getData(),
+                        lDtHora.get(0).getHora(),
+                        mImages[i]));
+            }
 
             return myList.size();
 
@@ -102,7 +117,7 @@ public class sonicSincronizacaoDownload extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1500));
+                    ,sonicUtils.Randomizer.generate(500,1000));
 
 
         }
@@ -118,10 +133,8 @@ public class sonicSincronizacaoDownload extends Fragment {
         myAdapter = new sonicSincronizacaoDownloadAdapterT(getActivity(), myList);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAnimation(fadeIn);
-        myRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        myRecycler.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         myRecycler.setAdapter(myAdapter);
-        myLinearLayout.setVisibility(VISIBLE);
-        myLinearLayout.setAnimation(fadeIn);
 
     }
 

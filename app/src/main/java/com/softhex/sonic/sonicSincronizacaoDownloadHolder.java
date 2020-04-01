@@ -4,16 +4,24 @@ public class sonicSincronizacaoDownloadHolder {
 
     private String titulo;
     private String descricao;
+    private String dependencia;
+    private String sincronizacao;
+    private String data;
+    private String hora;
     private int imagem;
 
-    public sonicSincronizacaoDownloadHolder() {
+    public sonicSincronizacaoDownloadHolder(){
 
     }
 
-    public sonicSincronizacaoDownloadHolder(String titulo, String descricao, int imagem) {
+    public sonicSincronizacaoDownloadHolder(String titulo, String descricao, String data, String hora, int imagem) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.imagem = imagem;
+        this.dependencia = dependencia;
+        this.sincronizacao = sincronizacao;
+        this.data = data;
+        this.hora = hora;
 
     }
 
@@ -39,5 +47,39 @@ public class sonicSincronizacaoDownloadHolder {
 
     public void setImagem(int imagem) {
         this.imagem = imagem;
+    }
+
+    public String getDependencia() {
+        return dependencia;
+    }
+
+    public void setDependencia(String dependencia) {
+        this.dependencia = dependencia;
+    }
+
+    public String getSincronizacao() {
+        return sincronizacao;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
+
+    public void setSincronizacao(String sincronizacao) {
+        this.sincronizacao = sincronizacao;
+
+
     }
 }

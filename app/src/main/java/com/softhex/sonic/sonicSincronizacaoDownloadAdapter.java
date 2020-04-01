@@ -83,10 +83,10 @@ public class sonicSincronizacaoDownloadAdapter extends RecyclerView.Adapter<soni
         public myViewHolder(View itemView) {
             super(itemView);
 
-            card = itemView.findViewById(R.id.card);
-            imagem = itemView.findViewById(R.id.imagem);
-            titulo = itemView.findViewById(R.id.titulo);
-            descricao = itemView.findViewById(R.id.descricao);
+            card = itemView.findViewById(R.id.mCard);
+            imagem = itemView.findViewById(R.id.ivImagem);
+            titulo = itemView.findViewById(R.id.tvTitulo);
+            descricao = itemView.findViewById(R.id.tvDescricao);
 
 
             card.setOnClickListener(new View.OnClickListener() {

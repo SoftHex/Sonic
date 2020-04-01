@@ -191,6 +191,19 @@
     <string name="prefListagemCompletaDescription">Listar todos os itens de uma só vez. Requer maior processamento.</string>
     <bool name="prefListagemCompletaDefault">false</bool>
 
+    <string name="tipoHora" translatable="false">tipoHora</string>
+    <string name="prefTipoHoraNome">Formato de Hora</string>
+    <string name="prefTipoHoraDescription">Formato padrão para exibição das hora.</string>
+    <string name="prefTipoHoraDefault">12 Horas</string>
+    <string-array name="prefTipoHoraOptions">
+        <item name="1">12 Horas</item>
+        <item name="2">24 Horas</item>
+    </string-array>
+    <string-array name="prefTipoHoraValues">
+        <item name="1">12 Horas</item>
+        <item name="2">24 Horas</item>
+    </string-array>
+
     <string name="homeChartaType" translatable="false">homeChartType</string>
     <string name="prefHomeChartaTypeNome">Gráfico - Tela Inicial</string>
     <string name="prefHomeChartaTypeDescription">Tipo de gráfico exibido na tela inicial.</string>

@@ -73,20 +73,20 @@ public class sonicDatabaseCRUD {
     private sonicConstants myCons;
     private Context myCtx;
     private sonicSystem mySystem;
+    private sonicPreferences mPrefs;
 
     public sonicDatabaseCRUD(Context ctx){
 
         this.myCtx = ctx;
+        this.mPrefs = new sonicPreferences(ctx);
         this.DB = new sonicDatabase(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(myCtx);
-        this.myUtil = new sonicUtils(myCtx);
         this.myCons = new sonicConstants();
         this.mySystem = new sonicSystem(myCtx);
         this.pref = new sonicPreferences(myCtx);
 
     }
-
 
     Database Database = new Database();
     Site Site = new Site();
@@ -1404,7 +1404,7 @@ public class sonicDatabaseCRUD {
         public List<sonicUsuariosHolder> selectUsuarioImei(String imei){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicUsuariosHolder> USUARIO = new ArrayList<sonicUsuariosHolder>();
+            List<sonicUsuariosHolder> usuarios = new ArrayList<sonicUsuariosHolder>();
 
             try{
 
@@ -1428,18 +1428,21 @@ public class sonicDatabaseCRUD {
                     usuario.setCargo(cursor.getString(cursor.getColumnIndex("cargo")));
                     usuario.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                     usuario.setEmpresaId(cursor.getInt(cursor.getColumnIndex("empresa_id")));
-                    USUARIO.add(usuario);
+                    usuarios.add(usuario);
 
 
                 }
                 cursor.close();
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(),
+                                        mySystem.System.getActivityName(),
+                                        mySystem.System.getClassName(el),
+                                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
-            return USUARIO;
+            return usuarios;
         }
 
         public Boolean usuarioAtivo() {
@@ -1522,8 +1525,8 @@ public class sonicDatabaseCRUD {
 
             // DATA ATUAL E HORA
             Calendar c = Calendar.getInstance();
-            SimpleDateFormat hora = new SimpleDateFormat("hh:mm");
-            SimpleDateFormat data = new SimpleDateFormat("dd/mm/yyyy");
+            SimpleDateFormat hora = new SimpleDateFormat((mPrefs.Geral.getTipoHora().equals("12 Horas") || mPrefs.Geral.getTipoHora() == "12 Horas" ? "hh:mm a" : "HH:mm"));
+            SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
             String hora_atual = hora.format(c.getTime());
             String data_atual = data.format(c.getTime());
             try{
@@ -1540,6 +1543,36 @@ public class sonicDatabaseCRUD {
             }
 
             return DB.getWritableDatabase().insert(TABLE_SINCRONIZACAO, null, cv)>0;
+        }
+
+        public List<sonicSincronizacaoDownloadHolder> selectLastSinc(String tabela, String tipo){
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicSincronizacaoDownloadHolder> sincs = new ArrayList<>();
+
+            try{
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT data_sinc, hora_sinc FROM " + TABLE_SINCRONIZACAO + " WHERE tabela='"+tabela+"' AND tipo='"+tipo+"' ORDER BY _id DESC LIMIT 1", null);
+
+                if( cursor != null && cursor.moveToFirst() ){
+                    sonicSincronizacaoDownloadHolder sinc = new sonicSincronizacaoDownloadHolder();
+                    sinc.setData(cursor.getString(cursor.getColumnIndex("data_sinc")));
+                    sinc.setHora(cursor.getString(cursor.getColumnIndex("hora_sinc")));
+                    sincs.add(sinc);
+
+                }else{
+                    sonicSincronizacaoDownloadHolder sinc = new sonicSincronizacaoDownloadHolder();
+                    sinc.setData("");
+                    sinc.setHora("");
+                    sincs.add(sinc);
+                }
+                cursor.close();
+
+            }catch (SQLiteException e){
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return sincs;
         }
 
         public boolean cleanSincronizacao(){
