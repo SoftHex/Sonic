@@ -490,6 +490,21 @@ public class sonicUtils {
         return result;
     }
 
+    public static String stringToCep(String value){
+        String result;
+
+        switch (value.length()){
+            case 8:
+                result = value.replaceAll("(\\d{2})(\\d{3})(\\d{3})", "$1.$2-$3");
+                break;
+            default:
+                result = value;
+                break;
+        }
+
+        return result;
+    }
+
     public static String unmask(String s) {
         return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
     }

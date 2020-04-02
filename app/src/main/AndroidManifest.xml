@@ -133,6 +133,10 @@
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".sonicRotaDetalhe"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".sonicGraph"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />

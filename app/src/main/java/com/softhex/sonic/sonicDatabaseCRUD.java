@@ -2856,28 +2856,30 @@ public class sonicDatabaseCRUD {
                 }
 
                 String query = "SELECT " +
-                        "R.codigo," +
-                        "R.codigo_empresa," +
-                        "R.codigo_cliente," +
-                        "R.tipo," +
-                        "R.status," +
-                        "R.data_agendamento," +
-                        "R.hora_agendamento," +
-                        "R.atendente," +
-                        "R.ordem," +
-                        "R.observacao," +
-                        "R.data_inicio," +
-                        "R.data_fim," +
-                        "R.hora_inicio," +
-                        "R.hora_fim," +
-                        "R.situacao," +
-                        "R.negativacao," +
-                        "R.cancelamento," +
-                        "C.razao_social," +
-                        "C.nome_fantasia," +
-                        "C.endereco," +
-                        "C.bairro," +
-                        "C.municipio" +
+                        "R.codigo, " +
+                        "R.codigo_empresa, " +
+                        "R.codigo_cliente, " +
+                        "R.tipo, " +
+                        "R.status, " +
+                        "R.data_agendamento, " +
+                        "R.hora_agendamento, " +
+                        "R.atendente, " +
+                        "R.ordem, " +
+                        "R.observacao, " +
+                        "R.data_inicio, " +
+                        "R.data_fim, " +
+                        "R.hora_inicio, " +
+                        "R.hora_fim, " +
+                        "R.situacao, " +
+                        "R.negativacao, " +
+                        "R.cancelamento, " +
+                        "C.razao_social, " +
+                        "C.nome_fantasia, " +
+                        "C.endereco, " +
+                        "C.bairro, " +
+                        "C.municipio, " +
+                        "C.uf, " +
+                        "C.cep " +
                         " FROM " + TABLE_ROTA +
                         " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" + where ;
 
@@ -2910,9 +2912,11 @@ public class sonicDatabaseCRUD {
                             rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
                             rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
                             rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                            rota.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                            rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
                             rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
                             rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                            rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                            rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
 
                             rotas.add(rota);
 

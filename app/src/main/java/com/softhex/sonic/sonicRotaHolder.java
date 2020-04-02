@@ -10,10 +10,11 @@ public class sonicRotaHolder{
     String nome_fantasia;
     String razao_social;
     String grupo_cliente;
-    String endereco;
+    String logradouro;
     String bairro;
     String municipio;
-    String endereco_completo;
+    String uf;
+    String cep;
     int tipo;
     int status;
     String data_agendamento;
@@ -33,58 +34,6 @@ public class sonicRotaHolder{
 
 
     public sonicRotaHolder() {
-    }
-
-    public sonicRotaHolder(int codigo,
-                           int codigo_cliente,
-                           int codigo_empresa,
-                           String nome_fantasia,
-                           String razao_social,
-                           String grupo_cliente,
-                           String endereco,
-                           String bairro,
-                           String municipio,
-                           String endereco_completo,
-                           int tipo,
-                           int status,
-                           String data_agendamento,
-                           String hora_agendamento,
-                           String atendente,
-                           int ordem,
-                           String observacao,
-                           String data_inicio,
-                           String hora_inicio,
-                           String data_fim,
-                           String hora_fim,
-                           int situacao,
-                           String negativacao,
-                           String cancelamento,
-                           String latitude,
-                           String longitude) {
-        this.codigo = codigo;
-        this.codigo_cliente = codigo_cliente;
-        this.codigo_empresa = codigo_empresa;
-        this.nome_fantasia = nome_fantasia;
-        this.razao_social = razao_social;
-        this.grupo_cliente = grupo_cliente;
-        this.endereco = endereco;
-        this.bairro = bairro;
-        this.municipio = municipio;
-        this.endereco_completo = endereco_completo;
-        this.tipo = tipo;
-        this.status = status;
-        this.data_agendamento = data_agendamento;
-        this.hora_agendamento = hora_agendamento;
-        this.ordem = ordem;
-        this.observacao = observacao;
-        this.data_inicio = data_inicio;
-        this.hora_inicio = hora_inicio;
-        this.data_fim = data_fim;
-        this.hora_fim = hora_fim;
-        this.negativacao = negativacao;
-        this.cancelamento = cancelamento;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public int getCodigo() {
@@ -111,8 +60,8 @@ public class sonicRotaHolder{
         return grupo_cliente;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getLogradrouro() {
+        return logradouro;
     }
 
     public String getBairro() {
@@ -123,8 +72,12 @@ public class sonicRotaHolder{
         return municipio;
     }
 
+    public String getUf(){return  uf;}
+
+    public String getCep(){return  cep;}
+
     public String getEnderecoCompleto() {
-        return endereco+", "+bairro+", "+municipio;
+        return logradouro+", " + bairro+", "+municipio+" - "+uf;
     }
 
     public int getTipo(){return  tipo;};
@@ -195,8 +148,8 @@ public class sonicRotaHolder{
         this.grupo_cliente = grupo_cliente;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
 
     public void setBairro(String bairro) {
@@ -206,9 +159,9 @@ public class sonicRotaHolder{
         this.municipio = municipio;
     }
 
-    public void setEnderecoCompleto(String endereco_completo) {
-        this.endereco_completo = endereco_completo;
-    }
+    public void setUf(String uf){this.uf = uf;}
+
+    public void setCep(String cep){this.cep = cep;}
 
     public void setTipo(int tipo){this.tipo = tipo;}
     public void setStatus(int status) {

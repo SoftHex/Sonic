@@ -44,12 +44,12 @@ import static android.view.View.VISIBLE;
  * Created by Administrador on 21/07/2017.
  */
 
-public class sonicRotaClientes extends Fragment {
+public class sonicRotaAgenda extends Fragment {
 
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicRotaAdapter2 myAdapter;
+    private sonicRotaAdapter myAdapter;
     private List<sonicRotaHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
@@ -236,7 +236,7 @@ public class sonicRotaClientes extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter2(myList, this.getActivity());
+        myAdapter = new sonicRotaAdapter(myList, this.getActivity());
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -278,7 +278,7 @@ public class sonicRotaClientes extends Fragment {
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um status...");
+        //builder.setTitle("Selecione um status...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 

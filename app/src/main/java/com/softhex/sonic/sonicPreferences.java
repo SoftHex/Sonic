@@ -28,12 +28,21 @@ public class sonicPreferences{
     private static final String ENVIRONMENT = "pathEnvironment";
     private static final String CLIENTE_ID = "clienteId";
     private static final String CLIENTE_NOME = "clienteNome";
+    private static final String CLIENTE_FANTASIA = "clienteFantasia";
+    private static final String CLIENTE_RAZAO = "clienteRazao";
     private static final String CLIENTE_GRUPO = "clienteGrupo";
     private static final String CLIENTE_CNPJ_CPF = "clienteCnpjCpf";
     private static final String CLIENTE_TELEFONE = "clienteTelefone";
     private static final String CLIENTE_EMAIL = "clienteEmail";
     private static final String CLIENTE_WHATSAPP = "clienteWhatsApp";
     private static final String CLIENTE_BLOQUEADO = "clienteBloqueado";
+    private static final String CLIENTE_LOGRADOURO = "clienteLogradouro";
+    private static final String CLIENTE_BAIRRO = "clienteBairro";
+    private static final String CLIENTE_MUNICIPIO = "clienteMunicipio";
+    private static final String CLIENTE_UF = "clienteUf";
+    private static final String CLIENTE_CEP = "clienteCep";
+    private static final String CLIENTE_IE = "clienteInscEstadual";
+    private static final String CLIENTE_OBS = "clienteObservacao";
     private static final String CLIENTE_ENDERECO_COMPLETO = "clienteEnderecoCompleto";
     private static final String CLIENTE_PATH = "clientePath";
     private static final String CLIENTE_NUNCA_COMPROU = "clienteNuncaComprou";
@@ -63,6 +72,7 @@ public class sonicPreferences{
     private static final String GERAL_SITE = "site";
     private static final String GERAL_FIRST_SINC = "firstSinc";
     private static final String SINC_DOWNLOAD_TYPE = "downloadType";
+    private static final String ROTA_ID = "rotaId";
 
 
     Users Users = new Users();
@@ -73,6 +83,7 @@ public class sonicPreferences{
     Util Util = new Util();
     Geral Geral = new Geral();
     Sincronizacao Sincronizacao = new Sincronizacao();
+    Rota Rota = new Rota();
 
     public sonicPreferences(Context context) {
         sharedpreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -272,6 +283,22 @@ public class sonicPreferences{
         public String getNome(){
             return sharedpreferences.getString(CLIENTE_NOME, null);
         }
+        public void setRazao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_RAZAO, value);
+            editor.apply();
+        }
+        public String getRazao(){
+            return sharedpreferences.getString(CLIENTE_RAZAO, null);
+        }
+        public void setFantasia(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_FANTASIA, value);
+            editor.apply();
+        }
+        public String getFantasia(){
+            return sharedpreferences.getString(CLIENTE_FANTASIA, null);
+        }
         public void setGrupo(String value){
             editor = sharedpreferences.edit();
             editor.putString(CLIENTE_GRUPO, value);
@@ -282,6 +309,55 @@ public class sonicPreferences{
         }
         public String getClienteExibicao(){
             return sharedpreferences.getString(mContex.getResources().getString(R.string.clienteTipo), mContex.getResources().getString(R.string.prefClienteTipoDefault));
+        }
+
+        public void setLogradouro(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_LOGRADOURO, value);
+            editor.apply();
+        }
+        public String getLogradouro(){
+            return sharedpreferences.getString(CLIENTE_LOGRADOURO, "");
+        }
+        public void setBairro(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_BAIRRO, value);
+            editor.apply();
+        }
+        public String getBairro(){
+            return sharedpreferences.getString(CLIENTE_BAIRRO, "");
+        }
+        public void setMunicipio(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_MUNICIPIO, value);
+            editor.apply();
+        }
+        public String getMunicipio(){
+            return sharedpreferences.getString(CLIENTE_MUNICIPIO, "");
+        }
+        public void setUf(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_UF, value);
+            editor.apply();
+        }
+        public String getUf(){
+            return sharedpreferences.getString(CLIENTE_UF, "");
+        }
+        public void setCep(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_CEP, value);
+            editor.apply();
+        }
+        public String getCep(){
+            return sharedpreferences.getString(CLIENTE_CEP, "");
+        }
+        public void setIe(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_IE, value);
+            editor.apply();
+        }
+        public String getIe(){
+            return sharedpreferences.getString(CLIENTE_IE, "");
         }
         public void setEnderecoCompleto(String value){
             editor = sharedpreferences.edit();
@@ -319,6 +395,14 @@ public class sonicPreferences{
         }
         public String getEmail(){
             return sharedpreferences.getString(CLIENTE_EMAIL, null);
+        }
+        public void setObs(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(CLIENTE_OBS, value);
+            editor.apply();
+        }
+        public String getObs(){
+            return sharedpreferences.getString(CLIENTE_OBS, null);
         }
         public void setWhatsApp(String value){
             editor = sharedpreferences.edit();
@@ -597,6 +681,16 @@ public class sonicPreferences{
         }
         public String getDownloadType(){
             return sharedpreferences.getString(SINC_DOWNLOAD_TYPE, "DADOS");
+        }
+    }
+    public class Rota{
+        public void setId(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(ROTA_ID, value);
+            editor.apply();
+        }
+        public int getId(){
+            return sharedpreferences.getInt(ROTA_ID, 0);
         }
     }
 }
