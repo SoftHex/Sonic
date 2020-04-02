@@ -80,7 +80,7 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
         holder.tvTitulo.setText(myList.get(position).getTitulo());
         holder.tvDescricao.setText(myList.get(position).getDescricao());
-        SpannableString stringEstilizada = new SpannableString("Ainda não houve sincronização.");
+        SpannableString stringEstilizada = new SpannableString(myCtx.getResources().getString(R.string.noFirstSinc));
         stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         holder.tvSincronizacao.setText((myList.get(position).getData().equals("") || myList.get(position).getData()=="") ? stringEstilizada : "Sincronizado "+mUtils.Data.dataSocial(myList.get(position).getData())+" às "+myList.get(position).getHora());
         holder.linearItem.setId(position);
@@ -119,6 +119,7 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
         switch (v.getId()){
             case 0:
                 mPrefs.Geral.setSincRefresh(true);
+                mPrefs.Geral.setFirstSinc(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
                 file = String.format("%5s",mPrefs.Users.getUsuarioId()).replace(" ", "0")+".TXT";
                 myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);

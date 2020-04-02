@@ -27,49 +27,28 @@ public class sonicEmpresa extends sonicRuntimePermission {
         mContext = this;
         myRegister = findViewById(R.id.btRegistrar);
         myCode = findViewById(R.id.etCodigo);
-        //myTest = findViewById(R.id.background_expandable);
 
-        /*myTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        myRegister.setOnClickListener((View v)-> {
 
-                if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()){
-
-                    new sonicVerificarSite(sonicEmpresa.this).validar("EMPRESA_TESTE", true);
-
-                }else{
-
-                    new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
-
-                }
-            }
-        });*/
-
-        myRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                hideKeyboard(view);
+                hideKeyboard(v);
 
                 if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()) {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
-                        new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Código inválido...");
+                        new sonicDialog(sonicEmpresa.this).showSnackBar(v,"Código inválido...");
 
                     } else {
 
-                        new sonicVerificarSite(sonicEmpresa.this).validar(myCode.getText().toString(), false);
+                        new sonicVerificarSite(sonicEmpresa.this).validar(myCode.getText().toString());
 
                     }
 
                 }else{
 
-                    new sonicDialog(sonicEmpresa.this).showSnackBar(view,"Verifique sua conexão com a internet...");
+                    new sonicDialog(sonicEmpresa.this).showSnackBar(v,"Verifique sua conexão com a internet...");
 
                 }
-
-            }
 
         });
 

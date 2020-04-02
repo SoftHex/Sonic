@@ -109,6 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_marginTop="3dp"
                 android:padding="6dp">
 
                 <!-- CABEÇALHO - FOTO, NOME E ENDEREÇO -->
@@ -278,7 +279,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1px"
-        android:layout_marginLeft="26dp"
-        android:background="#DCDCDC" />
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/colorSeparador" />
 
 </LinearLayout>

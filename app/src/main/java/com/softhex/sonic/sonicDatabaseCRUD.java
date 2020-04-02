@@ -75,10 +75,10 @@ public class sonicDatabaseCRUD {
     private sonicSystem mySystem;
     private sonicPreferences mPrefs;
 
-    public sonicDatabaseCRUD(Context ctx){
+    public sonicDatabaseCRUD(Context context){
 
-        this.myCtx = ctx;
-        this.mPrefs = new sonicPreferences(ctx);
+        this.myCtx = context;
+        this.mPrefs = new sonicPreferences(context);
         this.DB = new sonicDatabase(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.prefs = PreferenceManager.getDefaultSharedPreferences(myCtx);
@@ -1060,7 +1060,6 @@ public class sonicDatabaseCRUD {
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')));";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
-                Log.d("QUERY", query);
 
                 if(cursor!=null){
                     while (cursor.moveToNext()){

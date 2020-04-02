@@ -13,9 +13,9 @@ import java.util.List;
 public class sonicSplash extends AppCompatActivity {
 
     private Intent i;
-    private sonicDatabaseCRUD DBC;
+    private sonicDatabaseCRUD mData;
     private Activity mActivity;
-    private sonicPreferences mPref;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +23,10 @@ public class sonicSplash extends AppCompatActivity {
         setContentView(R.layout.sonic_splash);
 
         mActivity = this;
-        DBC = new sonicDatabaseCRUD(sonicSplash.this);
-        mPref = new sonicPreferences(this);
+        mData = new sonicDatabaseCRUD(this);
+        mPrefs = new sonicPreferences(this);
 
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
-
 
         new myAsyncTaskLogar().execute();
 
@@ -38,31 +37,31 @@ public class sonicSplash extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Integer... integers) {
 
-            Boolean res = DBC.Usuario.usuarioAtivo();
+            Boolean res = mData.Usuario.usuarioAtivo();
             List<sonicUsuariosHolder> mListUser;
             List<sonicGrupoEmpresasHolder> mListEmpresa;
-            mListUser = DBC.Usuario.selectUsuarioAtivo();
-            mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
+            mListUser = mData.Usuario.selectUsuarioAtivo();
+            mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
 
             if(res){
 
-                mPref.Matriz.setNome(mListEmpresa.get(0).getNome());
-                mPref.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
-                mPref.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
-                mPref.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
-                mPref.Matriz.setBairro(mListEmpresa.get(0).getBairro());
-                mPref.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
-                mPref.Matriz.setUF(mListEmpresa.get(0).getUf());
-                mPref.Matriz.setCep(mListEmpresa.get(0).getCep());
-                mPref.Matriz.setFone(mListEmpresa.get(0).getFone());
-                mPref.Matriz.setEmail(mListEmpresa.get(0).getEmail());
-                mPref.Matriz.setSite(mListEmpresa.get(0).getSite());
-                mPref.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
-                mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
-                mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
-                mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());
-                mPref.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
-                mPref.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
+                mPrefs.Matriz.setNome(mListEmpresa.get(0).getNome());
+                mPrefs.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
+                mPrefs.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+                mPrefs.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
+                mPrefs.Matriz.setBairro(mListEmpresa.get(0).getBairro());
+                mPrefs.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
+                mPrefs.Matriz.setUF(mListEmpresa.get(0).getUf());
+                mPrefs.Matriz.setCep(mListEmpresa.get(0).getCep());
+                mPrefs.Matriz.setFone(mListEmpresa.get(0).getFone());
+                mPrefs.Matriz.setEmail(mListEmpresa.get(0).getEmail());
+                mPrefs.Matriz.setSite(mListEmpresa.get(0).getSite());
+                mPrefs.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
+                mPrefs.Users.setUsuarioId(mListUser.get(0).getCodigo());
+                mPrefs.Users.setUsuarioNome(mListUser.get(0).getNome());
+                mPrefs.Users.setUsuarioCargo(mListUser.get(0).getCargo());
+                mPrefs.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
+                mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
 
 
             }else{
@@ -79,7 +78,7 @@ public class sonicSplash extends AppCompatActivity {
             if(result){
 
                 // VERIFICA SE O USUARIO ESCOLHEU EXIGIR SENHA AO ENTRAR
-                if(new sonicPreferences(mActivity).Users.getStatusLogin()){
+                if(mPrefs.Users.getStatusLogin()){
                     i  = new Intent(mActivity,sonicLogin.class);
                 }else {
                     i = new Intent(mActivity, sonicMain.class);
@@ -105,10 +104,9 @@ public class sonicSplash extends AppCompatActivity {
 
                                     startActivity(i);
                                     finish();
-
                                 }
                             }
-                , 3000);
+                ,sonicUtils.Randomizer.generate(1500, 3000));
 
     }
 

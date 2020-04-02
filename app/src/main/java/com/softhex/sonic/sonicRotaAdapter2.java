@@ -144,7 +144,7 @@ public class sonicRotaAdapter2 extends RecyclerView.Adapter<sonicRotaAdapter2.Vi
         holder.tvNome.setText(cliNome);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
-        holder.tvDataHora.setText("Data Prevista: "+mUtils.Data.dataFotmatadaBarra(rota.getDataAgendamento())+" Ás "+mUtils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
+        holder.tvDataHora.setText("Data Prevista: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento())+" às "+mUtils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
         holder.tvObservacao.setText("Observação: "+rota.getObservacao());
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + ".JPG");

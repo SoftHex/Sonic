@@ -66,8 +66,8 @@ public class sonicRota extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicRotaClientes(), "CLIENTES");
-        myAdapter.addFragment(new sonicRotaClientes(), "MAPA");
+        myAdapter.addFragment(new sonicRotaClientes(), "AGENDA");
+        myAdapter.addFragment(new sonicRotaClientes(), "PRÓPRIA");
         viewpager.setAdapter(myAdapter);
 
     }

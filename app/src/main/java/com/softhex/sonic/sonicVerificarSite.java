@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
-import android.telephony.TelephonyManager;
 
 import java.io.File;
 
@@ -22,33 +21,21 @@ public class sonicVerificarSite{
     private sonicFtp myFtp;
     private sonicDialog myMessage;
     private sonicDatabaseLogCRUD DBCL;
-    private sonicDatabaseCRUD DBC;
     private sonicSystem mySystem;
-    private sonicPopularTabelas myPopTable;
-    private sonicUtils myUtil;
-    private TelephonyManager myPhonyManager;
-    private Boolean appTest;
+    private sonicPreferences mPrefs;
 
     public sonicVerificarSite(Activity act){
         this.mAct = act;
         this.myCtx = act;
+        this.mPrefs = new sonicPreferences(myCtx);
         this.myProgress = new ProgressDialog(myCtx);
         this.myFtp = new sonicFtp(act);
         this.myMessage = new sonicDialog(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
-        this.DBC = new sonicDatabaseCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
-        this.myPopTable = new sonicPopularTabelas(act);
-        this.myUtil = new sonicUtils(myCtx);
-        this.myPhonyManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
-        this.appTest = false;
     }
 
-    public Boolean validar(String site, Boolean test){
-
-        if(test){
-            sonicConstants.EMP_TESTE = true;
-        }
+    public Boolean validar(String site){
 
         String fileName = sonicConstants.FTP_SITES+ site +".TXT";
         String fileFull = sonicConstants.LOCAL_TEMP + site +".TXT";
@@ -92,17 +79,14 @@ public class sonicVerificarSite{
 
                     if(myFtp.downloadFile(strings[1], strings[2])){
 
-                        sonicConstants.EMP_SITE = strings[0];
-                        sonicConstants.EMP_EXIST = "1";
-                        sonicConstants.DOWNLOAD_TYPE = "SITE";
-
                         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + strings[0] + ".TXT");
 
                         if (file.exists()) {
 
                             publishProgress("Salvando configurações...");
 
-                            sonicConstants.DOWNLOAD_TYPE = "SITE";
+                            mPrefs.Geral.setSite(strings[0]);
+                            mPrefs.Sincronizacao.setDownloadType("SITE");
                             new sonicPopularTabelas(mAct).gravarDados(strings[0]+".TXT");
 
                             res = true;
@@ -113,7 +97,6 @@ public class sonicVerificarSite{
 
                         File delete = new File(Environment.getExternalStorageDirectory(), strings[2]);
                         delete.delete();
-                        sonicConstants.EMP_EXIST = "0";
                         myMessage.showMS("Atenção", "Empresa não encontrada.", myMessage.MSG_WARNING);
                         res = false;
 
@@ -128,7 +111,6 @@ public class sonicVerificarSite{
                             mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
-
 
             }else{
 
@@ -154,7 +136,6 @@ public class sonicVerificarSite{
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
         }
-
 
     }
 

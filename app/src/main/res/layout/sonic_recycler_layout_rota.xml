@@ -73,9 +73,9 @@
     </LinearLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/mShimmerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/shimmer"
         app:shimmer_duration="1000"
         app:shimmer_tilt="0"
         app:shimmer_direction="left_to_right">
@@ -85,7 +85,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/layout_cards_rota_itens_shimmer"/>
+            <include layout="@layout/layout_cards_rota_itens_shimmer"/>
+            <include layout="@layout/layout_cards_rota_itens_shimmer"/>
+            <include layout="@layout/layout_cards_rota_itens_shimmer"/>
 
         </LinearLayout>
 

@@ -43,7 +43,7 @@ public class sonicMainPedidos extends Fragment {
     private LineChart mLineChart;
     private BarChart mBarChart;
     private Context mContex;
-    private TextView tvMaxValue, tvTitulo;
+    private TextView tvMaxValue, tvTitulo, tvMensagem;
     private sonicPreferences mPrefs;
 
     @Nullable
@@ -58,6 +58,8 @@ public class sonicMainPedidos extends Fragment {
         mBarChart = myView.findViewById(R.id.mBarChart);
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
         tvTitulo = myView.findViewById(R.id.tvTitulo);
+        tvMensagem = myView.findViewById(R.id.tvMensagem);
+        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.INVISIBLE : View.VISIBLE);
         mList = mData.Venda.selectPedidos();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -155,7 +157,7 @@ public class sonicMainPedidos extends Fragment {
             }
             valueSet.add(new BarEntry(i, Float.valueOf(mList.get(i).getTotal())));
         }
-        tvMaxValue.setText(max);
+        tvMaxValue.setText(maxValue==0 ? "  0  " : max);
         BarDataSet barDataSet = new BarDataSet(valueSet, "");
         barDataSet.setColor(getResources().getColor(R.color.colorTypeInfo));
         barDataSet.setValueTextColor(Color.WHITE);
@@ -276,7 +278,7 @@ public class sonicMainPedidos extends Fragment {
             }
             valueSet.add(new Entry(i, mList.get(i-1).getTotal()));
         }
-        tvMaxValue.setText(max);
+        tvMaxValue.setText(maxValue==0 ? "  0  " : max);
         // TO OFFSET FIRST AND LAST VALUES
         valueSet.add(new Entry(7, 0f));
         xAxisLabel.add("");

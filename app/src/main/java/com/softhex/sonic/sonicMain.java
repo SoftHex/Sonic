@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,8 +57,10 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.softhex.view.ProgressProfileView;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import zerobranch.androidremotedebugger.AndroidRemoteDebugger;
 
@@ -108,6 +109,8 @@ public class sonicMain extends AppCompatActivity{
     private sonicPreferences mPrefs;
     private Context mContext;
     private TextView[] dots;
+    private Locale meuLocal = new Locale( "pt", "BR" );
+    private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
     private LinearLayout dotsLayout;
     List<sonicUsuariosHolder> listaUser;
     List<sonicEmpresasHolder> listaEmpresa;
@@ -152,25 +155,6 @@ public class sonicMain extends AppCompatActivity{
         //llChecked = findViewById(R.id.llChecked);
         myProgressProfile = findViewById(R.id.myProgressProfile);
 
-        // DISPLAY DRAWABLE FILE IN LINEAR LAYOUT
-        /*Glide.with(getBaseContext())
-                .load(getResources().getDrawable(R.drawable.backhome))
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .fitCenter()
-                .into(new CustomTarget<Drawable>() {
-                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        llDetail.setBackground(resource);
-                    }
-
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });*/
-
         // CARREGAR FOTO DO PERFIL
         File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(mPrefs.Users.getEmpresaId()));
 
@@ -190,25 +174,6 @@ public class sonicMain extends AppCompatActivity{
         setUpViewPager(myViewPager);
 
         myTabLayout = findViewById(R.id.mTabs);
-        //myTabLayout.setupWithViewPager(myViewPager);
-        //myTabLayout.setSelectedTabIndicator(R.color.colorAccent2);
-
-        myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                addBottomDots(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         addBottomDots(0);
 
@@ -296,16 +261,26 @@ public class sonicMain extends AppCompatActivity{
 
     public void lerDadosUsuario(){
 
+        List<sonicVendasValorHolder> mVendas = new ArrayList<>();
+        List<sonicVendasPedidosHolder> mPedidos = new ArrayList<>();
+        mVendas = DBC.Venda.selectVendas();
+        mPedidos = DBC.Venda.selectPedidos();
+        Float value = Float.valueOf(mVendas.get(5).getValor());
+        nfVal.setMaximumFractionDigits(2);
+        double v = (double)value/100;
+        tvVendas.setVisibility(View.VISIBLE);
+        tvVendas.setText(nfVal.format(v).replace("R$", "R$ "));
+        tvPedidos.setVisibility(View.VISIBLE);
+        tvPedidos.setText(String.valueOf(mPedidos.get(5).getTotal()));
         // ESCONDE O PROGRESS E EXIBE OS VALORES
         //pbPedidos.setVisibility(View.GONE);
         //pbDesempenho.setVisibility(View.GONE);
         //pbVendido.setVisibility(View.GONE);
         //pbMeta.setVisibility(View.GONE);
-        tvPedidos.setVisibility(View.VISIBLE);
-        tvPedidos.setText("130");
         tvDesemprenho.setVisibility(View.VISIBLE);
+        tvDesemprenho.setText("0%");
         //tvDesemprenho.setText(percentualProgress==100.0 ? (String.format("%.0f", percentualTotal)+"%") : (String.format("%.1f", percentualProgress)+"%"));
-        tvVendas.setVisibility(View.VISIBLE);
+
         //tvVendas.setText(new sonicUtils(mActivity).Number.stringToMoeda2(vendido));
         //tvMeta.setVisibility(View.VISIBLE);
         //tvMeta.setText(new sonicUtils(mActivity).Number.stringToMoeda2(usuarioMeta));
@@ -326,6 +301,7 @@ public class sonicMain extends AppCompatActivity{
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
 
                         if(!currentProfile) {
+                            lerDadosUsuario();
                             setTvEmpresa(profile.getIdentifier());
                             new myAssyncTask().execute(3);
                             new myAssyncTask().execute(4);
@@ -377,7 +353,6 @@ public class sonicMain extends AppCompatActivity{
 
             File file = new File(Environment.getExternalStorageDirectory(),mPrefs.Users.getPicture(listaEmpresa.get(x).getCodigo()));
 
-            Log.d("IMAGEM", file.toString());
             if(file.exists()){
                 myHeader.addProfiles(
                         new ProfileDrawerItem()
@@ -546,21 +521,13 @@ public class sonicMain extends AppCompatActivity{
                     @Override
                     public void onDrawerOpened(View drawerView) {
 
-                        // AVISOS
-                        //new myAssyncTask().execute(2,null,2);
-                        // PRODUTOS
-                        //new myAssyncTask().execute(4,null,4);
-
-                        /*int result = DBC.Avisos.countNaoLidos();
-                        if(result != avisoNaoLido) {
-                            if(result>0){
-                                updateBadge(result + "", 2);
-                            }else{
-                                updateBadge(null, 2);
-                            }
+                        if(mPrefs.Geral.getDrawerRefresh()){
+                            mPrefs.Geral.setDrawerRefresh(false);
+                            // CLIENTES
+                            new myAssyncTask().execute(3);
+                            // PRODUTOS
+                            new myAssyncTask().execute(4);
                         }
-                        avisoNaoLido = result;*/
-
                     }
 
                     @Override
@@ -957,8 +924,9 @@ public class sonicMain extends AppCompatActivity{
                 return false;
             case R.id.itSincronizar:
                 mPrefs.Geral.setHomeRefresh(true);
+                mPrefs.Geral.setDrawerRefresh(true);
+                mPrefs.Sincronizacao.setDownloadType("DADOS");
                 myFtp = new sonicFtp(mActivity);
-                sonicConstants.DOWNLOAD_TYPE = "DADOS";
                 String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
                 myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
                 return false;
@@ -1041,13 +1009,11 @@ public class sonicMain extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("PAUSE","");
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        Log.d("POST RESUME","");
     }
 
 }

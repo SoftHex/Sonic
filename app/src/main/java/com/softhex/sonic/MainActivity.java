@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private int[] layouts;
     private sonicDatabaseCRUD DBC;
     private Intent i;
-    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
             sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
         }
 
-        setContentView(R.layout.activity_main);
-
         viewPager = findViewById(R.id.view_pager);
         dotsLayout = findViewById(R.id.layoutDots);
         skip = findViewById(R.id.btn_skip);
@@ -59,29 +55,25 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewListener);
 
-        skip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        skip.setOnClickListener((View v)-> {
                 Intent i  = new Intent(MainActivity.this,sonicEmpresa.class);
                 startActivity(i);
                 finish();
-            }
         });
 
-        next.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
+        next.setOnClickListener((View v)->{
+
                 int current = getItem(+1);
+
                 if(current<layouts.length){
                     viewPager.setCurrentItem(current);
                 }
-                else
-                    {
+                else {
                         Intent i  = new Intent(MainActivity.this,sonicEmpresa.class);
                         startActivity(i);
                         finish();
                     }
-            }
+
         });
     }
 

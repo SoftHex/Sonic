@@ -57,9 +57,13 @@ public class sonicPreferences{
     private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
     private static final String GERAL_HOME_REFRESH = "homeRefresh";
     private static final String GERAL_SINC_REFRESH = "sincRefresh";
+    private static final String GERAL_DRAWER_REFRESH = "drawerRefresh";
     private static final String GERAL_HOME_CHART_TYPE = "homeChartType";
     private static final String GERAL_TIPO_HORA = "tipoHora";
+    private static final String GERAL_SITE = "site";
+    private static final String GERAL_FIRST_SINC = "firstSinc";
     private static final String SINC_DOWNLOAD_TYPE = "downloadType";
+
 
     Users Users = new Users();
     Path Path = new Path();
@@ -544,6 +548,14 @@ public class sonicPreferences{
         public boolean getSincRefresh(){
             return sharedpreferences.getBoolean(GERAL_SINC_REFRESH, false);
         }
+        public void setDrawerRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_DRAWER_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getDrawerRefresh(){
+            return sharedpreferences.getBoolean(GERAL_DRAWER_REFRESH, false);
+        }
         public void setHomeChartType(String value){
             editor = sharedpreferences.edit();
             editor.putString(GERAL_HOME_CHART_TYPE, value);
@@ -558,7 +570,23 @@ public class sonicPreferences{
             editor.apply();
         }
         public String getTipoHora(){
-            return sharedpreferences.getString(GERAL_TIPO_HORA, "12 Horas");
+            return sharedpreferences.getString(GERAL_TIPO_HORA, "24 Horas");
+        }
+        public void setSite(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_SITE, value);
+            editor.apply();
+        }
+        public String getSite(){
+            return sharedpreferences.getString(GERAL_SITE, "");
+        }
+        public void setFirstSinc(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_FIRST_SINC, value);
+            editor.apply();
+        }
+        public boolean getFirstSinc(){
+            return sharedpreferences.getBoolean(GERAL_FIRST_SINC, false);
         }
     }
     public class Sincronizacao{

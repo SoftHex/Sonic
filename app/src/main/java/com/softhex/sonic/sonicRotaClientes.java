@@ -65,7 +65,7 @@ public class sonicRotaClientes extends Fragment {
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
 
         mContext = getActivity();
 

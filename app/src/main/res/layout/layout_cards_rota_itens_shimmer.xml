@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:tag="cards main container">
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="0dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--LATERAL -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="-10dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="6dp">
+
+                <!-- START DASH -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp">
+
+                    <com.softhex.sonic.DividerView
+                        android:layout_width="wrap_content"
+                        android:layout_height="6dp"
+                        android:layerType="software"
+                        custom:color="@color/colorPrimaryBlackLightT"
+                        custom:orientation="vertical"
+                        custom:dashLength="6dp"
+                        custom:dashGap="6dp"
+                        custom:dashThickness="1dp" />
+
+                </LinearLayout>
+
+                <!-- TEXTO E FOTO -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center_vertical">
+
+                    <RelativeLayout
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:gravity="center"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:background="@drawable/text_shimmer"
+                            android:textSize="25sp"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <!-- END DASH -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.softhex.sonic.DividerView
+                        android:layout_width="wrap_content"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="6dp"
+                        android:layerType="software"
+                        custom:color="@color/colorPrimaryBlackLightT"
+                        custom:orientation="vertical"
+                        custom:dashLength="6dp"
+                        custom:dashGap="6dp"
+                        custom:dashThickness="1dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- CONTEUDO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="3dp"
+                android:padding="6dp">
+
+                <!-- CABEÇALHO - FOTO, NOME E ENDEREÇO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_shimmer"
+                            android:textSize="18sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_shimmer"
+                            android:layout_marginTop="2dp"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- CABEÇALHO - STATUS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_shimmer"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- INFORMAÇOES GERAIS -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_shimmer"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_shimmer"
+                        android:layout_marginTop="2dp"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_shimmer"
+                        android:layout_marginTop="2dp"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/text_shimmer"
+                        android:layout_marginTop="2dp"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- SEPARADOR -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1px"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/colorSeparador" />
+
+</LinearLayout>

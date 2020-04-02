@@ -135,6 +135,7 @@
     <string name="go_erro_no_emp">Não existe Empresa para este código!</string>
     <string name="go_erro_tabela">Erro ao gravar dados nas tabelas...</string>
     <string name="go_erro_file">Arquivo não encontrado...</string>
+    <string name="noFirstSinc">Ainda não houve sincronização...</string>
 
     <!-- SINCRONIZAÇÃO UPLOAD/DOWNLOAD -->
     <string name="sinc_cliente">CLIENTES</string>
@@ -194,14 +195,14 @@
     <string name="tipoHora" translatable="false">tipoHora</string>
     <string name="prefTipoHoraNome">Formato de Hora</string>
     <string name="prefTipoHoraDescription">Formato padrão para exibição das hora.</string>
-    <string name="prefTipoHoraDefault">12 Horas</string>
+    <string name="prefTipoHoraDefault">24 Horas</string>
     <string-array name="prefTipoHoraOptions">
-        <item name="1">12 Horas</item>
-        <item name="2">24 Horas</item>
+        <item name="1">24 Horas</item>
+        <item name="2">12 Horas</item>
     </string-array>
     <string-array name="prefTipoHoraValues">
-        <item name="1">12 Horas</item>
-        <item name="2">24 Horas</item>
+        <item name="1">24 Horas</item>
+        <item name="2">12 Horas</item>
     </string-array>
 
     <string name="homeChartaType" translatable="false">homeChartType</string>

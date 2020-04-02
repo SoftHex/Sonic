@@ -47,7 +47,7 @@ public class sonicMainVendas extends Fragment {
     private Context mContex;
     private Locale meuLocal = new Locale( "pt", "BR" );
     private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
-    private TextView tvMaxValue, tvTitulo;
+    private TextView tvMaxValue, tvTitulo, tvMensagem;
     private sonicPreferences mPrefs;
 
     @Nullable
@@ -62,6 +62,8 @@ public class sonicMainVendas extends Fragment {
         mLineChart = myView.findViewById(R.id.mLineChart);
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
         tvTitulo = myView.findViewById(R.id.tvTitulo);
+        tvMensagem = myView.findViewById(R.id.tvMensagem);
+        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.INVISIBLE : View.VISIBLE);
         mList = mData.Venda.selectVendas();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -160,7 +162,7 @@ public class sonicMainVendas extends Fragment {
             }
             valueSet.add(new BarEntry(i, Float.valueOf(mList.get(i).getValor())));
         }
-        tvMaxValue.setText(max);
+        tvMaxValue.setText(maxValue==0f ? "R$ 0,00" : max);
         BarDataSet barDataSet = new BarDataSet(valueSet, "");
         barDataSet.setColor(getResources().getColor(R.color.colorTypeInfo));
         barDataSet.setValueTextColor(Color.WHITE);
@@ -283,7 +285,7 @@ public class sonicMainVendas extends Fragment {
             }
             valueSet.add(new Entry(i, Float.valueOf(mList.get(i-1).getValor())));
         }
-        tvMaxValue.setText(max);
+        tvMaxValue.setText(maxValue==0f ? "R$ 0,00" : max);
         // TO OFFSET FIRST AND LAST VALUES
         valueSet.add(new Entry(7, 0f));
         xAxisLabel.add("");

@@ -200,8 +200,11 @@ public class sonicPopularTabelas {
             myProgress.dismiss();
             new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
             if(aBoolean){
+                sonicDatabaseCRUD mData = new sonicDatabaseCRUD(myCtx);
                 switch (mPref.Sincronizacao.getDownloadType()){
                     case "DADOS":
+                        mPref.Geral.setDrawerRefresh(true);
+                        mPref.Geral.setFirstSinc(true);
                         new PromptDialog(myCtx)
                                 .setDialogType(sonicDialog.MSG_SUCCESS)
                                 .setAnimationEnable(true)
@@ -222,7 +225,6 @@ public class sonicPopularTabelas {
 
                                     }
                                 }).show();
-                        sonicDatabaseCRUD mData = new sonicDatabaseCRUD(myCtx);
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_TODAS, sonicConstants.TIPO_SINC_DADOS);
                         List<String[]> list = Arrays.asList(mTables);
                         for(String[] arr: list){
@@ -230,14 +232,25 @@ public class sonicPopularTabelas {
                         }
                         break;
                     case "ESTOQUE":
-                        new sonicDialog(myCtx).showMI(R.string.headerSuccess,R.string.estoqueSincronizado, sonicDialog.MSG_SUCCESS);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao("dados", sonicConstants.TB_ESTOQUE_PRODUTO);
+                        new PromptDialog(myCtx)
+                                .setDialogType(sonicDialog.MSG_SUCCESS)
+                                .setAnimationEnable(true)
+                                .setTitleText(R.string.headerSuccess)
+                                .setContentText(R.string.estoqueSincronizado)
+                                .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                    @Override
+                                    public void onClick(PromptDialog dialog) {
+                                        dialog.dismiss();
+                                        ((sonicSincronizacao)mAct).refreshSincFragment();
+                                        mPref.Geral.setSincRefresh(false);
+                                    }
+                                }).show();
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTO, sonicConstants.TIPO_SINC_DADOS);
                         break;
                     case "SITE":
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_SITE, sonicConstants.TIPO_SINC_DADOS);
                         primeiroAcesso();
                         break;
-
-
                 }
             }
         }
@@ -254,7 +267,7 @@ public class sonicPopularTabelas {
 
                 mPref.Users.setUsuarioImei(android.os.Build.VERSION.SDK_INT >= 26 ? myPhoneManager.getImei() : myPhoneManager.getDeviceId());
 
-                new mAsyncTaskDownloadImagemPerfil().execute();
+                new mAsyncTask().execute();
 
             }else{
 
@@ -271,14 +284,9 @@ public class sonicPopularTabelas {
 
     }
 
-    private class mAsyncTaskDownloadImagemPerfil extends AsyncTask<String, String, List<sonicUsuariosHolder>>{
+    private class mAsyncTask extends AsyncTask<String, String, List<sonicUsuariosHolder>>{
         @Override
         protected List<sonicUsuariosHolder> doInBackground(String... strings) {
-            //new Handler(Looper.getMainLooper()).post(()-> {
-
-                //new sonicFtp(myCtx).downloadFileSilent(sonicConstants.FTP_EMPRESA, sonicConstants.LOCAL_IMG_EMPRESA + "empresa.JPG");
-
-            //});
             return DBC.Usuario.selectUsuarioImei(mPref.Users.getUsuarioImei());
         }
 
@@ -290,7 +298,6 @@ public class sonicPopularTabelas {
             }
             else{
                 new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
-                sonicConstants.EMP_TESTE = false;
             }
         }
     }
@@ -308,7 +315,4 @@ public class sonicPopularTabelas {
         ((AppCompatActivity) myCtx).finish();
 
     }
-
-
-
 }
