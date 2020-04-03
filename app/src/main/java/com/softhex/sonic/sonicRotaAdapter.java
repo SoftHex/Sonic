@@ -203,6 +203,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             mPrefs.Clientes.setMunicipio(rota.getMunicipio());
             mPrefs.Clientes.setUf(rota.getUf());
             mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
+            mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
             mPrefs.Rota.setId(rota.getCodigo());
             Intent i = new Intent(v.getContext(), sonicRotaDetalhe.class);
             v.getContext().startActivity(i);

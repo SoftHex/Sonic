@@ -1,11 +1,8 @@
 package com.softhex.sonic;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.SparseIntArray;
 import android.view.View;
 
@@ -88,15 +85,15 @@ public abstract class sonicRuntimePermission extends AppCompatActivity{
             Snackbar.make(findViewById(android.R.id.content), mErrorString.get(requestCode), Snackbar.LENGTH_INDEFINITE).setAction("PERMITIR", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    Intent i = new Intent();
-                    i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    i.setData(Uri.parse("package:" + getPackageName()));
-                    i.addCategory(Intent.CATEGORY_DEFAULT);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    startActivity(i);
+                    ActivityCompat.requestPermissions(sonicRuntimePermission.this, permissions, requestCode);
+                    //Intent i = new Intent();
+                    //i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    //i.setData(Uri.parse("package:" + getPackageName()));
+                    //i.addCategory(Intent.CATEGORY_DEFAULT);
+                    //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    //i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    //startActivity(i);
 
                 }
             }).setTextColor(Color.WHITE).setActionTextColor(Color.YELLOW) .show();

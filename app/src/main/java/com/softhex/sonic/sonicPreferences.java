@@ -73,6 +73,9 @@ public class sonicPreferences{
     private static final String GERAL_FIRST_SINC = "firstSinc";
     private static final String SINC_DOWNLOAD_TYPE = "downloadType";
     private static final String ROTA_ID = "rotaId";
+    private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
+    private static final String ROTA_START_TIME = "rotaStartTime";
+    private static final String ROTA_END_TIME = "rotaEndTime";
 
 
     Users Users = new Users();
@@ -691,6 +694,30 @@ public class sonicPreferences{
         }
         public int getId(){
             return sharedpreferences.getInt(ROTA_ID, 0);
+        }
+        public void setAddressMap(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_ADDRESS_MAP, value);
+            editor.apply();
+        }
+        public String getAddressMap(){
+            return sharedpreferences.getString(ROTA_ADDRESS_MAP, "");
+        }
+        public void setStartTime(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_START_TIME, value);
+            editor.apply();
+        }
+        public String getStartTime(){
+            return sharedpreferences.getString(ROTA_START_TIME, "");
+        }
+        public void setEndTime(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_END_TIME, value);
+            editor.apply();
+        }
+        public String getEndTime(){
+            return sharedpreferences.getString(ROTA_END_TIME, "");
         }
     }
 }

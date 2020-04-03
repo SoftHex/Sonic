@@ -61,6 +61,7 @@ import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -507,6 +508,93 @@ public class sonicUtils {
 
     public static String unmask(String s) {
         return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
+    }
+
+    static String firstCharUpper(String str)
+    {
+
+        // Create a char array of given String
+        char ch[] = str.toCharArray();
+        for (int i = 0; i < str.length(); i++) {
+
+            // If first character of a word is found
+            if (i == 0 && ch[i] != ' ' ||
+                    ch[i] != ' ' && ch[i - 1] == ' ') {
+
+                // If it is in lower-case
+                if (ch[i] >= 'a' && ch[i] <= 'z') {
+
+                    // Convert into Upper-case
+                    ch[i] = (char)(ch[i] - 'a' + 'A');
+                }
+            }
+
+            // If apart from first character
+            // Any one is in Upper-case
+            else if (ch[i] >= 'A' && ch[i] <= 'Z')
+
+                // Convert into Lower-Case
+                ch[i] = (char)(ch[i] + 'a' - 'A');
+        }
+
+        // Convert the char array to equivalent String
+        String st = new String(ch);
+        return st;
+    }
+
+    static String addressToMapSearch(String str)
+    {
+
+        // Create a char array of given String
+        char ch[] = str.toCharArray();
+        for (int i = 0; i < str.length(); i++) {
+
+            // If first character of a word is found
+            if (i == 0 && ch[i] != ' ' ||
+                    ch[i] != ' ' && ch[i - 1] == ' ') {
+
+                // If it is in lower-case
+                if (ch[i] >= 'a' && ch[i] <= 'z') {
+
+                    // Convert into Upper-case
+                    ch[i] = (char)(ch[i] - 'a' + 'A');
+                }
+            }
+
+            // If apart from first character
+            // Any one is in Upper-case
+            else if (ch[i] >= 'A' && ch[i] <= 'Z')
+
+                // Convert into Lower-Case
+                ch[i] = (char)(ch[i] + 'a' - 'A');
+        }
+
+        // Convert the char array to equivalent String
+        String st = new String(ch);
+        return st.replace(" ","+").replace(",","+");
+    }
+
+    public static String getDifferenceTime(final String first, final String last)
+    {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        long second = 1000l;
+        long minute = 60l * second;
+        long hour = 60l * minute;
+        Date date1=null;
+        Date date2=null;
+
+        try{
+            date1 = dateFormat.parse(first);
+            date2 = dateFormat.parse(last);
+
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        long diff = (date2.getTime() - date1.getTime())*-1;
+
+        return String.format("%02d", diff / hour)+":"+String.format("%02d", (diff % hour) / minute)+":"+String.format("%02d", (diff % minute) / second);
     }
 
     public class MaskEditUtil {

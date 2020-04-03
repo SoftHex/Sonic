@@ -54,17 +54,13 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
         requestAppPermissions(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_PHONE_STATE // LER O IMEI DO APARELHO
-                /*
+                Manifest.permission.READ_PHONE_STATE, // LER O IMEI DO APARELHO
                 Manifest.permission.CALL_PHONE,
                 Manifest.permission.GET_ACCOUNTS,
                 Manifest.permission.VIBRATE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_CONTACTS,
-
-                * */
-
+                Manifest.permission.WRITE_CONTACTS
                 },R.string.msgPerms,REQUEST_PERMISSION);
 
     }

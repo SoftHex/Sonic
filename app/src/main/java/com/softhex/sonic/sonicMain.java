@@ -180,6 +180,24 @@ public class sonicMain extends AppCompatActivity{
         createDrawerMenu();
         calcularPercentual("2200000",usuarioMeta);
         lerDadosUsuario();
+
+        myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                addBottomDots(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
@@ -910,6 +928,8 @@ public class sonicMain extends AppCompatActivity{
         return super.onPrepareOptionsMenu(menu);
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
