@@ -17,6 +17,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -61,13 +62,15 @@ public class sonicRotaAgenda extends Fragment {
     private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
-    Intent i;
+    private Intent i;
+    private sonicPreferences mPrefs;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
 
         mContext = getActivity();
+        mPrefs = new sonicPreferences(mContext);
 
         loadFragment();
 
@@ -103,7 +106,7 @@ public class sonicRotaAgenda extends Fragment {
 
         myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
-        myLayout.scrollToPosition(sonicConstants.ROTA_ITEM_SELECTED);
+        myLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -222,7 +225,7 @@ public class sonicRotaAgenda extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1000));
+                    ,result*10);
 
 
         }
@@ -236,13 +239,18 @@ public class sonicRotaAgenda extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter(myList, this.getActivity());
+        myAdapter = new sonicRotaAdapter(myList, this.getContext(), this.getActivity());
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
+    }
+
+    public void teste(){
+        //myAdapter.notifyItemChanged(0);
+        Toast.makeText(this.getContext(), "TESTES", Toast.LENGTH_SHORT).show();
     }
 
     private void showNoResult(){
@@ -314,7 +322,6 @@ public class sonicRotaAgenda extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d("RESUME","");
-
     }
 
     @Override
@@ -329,5 +336,4 @@ public class sonicRotaAgenda extends Fragment {
         super.onDestroy();
 
     }
-
 }

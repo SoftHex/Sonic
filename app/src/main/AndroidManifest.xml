@@ -134,6 +134,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicRotaDetalhe"
+            android:parentActivityName=".sonicRota"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity

@@ -3,6 +3,7 @@ package com.softhex.sonic;
 import android.Manifest;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,13 +19,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.Settings;
-import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,11 +47,22 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 public class sonicRotaDetalhe extends AppCompatActivity {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO})
+    public @interface Status{
+        int NAO_INICIADO = 1;
+        int EM_ATENDIMENTO = 2;
+        int CONCLUIDO = 3;
+    }
 
     private static final int REQUEST_PERMISSION = 10;
     private Context mContex;
@@ -60,7 +72,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private TextView[] dots;
     private TextView tvCount;
     private LinearLayout dotsLayout;
-    private sonicDatabaseCRUD DBC;
+    private sonicDatabaseCRUD mData;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private LinearLayout linearNew;
@@ -81,6 +93,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private Handler customHandler = new Handler();
     private boolean timeStart = false;
     private ProgressDialog myProgress;
+    private Calendar mCalendar;
+    private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
+    private SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");
+    private sonicUtils mUtils;
+    private Activity mActivity;
+    private List<sonicRotaHolder> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +106,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         setContentView(R.layout.sonic_rota_detalhe);
 
         mPref = new sonicPreferences(this);
-        DBC = new sonicDatabaseCRUD(this);
+        mData = new sonicDatabaseCRUD(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mContex = this;
+        mActivity = getParent();
+        mUtils = new sonicUtils(mContex);
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
@@ -133,7 +153,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         mCollapsingToolbar.setTitle("");
 
         mToolbar.setNavigationOnClickListener((View v)-> {
-                onBackPressed();
+            onBackPressed();
         });
 
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -152,6 +172,140 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    public void loadDetails(){
+        tvLogradrouro.setText(mPref.Clientes.getLogradouro());
+        tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
+        tvCep.setText("CEP: "+mPref.Clientes.getCep());
+        tvDataInicio.setText(mPref.Rota.getStartDate());
+        tvHoraInicio.setText(mPref.Rota.getStartHora());
+        tvHoraFim.setText(mPref.Rota.getEndHora());
+        tvDuracao.setText(mPref.Rota.getDuracao());
+        if(mPref.Rota.getEmAtendimento()){
+            btIniciar.setText("FINALIZAR ATENDIMENTO");
+            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
+            btCancelar.setEnabled(false);
+            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
+            startCounter();
+        }else if(mPref.Rota.getFinalizada()) {
+            btIniciar.setText("CONCLUÍDO");
+            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
+            btCancelar.setEnabled(false);
+            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
+        }else{
+            btIniciar.setText("INICIAR ATENDIMENTO");
+            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
+            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_cancelado));
+        }
+
+    }
+
+    public void loadActions(){
+        fbNavegar.setOnClickListener((View v)->{
+            startNavigation();
+        });
+        btIniciar.setOnClickListener((View v)->{
+
+            if(mPref.Rota.getEmAtendimento()){
+
+            }
+
+            if(!timeStart){
+                new mAsyncTask().execute(Status.EM_ATENDIMENTO);
+                mPref.Rota.setEmAtendimento(true);
+            }else{
+                myProgress = new ProgressDialog(mContex);
+                myProgress.setCancelable(false);
+                myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                myProgress.setIndeterminate(true);
+                myProgress.setTitle("Iniciando...");
+                myProgress.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mPref.Rota.setRefresh(true);
+                                            new mAsyncTask().execute(Status.CONCLUIDO);
+                                        }
+                                    }
+                        , 0);
+            }
+
+        });
+        btCancelar.setOnClickListener((View v)->{
+
+        });
+    }
+
+    class mAsyncTask extends AsyncTask<Integer, Void, Boolean>{
+
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            mCalendar = Calendar.getInstance();
+            return (mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),"status",integers[0])
+                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()), !timeStart ? "data_inicio" : "data_fim" ,data.format(mCalendar.getTime()))
+                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),!timeStart ? "hora_inicio" : "hora_fim",hora.format(mCalendar.getTime())));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            if(aBoolean){
+                if(!timeStart){
+                    myProgress.dismiss();
+                    startCounter();
+                    timeStart = true;
+                }else{
+                    stopCounter();
+                }
+            }else{
+                Toast.makeText(mContex, "Não foi possivel iniciar o atendimento...", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+    public void startCounter(){
+        customHandler.postDelayed(updateTimerThread, 0);
+        btIniciar.setText("FINALIZAR ATENDIMENTO");
+        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
+        btCancelar.setEnabled(false);
+        btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
+        mCalendar = Calendar.getInstance();
+        tvDataInicio.setText(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
+        mPref.Rota.setStartDate(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
+        tvHoraInicio.setText(hora.format(mCalendar.getTime()));
+        mPref.Rota.setStartHora(hora.format(mCalendar.getTime()));
+        startTime = SystemClock.uptimeMillis();
+
+    }
+    private Runnable updateTimerThread = new Runnable() {
+        public void run() {
+            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+            tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
+            customHandler.postDelayed(this, 1000);
+        }
+    };
+
+    public static String getDateFromMillis(long d) {
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return df.format(d);
+    }
+
+    public void stopCounter() {
+        mCalendar = Calendar.getInstance();
+        tvHoraFim.setText(hora.format(mCalendar.getTime()));
+        mPref.Rota.setEndDate(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
+        mPref.Rota.setEndHora(hora.format(mCalendar.getTime()));
+        btIniciar.setText("CONCLUIDO");
+        btIniciar.setEnabled(false);
+        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
+        customHandler.removeCallbacks(updateTimerThread);
 
     }
 
@@ -204,126 +358,6 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             tvCount.setVisibility(View.VISIBLE);
             tvCount.setText(position+"/"+myImages.length);
         }
-    }
-
-    private void addBottomDots(int position){
-
-        dots = new TextView[myImages.length];
-        dotsLayout.removeAllViews();
-        if(myImages.length>1){
-            for(int i=0; i < dots.length; i++)
-            {
-                dots[i] = new TextView(this);
-                dots[i].setText(Html.fromHtml("&#8226;"));
-                dots[i].setTextSize(30);
-                dots[i].setTextColor(getResources().getColor(R.color.dotSlideInactive));
-                dotsLayout.addView(dots[i]);
-            }
-            if(dots.length>1){
-                dots[position].setTextColor(getResources().getColor(R.color.dotSlideActive));
-                dots[position].setTextSize(45);
-            }
-        }
-
-    }
-
-    public void loadDetails(){
-        tvLogradrouro.setText(mPref.Clientes.getLogradouro());
-        tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
-        tvCep.setText("CEP: "+mPref.Clientes.getCep());
-    }
-
-    public void loadActions(){
-        fbNavegar.setOnClickListener((View v)->{
-            startNavigation();
-        });
-        btIniciar.setOnClickListener((View v)->{
-
-            myProgress = new ProgressDialog(mContex);
-            myProgress.setCancelable(false);
-            myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            myProgress.setIndeterminate(true);
-            myProgress.setTitle("Iniciando...");
-            myProgress.show();
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                       new mAsyncTask().execute();
-                                    }
-                                }
-                    , sonicUtils.Randomizer.generate(500, 1000));
-
-
-        });
-    }
-
-    class mAsyncTask extends AsyncTask<Boolean, Void, Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Boolean... booleans) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            myProgress.dismiss();
-            if(!timeStart){
-                startCounter();
-                timeStart = true;
-            }else{
-                stopCounter();
-            }
-        }
-    }
-
-    public void startCounter(){
-        customHandler.postDelayed(updateTimerThread, 0);
-        btIniciar.setText("FINALIZAR ATENDIMENTO");
-        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-        btCancelar.setEnabled(false);
-        btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-        Calendar c = Calendar.getInstance();
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        int minutes = c.get(Calendar.MINUTE);
-        int seconds = c.get(Calendar.SECOND);
-        String curTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        SimpleDateFormat data = new SimpleDateFormat("dd/MM/yyyy");
-        tvDataInicio.setText(data.format(c.getTime()));
-        tvHoraInicio.setText(curTime);
-        mPref.Rota.setStartTime(curTime);
-        startTime = SystemClock.uptimeMillis();
-
-    }
-    private Runnable updateTimerThread = new Runnable() {
-        public void run() {
-            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-            tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
-            customHandler.postDelayed(this, 1000);
-        }
-    };
-
-    public static String getDateFromMillis(long d) {
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(d);
-    }
-
-    public void stopCounter() {
-        Calendar c = Calendar.getInstance();
-        int hours = c.get(Calendar.HOUR_OF_DAY);
-        int minutes = c.get(Calendar.MINUTE);
-        int seconds = c.get(Calendar.SECOND);
-        String curTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
-        tvHoraFim.setText(curTime);
-        mPref.Rota.setEndTime(curTime);
-        btIniciar.setText("CONCLUIDO");
-        btIniciar.setEnabled(false);
-        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
-        customHandler.removeCallbacks(updateTimerThread);
-
     }
 
     public boolean checkPermissions(){
@@ -406,10 +440,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int i) {
-
-            //addBottomDots(i);
             addCount(i+1);
-
         }
 
         @Override

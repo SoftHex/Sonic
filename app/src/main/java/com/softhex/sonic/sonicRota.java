@@ -2,15 +2,18 @@ package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -22,6 +25,8 @@ import java.util.List;
 public class sonicRota extends AppCompatActivity{
 
     private Context mContext;
+    private  ViewPagerAdapter myAdapter;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +34,7 @@ public class sonicRota extends AppCompatActivity{
         setContentView(R.layout.sonic_layout_padrao);
 
         mContext = this;
-
+        mPrefs = new sonicPreferences(mContext);
         createInterface();
 
     }
@@ -65,7 +70,7 @@ public class sonicRota extends AppCompatActivity{
     }
 
     public void setUpViewPager(ViewPager viewpager){
-        ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicRotaAgenda(), "AGENDA");
         myAdapter.addFragment(new sonicRotaAgenda(), "PRÓPRIA");
         viewpager.setAdapter(myAdapter);
@@ -102,6 +107,18 @@ public class sonicRota extends AppCompatActivity{
 
     }
 
+    public void refreshRotaFragment(){
 
+        for(int i=0; i<myAdapter.getCount();i++){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(mPrefs.Rota.getRefresh())
+        refreshRotaFragment();
+    }
 }

@@ -248,22 +248,22 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tvDuracao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="Duração:"
+                        android:textColor="@color/colorTextAccentDark"
+                        android:textSize="14sp" />
+
+                    <TextView
                         android:id="@+id/tvObservacao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Observação:"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tvTempo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Duração:"
                         android:textColor="@color/colorTextAccentDark"
                         android:textSize="14sp" />
 

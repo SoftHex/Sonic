@@ -73,9 +73,18 @@ public class sonicPreferences{
     private static final String GERAL_FIRST_SINC = "firstSinc";
     private static final String SINC_DOWNLOAD_TYPE = "downloadType";
     private static final String ROTA_ID = "rotaId";
+    private static final String ROTA_ITEM_POSITION = "rotaItemPosition";
     private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
-    private static final String ROTA_START_TIME = "rotaStartTime";
-    private static final String ROTA_END_TIME = "rotaEndTime";
+    private static final String ROTA_START_DATE = "rotaStartDate";
+    private static final String ROTA_END_DATE = "rotaEndData";
+    private static final String ROTA_START_HORA = "rotaStartHora";
+    private static final String ROTA_END_HORA = "rotaEndHora";
+    private static final String ROTA_REFRESH = "rotaRefresh";
+    private static final String ROTA_OBS = "rotaObservacao";
+    private static final String ROTA_DURACAO = "rotaDuracao";
+    private static final String ROTA_EM_ATENDIMENTO = "rotaEmAtendimento";
+    private static final String ROTA_FINALIZADA = "rotaFinalizada";
+    private static final String ROTA_CANCELADA = "rotaCancelada";
 
 
     Users Users = new Users();
@@ -90,7 +99,6 @@ public class sonicPreferences{
 
     public sonicPreferences(Context context) {
         sharedpreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-        //sharedpreferences = PreferenceManager.getDefaultSharedPreferences(context);
         mContex = context;
     }
 
@@ -687,12 +695,12 @@ public class sonicPreferences{
         }
     }
     public class Rota{
-        public void setId(int value){
+        public void setCodigo(int value){
             editor = sharedpreferences.edit();
             editor.putInt(ROTA_ID, value);
             editor.apply();
         }
-        public int getId(){
+        public int getCodigo(){
             return sharedpreferences.getInt(ROTA_ID, 0);
         }
         public void setAddressMap(String value){
@@ -703,21 +711,100 @@ public class sonicPreferences{
         public String getAddressMap(){
             return sharedpreferences.getString(ROTA_ADDRESS_MAP, "");
         }
-        public void setStartTime(String value){
+        public void setStartDate(String value){
             editor = sharedpreferences.edit();
-            editor.putString(ROTA_START_TIME, value);
+            editor.putString(ROTA_START_DATE, value);
             editor.apply();
         }
-        public String getStartTime(){
-            return sharedpreferences.getString(ROTA_START_TIME, "");
+        public String getStartDate(){
+            return sharedpreferences.getString(ROTA_START_DATE, "");
         }
-        public void setEndTime(String value){
+        public void setEndDate(String value){
             editor = sharedpreferences.edit();
-            editor.putString(ROTA_END_TIME, value);
+            editor.putString(ROTA_END_DATE, value);
             editor.apply();
         }
-        public String getEndTime(){
-            return sharedpreferences.getString(ROTA_END_TIME, "");
+        public String getEndDate(){
+            return sharedpreferences.getString(ROTA_END_DATE, "");
+        }
+        public void setStartHora(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_START_HORA, value);
+            editor.apply();
+        }
+        public String getStartHora(){
+            return sharedpreferences.getString(ROTA_START_HORA, "");
+        }
+        public void setEndHora(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_END_HORA, value);
+            editor.apply();
+        }
+        public String getEndHora(){
+            return sharedpreferences.getString(ROTA_END_HORA, "");
+        }
+        public void setItemPosition(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(ROTA_ITEM_POSITION, value);
+            editor.apply();
+        }
+        public int getItemPosition(){
+            return sharedpreferences.getInt(ROTA_ITEM_POSITION, 0);
+        }
+
+
+        public void setRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getRefresh(){
+            return sharedpreferences.getBoolean(ROTA_REFRESH, false);
+        }
+        public void setObs(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_OBS, value);
+            editor.apply();
+        }
+        public String getObs(){
+            return sharedpreferences.getString(ROTA_OBS, "");
+        }
+
+
+        public void setDuracao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_DURACAO, value);
+            editor.apply();
+        }
+        public String getDuracao(){
+            return sharedpreferences.getString(ROTA_DURACAO, "");
+        }
+
+        public void setEmAtendimento(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_EM_ATENDIMENTO, value);
+            editor.apply();
+        }
+        public boolean getEmAtendimento(){
+            return sharedpreferences.getBoolean(ROTA_EM_ATENDIMENTO, false);
+        }
+
+        public void setFinalizada(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_FINALIZADA, value);
+            editor.apply();
+        }
+        public boolean getFinalizada(){
+            return sharedpreferences.getBoolean(ROTA_FINALIZADA, false);
+        }
+
+        public void setCancelada(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_CANCELADA, value);
+            editor.apply();
+        }
+        public boolean getCancelada(){
+            return sharedpreferences.getBoolean(ROTA_CANCELADA, false);
         }
     }
 }

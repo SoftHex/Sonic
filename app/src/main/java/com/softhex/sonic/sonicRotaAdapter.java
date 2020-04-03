@@ -79,6 +79,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
     }
 
     private Context myCtx;
+    private Activity mActivity;
     private List<sonicRotaHolder> rotas;
     private List<sonicRotaHolder> filteredRotas;
     private List<sonicRotaHolder> alteredRotas;
@@ -100,6 +101,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         TextView tvNegativado;
         TextView tvCancelado;
         TextView tvLetra;
+        TextView tvDuracao;
         LinearLayout linearItem;
 
         ViewHolder(View view) {
@@ -115,19 +117,22 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             tvCancelado = view.findViewById(R.id.tvCancelado);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
+            tvDuracao = view.findViewById(R.id.tvDuracao);
             tvObservacao = view.findViewById(R.id.tvObservacao);
 
         }
     }
 
-    sonicRotaAdapter(List<sonicRotaHolder> rotas, Activity mActivity) {
-        this.myCtx = mActivity;
+    sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, Activity activity) {
+        this.myCtx = context;
         this.filteredRotas = rotas;
+        this.mActivity = activity;
         this.rotas = rotas;
-        mUtils = new sonicUtils(myCtx);
+        this.mUtils = new sonicUtils(myCtx);
         this.mPrefs = new sonicPreferences(myCtx);
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -147,6 +152,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
         holder.tvDataHora.setText("Data Prevista: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento())+" às "+mUtils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
         holder.tvObservacao.setText("Observação: "+rota.getObservacao());
+        holder.tvDuracao.setText(rota.getHoraFim().equals("") ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
 
         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + ".JPG");
 
@@ -204,9 +210,25 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             mPrefs.Clientes.setUf(rota.getUf());
             mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
             mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
-            mPrefs.Rota.setId(rota.getCodigo());
-            Intent i = new Intent(v.getContext(), sonicRotaDetalhe.class);
-            v.getContext().startActivity(i);
+            mPrefs.Rota.setCodigo(rota.getCodigo());
+            mPrefs.Rota.setItemPosition(position);
+            mPrefs.Rota.setStartDate(rota.getDataInicio().equals("") ? "--/--/--" : mUtils.Data.dataFotmatadaBR(rota.getDataInicio()));
+            mPrefs.Rota.setStartHora(rota.getHoraInicio().equals("") ? "--:--" : rota.getHoraInicio());
+            mPrefs.Rota.setEndHora(rota.getHoraFim().equals("") ? "--:--" : rota.getHoraFim());
+            mPrefs.Rota.setDuracao(rota.getHoraFim().equals("") ? "00:00:00" : sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()) );
+            mPrefs.Rota.setObs(rota.getObservacao());
+            switch (rota.getStatus()){
+                case 2:
+                    mPrefs.Rota.setEmAtendimento(true);
+                    break;
+                case 3:
+                    mPrefs.Rota.setFinalizada(true);
+                    break;
+            }
+            mPrefs.Rota.setRefresh(false);
+            Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
+            mActivity.startActivityForResult(i, 1);
+
         });
 
     }

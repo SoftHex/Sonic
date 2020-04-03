@@ -592,9 +592,10 @@ public class sonicUtils {
             e.printStackTrace();
         }
 
-        long diff = (date2.getTime() - date1.getTime())*-1;
+        long diff = (date2.getTime() - date1.getTime());
+        long diff2 = diff < 0 ? diff*-1 : diff;
 
-        return String.format("%02d", diff / hour)+":"+String.format("%02d", (diff % hour) / minute)+":"+String.format("%02d", (diff % minute) / second);
+        return String.format("%02d", diff2 / hour)+":"+String.format("%02d", (diff2 % hour) / minute)+":"+String.format("%02d", (diff2 % minute) / second);
     }
 
     public class MaskEditUtil {
