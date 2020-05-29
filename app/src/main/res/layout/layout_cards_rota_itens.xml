@@ -162,7 +162,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:background="@drawable/status_nao_iniciado"
-                        android:text="Não Iniciado"
+                        android:text="Não Iniciado/Em At./Concl/Cance"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:paddingTop="2dp"
@@ -171,50 +171,19 @@
                         android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/tvPositivado"
+                        android:id="@+id/tvSituacao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:background="@drawable/status_positivado"
-                        android:text="Positivado"
+                        android:background="@drawable/situacao_positivado"
+                        android:text="Pos/Neg"
                         android:layout_marginLeft="4dp"
                         android:paddingLeft="4dp"
                         android:paddingRight="4dp"
                         android:paddingTop="2dp"
                         android:paddingBottom="2dp"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvNegativado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:background="@drawable/status_negativado"
-                        android:text="Negativado"
-                        android:layout_marginLeft="4dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvCancelado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:background="@drawable/status_cancelado"
-                        android:text="Cancelado"
-                        android:layout_marginLeft="4dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
+                        android:visibility="gone"
                         android:textColor="@color/colorTextWhite"
                         android:textSize="12sp" />
 

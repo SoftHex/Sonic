@@ -107,6 +107,7 @@ public class sonicRotaAgenda extends Fragment {
         myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         myLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
+        //myLayout.smoothScrollToPosition(myRecycler, new RecyclerView.State(), mPrefs.Rota.getItemPosition());
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -239,7 +240,7 @@ public class sonicRotaAgenda extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter(myList, this.getContext(), this.getActivity());
+        myAdapter = new sonicRotaAdapter(myList, this.getContext(), this.getActivity(), myRecycler);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -278,10 +279,10 @@ public class sonicRotaAgenda extends Fragment {
 
 
         List<String> l = new ArrayList<String>();
-        l.add("NÃO INICIADO");
-        l.add("EM ANDAMENTO");
-        l.add("CONCLUIDO");
-        l.add("CANCELADO");
+        l.add("NÃO INICIADA");
+        l.add("EM ATENDIMENTO");
+        l.add("CONCLUIDA");
+        l.add("CANCELADA");
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 

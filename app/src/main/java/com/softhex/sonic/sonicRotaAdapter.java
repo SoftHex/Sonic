@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.softhex.materialdialog.PromptDialog;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -39,35 +40,35 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO})
+    @IntDef({Status.NAO_INICIADA, Status.EM_ATENDIMENTO, Status.CONCLUIDA, Status.CANCELADA})
     public @interface Status{
-        int NAO_INICIADO = 1;
+        int NAO_INICIADA = 1;
         int EM_ATENDIMENTO = 2;
-        int CONCLUIDO = 3;
+        int CONCLUIDA = 3;
+        int CANCELADA = 4;
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO})
+    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO, StatusText.CANCELADA})
     public @interface StatusText{
-        String NAO_INICIADO = "Não Iniciado";
+        String NAO_INICIADO = "Não Iniciada";
         String EM_ATENDIMENTO = "Em Atendimento";
-        String CONCLUIDO = "Concluído";
+        String CONCLUIDO = "Concluída";
+        String CANCELADA = "Cancelada";
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Situacao.POSITIVADO, Situacao.NEGATIVADO, Situacao.CANCELADO})
+    @IntDef({Situacao.POSITIVADO, Situacao.NEGATIVADO})
     public @interface Situacao{
         int POSITIVADO = 1;
         int NEGATIVADO = 2;
-        int CANCELADO = 3;
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({SituacaoText.POSITIVADO, SituacaoText.NEGATIVADO, SituacaoText.CANCELADO})
+    @StringDef({SituacaoText.POSITIVADO, SituacaoText.NEGATIVADO})
     public @interface SituacaoText{
         String POSITIVADO = "Positivado";
         String NEGATIVADO = "Negativado";
-        String CANCELADO = "Cancelado";
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -87,6 +88,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
     private Boolean nFantasia;
     private sonicPreferences mPrefs;
     private sonicUtils mUtils;
+    private RecyclerView mRecycler;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -97,9 +99,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         TextView tvAtendente;
         TextView tvDataHora;
         ImageView ivImagem;
-        TextView tvPositivado;
-        TextView tvNegativado;
-        TextView tvCancelado;
+        TextView tvSituacao;
         TextView tvLetra;
         TextView tvDuracao;
         LinearLayout linearItem;
@@ -112,9 +112,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             ivImagem = view.findViewById(R.id.ivImagem);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
-            tvPositivado = view.findViewById(R.id.tvPositivado);
-            tvNegativado = view.findViewById(R.id.tvNegativado);
-            tvCancelado = view.findViewById(R.id.tvCancelado);
+            tvSituacao = view.findViewById(R.id.tvSituacao);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
             tvDuracao = view.findViewById(R.id.tvDuracao);
@@ -123,13 +121,14 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         }
     }
 
-    sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, Activity activity) {
+    sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, Activity activity, RecyclerView mRecycler) {
         this.myCtx = context;
         this.filteredRotas = rotas;
         this.mActivity = activity;
         this.rotas = rotas;
         this.mUtils = new sonicUtils(myCtx);
         this.mPrefs = new sonicPreferences(myCtx);
+        this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
     }
 
@@ -174,63 +173,124 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             holder.tvLetra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
 
         }
-        holder.tvStatus.setBackground(rota.getStatus()==Status.NAO_INICIADO ?
-                myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
-                    rota.getStatus()==Status.EM_ATENDIMENTO ? myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
-                        myCtx.getResources().getDrawable(R.drawable.status_concluido));
+        holder.tvStatus.setBackground(
+                rota.getStatus()==Status.NAO_INICIADA ?
+                    myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
+                        rota.getStatus()==Status.EM_ATENDIMENTO ?
+                            myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
+                                rota.getStatus()==Status.CONCLUIDA  ?
+                                    myCtx.getResources().getDrawable(R.drawable.status_concluido) :
+                                        myCtx.getResources().getDrawable(R.drawable.status_cancelado));
 
-        holder.tvStatus.setText(rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
+        holder.tvStatus.setText(
+                rota.getStatus()==Status.NAO_INICIADA ? StatusText.NAO_INICIADO :
                 rota.getStatus()==Status.EM_ATENDIMENTO ? StatusText.EM_ATENDIMENTO :
-                        StatusText.CONCLUIDO);
-        switch (rota.getSituacao()){
-            case Situacao.POSITIVADO:
-                holder.tvNegativado.setVisibility(View.GONE);
-                holder.tvCancelado.setVisibility(View.GONE);
-                break;
-            case Situacao.NEGATIVADO:
-                holder.tvPositivado.setVisibility(View.GONE);
-                holder.tvCancelado.setVisibility(View.GONE);
-                break;
-            case Situacao.CANCELADO:
-                holder.tvPositivado.setVisibility(View.GONE);
-                holder.tvNegativado.setVisibility(View.GONE);
+                        rota.getStatus()==Status.CONCLUIDA ? StatusText.CONCLUIDO :
+                        StatusText.CANCELADA);
+
+        if(rota.getStatus()==Status.CONCLUIDA){
+            holder.tvSituacao.setVisibility(View.VISIBLE);
+            switch (rota.getSituacao()){
+                case Situacao.POSITIVADO:
+                    holder.tvSituacao.setText(SituacaoText.POSITIVADO);
+                    holder.tvSituacao.setBackground(myCtx.getResources().getDrawable(R.drawable.situacao_positivado));
                     break;
-             default:
-                 holder.tvPositivado.setVisibility(View.GONE);
-                 holder.tvNegativado.setVisibility(View.GONE);
-                 holder.tvCancelado.setVisibility(View.GONE);
+                case Situacao.NEGATIVADO:
+                    holder.tvSituacao.setText(SituacaoText.NEGATIVADO);
+                    holder.tvSituacao.setBackground(myCtx.getResources().getDrawable(R.drawable.situacao_negativado));
+                    break;
+            }
+
         }
 
         holder.linearItem.setOnClickListener((View v)-> {
-            mPrefs.Clientes.setId(rota.getCodigoCliente());
-            mPrefs.Clientes.setNome(cliNomeExibicao);
-            mPrefs.Clientes.setLogradouro(rota.getLogradrouro());
-            mPrefs.Clientes.setBairro(rota.getBairro());
-            mPrefs.Clientes.setMunicipio(rota.getMunicipio());
-            mPrefs.Clientes.setUf(rota.getUf());
-            mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
-            mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
-            mPrefs.Rota.setCodigo(rota.getCodigo());
-            mPrefs.Rota.setItemPosition(position);
-            mPrefs.Rota.setStartDate(rota.getDataInicio().equals("") ? "--/--/--" : mUtils.Data.dataFotmatadaBR(rota.getDataInicio()));
-            mPrefs.Rota.setStartHora(rota.getHoraInicio().equals("") ? "--:--" : rota.getHoraInicio());
-            mPrefs.Rota.setEndHora(rota.getHoraFim().equals("") ? "--:--" : rota.getHoraFim());
-            mPrefs.Rota.setDuracao(rota.getHoraFim().equals("") ? "00:00:00" : sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()) );
-            mPrefs.Rota.setObs(rota.getObservacao());
-            switch (rota.getStatus()){
-                case 2:
-                    mPrefs.Rota.setEmAtendimento(true);
-                    break;
-                case 3:
-                    mPrefs.Rota.setFinalizada(true);
-                    break;
+            if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADA){
+
+                new PromptDialog(myCtx)
+                        .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
+                        .setAnimationEnable(true)
+                        .setTitleText("Atenção")
+                        .setContentText("Existe uma rota em atendimento. \nFinalize a rota para iniciar a próxima.")
+                        .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                            @Override
+                            public void onClick(PromptDialog dialog){
+                                dialog.dismiss();
+                                mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
+                            }
+                        }).show();
+                /*new AlertDialog.Builder(myCtx)
+                        .setTitle("Atenção")
+                        .setMessage("Existe uma rota em atendimento. \nFinalize a rota para iniciar a próxima.")
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Continue with delete operation
+                                mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
+                                Handler h = new Handler();
+                                h.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //View x = mRecycler.getLayoutManager().findViewByPosition(mPrefs.Rota.getItemPosition());
+                                        //Animation myBlinkAnimation = AnimationUtils.loadAnimation(myCtx, R.anim.blink);
+                                        //x.startAnimation(myBlinkAnimation);
+                                    }
+                                },500);
+
+                                //Animation blinkanimation;
+                                //blinkanimation= new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
+                                //blinkanimation.setDuration(300); // duration
+                                //blinkanimation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
+                                //blinkanimation.setRepeatCount(3); // Repeat animation infinitely
+                                //blinkanimation.setRepeatMode(Animation.REVERSE);
+                            }
+                        })
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        //.setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();*/
+
+
+            }else{
+
+                mPrefs.Clientes.setId(rota.getCodigoCliente());
+                mPrefs.Clientes.setNome(cliNomeExibicao);
+                mPrefs.Clientes.setLogradouro(rota.getLogradrouro());
+                mPrefs.Clientes.setBairro(rota.getBairro());
+                mPrefs.Clientes.setMunicipio(rota.getMunicipio());
+                mPrefs.Clientes.setUf(rota.getUf());
+                mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
+                mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
+                mPrefs.Rota.setCodigo(rota.getCodigo());
+                mPrefs.Rota.setItemPosition(position);
+                mPrefs.Rota.setStartDate(rota.getDataInicio().equals("") ? "--/--/--" : mUtils.Data.dataFotmatadaBR(rota.getDataInicio()));
+                mPrefs.Rota.setStartHora(rota.getHoraInicio().equals("") ? "--:--" : rota.getHoraInicio());
+                mPrefs.Rota.setEndHora(rota.getHoraFim().equals("") ? "--:--" : rota.getHoraFim());
+                mPrefs.Rota.setDuracao(rota.getHoraFim().equals("") ? "00:00:00" : sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()) );
+                mPrefs.Rota.setObs(rota.getObservacao());
+                switch (rota.getStatus()){
+                    case 2:
+                        mPrefs.Rota.setEmAtendimento(true);
+                        break;
+                    case 3:
+                        mPrefs.Rota.setFinalizada(true);
+                        break;
+                    case 4:
+                        mPrefs.Rota.setCancelada(true);
+                        break;
+                }
+                mPrefs.Rota.setRefresh(false);
+                Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
+                mActivity.startActivityForResult(i, 1);
             }
-            mPrefs.Rota.setRefresh(false);
-            Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
-            mActivity.startActivityForResult(i, 1);
 
         });
 
+    }
+
+    private Void scrollToPosition(){
+        mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
+        return null;
     }
 
     @Override

@@ -35,6 +35,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_PRODUTO = sonicConstants.TB_PRODUTO;
     private static final String DB_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTO;
     private static final String DB_ROTA = sonicConstants.TB_ROTA;
+    private static final String DB_ROTA_PESSOAL = sonicConstants.TB_ROTA_PESSOAL;
     private static final String DB_RANKING_PRODUTO = sonicConstants.TB_RANKING_PRODUTO;
     private static final String DB_ESTOQUE_PRODUTO = sonicConstants.TB_ESTOQUE_PRODUTO;
     private static final String DB_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
@@ -232,7 +233,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "tipo int NOT NULL, " +             // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
-            "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO
+            "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
             "data_agendamento varchar, " +
             "hora_agendamento varchar, " +
             "atendente string, " +
@@ -243,13 +244,35 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "data_fim varchar, " +
             "hora_fim varchar, " +
             "data_reagendamento varchar, " +
-            "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO, 3=CANCELADO
-            "negativacao string, " +
-            "cancelamento string);";
+            "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO
+            "negativacao string, " +            // MOTIVO DA NEGATIVAÇÃO
+            "cancelamento string);";            // MOTIVO DO CANCELAMENTO
     private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE UNIQUE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
     private static final String CREATE_INDEX_ROTA_CODIGO_USUARIO = "CREATE INDEX index_rota_codigo_usuario ON "+DB_ROTA+" (codigo_usuario);";
     private static final String CREATE_INDEX_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
     private static final String CREATE_INDEX_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";
+
+    private static final String CREATE_ROTA_PESSOAL = "CREATE TABLE IF NOT EXISTS "+DB_ROTA_PESSOAL+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo_empresa int NOT NULL, " +
+            "codigo_cliente int NOT NULL, " +
+            "tipo int NOT NULL, " +             // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
+            "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
+            "data_agendamento varchar, " +
+            "hora_agendamento varchar, " +
+            "atendente string, " +
+            "ordem int, " +
+            "observacao string, " +
+            "data_inicio varchar, " +
+            "hora_inicio varchar, " +
+            "data_fim varchar, " +
+            "hora_fim varchar, " +
+            "data_reagendamento varchar, " +
+            "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO
+            "negativacao string, " +            // MOTIVO DA NEGATIVAÇÃO
+            "cancelamento string);";            // MOTIVO DO CANCELAMENTO
+    private static final String CREATE_INDEX_ROTA_PESSOAL_CODIGO_EMPRESA = "CREATE INDEX index_rota_pessoal_codigo_empresa ON "+DB_ROTA_PESSOAL+" (codigo_empresa);";
+    private static final String CREATE_INDEX_ROTA_PESSOAL_CODIGO_CLIENTE = "CREATE INDEX index_rota_pessoal_codigo_cliente ON "+DB_ROTA_PESSOAL+" (codigo_cliente);";
 
 
     private static final String CREATE_ESTOQUE_PRODUTO = "CREATE TABLE IF NOT EXISTS "+ DB_ESTOQUE_PRODUTO +" (" +
@@ -569,6 +592,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_USUARIO);
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_ROTA_CODIGO_EMPRESA);
+        // TABELA ROTA PESSOAL
+        DB.execSQL(CREATE_ROTA_PESSOAL);
+        DB.execSQL(CREATE_INDEX_ROTA_PESSOAL_CODIGO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_ROTA_PESSOAL_CODIGO_EMPRESA);
         // TABELA ULTIMAS COMPRAS
         DB.execSQL(CREATE_ULTIMAS_COMPRAS);
         DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO);

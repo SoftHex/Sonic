@@ -242,7 +242,7 @@ public class sonicProdutosLista extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicProdutosListaAdapter(myList, _this);
+        myAdapter = new sonicProdutosListaAdapter(myList, _this, myRecycler);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

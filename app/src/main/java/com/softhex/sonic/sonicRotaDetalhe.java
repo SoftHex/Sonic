@@ -19,8 +19,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +34,7 @@ import android.widget.Toast;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -84,7 +91,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private TextView tvHoraInicio;
     private TextView tvHoraFim;
     private TextView tvDuracao;
-    private Button btNavegar;
+    private TextView tvSituacao;
+    private TextView tvMotivo;
     private Button btIniciar;
     private Button btCancelar;
     private FloatingActionButton fbNavegar;
@@ -121,6 +129,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvDataInicio = findViewById(R.id.tvDataInicio);
         tvHoraInicio = findViewById(R.id.tvHoraInicio);
         tvHoraFim = findViewById(R.id.tvHoraFim);
+        tvSituacao = findViewById(R.id.tvSituacao);
+        tvMotivo = findViewById(R.id.tvMotivo);
         tvCep = findViewById(R.id.tvCep);
         tvDuracao = findViewById(R.id.tvDuracao);
         btIniciar = findViewById(R.id.btIniciar);
@@ -176,6 +186,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     public void loadDetails(){
+        mList = mData.Rota.selectRotaId(mPref.Rota.getCodigo());
         tvLogradrouro.setText(mPref.Clientes.getLogradouro());
         tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
         tvCep.setText("CEP: "+mPref.Clientes.getCep());
@@ -183,34 +194,57 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvHoraInicio.setText(mPref.Rota.getStartHora());
         tvHoraFim.setText(mPref.Rota.getEndHora());
         tvDuracao.setText(mPref.Rota.getDuracao());
-        if(mPref.Rota.getEmAtendimento()){
-            btIniciar.setText("FINALIZAR ATENDIMENTO");
-            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-            btCancelar.setEnabled(false);
-            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-            startCounter();
-        }else if(mPref.Rota.getFinalizada()) {
-            btIniciar.setText("CONCLUÍDO");
-            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
-            btCancelar.setEnabled(false);
-            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-        }else{
-            btIniciar.setText("INICIAR ATENDIMENTO");
-            btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-            btCancelar.setBackground(getResources().getDrawable(R.drawable.status_cancelado));
+        SpannableString stringEstilizada;
+        switch (mList.get(0).getStatus()){
+            case 1:
+                btIniciar.setText("INICIAR ATENDIMENTO");
+                btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
+                break;
+            case 2:
+                btIniciar.setText("FINALIZAR ATENDIMENTO");
+                btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
+                btCancelar.setEnabled(false);
+                stringEstilizada = new SpannableString("CANCELAR ATENDIMENTO");
+                stringEstilizada.setSpan(new StrikethroughSpan(),0,stringEstilizada.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                btCancelar.setText(stringEstilizada);
+                break;
+            case 3:
+                btIniciar.setText("ATENDIMENTO CONCLUÍDO");
+                btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
+                btIniciar.setEnabled(false);
+                btCancelar.setVisibility(View.GONE);
+                break;
+            case 4:
+                btIniciar.setVisibility(View.GONE);
+                btCancelar.setText("ATENDIMENTO CANCELADO");
+                btCancelar.setEnabled(false);
+                break;
         }
-
     }
 
     public void loadActions(){
         fbNavegar.setOnClickListener((View v)->{
             startNavigation();
         });
+
+        // BOTÃO DE INICIAR/CONCLUIR ROTA
         btIniciar.setOnClickListener((View v)->{
-
             if(mPref.Rota.getEmAtendimento()){
-
+                concluirAtendimento();
+            }else {
+                iniciarAtendimento();
             }
+        });
+
+        //BOTÃO DE CANCELAR ROTA
+        btCancelar.setOnClickListener((View v)->{
+
+            cancelarAtendimento();
+
+        });
+    }
+
+    private void iniciarAtendimento(){
 
             if(!timeStart){
                 new mAsyncTask().execute(Status.EM_ATENDIMENTO);
@@ -224,19 +258,56 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 myProgress.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mPref.Rota.setRefresh(true);
-                                            new mAsyncTask().execute(Status.CONCLUIDO);
-                                        }
-                                    }
-                        , 0);
+                    @Override
+                    public void run() {
+                        mPref.Rota.setRefresh(true);
+                        new mAsyncTask().execute(Status.CONCLUIDO);
+                    }}, 500);
             }
+    }
 
-        });
-        btCancelar.setOnClickListener((View v)->{
+    private void concluirAtendimento(){
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_rota2, null);
 
+        final EditText etMotivo = (EditText) dialogView.findViewById(R.id.etMotivo);
+        TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
+        Button btSalvar = dialogView.findViewById(R.id.btSalvar);
+        Button btCancelar = dialogView.findViewById(R.id.btCancelar);
+
+
+
+        etMotivo.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //etMotivo.setTypeface(Typeface.defaultFromStyle());
+                return false;
+            }
         });
+
+        btSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPref.Rota.setEmAtendimento(false);
+                dialogBuilder.dismiss();
+            }
+        });
+        btCancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // DO SOMETHINGS
+                dialogBuilder.dismiss();
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
+
+    }
+
+    private void cancelarAtendimento(){
+
     }
 
     class mAsyncTask extends AsyncTask<Integer, Void, Boolean>{
@@ -253,10 +324,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-
+            if(myProgress != null && myProgress.isShowing()){
+                myProgress.dismiss();
+            }
             if(aBoolean){
                 if(!timeStart){
-                    myProgress.dismiss();
+                    //myProgress.dismiss();
                     startCounter();
                     timeStart = true;
                 }else{

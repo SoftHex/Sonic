@@ -83,21 +83,20 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
 
-
         }
 
     }
 
 
-    public sonicClientesAdapter(Context mContex, List<sonicClientesHolder> cliente, RecyclerView mRecycler, String mPrefix) {
+    public sonicClientesAdapter(Context context, List<sonicClientesHolder> cliente, RecyclerView recycler, String prefix) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = cliente;
         this.mFilteredList = cliente;
-        this.mContext = mContex;
+        this.mContext = context;
         this.mPrefs = new sonicPreferences(mContext);
-        this.mRecycler = mRecycler;
-        this.mPrefix = mPrefix;
+        this.mRecycler = recycler;
+        this.mPrefix = prefix;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
 
@@ -120,9 +119,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 }
             }
 
-            linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+            linearLayoutManager = (LinearLayoutManager) recycler.getLayoutManager();
 
-            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);

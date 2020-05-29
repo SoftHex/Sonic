@@ -51,6 +51,31 @@ public class sonicDialog {
 
     }
 
+    public Void showMS(final String title, final String msg, final int type, Void method){
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+                new PromptDialog(myCtx)
+                        .setDialogType(type)
+                        .setAnimationEnable(true)
+                        .setTitleText(title)
+                        .setContentText(msg)
+                        .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                            @Override
+                            public void onClick(PromptDialog dialog){
+                                dialog.dismiss();
+                            }
+                        }).show();
+
+            }
+        });
+
+        return method;
+
+    }
+
     public boolean showMSTwoOptions(final String title, final String msg, String optpositive, String optnegative, final int type){
 
         final PromptDialog prompt = new PromptDialog(myCtx);
