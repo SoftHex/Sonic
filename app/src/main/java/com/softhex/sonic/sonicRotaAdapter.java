@@ -40,21 +40,21 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Status.NAO_INICIADA, Status.EM_ATENDIMENTO, Status.CONCLUIDA, Status.CANCELADA})
+    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO, Status.CANCELADO})
     public @interface Status{
-        int NAO_INICIADA = 1;
+        int NAO_INICIADO = 1;
         int EM_ATENDIMENTO = 2;
-        int CONCLUIDA = 3;
-        int CANCELADA = 4;
+        int CONCLUIDO = 3;
+        int CANCELADO = 4;
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO, StatusText.CANCELADA})
+    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO, StatusText.CANCELADO})
     public @interface StatusText{
-        String NAO_INICIADO = "Não Iniciada";
+        String NAO_INICIADO = "Não Iniciado";
         String EM_ATENDIMENTO = "Em Atendimento";
-        String CONCLUIDO = "Concluída";
-        String CANCELADA = "Cancelada";
+        String CONCLUIDO = "Concluído";
+        String CANCELADO = "Cancelado";
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -174,21 +174,21 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
 
         }
         holder.tvStatus.setBackground(
-                rota.getStatus()==Status.NAO_INICIADA ?
+                rota.getStatus()==Status.NAO_INICIADO ?
                     myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
                         rota.getStatus()==Status.EM_ATENDIMENTO ?
                             myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
-                                rota.getStatus()==Status.CONCLUIDA  ?
+                                rota.getStatus()==Status.CONCLUIDO ?
                                     myCtx.getResources().getDrawable(R.drawable.status_concluido) :
                                         myCtx.getResources().getDrawable(R.drawable.status_cancelado));
 
         holder.tvStatus.setText(
-                rota.getStatus()==Status.NAO_INICIADA ? StatusText.NAO_INICIADO :
+                rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
                 rota.getStatus()==Status.EM_ATENDIMENTO ? StatusText.EM_ATENDIMENTO :
-                        rota.getStatus()==Status.CONCLUIDA ? StatusText.CONCLUIDO :
-                        StatusText.CANCELADA);
+                        rota.getStatus()==Status.CONCLUIDO ? StatusText.CONCLUIDO :
+                        StatusText.CANCELADO);
 
-        if(rota.getStatus()==Status.CONCLUIDA){
+        if(rota.getStatus()==Status.CONCLUIDO){
             holder.tvSituacao.setVisibility(View.VISIBLE);
             switch (rota.getSituacao()){
                 case Situacao.POSITIVADO:
@@ -204,7 +204,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         }
 
         holder.linearItem.setOnClickListener((View v)-> {
-            if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADA){
+            if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADO){
 
                 new PromptDialog(myCtx)
                         .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
@@ -260,6 +260,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 mPrefs.Clientes.setMunicipio(rota.getMunicipio());
                 mPrefs.Clientes.setUf(rota.getUf());
                 mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
+                mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro()+", "+rota.getBairro()+" - "+rota.getMunicipio()+"/"+rota.getUf());
                 mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
                 mPrefs.Rota.setCodigo(rota.getCodigo());
                 mPrefs.Rota.setItemPosition(position);
@@ -268,17 +269,8 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 mPrefs.Rota.setEndHora(rota.getHoraFim().equals("") ? "--:--" : rota.getHoraFim());
                 mPrefs.Rota.setDuracao(rota.getHoraFim().equals("") ? "00:00:00" : sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()) );
                 mPrefs.Rota.setObs(rota.getObservacao());
-                switch (rota.getStatus()){
-                    case 2:
-                        mPrefs.Rota.setEmAtendimento(true);
-                        break;
-                    case 3:
-                        mPrefs.Rota.setFinalizada(true);
-                        break;
-                    case 4:
-                        mPrefs.Rota.setCancelada(true);
-                        break;
-                }
+                mPrefs.Rota.setStatus(rota.getStatus());
+                mPrefs.Rota.setSituacao(rota.getSituacao());
                 mPrefs.Rota.setRefresh(false);
                 Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
                 mActivity.startActivityForResult(i, 1);

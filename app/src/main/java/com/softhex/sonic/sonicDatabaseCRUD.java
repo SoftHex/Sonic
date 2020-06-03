@@ -3025,6 +3025,39 @@ public class sonicDatabaseCRUD {
 
         }
 
+        public boolean iniciarRota(String codigo, String data_ini, String hora_ini){
+            ContentValues cv = new ContentValues();
+            cv.put("status", 2);
+            cv.put("situacao", 1);
+            cv.put("data_inicio", data_ini);
+            cv.put("hora_inicio", hora_ini);
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
+        }
+
+        public boolean positivarRota(String codigo, String obs){
+            ContentValues cv = new ContentValues();
+            cv.put("status", 3);
+            cv.put("situacao", 1);
+            cv.put("observacao", obs);
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
+        }
+
+        public boolean negativarRota(String codigo, String obs,  String neg){
+            ContentValues cv = new ContentValues();
+            cv.put("status", 3);
+            cv.put("situacao", 2);
+            cv.put("negativacao", neg);
+            cv.put("observacao", obs);
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
+        }
+
+        public boolean cancelarRota(String codigo, String obs, String canc){
+            ContentValues cv = new ContentValues();
+            cv.put("status", 4);
+            cv.put("observacao", obs);
+            cv.put("cancelamento", canc);
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
+        }
 
         public boolean updateRota(String codigo, String column, int value){
                 ContentValues cv = new ContentValues();

@@ -83,8 +83,8 @@ public class sonicPreferences{
     private static final String ROTA_OBS = "rotaObservacao";
     private static final String ROTA_DURACAO = "rotaDuracao";
     private static final String ROTA_EM_ATENDIMENTO = "rotaEmAtendimento";
-    private static final String ROTA_FINALIZADA = "rotaFinalizada";
-    private static final String ROTA_CANCELADA = "rotaCancelada";
+    private static final String ROTA_STATUS = "rotaStatus";
+    private static final String ROTA_SITUACAO = "rotaSituacao";
 
 
     Users Users = new Users();
@@ -789,22 +789,22 @@ public class sonicPreferences{
             return sharedpreferences.getBoolean(ROTA_EM_ATENDIMENTO, false);
         }
 
-        public void setFinalizada(boolean value){
+        public void setStatus(int value){
             editor = sharedpreferences.edit();
-            editor.putBoolean(ROTA_FINALIZADA, value);
+            editor.putInt(ROTA_STATUS, value);
             editor.apply();
         }
-        public boolean getFinalizada(){
-            return sharedpreferences.getBoolean(ROTA_FINALIZADA, false);
+        public int getStatus(){
+            return sharedpreferences.getInt(ROTA_STATUS, 0);
         }
 
-        public void setCancelada(boolean value){
+        public void setSituacao(int value){
             editor = sharedpreferences.edit();
-            editor.putBoolean(ROTA_CANCELADA, value);
+            editor.putInt(ROTA_SITUACAO, value);
             editor.apply();
         }
-        public boolean getCancelada(){
-            return sharedpreferences.getBoolean(ROTA_CANCELADA, false);
+        public int getSituacao(){
+            return sharedpreferences.getInt(ROTA_SITUACAO, 0);
         }
     }
 }

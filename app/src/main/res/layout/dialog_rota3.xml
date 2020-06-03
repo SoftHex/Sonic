@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:id="@+id/rlContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:id="@+id/llContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvFechar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:drawableRight="@mipmap/ic_close_black_24dp"/>
+
+            <TextView
+                android:id="@+id/tvTitulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Atendimento"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            <TextView
+                android:id="@+id/tvDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Cliente"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:layout_margin="10dp" />
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorSeparador" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_gravity="left"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/rgMotivo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbPositivar2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:textColor="@color/colorPrimaryGreen"
+                        android:text="Positivar">
+
+                    </RadioButton>
+
+                    <RadioButton
+                        android:id="@+id/rbNegativar2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorPrimaryRed"
+                        android:text="Negativar">
+
+                    </RadioButton>
+
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/rgMotivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+
+                    <RadioButton
+                        android:id="@+id/rbPositivar"
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_flat_selector_left"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:paddingLeft="16sp"
+                        android:paddingTop="3sp"
+                        android:paddingRight="16sp"
+                        android:paddingBottom="3sp"
+                        android:textSize="18sp"
+                        android:text="Positivar"
+                        android:layout_weight="1"
+                        android:textColor="@drawable/radio_flat_text_selector" />
+
+                    <RadioButton
+                        android:id="@+id/rbNegativar"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/radio_flat_selector_right_orange"
+                        android:button="@android:color/transparent"
+                        android:paddingLeft="16sp"
+                        android:paddingTop="3sp"
+                        android:textSize="18sp"
+                        android:paddingRight="16sp"
+                        android:paddingBottom="3sp"
+                        android:text="Negativar"
+                        android:layout_weight="1"
+                        android:textColor="@drawable/radio_flat_text_selector_orange" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorSeparador" />
+
+            <LinearLayout
+                android:id="@+id/llSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="16dp">
+
+                <Spinner
+                    android:id="@+id/spMotivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:id="@+id/vsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="0.1px"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:visibility="gone"
+                android:background="@color/colorSeparador"
+                tools:ignore="InvalidId" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/tvObservacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:text="Observação(Opcional):"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp">
+
+                <EditText
+                    android:id="@+id/etObservacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:hint="Digite a observação aqui..."
+                    android:inputType="textMultiLine|text"
+                    android:background="@android:color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="16dp"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/btSalvar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/botao_salvar"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textStyle="bold"
+                android:text="SALVAR">
+
+            </Button>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/pbProgress"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

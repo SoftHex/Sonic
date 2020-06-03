@@ -168,7 +168,30 @@
                         android:orientation="vertical"
                         android:layout_gravity="top"
                         android:layout_weight="1">
-                        <!-- INÍCIO -->
+
+                        <!-- DATA INÍCIO -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Data:"/>
+
+                            <TextView
+                                android:id="@+id/tvDataInicio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:textColor="@color/colorAccent"
+                                android:textStyle="italic"
+                                android:text="--:--:--"/>
+
+                        </LinearLayout>
+
+                        <!-- HORA INÍCIO -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -190,12 +213,11 @@
 
                         </LinearLayout>
 
-                        <!-- FIM -->
+                        <!-- HORA FIM -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="bottom"
-                            android:layout_marginTop="14dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -222,23 +244,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:gravity="right"
-                        android:layout_gravity="center"
+                        android:gravity="center|right"
+                        android:layout_gravity="center|right"
                         android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvDataInicio"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorAccent"
-                            android:textStyle="italic"
-                            android:text="--/--/--"/>
 
                         <TextView
                             android:id="@+id/tvDuracao"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="30sp"
+                            android:textSize="40sp"
                             android:text="00:00:00"/>
 
                     </LinearLayout>
@@ -258,7 +272,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginTop="20dp"
                     android:layout_margin="10dp"
                     android:gravity="center">
 
@@ -290,29 +303,42 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/llDetalhe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginLeft="20dp"
+                    android:visibility="gone"
                     android:layout_marginRight="20dp">
 
                     <TextView
                         android:id="@+id/tvSituacao"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:textColor="@color/colorPrimaryRed"
-                        android:text="Negativado/Cancelado"/>
+                        android:text="Positivado/Negativado"/>
 
                     <TextView
-                        android:id="@+id/tvMotivo"
+                        android:id="@+id/tvNegativacao"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-
                         android:textColor="@color/colorTextAccent"
                         android:text="Motivo"/>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Observação:"/>
+
+                    <TextView
+                        android:id="@+id/tvObservacao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/colorTextAccent"
+                        android:text="Observação"/>
 
                 </LinearLayout>
 
