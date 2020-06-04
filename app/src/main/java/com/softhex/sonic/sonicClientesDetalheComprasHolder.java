@@ -5,6 +5,7 @@ public class sonicClientesDetalheComprasHolder {
     int id;
     String usuario;
     String vendedor;
+    String empresa;
     int codigo;
     String tipo_cobranca;
     String prazo;
@@ -22,6 +23,7 @@ public class sonicClientesDetalheComprasHolder {
                                             int id,
                                             String usuario,
                                             String vendedor,
+                                            String empresa,
                                             int codigo,
                                             String tipo_cobranca,
                                             String prazo,
@@ -34,6 +36,7 @@ public class sonicClientesDetalheComprasHolder {
         this.id = id;
         this.usuario = usuario;
         this.vendedor = vendedor;
+        this.empresa = empresa;
         this.codigo = codigo;
         this.tipo_cobranca = tipo_cobranca;
         this.prazo = prazo;
@@ -63,6 +66,14 @@ public class sonicClientesDetalheComprasHolder {
 
     public void setVendedor(String vendedor) {
         this.vendedor = vendedor;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
 
     public void setUsuario(String usuario) {

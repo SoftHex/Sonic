@@ -40,7 +40,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private TextView[] dots;
     private TextView tvCount;
     private LinearLayout dotsLayout;
-    private sonicDatabaseCRUD DBC;
+    private sonicDatabaseCRUD mData;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
     private LinearLayout linearNew;
@@ -49,7 +49,9 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private FloatingActionButton fbTelefone;
     private FloatingActionButton fbEmail;
     private FloatingActionButton fbWhatsApp;
-    private FloatingActionButton fbPedido;
+    private FloatingActionButton fbAddPedido;
+    private FloatingActionButton fbAddVisita;
+    private List<sonicClientesHolder> mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,8 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         setContentView(R.layout.sonic_clientes_detalhe);
 
         mPref = new sonicPreferences(this);
-        DBC = new sonicDatabaseCRUD(this);
+        mData = new sonicDatabaseCRUD(this);
+        mList = mData.Cliente.selectClienteByID(mPref.Clientes.getId());
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
@@ -66,6 +69,8 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         fbTelefone = findViewById(R.id.fbTelefone);
         fbEmail = findViewById(R.id.fbEmail);
         fbWhatsApp = findViewById(R.id.fbWhatsApp);
+        fbAddPedido = findViewById(R.id.fbAddPedido);
+        fbAddVisita = findViewById(R.id.fbAddVisita);
 
         createInterface();
         slideImages();
@@ -75,9 +80,9 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
     private void handlerFloatMenu(){
 
-        fbTelefone.setVisibility((mPref.Clientes.getTelefone()==null || mPref.Clientes.getTelefone().equals("")) ? View.GONE : View.VISIBLE);
-        fbEmail.setVisibility((mPref.Clientes.getEmail()==null || mPref.Clientes.getEmail().equals("")) ? View.GONE : View.VISIBLE);
-        fbWhatsApp.setVisibility((mPref.Clientes.getWhatsApp()==null || mPref.Clientes.getEmail().equals("")) ? View.GONE : View.VISIBLE);
+        fbTelefone.setVisibility((mList.get(0).getFone()==null || mList.get(0).getFone().equals("")) ? View.GONE : View.VISIBLE);
+        fbEmail.setVisibility((mList.get(0).getEmail()==null || mList.get(0).getEmail().equals("")) ? View.GONE : View.VISIBLE);
+        fbWhatsApp.setVisibility((mList.get(0).getWhats()==null || mList.get(0).getWhats().equals("")) ? View.GONE : View.VISIBLE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -97,10 +102,11 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Geral");
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "Financeiro");
-        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mPref.Clientes.getCompras()>0 ? "COMPRAS("+mPref.Clientes.getCompras()+")" : "COMPRAS"));
-        myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mPref.Clientes.getTitulos()>0 ? "TÍTULOS("+mPref.Clientes.getTitulos()+")" : "TÍTULOS"));
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "GERAL");
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "FINANCEIRO");
+        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
+        myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mList.get(0).getTitulos()>0 ? "TÍTULOS("+ mList.get(0).getTitulos()+")" : "TÍTULOS"));
+        //viewpager.addOnPageChangeListener(viewListener);
         viewpager.setAdapter(myAdapter);
 
     }
@@ -174,7 +180,6 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         setUpViewPager(myViewPager);
 
         mTabLayout = findViewById(R.id.mTabs);
-        //myTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimaryWhite));
         mTabLayout.setupWithViewPager(myViewPager);
 
         LayoutTransition transition = new LayoutTransition();

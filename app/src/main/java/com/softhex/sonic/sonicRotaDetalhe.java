@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -247,29 +248,30 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 llBotoes.setVisibility(View.GONE);
                 llSituacao.setVisibility(View.VISIBLE);
                 llDetalhe.setVisibility(View.VISIBLE);
-                tvObservacaoTitle.setVisibility(mList.get(0).getObservacao().equals("") ? View.GONE : View.VISIBLE);
+                tvObservacaoTitle.setVisibility((mList.get(0).getObservacao().equals(null) || mList.get(0).getObservacao().equals("")) ? View.GONE : View.VISIBLE);
+                tvObservacao.setVisibility((mList.get(0).getObservacao().equals(null) || mList.get(0).getObservacao().equals(""))  ? View.GONE : View.VISIBLE);
+                tvObservacao.setText(mList.get(0).getObservacao());
                 switch (mList.get(0).getSituacao()){
                     case 1: //POSITIVADO
                         tvNegCancTitle.setVisibility(View.GONE);
                         tvNegCanc.setVisibility(View.GONE);
                         tvPositivado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
                         tvPositivado.setBackground(getResources().getDrawable(R.drawable.flat_selected_green_left));
-                        tvNegCanc.setVisibility(View.GONE);
-                        tvObservacao.setText(mList.get(0).getObservacao());
                         break;
                     case 2: //NEGATIVADO
                         tvNegativado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
                         tvNegativado.setBackground(getResources().getDrawable(R.drawable.flat_selected_orange_middle));
                         tvNegCancTitle.setText("Negativado por:");
                         tvNegCanc.setText(mList.get(0).getNegativacao());
-                        tvObservacao.setText(mList.get(0).getObservacao());
                         break;
                 }
                 break;
             case 4:
                 llDetalhe.setVisibility(View.VISIBLE);
                 llSituacao.setVisibility(View.VISIBLE);
-                tvDuracao.setText("--:--:--");
+                tvDuracao.setTextSize(14f);
+                tvDuracao.setTypeface(tvDuracao.getTypeface(), Typeface.ITALIC);
+                tvDuracao.setText("Cancelado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
                 tvCancelado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
                 tvCancelado.setBackground(getResources().getDrawable(R.drawable.flat_selected_red_right));
                 tvNegCancTitle.setText("Cancelado por:");
@@ -378,13 +380,10 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
 
         List<String> mList = new ArrayList<>();
-        mList.add("ESCOLHA UMA OPÇÃO...");
-        mList.add("ESTABELECIMENTO FECHADO");
-        mList.add("ESTOQUE ABASTECIDO");
-        mList.add("CLIENTE INSATISFEITO");
-        mList.add("CLIENTE SEM TEMPO");
-        mList.add("COMPROU DE OUTRO FORNECEDOR");
-        mList.add("OUTROS");
+        String[] s = getResources().getStringArray(R.array.rotaNegativadaOptions);
+        for (String item: s) {
+            mList.add(item);
+        }
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mList);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spMotivo.setAdapter(mAdapter);
@@ -414,7 +413,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new mAsyncTask().execute("POSITIVAR", "", etObservacao.getText().toString());
+                        new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
                     }
                 }, 1000);
             }
@@ -452,23 +451,22 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             final AlertDialog alertDialog = dialogBuilder.create();
 
             TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-            tvTitulo.setText("Atendimento - " + mPref.Rota.getCodigo());
+            tvTitulo.setText("Atendimento #" + mPref.Rota.getCodigo());
             TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
             tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
             TextView tvInfo = dialogView.findViewById(R.id.tvInfo);
-            tvInfo.setText("Se cancelada, não poderá ser utilizada posteriormente.");
+            tvInfo.setText(R.string.rotaCancelada);
             EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
             Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
             Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
             TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
 
             List<String> mList = new ArrayList<>();
-            mList.add("ESCOLHA UMA OPÇÃO...");
-            mList.add("ESSA ROTA NÃO É MINHA");
-            mList.add("CLIENTE FECHOU");
-            mList.add("DADOS IMCOMPLETOS");
-            mList.add("ENDEREÇO ERRADO");
-            mList.add("OUTROS");
+            String[] s = getResources().getStringArray(R.array.rotaCanceladaOptions);
+            for (String item: s) {
+                mList.add(item);
+            }
+
             ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mList);
             mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spMotivo.setAdapter(mAdapter);
@@ -484,11 +482,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     Toast.makeText(v.getContext(), "Escolha uma opção para cancelamento.", Toast.LENGTH_SHORT).show();
                     spMotivo.requestFocus();
                 }else{
-                    alertDialog.dismiss();
                     myProgress.show();
                     h.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            alertDialog.dismiss();
                             new mAsyncTask().execute("CANCELAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
                         }
                     }, 1000);

@@ -66,7 +66,7 @@ public class sonicRotaPessoal extends Fragment {
     private Intent i;
     private sonicPreferences mPrefs;
     private FloatingActionMenu fbMenu;
-    private FloatingActionButton fbAddRota;
+    private FloatingActionButton fbAddVisita;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -75,6 +75,7 @@ public class sonicRotaPessoal extends Fragment {
         mContext = getActivity();
         mPrefs = new sonicPreferences(mContext);
         fbMenu = getActivity().findViewById(R.id.fbMenu);
+        fbAddVisita = getActivity().findViewById(R.id.fbAddVisita);
 
         loadFragment();
 

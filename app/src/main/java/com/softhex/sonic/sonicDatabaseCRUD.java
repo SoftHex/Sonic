@@ -749,6 +749,7 @@ public class sonicDatabaseCRUD {
                                 "UC._id, " +
                                 "UC.vendedor, " +
                                 "UC.codigo, " +
+                                "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESA + " E WHERE E.codigo = UC.codigo_empresa) AS empresa, " +
                                 "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = UC.codigo_tipo_cobranca) AS tipo_cobranca, " +
                                 "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = UC.codigo_prazo) AS prazo, " +
                                 "UC.data, " +
@@ -757,7 +758,6 @@ public class sonicDatabaseCRUD {
                                 " FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = "+codigo+" ORDER BY UC.data DESC LIMIT "+limit;
 
                 try {
-                    Log.d("QUERY", query);
 
                     Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -767,6 +767,7 @@ public class sonicDatabaseCRUD {
                             sonicClientesDetalheComprasHolder compras = new sonicClientesDetalheComprasHolder();
                             compras.setVendedor(cursor.getString(cursor.getColumnIndex("vendedor")));
                             compras.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                            compras.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                             compras.setTipoCobranca(cursor.getString(cursor.getColumnIndex("tipo_cobranca")));
                             compras.setPrazo(cursor.getString(cursor.getColumnIndex("prazo")));
                             compras.setData(cursor.getString(cursor.getColumnIndex("data")));
@@ -845,7 +846,7 @@ public class sonicDatabaseCRUD {
             }
 
 
-            public List<sonicClientesHolder> selectClienteID(int id) {
+            public List<sonicClientesHolder> selectClienteByID(int id) {
 
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 List<sonicClientesHolder> cliente = new ArrayList<sonicClientesHolder>();
@@ -871,7 +872,11 @@ public class sonicDatabaseCRUD {
                                     "c.situacao," +
                                     "c.observacao," +
                                     "c.data_cadastro," +
-                                    "c.situacao" +
+                                    "c.situacao," +
+                                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTE +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo," +
+                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
+                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
+                                    "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras " +
                                     " FROM " + TABLE_CLIENTE +
                                     " c WHERE c.codigo = "+id, null);
 
@@ -897,7 +902,10 @@ public class sonicDatabaseCRUD {
                         clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
                         clientes.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
                         clientes.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
-                        clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        clientes.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
+                        clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
+                        clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
+                        clientes.setCompras(cursor.getInt(cursor.getColumnIndex("compras")));
                         cliente.add(clientes);
 
                     }

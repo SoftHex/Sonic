@@ -136,7 +136,17 @@
         android:layout_margin="16dp">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fbPedido"
+            android:id="@+id/fbAddVisita"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorPrimaryGreenLight"
+            fab:fab_colorPressed="@color/colorPrimaryWhite"
+            android:src="@mipmap/ic_map_plus_white_24dp"
+            fab:fab_size="mini"
+            fab:fab_label="Agendar Visita" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fbAddPedido"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/colorPrimaryGreenLight"
@@ -154,7 +164,7 @@
             android:src="@mipmap/ic_whatsapp_grey600_24dp"
             android:tint="@color/colorPrimaryWhite"
             fab:fab_size="mini"
-            fab:fab_label="Conversar" />
+            fab:fab_label="Mensagem de WhatsApp" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fbEmail"

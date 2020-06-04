@@ -112,8 +112,9 @@ public class sonicMain extends AppCompatActivity{
     private Locale meuLocal = new Locale( "pt", "BR" );
     private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
     private LinearLayout dotsLayout;
-    List<sonicUsuariosHolder> listaUser;
-    List<sonicEmpresasHolder> listaEmpresa;
+    private List<sonicUsuariosHolder> listaUser;
+    private List<sonicEmpresasHolder> listaEmpresa;
+    private LinearLayout llGroupVendas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,7 @@ public class sonicMain extends AppCompatActivity{
         tvPedidos = findViewById(R.id.tvPedidos);
         tvDesemprenho = findViewById(R.id.tvDesempenho);
         tvVendas = findViewById(R.id.tvVendas);
+        llGroupVendas = findViewById(R.id.llGroupVendas);
         dotsLayout = findViewById(R.id.layoutDots);
         //tvMeta = findViewById(R.id.tvMeta);
         pbEmpresa = findViewById(R.id.pbEmpresa);
@@ -191,6 +193,7 @@ public class sonicMain extends AppCompatActivity{
             public void onPageSelected(int position) {
                 addBottomDots(position);
             }
+
 
             @Override
             public void onPageScrollStateChanged(int state) {

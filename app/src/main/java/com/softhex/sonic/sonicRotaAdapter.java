@@ -3,7 +3,6 @@ package com.softhex.sonic;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +91,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        TextView tvCodigo;
         TextView tvNome;
         TextView tvEndereco;
         TextView tvStatus;
@@ -107,6 +107,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         ViewHolder(View view) {
             super(view);
             linearItem = view.findViewById(R.id.linearItem);
+            tvCodigo = view.findViewById(R.id.tvCodigo);
             tvNome = view.findViewById(R.id.tvNome);
             tvLetra = view.findViewById(R.id.tvLetra);
             ivImagem = view.findViewById(R.id.ivImagem);
@@ -146,6 +147,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.setIsRecyclable(false);
         String cliNomeExibicao = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
 
+        holder.tvCodigo.setText("#"+rota.getCodigo());
         holder.tvNome.setText(cliNomeExibicao);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
@@ -153,13 +155,13 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.tvObservacao.setText("Observação: "+rota.getObservacao());
         holder.tvDuracao.setText(rota.getHoraFim().equals("") ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
 
-        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES + rota.getCodigoCliente() + ".JPG");
+        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
 
-        if(file.exists()){
+        if(f.exists()){
             holder.ivImagem.setVisibility(View.VISIBLE);
             holder.tvLetra.setVisibility(View.GONE);
             Glide.with(myCtx)
-                    .load(file)
+                    .load(f)
                     .circleCrop()
                     .override(100,100)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -209,8 +211,8 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 new PromptDialog(myCtx)
                         .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
                         .setAnimationEnable(true)
-                        .setTitleText("Atenção")
-                        .setContentText("Existe uma rota em atendimento. \nFinalize a rota para iniciar a próxima.")
+                        .setTitleText(R.string.msgAtencao)
+                        .setContentText(R.string.rotaEmAtendimento)
                         .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
                             @Override
                             public void onClick(PromptDialog dialog){

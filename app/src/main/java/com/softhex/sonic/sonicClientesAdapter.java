@@ -163,23 +163,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 holder.linearItem.setOnClickListener((View v)-> {
 
                     mPrefs.Clientes.setId(cli.getCodigo());
-                    mPrefs.Clientes.setNome(cliNomeExibicao);
-                    mPrefs.Clientes.setFantasia(cli.getNomeFantasia());
-                    mPrefs.Clientes.setRazao(cli.getRazaoSocial());
-                    mPrefs.Clientes.setLogradouro(cli.getEndereco());
-                    mPrefs.Clientes.setBairro(cli.getBairro());
-                    mPrefs.Clientes.setMunicipio(cli.getMunicipio());
-                    mPrefs.Clientes.setUf(cli.getUf());
-                    mPrefs.Clientes.setCep(sonicUtils.stringToCep(cli.getCep()));
-                    mPrefs.Clientes.setIe(cli.getInscEstadual());
-                    mPrefs.Clientes.setObs(cli.getObservacao());
-                    mPrefs.Clientes.setEnderecoCompleto(cli.getEnderecoCompleto());
-                    mPrefs.Clientes.setGrupo(cli.getGrupo());
-                    mPrefs.Clientes.setCompras(cli.getCompras());
-                    mPrefs.Clientes.setTitulos(cli.getTitulos());
-                    mPrefs.Clientes.setTelefone(cli.getFone());
-                    mPrefs.Clientes.setEmail(cli.getEmail());
-                    mPrefs.Clientes.setCnpjCpf(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
                     mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra()>0 ? true : false);
                     Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
                     mContext.startActivity(i);

@@ -23,218 +23,242 @@
             android:focusable="false"
             android:background="?selectableItemBackground">
 
-            <!--LATERAL -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginBottom="-10dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="6dp">
-
-                <!-- START DASH -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp">
-
-                    <com.softhex.sonic.DividerView
-                        android:layout_width="wrap_content"
-                        android:layout_height="6dp"
-                        android:layerType="software"
-                        custom:color="@color/colorPrimaryBlackLightT"
-                        custom:orientation="vertical"
-                        custom:dashLength="6dp"
-                        custom:dashGap="6dp"
-                        custom:dashThickness="1dp" />
-
-                </LinearLayout>
-
-                <!-- TEXTO E FOTO -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:layout_gravity="center_vertical">
-
-                    <RelativeLayout
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:gravity="center"
-                        android:layout_gravity="center">
-
-                        <TextView
-                            android:id="@+id/tvLetra"
-                            android:transitionName="imagemTransition"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="A"
-                            android:background="@drawable/circle_textview"
-                            android:textSize="25sp"/>
-
-                        <ImageView
-                            android:id="@+id/ivImagem"
-                            android:transitionName="imagemTransition"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-
-                <!-- END DASH -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.softhex.sonic.DividerView
-                        android:layout_width="wrap_content"
-                        android:layout_height="120dp"
-                        android:layout_marginTop="6dp"
-                        android:layerType="software"
-                        custom:color="@color/colorPrimaryBlackLightT"
-                        custom:orientation="vertical"
-                        custom:dashLength="6dp"
-                        custom:dashGap="6dp"
-                        custom:dashThickness="1dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- CONTEUDO -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="3dp"
-                android:padding="6dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
 
-                <!-- CABEÇALHO - FOTO, NOME E ENDEREÇO -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
+                <!--LATERAL -->
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="-10dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="6dp">
 
-                    <TextView
-                        android:id="@+id/tvNome"
+                    <!-- START DASH -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp">
+
+                        <com.softhex.sonic.DividerView
+                            android:layout_width="wrap_content"
+                            android:layout_height="6dp"
+                            android:layerType="software"
+                            custom:color="@color/colorPrimaryBlackLightT"
+                            custom:orientation="vertical"
+                            custom:dashLength="6dp"
+                            custom:dashGap="6dp"
+                            custom:dashThickness="1dp" />
+
+                    </LinearLayout>
+
+                    <!-- TEXTO E FOTO -->
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="NOME DO CLIENTE"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/tvEndereco"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Endereço do Cliente"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="16sp" />
+                        <RelativeLayout
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:gravity="center"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:id="@+id/tvLetra"
+                                android:transitionName="imagemTransition"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="A"
+                                android:background="@drawable/circle_textview"
+                                android:textSize="25sp"/>
+
+                            <ImageView
+                                android:id="@+id/ivImagem"
+                                android:transitionName="imagemTransition"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <!-- END DASH -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.softhex.sonic.DividerView
+                            android:layout_width="wrap_content"
+                            android:layout_height="120dp"
+                            android:layout_marginTop="6dp"
+                            android:layerType="software"
+                            custom:color="@color/colorPrimaryBlackLightT"
+                            custom:orientation="vertical"
+                            custom:dashLength="6dp"
+                            custom:dashGap="6dp"
+                            custom:dashThickness="1dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                </LinearLayout>
-
-                <!-- CABEÇALHO - STATUS -->
+                <!-- CONTEUDO -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="3dp"
+                    android:padding="6dp">
 
-                    <TextView
-                        android:id="@+id/tvStatus"
-                        android:layout_width="wrap_content"
+                    <!-- CABEÇALHO - FOTO, NOME E ENDEREÇO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:background="@drawable/status_nao_iniciado"
-                        android:text="Não Iniciado/Em At./Concl/Cance"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="12sp" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tvSituacao"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:background="@drawable/situacao_positivado"
-                        android:text="Pos/Neg"
-                        android:layout_marginLeft="4dp"
-                        android:paddingLeft="4dp"
-                        android:paddingRight="4dp"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        android:visibility="gone"
-                        android:textColor="@color/colorTextWhite"
-                        android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvNome"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="NOME DO CLIENTE"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvEndereco"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="Endereço do Cliente"
+                                android:textColor="@color/colorTextAccentDark"
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
-                <!-- INFORMAÇOES GERAIS -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvAtendente"
-                        android:layout_width="wrap_content"
+                    <!-- CABEÇALHO - STATUS -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Atendente"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp" />
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tvDataHora"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Data Prevista:"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tvDuracao"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Duração:"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvCodigo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:text="#0000"/>
 
-                    <TextView
-                        android:id="@+id/tvObservacao"
-                        android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tvStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:background="@drawable/status_nao_iniciado"
+                                android:text="Não Iniciado/Em At./Concl/Cance"
+                                android:layout_marginLeft="4dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:textColor="@color/colorTextWhite"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tvSituacao"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:background="@drawable/situacao_positivado"
+                                android:text="Pos/Neg"
+                                android:layout_marginLeft="4dp"
+                                android:paddingLeft="4dp"
+                                android:paddingRight="4dp"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                android:visibility="gone"
+                                android:textColor="@color/colorTextWhite"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- INFORMAÇOES GERAIS -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Observação:"
-                        android:textColor="@color/colorTextAccentDark"
-                        android:textSize="14sp" />
+                        android:layout_marginTop="6dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvAtendente"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Atendente"
+                            android:textColor="@color/colorTextAccentDark"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvDataHora"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Data Prevista:"
+                            android:textColor="@color/colorTextAccentDark"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvDuracao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Duração:"
+                            android:textColor="@color/colorTextAccentDark"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvObservacao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Observação:"
+                            android:textColor="@color/colorTextAccentDark"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -247,8 +271,8 @@
     <!-- SEPARADOR -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.1px"
-        android:layout_marginLeft="60dp"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="68dp"
         android:layout_marginRight="16dp"
         android:background="@color/colorSeparador" />
 

@@ -59,14 +59,14 @@
         android:layout_margin="16dp">
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fbAddRota"
+            android:id="@+id/fbAddVisita"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/colorPrimaryGreenLight"
             fab:fab_colorPressed="@color/colorPrimaryWhite"
-            android:src="@mipmap/ic_map_marker_plus_outline_white_24dp"
+            android:src="@mipmap/ic_map_plus_white_24dp"
             fab:fab_size="mini"
-            fab:fab_label="Novo Agendamento" />
+            fab:fab_label="Agendar Visita" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

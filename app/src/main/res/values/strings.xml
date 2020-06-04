@@ -295,9 +295,31 @@
     </string-array>
 
     <!-- OUTROS -->
-    <string name="no_cliente">Sem cliente para ser exibido no momento. Vá até o menu no ícone</string>
-    <string name="no_cliente_continue">e faça um sincronização.</string>
+    <string name="msgAtencao">Atenção!</string>
+    <string name="msgErro">Erro!</string>
+    <string name="msgInfo">Informação!</string>
+    <string name="msgSucess">Tudo certo!</string>
     <string name="rotaObs">Digite uma observação aqui...</string>
+    <string name="rotaEmAtendimento">Existe um rota em atendimento. Finalize-a para iniciar a próxima.</string>
+    <string name="rotaCancelada">Se cancelada, não poderá ser utilizada posteriormente.</string>
+
+    <string-array name="rotaNegativadaOptions">
+        <item name="1">ESCOLHA UMA OPÇÃO...</item>
+        <item name="2">ESTABELECIMENTO FECHADO</item>
+        <item name="3">ESTOQUE ABASTECIDO</item>
+        <item name="4">CLIENTE INSATISFEITO</item>
+        <item name="5">CLIENTE SEM TEMPO</item>
+        <item name="6">COMPROU DE OUTRO FORNECEDOR</item>
+        <item name="7">OUTROS</item>
+    </string-array>
+    <string-array name="rotaCanceladaOptions">
+        <item name="1">ESCOLHA UMA OPÇÃO...</item>
+        <item name="2">ESSA ROTA NÃO É MINHA</item>
+        <item name="3">CLIENTE FECHOU</item>
+        <item name="4">DADOS IMCOMPLETOS</item>
+        <item name="5">ENDEREÇO ERRADO</item>
+        <item name="6">OUTROS</item>
+    </string-array>
 
     <!--  BUTTONS SINC -->
     <string name="button_sinc_iddle">Sincronizar.</string>

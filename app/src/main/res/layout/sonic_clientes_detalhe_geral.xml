@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            android:layout_margin="12dp"
-            android:layout_marginTop="20dp">
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp">
 
             <TextView
                 android:id="@+id/tvNome"
@@ -56,25 +56,18 @@
         <!-- SEPARADOR -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1px"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="#DCDCDC" />
 
-        <!-- SEPARADOR -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1px"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="#DCDCDC" />
 
         <!-- ENDEREÇO -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="12dp"
+            android:layout_margin="8dp"
             android:padding="10dp">
 
             <!-- ENDEREÇO -->
@@ -132,9 +125,9 @@
         <!-- SEPARADOR -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1px"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="#DCDCDC" />
 
         <!-- CONTATO -->
@@ -143,7 +136,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="50dp"
-            android:layout_margin="12dp"
+            android:layout_margin="8dp"
             android:padding="10dp">
 
             <!-- FONE -->
@@ -189,9 +182,9 @@
         <!-- SEPARADOR -->
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1px"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:background="#DCDCDC" />
 
         <!-- OBSERVAÇÃO -->
@@ -200,7 +193,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            android:layout_margin="12dp"
+            android:layout_margin="8dp"
             android:layout_marginTop="20dp">
 
             <!-- OBSERVAÇÃO -->
