@@ -32,7 +32,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,21 +93,30 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private TextView tvLogradrouro;
     private TextView tvEndCompleto;
     private TextView tvCep;
-    private TextView tvDataInicio;
-    private TextView tvHoraInicio;
-    private TextView tvHoraFim;
+    private TextView tvData;
     private TextView tvDuracao;
-    private TextView tvSituacao;
-    private TextView tvNegativacao;
+    private TextView tvTextoInicio;
+    private TextView tvTextoFim;
+    private TextView tvDuracaoMini;
+    private TextView tvNegCanc;
+    private TextView tvNegCancTitle;
     private TextView tvObservacao;
+    private TextView tvObservacaoTitle;
+    private TextView tvPositivado;
+    private TextView tvNegativado;
+    private TextView tvCancelado;
     private LinearLayout llDetalhe;
+    private LinearLayout llTime;
+    private LinearLayout llTime2;
+    private LinearLayout llSituacao;
+    private LinearLayout llBotoes;
     private Button btIniciar;
     private Button btCancelar;
     private FloatingActionButton fbNavegar;
     private FusedLocationProviderClient mFusedLocationClient;
     private long startTime, timeInMilliseconds = 0;
     private Handler customHandler = new Handler();
-    private boolean timeStart = false;
+    private boolean clockCounting = false;
     private ProgressDialog myProgress;
     private Calendar mCalendar;
     private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
@@ -135,18 +143,26 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         fbNavegar = findViewById(R.id.fbNavegar);
         tvLogradrouro = findViewById(R.id.tvLogradouro);
         tvEndCompleto = findViewById(R.id.tvEnderecoCompleto);
-        tvDataInicio = findViewById(R.id.tvDataInicio);
-        tvHoraInicio = findViewById(R.id.tvHoraInicio);
-        tvHoraFim = findViewById(R.id.tvHoraFim);
-        tvSituacao = findViewById(R.id.tvSituacao);
-        tvNegativacao = findViewById(R.id.tvNegativacao);
+        tvData = findViewById(R.id.tvData);
+        tvNegCanc = findViewById(R.id.tvNegCanc);
+        tvNegCancTitle = findViewById(R.id.tvNegCancTitle);
         tvCep = findViewById(R.id.tvCep);
         tvDuracao = findViewById(R.id.tvDuracao);
         btIniciar = findViewById(R.id.btIniciar);
         btCancelar = findViewById(R.id.btCancelar);
         llDetalhe = findViewById(R.id.llDetalhe);
-        tvNegativacao = findViewById(R.id.tvNegativacao);
+        llBotoes = findViewById(R.id.llBotoes);
+        llSituacao = findViewById(R.id.llSituacao);
+        llTime = findViewById(R.id.llTime);
+        llTime2 = findViewById(R.id.llTime2);
         tvObservacao = findViewById(R.id.tvObservacao);
+        tvObservacaoTitle = findViewById(R.id.tvObservacaoTitle);
+        tvPositivado = findViewById(R.id.tvPositivado);
+        tvNegativado = findViewById(R.id.tvNegativado);
+        tvCancelado = findViewById(R.id.tvCancelado);
+        tvTextoInicio = findViewById(R.id.tvTextoInicio);
+        tvTextoFim = findViewById(R.id.tvTextoFim);
+        tvDuracaoMini = findViewById(R.id.tvDuracaoMini);
 
         createInterface();
         slideImages();
@@ -202,48 +218,65 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvLogradrouro.setText(mPref.Clientes.getLogradouro());
         tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
         tvCep.setText("CEP: "+mPref.Clientes.getCep());
-        tvDataInicio.setText(mList.get(0).getDataInicio());
-        tvHoraInicio.setText(mList.get(0).getHoraInicio());
-        tvHoraFim.setText(mList.get(0).getHoraFim());
-        tvDuracao.setText(mPref.Rota.getDuracao());
         switch (mList.get(0).getStatus()){
             case 1:
+                llDetalhe.setVisibility(View.GONE);
+                llBotoes.setVisibility(View.VISIBLE);
                 btIniciar.setText("INICIAR ATENDIMENTO");
                 btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
                 break;
             case 2:
+                continueClock();
+                llBotoes.setVisibility(View.VISIBLE);
+                llSituacao.setVisibility(View.GONE);
+                llDetalhe.setVisibility(View.GONE);
                 btIniciar.setText("FINALIZAR ATENDIMENTO");
                 btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-                btCancelar.setVisibility(View.GONE);
+                btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
+                btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
+                btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mPref.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
                 break;
             case 3:
-                btIniciar.setVisibility(View.GONE);
-                btCancelar.setVisibility(View.GONE);
+                llTime.setVisibility(View.GONE);
+                llTime2.setVisibility(View.VISIBLE);
+                tvData.setText("Data: "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio()));
+                tvTextoInicio.setText("Iniciado às "+mList.get(0).getHoraInicio());
+                tvTextoFim.setText("Concluído às "+mList.get(0).getHoraFim());
+                tvDuracaoMini.setText(sonicUtils.getDifferenceTime(mList.get(0).getHoraInicio(), mList.get(0).getHoraFim()));
+                llBotoes.setVisibility(View.GONE);
+                llSituacao.setVisibility(View.VISIBLE);
                 llDetalhe.setVisibility(View.VISIBLE);
+                tvObservacaoTitle.setVisibility(mList.get(0).getObservacao().equals("") ? View.GONE : View.VISIBLE);
                 switch (mList.get(0).getSituacao()){
-                    case 1:
-                        tvSituacao.setText("Positivado");
-                        tvSituacao.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
-                        tvNegativacao.setVisibility(View.GONE);
+                    case 1: //POSITIVADO
+                        tvNegCancTitle.setVisibility(View.GONE);
+                        tvNegCanc.setVisibility(View.GONE);
+                        tvPositivado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+                        tvPositivado.setBackground(getResources().getDrawable(R.drawable.flat_selected_green_left));
+                        tvNegCanc.setVisibility(View.GONE);
                         tvObservacao.setText(mList.get(0).getObservacao());
                         break;
-                    case 2:
-                        tvSituacao.setText("Negativado");
-                        tvSituacao.setTextColor(getResources().getColor(R.color.colorPrimaryOrange));
-                        tvNegativacao.setVisibility(View.VISIBLE);
-                        tvNegativacao.setText(mList.get(0).getNegativacao());
+                    case 2: //NEGATIVADO
+                        tvNegativado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+                        tvNegativado.setBackground(getResources().getDrawable(R.drawable.flat_selected_orange_middle));
+                        tvNegCancTitle.setText("Negativado por:");
+                        tvNegCanc.setText(mList.get(0).getNegativacao());
                         tvObservacao.setText(mList.get(0).getObservacao());
                         break;
                 }
                 break;
             case 4:
-                btIniciar.setVisibility(View.GONE);
-                btCancelar.setVisibility(View.GONE);
                 llDetalhe.setVisibility(View.VISIBLE);
-                tvSituacao.setText("Cancelado");
-                tvSituacao.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
-                tvSituacao.setVisibility(View.GONE);
-                tvNegativacao.setVisibility(View.GONE);
+                llSituacao.setVisibility(View.VISIBLE);
+                tvDuracao.setText("--:--:--");
+                tvCancelado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
+                tvCancelado.setBackground(getResources().getDrawable(R.drawable.flat_selected_red_right));
+                tvNegCancTitle.setText("Cancelado por:");
+                tvNegCanc.setText(mList.get(0).getCancelamento());
+                tvObservacaoTitle.setVisibility(mList.get(0).getObservacao().equals("") ? View.GONE : View.VISIBLE);
+                tvObservacao.setText(mList.get(0).getObservacao());
+                llBotoes.setVisibility(View.GONE);
                 break;
         }
     }
@@ -262,7 +295,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             startNavigation();
         });
 
-        // BOTÃO DE INICIAR/CONCLUIR ROTA
+        // BOTÃO DE INICIAR/CONCLUIR ATENDIMENTO
         btIniciar.setOnClickListener((View v)->{
             myProgress.show();
             h.postDelayed(new Runnable() {
@@ -272,7 +305,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     if(mPref.Rota.getEmAtendimento()){
                         finalizarAtendimento();
                     }else {
-                        //btCancelar.setVisibility(View.GONE);
+                        btIniciar.setText("FINALIZAR ATENDIMENTO");
+                        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
                         btCancelar.animate()
                                 .translationX(btCancelar.getWidth()+100)
                                 .alpha(0.0f)
@@ -281,7 +315,14 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        btCancelar.setVisibility(View.GONE);
+                                        btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
+                                        btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
+                                        btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                        btCancelar.animate()
+                                                .translationX(0)
+                                                .alpha(1f)
+                                                .setDuration(300);
+
                                     }
                                 });
                         new mAsyncTask().execute("INICIAR","","");
@@ -291,11 +332,21 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         });
 
-        //BOTÃO DE CANCELAR ROTA
+        //BOTÃO DE CANCELAR ATENDIMENTO/IR PARA O CADASTRO DO CLIENTE
         btCancelar.setOnClickListener((View v)->{
-
-            cancelarAtendimento();
-
+            if(mPref.Rota.getEmAtendimento()){
+                Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                v.getContext().startActivity(i);
+            }else{
+                myProgress.show();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        myProgress.dismiss();
+                        cancelarAtendimento();
+                    }
+                },1000);
+            }
         });
     }
 
@@ -305,7 +356,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.FullDialog);
         ViewGroup viewGroup = findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rota3, viewGroup, false);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rota_confirmada, viewGroup, false);
         dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
         dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
         dialogBuilder.setView(dialogView);
@@ -315,15 +366,15 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvTitulo.setText("Atendimento - " + mPref.Rota.getCodigo());
         TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
         tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
-        TextView tvObservacao = dialogView.findViewById(R.id.tvObservacao);
-        RadioGroup rgMotivo = dialogView.findViewById(R.id.rgMotivo);
+        TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
+        tvDataHora.setText(mPref.Rota.getDataHora());
         RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
         RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
         EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
         Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
         LinearLayout llSpinner = dialogView.findViewById(R.id.llSpinner);
         View vsSpinner = dialogView.findViewById(R.id.vsSpinner);
-        Button btSalvar = dialogView.findViewById(R.id.btSalvar);
+        Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
         TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
 
         List<String> mList = new ArrayList<>();
@@ -337,10 +388,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mList);
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spMotivo.setAdapter(mAdapter);
-        //spMotivo.setEnabled(false);
-        spMotivo.setActivated(false);
 
-        btSalvar.setOnClickListener((View v) -> {
+        btConfirmar.setOnClickListener((View v) -> {
             myProgress = new ProgressDialog(mContex);
             myProgress.setCancelable(false);
             myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -356,7 +405,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new mAsyncTask().execute("NEGATIVAR", etObservacao.getText().toString(), spMotivo.getSelectedItem().toString());
+                        new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
                     }
                 }, 1000);
             }else{
@@ -365,7 +414,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
+                        new mAsyncTask().execute("POSITIVAR", "", etObservacao.getText().toString());
                     }
                 }, 1000);
             }
@@ -381,6 +430,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
                 vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
             }
         });
 
@@ -390,6 +440,68 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
     private void cancelarAtendimento(){
 
+            Rect displayRectangle = new Rect();
+            Window window = this.getWindow();
+            window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.FullDialog);
+            ViewGroup viewGroup = findViewById(android.R.id.content);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rota_cancelada, viewGroup, false);
+            dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
+            dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
+            dialogBuilder.setView(dialogView);
+            final AlertDialog alertDialog = dialogBuilder.create();
+
+            TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
+            tvTitulo.setText("Atendimento - " + mPref.Rota.getCodigo());
+            TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
+            tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
+            TextView tvInfo = dialogView.findViewById(R.id.tvInfo);
+            tvInfo.setText("Se cancelada, não poderá ser utilizada posteriormente.");
+            EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
+            Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
+            Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
+            TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
+
+            List<String> mList = new ArrayList<>();
+            mList.add("ESCOLHA UMA OPÇÃO...");
+            mList.add("ESSA ROTA NÃO É MINHA");
+            mList.add("CLIENTE FECHOU");
+            mList.add("DADOS IMCOMPLETOS");
+            mList.add("ENDEREÇO ERRADO");
+            mList.add("OUTROS");
+            ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mList);
+            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spMotivo.setAdapter(mAdapter);
+
+            btConfirmar.setOnClickListener((View v) -> {
+                myProgress = new ProgressDialog(mContex);
+                myProgress.setCancelable(false);
+                myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                myProgress.setIndeterminate(true);
+                myProgress.setTitle("Cancelando...");
+                Handler h = new Handler();
+                if(spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
+                    Toast.makeText(v.getContext(), "Escolha uma opção para cancelamento.", Toast.LENGTH_SHORT).show();
+                    spMotivo.requestFocus();
+                }else{
+                    alertDialog.dismiss();
+                    myProgress.show();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new mAsyncTask().execute("CANCELAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
+                        }
+                    }, 1000);
+                }
+
+            });
+
+            tvFechar.setOnClickListener((View v)-> {
+                alertDialog.dismiss();
+            });
+
+            alertDialog.show();
+
     }
 
     class mAsyncTask extends AsyncTask<String, Void, Boolean>{
@@ -397,13 +509,13 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... strings) {
-            mCalendar = Calendar.getInstance();
             String codigo = String.valueOf(mPref.Rota.getCodigo());
             Boolean result = false;
             switch (strings[0]){
                 case "INICIAR":
-                    result = mData.Rota.iniciarRota(codigo, data.format(mCalendar.getTime()), hora.format(mCalendar.getTime()));
+                    result = mData.Rota.iniciarRota(codigo);
                     mPref.Rota.setEmAtendimento(true);
+                    mPref.Rota.setCancelada(false);
                     break;
                 case "POSITIVAR":
                     result = mData.Rota.positivarRota(codigo, strings[1]);
@@ -416,15 +528,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 case "CANCELAR":
                     result = mData.Rota.cancelarRota(codigo, strings[1], strings[2]);
                     mPref.Rota.setEmAtendimento(false);
+                    mPref.Rota.setCancelada(true);
                     break;
             }
 
             return result;
-            /*return (mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),"status", Integer.valueOf(strings[0]))
-                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),"situacao", Integer.valueOf(strings[1]))
-                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),"observacao", Integer.valueOf(strings[2]))
-                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()), !timeStart ? "data_inicio" : "data_fim" ,data.format(mCalendar.getTime()))
-                    && mData.Rota.updateRota(String.valueOf(mPref.Rota.getCodigo()),!timeStart ? "hora_inicio" : "hora_fim",hora.format(mCalendar.getTime())));*/
         }
 
         @Override
@@ -434,12 +542,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 myProgress.dismiss();
             }
             if(aBoolean){
-                if(!timeStart){
-                    //myProgress.dismiss();
-                    startCounter();
-                    timeStart = true;
+                mPref.Rota.setRefresh(true);
+                if(!clockCounting && !mPref.Rota.getCancelada()){
+                    startClock();
                 }else{
-                    stopCounter();
+                    stopClock();
                 }
             }else{
                 Toast.makeText(mContex, "Não foi possivel iniciar o atendimento...", Toast.LENGTH_SHORT).show();
@@ -448,23 +555,19 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         }
     }
 
-    public void startCounter(){
+    public void startClock(){
+        mPref.Rota.setStartTime(SystemClock.uptimeMillis());
+        clockCounting = true;
         customHandler.postDelayed(updateTimerThread, 0);
-        btIniciar.setText("FINALIZAR ATENDIMENTO");
-        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-        btCancelar.setEnabled(false);
-        btCancelar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-        mCalendar = Calendar.getInstance();
-        tvDataInicio.setText(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
-        mPref.Rota.setStartDate(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
-        tvHoraInicio.setText(hora.format(mCalendar.getTime()));
-        mPref.Rota.setStartHora(hora.format(mCalendar.getTime()));
-        startTime = SystemClock.uptimeMillis();
 
+    }
+    public void continueClock(){
+        clockCounting = true;
+        customHandler.postDelayed(updateTimerThread, 0);
     }
     private Runnable updateTimerThread = new Runnable() {
         public void run() {
-            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+            timeInMilliseconds = SystemClock.uptimeMillis() - mPref.Rota.getStartTime();
             tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
             customHandler.postDelayed(this, 1000);
         }
@@ -476,20 +579,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         return df.format(d);
     }
 
-    public static String getSecondFromMillis(long d) {
-        SimpleDateFormat df = new SimpleDateFormat("ss");
-        df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return df.format(d);
-    }
-
-    public void stopCounter() {
-        mCalendar = Calendar.getInstance();
-        tvHoraFim.setText(hora.format(mCalendar.getTime()));
-        mPref.Rota.setEndDate(mUtils.Data.dataFotmatadaBR(data.format(mCalendar.getTime())));
-        mPref.Rota.setEndHora(hora.format(mCalendar.getTime()));
-        //btIniciar.setText("CONCLUIDO");
-        //btIniciar.setEnabled(false);
-        //btIniciar.setBackground(getResources().getDrawable(R.drawable.status_concluido));
+    public void stopClock() {
+        clockCounting = false;
         customHandler.removeCallbacks(updateTimerThread);
         loadDetails();
 

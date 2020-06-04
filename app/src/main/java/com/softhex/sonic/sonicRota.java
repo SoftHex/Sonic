@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
@@ -27,14 +29,16 @@ public class sonicRota extends AppCompatActivity{
     private Context mContext;
     private  ViewPagerAdapter myAdapter;
     private sonicPreferences mPrefs;
+    private FloatingActionMenu fmMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sonic_layout_padrao);
+        setContentView(R.layout.sonic_layout_rota);
 
         mContext = this;
         mPrefs = new sonicPreferences(mContext);
+        fmMenu = findViewById(R.id.fmMenu);
         createInterface();
 
     }
@@ -69,10 +73,51 @@ public class sonicRota extends AppCompatActivity{
 
     }
 
+    private ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if(position==1){
+                fmMenu.setVisibility(View.VISIBLE);
+                //handlerFloatMenu();
+            }else{
+                fmMenu.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
+    private void handlerFloatMenu(){
+        fmMenu.setVisibility(View.VISIBLE);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fmMenu.open(true);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fmMenu.close(true);
+                    }
+                },2000);
+            }
+        },700);
+
+    }
+
     public void setUpViewPager(ViewPager viewpager){
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicRotaAgenda(), "AGENDA");
-        myAdapter.addFragment(new sonicRotaAgenda(), "PRÓPRIA");
+        myAdapter.addFragment(new sonicRotaPessoal(), "PESSOAL");
+        viewpager.addOnPageChangeListener(listener);
         viewpager.setAdapter(myAdapter);
 
     }

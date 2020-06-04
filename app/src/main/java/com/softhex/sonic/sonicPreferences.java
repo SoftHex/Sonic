@@ -75,16 +75,13 @@ public class sonicPreferences{
     private static final String ROTA_ID = "rotaId";
     private static final String ROTA_ITEM_POSITION = "rotaItemPosition";
     private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
-    private static final String ROTA_START_DATE = "rotaStartDate";
-    private static final String ROTA_END_DATE = "rotaEndData";
-    private static final String ROTA_START_HORA = "rotaStartHora";
-    private static final String ROTA_END_HORA = "rotaEndHora";
+    private static final String ROTA_START_TIME = "rotaStartTime";
     private static final String ROTA_REFRESH = "rotaRefresh";
-    private static final String ROTA_OBS = "rotaObservacao";
-    private static final String ROTA_DURACAO = "rotaDuracao";
     private static final String ROTA_EM_ATENDIMENTO = "rotaEmAtendimento";
+    private static final String ROTA_CANCELADA = "rotaCancelada";
     private static final String ROTA_STATUS = "rotaStatus";
     private static final String ROTA_SITUACAO = "rotaSituacao";
+    private static final String ROTA_DATA_HORA = "rotaDataHora";
 
 
     Users Users = new Users();
@@ -695,6 +692,14 @@ public class sonicPreferences{
         }
     }
     public class Rota{
+        public void setStartTime(long value){
+            editor = sharedpreferences.edit();
+            editor.putLong(ROTA_START_TIME, value);
+            editor.apply();
+        }
+        public long getStartTime(){
+            return sharedpreferences.getLong(ROTA_START_TIME, 0);
+        }
         public void setCodigo(int value){
             editor = sharedpreferences.edit();
             editor.putInt(ROTA_ID, value);
@@ -711,43 +716,13 @@ public class sonicPreferences{
         public String getAddressMap(){
             return sharedpreferences.getString(ROTA_ADDRESS_MAP, "");
         }
-        public void setStartDate(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_START_DATE, value);
-            editor.apply();
-        }
-        public String getStartDate(){
-            return sharedpreferences.getString(ROTA_START_DATE, "");
-        }
-        public void setEndDate(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_END_DATE, value);
-            editor.apply();
-        }
-        public String getEndDate(){
-            return sharedpreferences.getString(ROTA_END_DATE, "");
-        }
-        public void setStartHora(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_START_HORA, value);
-            editor.apply();
-        }
-        public String getStartHora(){
-            return sharedpreferences.getString(ROTA_START_HORA, "");
-        }
-        public void setEndHora(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_END_HORA, value);
-            editor.apply();
-        }
-        public String getEndHora(){
-            return sharedpreferences.getString(ROTA_END_HORA, "");
-        }
+
         public void setItemPosition(int value){
             editor = sharedpreferences.edit();
             editor.putInt(ROTA_ITEM_POSITION, value);
             editor.apply();
         }
+
         public int getItemPosition(){
             return sharedpreferences.getInt(ROTA_ITEM_POSITION, 0);
         }
@@ -761,24 +736,6 @@ public class sonicPreferences{
         public boolean getRefresh(){
             return sharedpreferences.getBoolean(ROTA_REFRESH, false);
         }
-        public void setObs(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_OBS, value);
-            editor.apply();
-        }
-        public String getObs(){
-            return sharedpreferences.getString(ROTA_OBS, "");
-        }
-
-
-        public void setDuracao(String value){
-            editor = sharedpreferences.edit();
-            editor.putString(ROTA_DURACAO, value);
-            editor.apply();
-        }
-        public String getDuracao(){
-            return sharedpreferences.getString(ROTA_DURACAO, "");
-        }
 
         public void setEmAtendimento(boolean value){
             editor = sharedpreferences.edit();
@@ -787,6 +744,15 @@ public class sonicPreferences{
         }
         public boolean getEmAtendimento(){
             return sharedpreferences.getBoolean(ROTA_EM_ATENDIMENTO, false);
+        }
+
+        public void setCancelada(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_CANCELADA, value);
+            editor.apply();
+        }
+        public boolean getCancelada(){
+            return sharedpreferences.getBoolean(ROTA_CANCELADA, false);
         }
 
         public void setStatus(int value){
@@ -806,5 +772,16 @@ public class sonicPreferences{
         public int getSituacao(){
             return sharedpreferences.getInt(ROTA_SITUACAO, 0);
         }
+
+
+        public void setDataHora(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_DATA_HORA, value);
+            editor.apply();
+        }
+        public String getDataHora(){
+            return sharedpreferences.getString(ROTA_DATA_HORA, "");
+        }
+
     }
 }

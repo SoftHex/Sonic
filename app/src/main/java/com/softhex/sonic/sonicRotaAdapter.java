@@ -264,13 +264,6 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
                 mPrefs.Rota.setCodigo(rota.getCodigo());
                 mPrefs.Rota.setItemPosition(position);
-                mPrefs.Rota.setStartDate(rota.getDataInicio().equals("") ? "--/--/--" : mUtils.Data.dataFotmatadaBR(rota.getDataInicio()));
-                mPrefs.Rota.setStartHora(rota.getHoraInicio().equals("") ? "--:--" : rota.getHoraInicio());
-                mPrefs.Rota.setEndHora(rota.getHoraFim().equals("") ? "--:--" : rota.getHoraFim());
-                mPrefs.Rota.setDuracao(rota.getHoraFim().equals("") ? "00:00:00" : sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()) );
-                mPrefs.Rota.setObs(rota.getObservacao());
-                mPrefs.Rota.setStatus(rota.getStatus());
-                mPrefs.Rota.setSituacao(rota.getSituacao());
                 mPrefs.Rota.setRefresh(false);
                 Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
                 mActivity.startActivityForResult(i, 1);

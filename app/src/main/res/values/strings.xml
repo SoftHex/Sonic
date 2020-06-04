@@ -169,21 +169,6 @@
     <string name="loremIpsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
     <string name="loremIpsumShort">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
 
-    <!-- PREFERENCES FOR CLIENTS -->
-    <string name="pref_title_clientes_open">Clientes em aberto</string>
-    <string name="pref_description_clientes_open">Permitir a vizualização de clientes que estejam com títulos em aberto.</string>
-    <string name="pref_title_order_cliente">Ordenar clientes por...</string>
-    <string-array name="pref_title_order_options">
-        <item>Nome</item>
-        <item>Ticket médio</item>
-        <item>Situação</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
     <!-- PREFERENCES GERAL -->
     <string name="prefGeralCategory">Geral</string>
 
@@ -218,7 +203,7 @@
         <item name="2">Barras</item>
     </string-array>
 
-    <!-- PREFERENCES FOR CLIENTS -->
+    <!-- PREFERENCES FOR CLIENTES -->
     <string name="prefClienteCategory">Clientes</string>
 
     <string name="clienteTipo" translatable="false">clienteTipo</string>
@@ -309,9 +294,10 @@
         <item>1</item>
     </string-array>
 
-    <!-- GERAL CLIENTES -->
+    <!-- OUTROS -->
     <string name="no_cliente">Sem cliente para ser exibido no momento. Vá até o menu no ícone</string>
     <string name="no_cliente_continue">e faça um sincronização.</string>
+    <string name="rotaObs">Digite uma observação aqui...</string>
 
     <!--  BUTTONS SINC -->
     <string name="button_sinc_iddle">Sincronizar.</string>

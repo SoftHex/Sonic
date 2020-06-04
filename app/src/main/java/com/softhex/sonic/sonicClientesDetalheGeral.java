@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.util.List;
+
 /**
  * Created by Administrador on 21/07/2017.
  */
@@ -33,13 +35,15 @@ public class sonicClientesDetalheGeral extends Fragment {
     private TextView tvCgf;
     private TextView tvObservacao;
     private sonicPreferences mPref;
+    private sonicDatabaseCRUD mData;
+    private List<sonicClientesHolder> mList;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_clientes_detalhe_geral, container, false);
 
         mContext = getContext();
-
+        mData = new sonicDatabaseCRUD(getContext());
         mPref = new sonicPreferences(getContext());
 
         loadDetails();
@@ -50,33 +54,33 @@ public class sonicClientesDetalheGeral extends Fragment {
 
     private void loadDetails(){
 
+        mList = mData.Cliente.selectClienteID(mPref.Clientes.getId());
         tvNome = myView.findViewById(R.id.tvNome);
-        tvNome.setText(mPref.Clientes.getNome());
+        tvNome.setText(mList.get(0).getNome());
         tvGrupo = myView.findViewById(R.id.tvGrupo);
-        tvGrupo.setText("CÓD.: "+mPref.Clientes.getId()+" / " +mPref.Clientes.getGrupo());
+        tvGrupo.setText("CÓD.: "+mList.get(0).getCodigo()+" / " +mList.get(0).getGrupo());
         tvFantRazao = myView.findViewById(R.id.tvFantRazao);
-        tvFantRazao.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mPref.Clientes.getRazao() : mPref.Clientes.getNome());
+        tvFantRazao.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
         tvCnpjCpf = myView.findViewById(R.id.tvCnpjCpf);
-        tvCnpjCpf.setText(mPref.Clientes.getCnpjCpf());
+        tvCnpjCpf.setText(mList.get(0).getCpfCnpj());
         tvEndereco = myView.findViewById(R.id.tvEndereco);
-        tvEndereco.setText(mPref.Clientes.getLogradouro());
+        tvEndereco.setText(mList.get(0).getEndereco());
         tvBairro = myView.findViewById(R.id.tvBairro);
-        tvBairro.setText(mPref.Clientes.getBairro());
+        tvBairro.setText(mList.get(0).getBairro());
         tvMunicipio = myView.findViewById(R.id.tvMunicipio);
-        tvMunicipio.setText(mPref.Clientes.getMunicipio());
+        tvMunicipio.setText(mList.get(0).getMunicipio());
         tvCep = myView.findViewById(R.id.tvCep);
-        tvCep.setText("CEP: "+mPref.Clientes.getCep());
+        tvCep.setText("CEP: "+mList.get(0).getCep());
         tvFone = myView.findViewById(R.id.tvFone);
-        tvFone.setText(mPref.Clientes.getTelefone().equals("") ? "--" : mPref.Clientes.getTelefone());
+        tvFone.setText(mList.get(0).getFone());
         tvWhats = myView.findViewById(R.id.tvWhats);
-        tvWhats.setText(mPref.Clientes.getWhatsApp());
-        tvWhats.setText("--");
+        tvWhats.setText(mList.get(0).getWhats());
         tvEmail = myView.findViewById(R.id.tvEmail);
-        tvEmail.setText(mPref.Clientes.getEmail().equals("") ? "--" : mPref.Clientes.getEmail());
+        tvEmail.setText(mList.get(0).getEmail());
         tvCgf = myView.findViewById(R.id.tvInscEstadual);
-        tvCgf.setText("IE: "+mPref.Clientes.getIe());
+        tvCgf.setText("IE: "+mList.get(0).getInscEstadual());
         tvObservacao = myView.findViewById(R.id.tvObservacao);
-        tvObservacao.setText("Observações: "+mPref.Clientes.getObs());
+        tvObservacao.setText("Observações: "+mList.get(0).getObservacao());
 
     }
 

@@ -22,6 +22,7 @@ public class sonicClientesHolder {
      String fone;
      String contato;
      String email;
+     String whats;
      int situacao;
      int cli_sem_compra;
      String obs;
@@ -85,6 +86,11 @@ public class sonicClientesHolder {
     public String getEmail(){
         return this.email;
     }
+
+    public String getWhats() {
+        return whats;
+    }
+
     public int getSituacao(){
         return this.situacao;
     }
@@ -148,6 +154,11 @@ public class sonicClientesHolder {
     public void setEmail(String email){
         this.email = email;
     }
+
+    public void setWhats(String whats) {
+        this.whats = whats;
+    }
+
     public void setSituacao(int situacao){ this.situacao = situacao; }
     public void setCliSemCompra(int cli_sem_compra){this.cli_sem_compra = cli_sem_compra;}
     public void setObservacao(String obs){ this.obs = obs; }

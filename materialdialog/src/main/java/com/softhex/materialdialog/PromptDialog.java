@@ -265,6 +265,8 @@ public class PromptDialog extends Dialog {
                 if (mOnPositiveListener != null) {
                     mOnPositiveListener.onClick(PromptDialog.this);
                     OK = true;
+                    CANCEL = false;
+                    THIRD = false;
                 }
             }
         });
@@ -274,7 +276,9 @@ public class PromptDialog extends Dialog {
                 public void onClick(View v) {
                     if(mOnNegativeListener !=null ){
                         mOnNegativeListener.onClick(PromptDialog.this);
+                        OK = false;
                         CANCEL = true;
+                        THIRD = false;
                     }
                 }
             });
@@ -286,7 +290,10 @@ public class PromptDialog extends Dialog {
                 public void onClick(View v) {
                     if(mOnThirdOptionListener != null){
                         mOnThirdOptionListener.onClick(PromptDialog.this);
+                        OK = false;
+                        CANCEL = false;
                         THIRD = true;
+
                     }
                 }
             });
@@ -416,6 +423,8 @@ public class PromptDialog extends Dialog {
     public PromptDialog setPositiveListener(OnPositiveListener l) {
         mOnPositiveListener = l;
         OK = true;
+        CANCEL = false;
+        THIRD = false;
         return this;
     }
 
@@ -430,7 +439,9 @@ public class PromptDialog extends Dialog {
 
     public PromptDialog setNegativeListener(OnNegativeListener l){
         mOnNegativeListener = l;
+        OK = false;
         CANCEL = true;
+        THIRD = false;
         return  this;
     }
 
@@ -446,6 +457,8 @@ public class PromptDialog extends Dialog {
 
     public PromptDialog setThirdOptionListener(OnThirdOptionListener l){
         mOnThirdOptionListener = l;
+        OK = false;
+        CANCEL = false;
         THIRD = true;
         return this;
     }
@@ -464,7 +477,7 @@ public class PromptDialog extends Dialog {
     }
 
     public boolean getResultListener(){
-        return OK ? OK : CANCEL;
+        return OK ? true : false;
     }
 
     /**

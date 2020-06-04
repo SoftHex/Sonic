@@ -581,8 +581,8 @@ public class sonicUtils {
         long second = 1000l;
         long minute = 60l * second;
         long hour = 60l * minute;
-        Date date1=null;
-        Date date2=null;
+        Date date1 = new Date();
+        Date date2 = new Date();
 
         try{
             date1 = dateFormat.parse(first);

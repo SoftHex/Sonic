@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="top"
+            app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+            app:collapseIcon="@mipmap/ic_arrow_left_black_24dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:theme="@style/ToolBarTheme"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/mTabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:fillViewport="true"
+            style="@style/TabsTheme"
+            android:theme="@style/TabsTheme"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/mViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        </androidx.viewpager.widget.ViewPager>
+
+    <com.github.clans.fab.FloatingActionMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fmMenu"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorPrimaryWhite"
+        app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+        android:layout_margin="16dp">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fbAddRota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorPrimaryGreenLight"
+            fab:fab_colorPressed="@color/colorPrimaryWhite"
+            android:src="@mipmap/ic_map_marker_plus_outline_white_24dp"
+            fab:fab_size="mini"
+            fab:fab_label="Novo Agendamento" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- CONTEÚDO SEM MARGEM -->
+    <RelativeLayout
+        android:id="@+id/rlContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <!-- CONTEÚDO COM MARGEM 16DP -->
+        <LinearLayout
+            android:id="@+id/llContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="16dp">
+
+            <!-- BOTÃO FECHAR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right">
+
+                <TextView
+                    android:id="@+id/tvFechar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:drawableRight="@mipmap/ic_close_black_24dp"/>
+
+            </LinearLayout>
+
+            <!-- HEADER -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitCenter"
+                        android:contentDescription=""
+                        android:src="@drawable/cancel">
+
+                    </ImageView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tvTitulo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+                    <TextView
+                        android:id="@+id/tvDescricao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:maxLines="3"
+                        android:gravity="center"
+                        android:ellipsize="end" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- OBSERVAÇÃO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:id="@+id/tvInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="6dp"
+                    android:textStyle="italic"
+                    android:textColor="@color/colorAccent"
+                    android:drawableLeft="@mipmap/ic_information_outline_grey600_18dp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorSeparador" />
+
+            <!-- SPINNER -->
+            <LinearLayout
+                android:id="@+id/llSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:layout_marginTop="16dp">
+
+                <Spinner
+                    android:id="@+id/spMotivo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <!-- SEPARADOR -->
+            <View
+                android:id="@+id/vsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/colorSeparador"
+                tools:ignore="InvalidId" />
+
+            <!-- OBSERVAÇÃO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="36dp">
+
+                <EditText
+                    android:id="@+id/etObservacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:hint="@string/rotaObs"
+                    android:autofillHints="@string/rotaObs"
+                    android:inputType="textMultiLine|text"
+                    android:background="@android:color/transparent"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- BOTÃO SALVAR -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:padding="16dp"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/btConfirmar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/botao_cancelar"
+                android:textColor="@color/colorPrimaryWhite"
+                android:textStyle="bold"
+                android:text="CONFIRMAR">
+
+            </Button>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

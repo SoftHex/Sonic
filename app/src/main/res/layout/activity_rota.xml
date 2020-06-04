@@ -41,5 +41,27 @@
 
         </androidx.viewpager.widget.ViewPager>
 
+        <com.github.clans.fab.FloatingActionMenu
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fbMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            fab:menu_colorNormal="@color/colorAccent"
+            fab:menu_colorPressed="@color/colorPrimaryWhite"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            android:layout_margin="16dp">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fbAddRota"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="@color/colorPrimaryGreenLight"
+                    fab:fab_colorPressed="@color/colorPrimaryWhite"
+                    android:src="@mipmap/ic_add_shopping_cart_white_24dp"
+                    fab:fab_size="mini"
+                    fab:fab_label="Novo Agendamento" />
+
+        </com.github.clans.fab.FloatingActionMenu>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
