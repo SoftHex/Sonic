@@ -60,14 +60,15 @@ public class sonicClientesCPF extends Fragment {
     private Context mContext;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
-    Intent i;
+    private Intent i;
+    private sonicPreferences mPrefs;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         mContext = getActivity();
-
+        mPrefs = new sonicPreferences(getActivity());
         DBC = new sonicDatabaseCRUD(mContext);
 
         loadFragment();
@@ -168,8 +169,9 @@ public class sonicClientesCPF extends Fragment {
             @Override
             public void onViewDetachedFromWindow(View view) {
                 myTabLayout.setVisibility(VISIBLE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
-
+                if(!mPrefs.Rota.getAdding()){
+                    sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
+                }
             }
         });
 

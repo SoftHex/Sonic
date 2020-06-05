@@ -3,7 +3,6 @@ package com.softhex.sonic;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -165,7 +164,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                     mPrefs.Clientes.setId(cli.getCodigo());
                     mPrefs.Clientes.setNome(cliNomeExibicao);
-                    mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra()>0 ? true : false);
+                    mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
                     if(mPrefs.Rota.getAdding()){
                         ((Activity)mContext).finish();
                     }else{
@@ -182,14 +181,14 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 holder.tvLinha2.setText(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
                 holder.tvLinha3.setText(cli.getEnderecoCompleto());
 
-                File file = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CLIENTES + cli.getCodigo() + ".JPG");
+                File f = sonicFile.searchFile(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
 
-                if(file.exists()){
+                if(f.exists()){
 
                     holder.mImage.setVisibility(View.VISIBLE);
                     holder.letra.setVisibility(View.GONE);
                     Glide.with(mContext)
-                            .load(file)
+                            .load(f)
                             .circleCrop()
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)

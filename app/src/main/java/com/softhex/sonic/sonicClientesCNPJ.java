@@ -58,6 +58,7 @@ public class sonicClientesCNPJ extends Fragment {
     private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
+    private sonicPreferences mPrefs;
 
 
     @Nullable
@@ -65,7 +66,7 @@ public class sonicClientesCNPJ extends Fragment {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         mContext = getActivity();
-
+        mPrefs = new sonicPreferences(getActivity());
         loadFragment();
 
         return myView;
@@ -164,8 +165,9 @@ public class sonicClientesCNPJ extends Fragment {
             @Override
             public void onViewDetachedFromWindow(View view) {
                 myTabLayout.setVisibility(VISIBLE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
-
+                if(!mPrefs.Rota.getAdding()){
+                    sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
+                }
             }
         });
 
@@ -235,7 +237,6 @@ public class sonicClientesCNPJ extends Fragment {
         myRecycler.startAnimation(fadeIn);
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-
 
     }
 
