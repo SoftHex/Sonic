@@ -42,7 +42,7 @@ public class sonicSplash extends AppCompatActivity {
             List<sonicGrupoEmpresasHolder> mListEmpresa;
             mListUser = mData.Usuario.selectUsuarioAtivo();
             mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
-            mPrefs.Rota.setAdding(false);
+            mPrefs.RotaPessoal.setAdding(false);
 
             if(res){
 

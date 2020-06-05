@@ -51,7 +51,7 @@ public class sonicRotaPessoal extends Fragment {
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicRotaAdapter myAdapter;
+    private sonicRotaPessoalAdapter myAdapter;
     private List<sonicRotaHolder> myList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
@@ -245,7 +245,7 @@ public class sonicRotaPessoal extends Fragment {
         fadeIn.setFillAfter(true);
 
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter(myList, this.getContext(), this.getActivity(), myRecycler);
+        myAdapter = new sonicRotaPessoalAdapter(myList, this.getContext(), this.getActivity(), myRecycler);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

@@ -106,8 +106,9 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         Intent i = new Intent(this, sonicRotaPessoalAdd.class);
         fbAddVisita.setOnClickListener((View v)-> {
             fbMenu.close(false);
-            mPref.Rota.setAddFromCliente(true);
-            mPref.Rota.setAdding(true);
+            mPref.RotaPessoal.setClientePicked(false);
+            mPref.RotaPessoal.setAddFromCliente(true);
+            mPref.RotaPessoal.setAdding(true);
             startActivity(i);
         });
     }

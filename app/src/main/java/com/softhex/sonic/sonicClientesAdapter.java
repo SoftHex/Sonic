@@ -165,7 +165,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     mPrefs.Clientes.setId(cli.getCodigo());
                     mPrefs.Clientes.setNome(cliNomeExibicao);
                     mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
-                    if(mPrefs.Rota.getAdding()){
+                    if(mPrefs.RotaPessoal.getAdding()){
+                        mPrefs.RotaPessoal.setClientePicked(true);
                         ((Activity)mContext).finish();
                     }else{
                         Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);

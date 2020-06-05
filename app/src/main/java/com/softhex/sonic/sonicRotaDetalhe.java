@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +63,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -115,15 +113,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private Button btCancelar;
     private FloatingActionButton fbNavegar;
     private FusedLocationProviderClient mFusedLocationClient;
-    private long startTime, timeInMilliseconds = 0;
+    private long timeInMilliseconds = 0;
     private Handler customHandler = new Handler();
     private boolean clockCounting = false;
     private ProgressDialog myProgress;
-    private Calendar mCalendar;
-    private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
-    private SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");
     private sonicUtils mUtils;
-    private Activity mActivity;
     private List<sonicRotaHolder> mList;
 
     @Override
@@ -135,7 +129,6 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         mData = new sonicDatabaseCRUD(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mContex = this;
-        mActivity = getParent();
         mUtils = new sonicUtils(mContex);
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
@@ -237,6 +230,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
                 btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mPref.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
+                mPref.Rota.setEmAtendimentoCliente(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
+                mPref.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
                 break;
             case 3:
                 llTime.setVisibility(View.GONE);
@@ -337,8 +332,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         //BOTÃO DE CANCELAR ATENDIMENTO/IR PARA O CADASTRO DO CLIENTE
         btCancelar.setOnClickListener((View v)->{
             if(mPref.Rota.getEmAtendimento()){
-                Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                v.getContext().startActivity(i);
+                Intent i = new Intent(mContex, sonicClientesDetalhe.class);
+                startActivityForResult(i, 1);
             }else{
                 myProgress.show();
                 h.postDelayed(new Runnable() {
@@ -399,11 +394,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 Toast.makeText(v.getContext(), "Escolha uma opção para negativação.", Toast.LENGTH_SHORT).show();
                 spMotivo.requestFocus();
             }else if(rbNegativar.isChecked() && !spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
-                alertDialog.dismiss();
                 myProgress.show();
                 h.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        alertDialog.dismiss();
                         new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
                     }
                 }, 1000);
@@ -547,7 +542,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     stopClock();
                 }
             }else{
-                Toast.makeText(mContex, "Não foi possivel iniciar o atendimento...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContex, "Não foi possivel concluir o atendimento...", Toast.LENGTH_SHORT).show();
+                mPref.Rota.setEmAtendimento(false);
             }
 
         }

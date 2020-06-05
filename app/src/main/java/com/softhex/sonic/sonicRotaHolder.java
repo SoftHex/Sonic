@@ -5,8 +5,9 @@ public class sonicRotaHolder{
 
     int id;
     int codigo;
-    int codigo_cliente;
     int codigo_empresa;
+    String empresa;
+    int codigo_cliente;
     String nome_fantasia;
     String razao_social;
     String grupo_cliente;
@@ -42,6 +43,10 @@ public class sonicRotaHolder{
 
     public int getCodigoEmpresa() {
         return codigo_empresa;
+    }
+
+    public String getEmpresa() {
+        return empresa;
     }
 
     public int getCodigoCliente() {
@@ -130,6 +135,10 @@ public class sonicRotaHolder{
 
     public void setCodigoEmpresa(int codigo_empresa) {
         this.codigo_empresa = codigo_empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
 
     public void setCodigoCliente(int codigo_cliente) {

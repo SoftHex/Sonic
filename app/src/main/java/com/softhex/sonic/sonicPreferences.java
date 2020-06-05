@@ -78,12 +78,23 @@ public class sonicPreferences{
     private static final String ROTA_START_TIME = "rotaStartTime";
     private static final String ROTA_REFRESH = "rotaRefresh";
     private static final String ROTA_EM_ATENDIMENTO = "rotaEmAtendimento";
+    private static final String ROTA_EM_ATENDIMENTO_CLIENTE = "rotaEmAtendimentoCliente";
+    private static final String ROTA_EM_ATENDIMENTO_EMPRESA = "rotaEmAtendimentoEmpresa";
     private static final String ROTA_CANCELADA = "rotaCancelada";
     private static final String ROTA_STATUS = "rotaStatus";
     private static final String ROTA_SITUACAO = "rotaSituacao";
     private static final String ROTA_DATA_HORA = "rotaDataHora";
-    private static final String ROTA_ADD_FROM_CLIENTE = "rotaAddFromCliente";
-    private static final String ROTA_ADDING = "rotaAdding";
+    private static final String ROTA_PESSOAL_ID = "rotaPessoalId";
+    private static final String ROTA_PESSOAL_ITEM_POSITION = "rotaPessoalItemPosition";
+    private static final String ROTA_PESSOAL_ADDRESS_MAP = "rotaPessoalAddressMap";
+    private static final String ROTA_PESSOAL_REFRESH = "rotaPessoalRefresh";
+    private static final String ROTA_PESSOAL_FROM_CLIENTE = "rotaPessoalFromCliente";
+    private static final String ROTA_PESSOAL_ADDING = "rotaPessoalAdding";
+    private static final String ROTA_CLIENTE_PICKED= "rotaClientePicked";
+    private static final String ROTA_PESSOAL = "rotaPessoal";
+    private static final String ROTA_PESSOAL_DATA = "rotaPessoalData";
+    private static final String ROTA_PESSOAL_HORA = "rotaPessoalHora";
+
 
 
     Users Users = new Users();
@@ -95,6 +106,7 @@ public class sonicPreferences{
     Geral Geral = new Geral();
     Sincronizacao Sincronizacao = new Sincronizacao();
     Rota Rota = new Rota();
+    RotaPessoal RotaPessoal = new RotaPessoal();
 
     public sonicPreferences(Context context) {
         sharedpreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -748,6 +760,24 @@ public class sonicPreferences{
             return sharedpreferences.getBoolean(ROTA_EM_ATENDIMENTO, false);
         }
 
+        public void setEmAtendimentoCliente(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_EM_ATENDIMENTO_CLIENTE, value);
+            editor.apply();
+        }
+        public String getEmAtendimentoCliente(){
+            return sharedpreferences.getString(ROTA_EM_ATENDIMENTO_CLIENTE, "");
+        }
+
+        public void setEmAtendimentoEmpresa(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_EM_ATENDIMENTO_EMPRESA, value);
+            editor.apply();
+        }
+        public String getEmAtendimentoEmpresa(){
+            return sharedpreferences.getString(ROTA_EM_ATENDIMENTO_EMPRESA, "");
+        }
+
         public void setCancelada(boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(ROTA_CANCELADA, value);
@@ -785,24 +815,102 @@ public class sonicPreferences{
             return sharedpreferences.getString(ROTA_DATA_HORA, "");
         }
 
+    }
+
+    public class RotaPessoal{
+
+        public void setCodigo(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(ROTA_PESSOAL_ID, value);
+            editor.apply();
+        }
+        public int getCodigo(){
+            return sharedpreferences.getInt(ROTA_PESSOAL_ID, 0);
+        }
+        public void setAddressMap(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_PESSOAL_ID, value);
+            editor.apply();
+        }
+        public String getAddressMap(){
+            return sharedpreferences.getString(ROTA_PESSOAL_ADDRESS_MAP, "");
+        }
+
+        public void setItemPosition(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(ROTA_PESSOAL_ITEM_POSITION, value);
+            editor.apply();
+        }
+
+        public int getItemPosition(){
+            return sharedpreferences.getInt(ROTA_PESSOAL_ITEM_POSITION, 0);
+        }
+
+        public void setRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_PESSOAL_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getRefresh(){
+            return sharedpreferences.getBoolean(ROTA_PESSOAL_REFRESH, false);
+        }
+
         public void setAddFromCliente(boolean value){
             editor = sharedpreferences.edit();
-            editor.putBoolean(ROTA_ADD_FROM_CLIENTE, value);
+            editor.putBoolean(ROTA_PESSOAL_FROM_CLIENTE, value);
             editor.apply();
         }
 
         public boolean getAddFromCliente(){
-            return sharedpreferences.getBoolean(ROTA_ADD_FROM_CLIENTE, false);
+            return sharedpreferences.getBoolean(ROTA_PESSOAL_FROM_CLIENTE, false);
         }
 
         public void setAdding(boolean value){
             editor = sharedpreferences.edit();
-            editor.putBoolean(ROTA_ADDING, value);
+            editor.putBoolean(ROTA_PESSOAL_ADDING, value);
             editor.apply();
         }
 
         public boolean getAdding(){
-            return sharedpreferences.getBoolean(ROTA_ADDING, false);
+            return sharedpreferences.getBoolean(ROTA_PESSOAL_ADDING, false);
+        }
+
+        public void setClientePicked(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_CLIENTE_PICKED, value);
+            editor.apply();
+        }
+
+        public boolean getClientePicked(){
+            return sharedpreferences.getBoolean(ROTA_CLIENTE_PICKED, false);
+        }
+
+        public void setAddData(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_PESSOAL_DATA, value);
+            editor.apply();
+        }
+        public String getAddData(){
+            return sharedpreferences.getString(ROTA_PESSOAL_DATA, "");
+        }
+
+        public void setAddHora(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_PESSOAL_HORA, value);
+            editor.apply();
+        }
+        public String getAddHora(){
+            return sharedpreferences.getString(ROTA_PESSOAL_HORA, "");
+        }
+
+        public void setAdd(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_PESSOAL, value);
+            editor.apply();
+        }
+
+        public boolean getAdd(){
+            return sharedpreferences.getBoolean(ROTA_PESSOAL, false);
         }
 
     }

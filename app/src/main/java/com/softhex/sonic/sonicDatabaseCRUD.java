@@ -2845,20 +2845,34 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
+        public int countPorEmpresa() {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            int count = 0;
+
+            SQLiteDatabase db = DB.getReadableDatabase();
+
+            try {
+                Cursor cursor = db.rawQuery("SELECT R._id FROM " + TABLE_ROTA + " R WHERE R.codigo_empresa IN (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1)", null);
+                count = cursor.getCount();
+            } catch (SQLiteException e) {
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return count;
+        }
+
         public List<sonicRotaHolder> selectRota(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicRotaHolder> rotas = new ArrayList<>();
 
-            String where="";
-
-            if(sonicConstants.GRUPO_ROTA_STATUS != "TODOS"){
-                    where += " WHERE R.status = "+sonicConstants.GRUPO_ROTA_STATUS_INT;
-            }
-
             String query = "SELECT " +
+                        "R._id, " +
                         "R.codigo, " +
                         "R.codigo_empresa, " +
+                        "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                         "R.codigo_cliente, " +
                         "R.tipo, " +
                         "R.status, " +
@@ -2882,7 +2896,8 @@ public class sonicDatabaseCRUD {
                         "C.uf, " +
                         "C.cep " +
                         " FROM " + TABLE_ROTA +
-                        " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" + where ;
+                        " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
+                        " WHERE R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY R.codigo DESC";
 
                 try{
 
@@ -2896,6 +2911,7 @@ public class sonicDatabaseCRUD {
 
                             rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                            rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                             rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
                             rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
                             rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
@@ -2944,6 +2960,7 @@ public class sonicDatabaseCRUD {
             String query = "SELECT " +
                     "R.codigo, " +
                     "R.codigo_empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                     "R.codigo_cliente, " +
                     "R.tipo, " +
                     "R.status, " +
@@ -2976,36 +2993,38 @@ public class sonicDatabaseCRUD {
 
                 if(cursor!=null){
 
-                    cursor.moveToFirst();
+                    if(cursor.moveToFirst()){
 
-                    sonicRotaHolder rota = new sonicRotaHolder();
+                        sonicRotaHolder rota = new sonicRotaHolder();
 
-                    rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                    rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                    rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
-                    rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                    rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
-                    rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                    rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
-                    rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
-                    rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
-                    rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
-                    rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
-                    rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
-                    rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
-                    rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                    rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
-                    rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
-                    rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
-                    rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                    rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
-                    rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                    rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
-                    rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
-                    rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+                        rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                        rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
+                        rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                        rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
+                        rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                        rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
+                        rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
+                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                        rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+                        rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+                        rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
+                        rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
+                        rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
+                        rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
+                        rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
+                        rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
+                        rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                        rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
+                        rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                        rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                        rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                        rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
 
-                    rotas.add(rota);
+                        rotas.add(rota);
+                    }
 
                 }
                 cursor.close();
@@ -3083,7 +3102,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_ROTA);
+                count = DatabaseUtils.queryNumEntries(db, TABLE_ROTA_PESSOAL);
             } catch (SQLiteException e) {
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
@@ -3097,7 +3116,25 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public Boolean insertRota(List<String> values, String type){
+        public int countPorEmpresa() {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            int count = 0;
+
+            SQLiteDatabase db = DB.getReadableDatabase();
+
+            try {
+                Cursor cursor = db.rawQuery("SELECT R._id FROM " + TABLE_ROTA_PESSOAL + " R WHERE R.codigo_empresa IN (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1)", null);
+                count = cursor.getCount();
+            } catch (SQLiteException e) {
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return count;
+        }
+
+        public Boolean insertRota(String data, String hora){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result;
 
@@ -3105,11 +3142,11 @@ public class sonicDatabaseCRUD {
 
                 ContentValues cv = new ContentValues();
                 cv.put("codigo_empresa", mPrefs.Users.getEmpresaId());
-                cv.put("codigo_cliente", 0);
+                cv.put("codigo_cliente", mPrefs.Clientes.getId());
                 cv.put("tipo", 1); // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
                 cv.put("status", 1); // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
-                cv.put("data_agendamento", 0);
-                cv.put("hora_agendamento", 0);
+                cv.put("data_agendamento", data);
+                cv.put("hora_agendamento", hora);
                 cv.put("atendente", mPrefs.Users.getUsuarioNome());
 
                 result = DB.getWritableDatabase().insertOrThrow(TABLE_ROTA_PESSOAL, null, cv)>0;
@@ -3130,20 +3167,59 @@ public class sonicDatabaseCRUD {
             return result;
         }
 
+        public boolean iniciarRota(String codigo){
+            mCalendar = Calendar.getInstance();
+            ContentValues cv = new ContentValues();
+            cv.put("status", 2);
+            cv.put("situacao", 1);
+            cv.put("data_inicio", data.format(mCalendar.getTime()));
+            cv.put("hora_inicio", hora.format(mCalendar.getTime()));
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+        }
+
+        public boolean positivarRota(String codigo, String obs){
+            mCalendar = Calendar.getInstance();
+            ContentValues cv = new ContentValues();
+            cv.put("status", 3);
+            cv.put("situacao", 1);
+            cv.put("observacao", obs);
+            cv.put("data_fim", data.format(mCalendar.getTime()));
+            cv.put("hora_fim", hora.format(mCalendar.getTime()));
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+        }
+
+        public boolean negativarRota(String codigo, String neg, String obs){
+            mCalendar = Calendar.getInstance();
+            ContentValues cv = new ContentValues();
+            cv.put("status", 3);
+            cv.put("situacao", 2);
+            cv.put("negativacao", neg);
+            cv.put("observacao", obs);
+            cv.put("data_fim", data.format(mCalendar.getTime()));
+            cv.put("hora_fim", hora.format(mCalendar.getTime()));
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+        }
+
+        public boolean cancelarRota(String codigo, String canc, String obs){
+            mCalendar = Calendar.getInstance();
+            ContentValues cv = new ContentValues();
+            cv.put("status", 4);
+            cv.put("observacao", obs);
+            cv.put("cancelamento", canc);
+            cv.put("data_inicio", data.format(mCalendar.getTime()));
+            cv.put("hora_inicio", hora.format(mCalendar.getTime()));
+            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+        }
+
         public List<sonicRotaHolder> selectRota(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicRotaHolder> rotas = new ArrayList<>();
 
-            String where="";
-
-            if(sonicConstants.GRUPO_ROTA_STATUS != "TODOS"){
-                where += " WHERE R.status = "+sonicConstants.GRUPO_ROTA_STATUS_INT;
-            }
-
             String query = "SELECT " +
                     "R._id, " +
                     "R.codigo_empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                     "R.codigo_cliente, " +
                     "R.tipo, " +
                     "R.status, " +
@@ -3167,7 +3243,8 @@ public class sonicDatabaseCRUD {
                     "C.uf, " +
                     "C.cep " +
                     " FROM " + TABLE_ROTA_PESSOAL +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" + where ;
+                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
+                    " WHERE R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY R._id DESC";
 
             try{
 
@@ -3182,6 +3259,7 @@ public class sonicDatabaseCRUD {
                     rota.setCodigo(cursor.getInt(cursor.getColumnIndex("_id")));
                     rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
                     rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                    rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                     rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
                     rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
                     rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
@@ -3219,6 +3297,97 @@ public class sonicDatabaseCRUD {
                 e.printStackTrace();
             }
             return rotas;
+        }
+
+        public List<sonicRotaHolder> selectRotaId(int codigo){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicRotaHolder> rotas = new ArrayList<>();
+
+            String query = "SELECT " +
+                    "R._id, " +
+                    "R.codigo_empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
+                    "R.codigo_cliente, " +
+                    "R.tipo, " +
+                    "R.status, " +
+                    "R.data_agendamento, " +
+                    "R.hora_agendamento, " +
+                    "R.atendente, " +
+                    "R.ordem, " +
+                    "R.observacao, " +
+                    "R.data_inicio, " +
+                    "R.data_fim, " +
+                    "R.hora_inicio, " +
+                    "R.hora_fim, " +
+                    "R.situacao, " +
+                    "R.negativacao, " +
+                    "R.cancelamento, " +
+                    "C.razao_social, " +
+                    "C.nome_fantasia, " +
+                    "C.endereco, " +
+                    "C.bairro, " +
+                    "C.municipio, " +
+                    "C.uf, " +
+                    "C.cep " +
+                    " FROM " + TABLE_ROTA_PESSOAL +
+                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente WHERE R._id="+codigo;
+
+            try{
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery(
+                        query , null);
+
+                if(cursor!=null){
+
+                    if(cursor.moveToFirst()){
+
+                        sonicRotaHolder rota = new sonicRotaHolder();
+
+                        rota.setCodigo(cursor.getInt(cursor.getColumnIndex("_id")));
+                        rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                        rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                        rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
+                        rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
+                        rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                        rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
+                        rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
+                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                        rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+                        rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+                        rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
+                        rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
+                        rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
+                        rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
+                        rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
+                        rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
+                        rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                        rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
+                        rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                        rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                        rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                        rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+
+                        rotas.add(rota);
+                    }
+
+                }
+                cursor.close();
+
+            }catch (SQLiteException e){
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return rotas;
+
         }
 
         public boolean cleanData(String tabela){

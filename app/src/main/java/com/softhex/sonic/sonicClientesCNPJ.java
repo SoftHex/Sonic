@@ -165,7 +165,7 @@ public class sonicClientesCNPJ extends Fragment {
             @Override
             public void onViewDetachedFromWindow(View view) {
                 myTabLayout.setVisibility(VISIBLE);
-                if(!mPrefs.Rota.getAdding()){
+                if(!mPrefs.RotaPessoal.getAdding()){
                     sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
                 }
             }

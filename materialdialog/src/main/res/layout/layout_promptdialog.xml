@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:wheel="http://schemas.android.com/apk/res-auto"
     android:id="@+id/loading"
-    android:layout_width="250dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center"
+    android:layout_margin="20dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,7 +15,6 @@
         android:layout_height="75dp"
         android:gravity="center"
         android:orientation="vertical">
-
 
         <ImageView
             android:id="@+id/logoIv"

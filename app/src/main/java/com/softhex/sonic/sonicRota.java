@@ -80,10 +80,11 @@ public class sonicRota extends AppCompatActivity{
     private void loadActions(){
         Intent i = new Intent(this, sonicRotaPessoalAdd.class);
         fbAddVisita.setOnClickListener((View v)-> {
-            mPrefs.Rota.setAddFromCliente(false);
-            mPrefs.Rota.setAdding(true);
+            mPrefs.RotaPessoal.setAddFromCliente(false);
+            mPrefs.RotaPessoal.setClientePicked(false);
+            mPrefs.RotaPessoal.setAdding(true);
             fmMenu.close(false);
-            startActivity(i);
+            startActivityForResult(i, 1);
         });
     }
 
@@ -95,11 +96,10 @@ public class sonicRota extends AppCompatActivity{
 
         @Override
         public void onPageSelected(int position) {
-            if(position==1){
-                fmMenu.setVisibility(View.VISIBLE);
-                //handlerFloatMenu();
-            }else{
+            if(position==0){
                 fmMenu.setVisibility(View.GONE);
+            }else{
+                fmMenu.setVisibility(View.VISIBLE);
             }
         }
 
@@ -177,7 +177,7 @@ public class sonicRota extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(mPrefs.Rota.getRefresh())
+        if(mPrefs.Rota.getRefresh() || mPrefs.RotaPessoal.getRefresh())
         refreshRotaFragment();
     }
 }

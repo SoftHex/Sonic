@@ -151,9 +151,9 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.tvNome.setText(cliNomeExibicao);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
-        holder.tvDataHora.setText("Data Prevista: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento())+" às "+mUtils.Data.horaFotmatadaBR(rota.getHoraAgendamento()));
-        holder.tvObservacao.setText("Observação: "+rota.getObservacao());
-        holder.tvDuracao.setText(rota.getHoraFim().equals("") ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
+        holder.tvDataHora.setText("Agendado para: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento()));
+        //holder.tvObservacao.setText(rota.getObservacao()==null ? "Observação:" : "Observação: "+rota.getObservacao());
+        //holder.tvDuracao.setText(rota.getHoraFim()=="" ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
 
         File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
 
@@ -212,12 +212,12 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                         .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
                         .setAnimationEnable(true)
                         .setTitleText(R.string.msgAtencao)
-                        .setContentText(R.string.rotaEmAtendimento)
+                        .setContentText("Existe um rota em atendimento para o cliente "+mPrefs.Rota.getEmAtendimentoCliente()+". Finalize-a para iniciar a próxima.")
                         .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
                             @Override
                             public void onClick(PromptDialog dialog){
                                 dialog.dismiss();
-                                mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
+                                //mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
                             }
                         }).show();
                 /*new AlertDialog.Builder(myCtx)
@@ -268,7 +268,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 mPrefs.Rota.setItemPosition(position);
                 mPrefs.Rota.setRefresh(false);
                 Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
-                mActivity.startActivityForResult(i, 1);
+                mActivity.startActivityForResult(i, 0);
             }
 
         });

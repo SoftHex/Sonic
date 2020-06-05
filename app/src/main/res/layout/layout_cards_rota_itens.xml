@@ -33,7 +33,7 @@
                 <!--LATERAL -->
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="134dp"
                     android:orientation="vertical"
                     android:layout_marginBottom="-10dp"
                     android:layout_marginLeft="6dp"
@@ -51,8 +51,8 @@
                             android:layerType="software"
                             custom:color="@color/colorPrimaryBlackLightT"
                             custom:orientation="vertical"
-                            custom:dashLength="6dp"
-                            custom:dashGap="6dp"
+                            custom:dashLength="4dp"
+                            custom:dashGap="4dp"
                             custom:dashThickness="1dp" />
 
                     </LinearLayout>
@@ -94,17 +94,17 @@
                     <!-- END DASH -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
 
                         <com.softhex.sonic.DividerView
                             android:layout_width="wrap_content"
-                            android:layout_height="120dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:layerType="software"
                             custom:color="@color/colorPrimaryBlackLightT"
                             custom:orientation="vertical"
-                            custom:dashLength="6dp"
-                            custom:dashGap="6dp"
+                            custom:dashLength="4dp"
+                            custom:dashGap="4dp"
                             custom:dashThickness="1dp" />
 
                     </LinearLayout>
@@ -114,7 +114,7 @@
                 <!-- CONTEUDO -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginTop="3dp"
                     android:padding="6dp">
@@ -126,7 +126,7 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -140,6 +140,15 @@
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
+
+                            <!-- SEPARADOR -->
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="-20dp"
+                                android:layout_marginRight="16dp"
+                            android:translationX="10dp"
+                                android:background="@color/colorSeparador" />
 
                             <TextView
                                 android:id="@+id/tvEndereco"
@@ -226,7 +235,7 @@
                             android:maxLines="1"
                             android:text="Atendente"
                             android:textColor="@color/colorTextAccentDark"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/tvDataHora"
@@ -234,9 +243,10 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="Data Prevista:"
+                            android:text="Agendado para:"
+                            android:drawablePadding="4dp"
                             android:textColor="@color/colorTextAccentDark"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/tvDuracao"
@@ -245,6 +255,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="Duração:"
+                            android:visibility="gone"
                             android:textColor="@color/colorTextAccentDark"
                             android:textSize="14sp" />
 
@@ -255,6 +266,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="Observação:"
+                            android:visibility="gone"
                             android:textColor="@color/colorTextAccentDark"
                             android:textSize="14sp" />
 
@@ -271,7 +283,7 @@
     <!-- SEPARADOR -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"
+        android:layout_height="1dp"
         android:layout_marginLeft="68dp"
         android:layout_marginRight="16dp"
         android:background="@color/colorSeparador" />
