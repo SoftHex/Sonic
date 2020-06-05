@@ -83,6 +83,7 @@
             android:id="@+id/llNegative"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
             android:visibility="gone"
             android:layout_weight="3">
 
@@ -101,6 +102,7 @@
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:layout_marginLeft="4dp"
            android:layout_weight="3">
 
            <TextView
@@ -115,8 +117,6 @@
 
        </LinearLayout>
 
-
     </LinearLayout>
-
 
 </LinearLayout>

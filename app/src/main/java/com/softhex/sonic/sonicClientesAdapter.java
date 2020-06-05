@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
@@ -163,10 +164,14 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 holder.linearItem.setOnClickListener((View v)-> {
 
                     mPrefs.Clientes.setId(cli.getCodigo());
+                    mPrefs.Clientes.setNome(cliNomeExibicao);
                     mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra()>0 ? true : false);
-                    Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                    mContext.startActivity(i);
-
+                    if(mPrefs.Rota.getAdding()){
+                        ((Activity)mContext).finish();
+                    }else{
+                        Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                        mContext.startActivity(i);
+                    }
                 });
 
                 holder.codigo = cli.getCodigo();

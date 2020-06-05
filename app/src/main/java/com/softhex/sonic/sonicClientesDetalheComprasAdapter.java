@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Environment;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
@@ -100,7 +99,7 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
 
         holder.tvC2L1.setText(mUtils.Data.dataFotmatadaBR(mList.get(groupPosition).getData()));
         holder.tvC1L1.setText(mList.get(groupPosition).getTipoCobranca());
-        holder.tvC1L3.setText("CÓD.: " + (mList.get(groupPosition).getCodigo())+" / "+mList.get(groupPosition).getVendedor());
+        holder.tvC1L3.setText("#" + (mList.get(groupPosition).getCodigo())+" / VEND.: "+mList.get(groupPosition).getVendedor());
         holder.tvC1L2.setText("PRAZO: "+mList.get(groupPosition).getPrazo());
         holder.tvC2L2.setText("R$ "+mList.get(groupPosition).getValor());
         holder.tvEmpresa.setText("EMP.: "+mList.get(groupPosition).getEmpresa());
@@ -158,13 +157,15 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
         holder.tvQtdPrecoValor = convertView.findViewById(R.id.tvQtdPrecoValor);
         holder.tvDesconto = convertView.findViewById(R.id.tvDescontoItem);
         holder.tvLetra = convertView.findViewById(R.id.tvLetra);
-        File fileJpg = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CATALOGO + mItens.getCodigoProduto() +".JPG");
-        if(fileJpg.exists()){
+
+        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_CATALOGO, mItens.getCodigoProduto());
+
+        if(f.exists()){
 
             holder.tvLetra.setVisibility(View.GONE);
             holder.ivImagem.setVisibility(View.VISIBLE);
             Glide.with(mContext)
-                    .load(fileJpg)
+                    .load(f)
                     .circleCrop()
                     .apply(new RequestOptions().override(100,100))
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
@@ -176,7 +177,7 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             holder.tvLetra.setText(mItens.getLetra());
         }
         holder.tvNomeProduto.setText(mItens.getProduto());
-        holder.tvCodigoUnidade.setText("CÓD.: "+mItens.getCodigoProduto()+ " / UNID.: " + mItens.getUnidadeMedidaSigla());
+        holder.tvCodigoUnidade.setText("#"+mItens.getCodigoProduto()+ " / UNID.: " + mItens.getUnidadeMedidaSigla());
         holder.tvQtdPrecoValor.setText("QTD.: "+mItens.getQuantidade()+ " / PREÇO: R$ " + mItens.getPrecoUnitario()+ " / TOTAL: R$ "+mItens.getValorGeral());
         if(mItens.getDesconto().equals("0,00")){
             holder.tvDesconto.setVisibility(View.GONE);

@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Environment;
@@ -75,6 +76,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         createInterface();
         slideImages();
         handlerFloatMenu();
+        loadAction();
 
     }
 
@@ -98,6 +100,16 @@ public class sonicClientesDetalhe extends AppCompatActivity{
             }
         },700);
 
+    }
+
+    private void loadAction(){
+        Intent i = new Intent(this, sonicRotaPessoalAdd.class);
+        fbAddVisita.setOnClickListener((View v)-> {
+            fbMenu.close(false);
+            mPref.Rota.setAddFromCliente(true);
+            mPref.Rota.setAdding(true);
+            startActivity(i);
+        });
     }
 
     public void setUpViewPager(ViewPager viewpager){
@@ -194,22 +206,24 @@ public class sonicClientesDetalhe extends AppCompatActivity{
                 onBackPressed();
         });
 
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
-                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                    dotsLayout.setVisibility(View.INVISIBLE);
-                    mCollapsingToolbar.setTitle(mPref.Clientes.getNome());
-                }else {
-                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                    dotsLayout.setVisibility(View.VISIBLE);
-                    mCollapsingToolbar.setTitle("");
-                }
-            }
-        });
+        mAppBar.addOnOffsetChangedListener(appBarListener);
 
     }
+
+    private AppBarLayout.OnOffsetChangedListener appBarListener = new AppBarLayout.OnOffsetChangedListener() {
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
+                mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                dotsLayout.setVisibility(View.INVISIBLE);
+                mCollapsingToolbar.setTitle(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getRazaoSocial() : mList.get(0).getNomeFantasia());
+            }else {
+                mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                dotsLayout.setVisibility(View.VISIBLE);
+                mCollapsingToolbar.setTitle("");
+            }
+        }
+    };
 
     public void slideImages(){
 

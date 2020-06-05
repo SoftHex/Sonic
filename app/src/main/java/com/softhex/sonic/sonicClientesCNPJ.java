@@ -229,7 +229,7 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mContext, mList, myRecycler, "CNPJ: ");
+        myAdapter = new sonicClientesAdapter(getActivity(), mList, myRecycler, "CNPJ: ");
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

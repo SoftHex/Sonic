@@ -26,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultAppTheme">
+        <activity android:name=".sonicRotaPessoalAdd"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -59,12 +60,12 @@
             android:theme="@style/IntroTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:theme="@style/IntroTheme"
-            android:name=".sonicFirstAccess"/>
+            android:name=".sonicFirstAccess"
+            android:theme="@style/IntroTheme" />
         <activity
             android:name=".sonicLogin"
             android:theme="@style/IntroTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".sonicAvisos"
             android:theme="@style/DefaultAppTheme"
@@ -75,21 +76,20 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicConfig"
-            android:theme="@style/PreferenceAppTheme"/>
+            android:theme="@style/PreferenceAppTheme" />
         <activity
             android:name=".sonicConfigPerson"
             android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".sonicConfig" />
-            </activity>
+        </activity>
         <activity
             android:name=".sonicConfigSeguranca"
             android:theme="@style/PreferenceAppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".sonicConfig" />
-
         </activity>
         <activity
             android:name=".sonicConfigPerfil"

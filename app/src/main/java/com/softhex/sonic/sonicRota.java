@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -30,6 +31,7 @@ public class sonicRota extends AppCompatActivity{
     private  ViewPagerAdapter myAdapter;
     private sonicPreferences mPrefs;
     private FloatingActionMenu fmMenu;
+    private FloatingActionButton fbAddVisita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,9 @@ public class sonicRota extends AppCompatActivity{
         mContext = this;
         mPrefs = new sonicPreferences(mContext);
         fmMenu = findViewById(R.id.fmMenu);
+        fbAddVisita = findViewById(R.id.fbAddVisita);
         createInterface();
+        loadActions();
 
     }
 
@@ -71,6 +75,16 @@ public class sonicRota extends AppCompatActivity{
                 onBackPressed();
         });
 
+    }
+
+    private void loadActions(){
+        Intent i = new Intent(this, sonicRotaPessoalAdd.class);
+        fbAddVisita.setOnClickListener((View v)-> {
+            mPrefs.Rota.setAddFromCliente(false);
+            mPrefs.Rota.setAdding(true);
+            fmMenu.close(false);
+            startActivity(i);
+        });
     }
 
     private ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {

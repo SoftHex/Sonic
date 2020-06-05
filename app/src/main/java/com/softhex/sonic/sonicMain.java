@@ -183,24 +183,6 @@ public class sonicMain extends AppCompatActivity{
         calcularPercentual("2200000",usuarioMeta);
         lerDadosUsuario();
 
-        myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                addBottomDots(position);
-            }
-
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
@@ -719,7 +701,7 @@ public class sonicMain extends AppCompatActivity{
         myAdapter.addFragment(new sonicMainVendas(), "Vendas");
         myAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
         //myAdapter.addFragment(new sonicMainVendas(), "Visitas");
-
+        viewpager.addOnPageChangeListener(listener);
         viewpager.setAdapter(myAdapter);
 
     }
@@ -771,6 +753,33 @@ public class sonicMain extends AppCompatActivity{
             return super.getItemPosition(object);
         }
     }
+
+    private ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            addBottomDots(position);
+            switch (position){
+                case 0:
+                    for(int i=0;i<llGroupVendas.getChildCount();i++){
+                        View view = llGroupVendas.getChildAt(i);
+                        if(view instanceof TextView){
+                            //((TextView)view).setTextColor(Color.RED);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     public void updateBadge( int id, String badge){
 

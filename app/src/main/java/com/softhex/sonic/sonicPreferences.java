@@ -82,6 +82,8 @@ public class sonicPreferences{
     private static final String ROTA_STATUS = "rotaStatus";
     private static final String ROTA_SITUACAO = "rotaSituacao";
     private static final String ROTA_DATA_HORA = "rotaDataHora";
+    private static final String ROTA_ADD_FROM_CLIENTE = "rotaAddFromCliente";
+    private static final String ROTA_ADDING = "rotaAdding";
 
 
     Users Users = new Users();
@@ -781,6 +783,26 @@ public class sonicPreferences{
         }
         public String getDataHora(){
             return sharedpreferences.getString(ROTA_DATA_HORA, "");
+        }
+
+        public void setAddFromCliente(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_ADD_FROM_CLIENTE, value);
+            editor.apply();
+        }
+
+        public boolean getAddFromCliente(){
+            return sharedpreferences.getBoolean(ROTA_ADD_FROM_CLIENTE, false);
+        }
+
+        public void setAdding(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_ADDING, value);
+            editor.apply();
+        }
+
+        public boolean getAdding(){
+            return sharedpreferences.getBoolean(ROTA_ADDING, false);
         }
 
     }
