@@ -232,18 +232,21 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
-            "tipo int NOT NULL, " +             // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
+            "forma int NOT NULL, " +            // 1=AGENDAMENTO, 2=REAGENDAMENTO
             "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
             "data_agendamento varchar, " +
             "hora_agendamento varchar, " +
             "atendente string, " +
             "ordem int, " +
+            "tipo INT NOT NULL, "  +            // 1=EMPRESA, 2=PESSOAL
             "observacao string, " +
             "data_inicio varchar, " +
             "hora_inicio varchar, " +
             "data_fim varchar, " +
             "hora_fim varchar, " +
+            "reagendamento int, " +             // CODIGO AGENDAMENTO ANTERIOR
             "data_reagendamento varchar, " +
+            "hora_reagendamento varchar, " +
             "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO
             "negativacao string, " +            // MOTIVO DA NEGATIVAÇÃO
             "cancelamento string);";            // MOTIVO DO CANCELAMENTO
