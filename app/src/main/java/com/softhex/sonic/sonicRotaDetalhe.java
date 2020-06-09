@@ -360,7 +360,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         final AlertDialog alertDialog = dialogBuilder.create();
 
         TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Atendimento - " + mPref.Rota.getCodigo());
+        tvTitulo.setText("Atendimento #" + mPref.Rota.getCodigo());
         TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
         tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
         TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);

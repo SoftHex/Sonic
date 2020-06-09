@@ -197,6 +197,7 @@ public class sonicDatabaseCRUD {
 
                 result = DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0;
 
+					// insertOrThrow, insertWithOnConflict
                     //result = DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0;
 
             }catch (SQLiteException e){
@@ -3171,10 +3172,9 @@ public class sonicDatabaseCRUD {
             mCalendar = Calendar.getInstance();
             ContentValues cv = new ContentValues();
             cv.put("status", 2);
-            cv.put("situacao", 1);
             cv.put("data_inicio", data.format(mCalendar.getTime()));
             cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
         }
 
         public boolean positivarRota(String codigo, String obs){
@@ -3185,7 +3185,7 @@ public class sonicDatabaseCRUD {
             cv.put("observacao", obs);
             cv.put("data_fim", data.format(mCalendar.getTime()));
             cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
         }
 
         public boolean negativarRota(String codigo, String neg, String obs){
@@ -3197,7 +3197,7 @@ public class sonicDatabaseCRUD {
             cv.put("observacao", obs);
             cv.put("data_fim", data.format(mCalendar.getTime()));
             cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
         }
 
         public boolean cancelarRota(String codigo, String canc, String obs){
@@ -3208,7 +3208,7 @@ public class sonicDatabaseCRUD {
             cv.put("cancelamento", canc);
             cv.put("data_inicio", data.format(mCalendar.getTime()));
             cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " _id=? ", new String[]{codigo})>0;
+            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
         }
 
         public List<sonicRotaHolder> selectRota(){

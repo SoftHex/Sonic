@@ -37,7 +37,7 @@
                     android:orientation="vertical"
                     android:layout_marginBottom="-10dp"
                     android:layout_marginLeft="6dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="3dp"
                     android:layout_marginRight="6dp">
 
                     <!-- START DASH -->
@@ -99,7 +99,7 @@
                         <com.softhex.sonic.DividerView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
+                            android:layout_marginTop="4dp"
                             android:layerType="software"
                             custom:color="@color/colorPrimaryBlackLightT"
                             custom:orientation="vertical"
@@ -140,15 +140,6 @@
                                 android:textColor="@color/colorPrimary"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
-
-                            <!-- SEPARADOR -->
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginLeft="-20dp"
-                                android:layout_marginRight="16dp"
-                            android:translationX="10dp"
-                                android:background="@color/colorSeparador" />
 
                             <TextView
                                 android:id="@+id/tvEndereco"
