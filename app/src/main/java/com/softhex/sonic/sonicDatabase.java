@@ -324,9 +324,12 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
-            "numero varchar, " +
-            "data_emissao varchar, " +
-            "data_vencimento varchar, " +
+            "numero varchar NOT NULL, " +
+            "data_emissao varchar NOT NULL, " +
+            "data_vencimento varchar NOT NULL, " +
+            "codigo_agente_cobrador int NOT NULL, " +
+            "codigo_tipo_cobranca int NOT NULL, " +
+            "vendedor varchar, " +
             "valor decimal(9,2), " +
 			"saldo decimal(9,2), " +
             "situacao int);";
@@ -334,7 +337,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_TITULO_CODIGO_USUARIO = "CREATE INDEX index_titulo_codigo_usuario ON "+DB_TITTULO+" (codigo_usuario);";
     private static final String CREATE_INDEX_TITULO_CODIGO_CLIENTE = "CREATE INDEX index_titulo_codigo_cliente ON "+DB_TITTULO+" (codigo_cliente);";
     private static final String CREATE_INDEX_TITULO_CODIGO_EMPRESA = "CREATE INDEX index_titulo_codigo_empresa ON "+DB_TITTULO+" (codigo_empresa);";
-
+    private static final String CREATE_INDEX_TITULO_CODIGO_AGENTE_COBRADOR = "CREATE INDEX index_titulo_codigo_agente_cobrador ON "+DB_TITTULO+" (codigo_agente_cobrador);";
+    private static final String CREATE_INDEX_TITULO_CODIGO_TIPO_COBRANCA = "CREATE INDEX index_titulo_codigo_tipo_cobranca ON "+DB_TITTULO+" (codigo_tipo_cobranca);";
 
     private static final String CREATE_RETORNO_PEDIDO = "CREATE TABLE IF NOT EXISTS "+DB_RETORNO_PEDIDO+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -640,6 +644,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TITULO_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_TITULO_CODIGO_EMPRESA);
         DB.execSQL(CREATE_INDEX_TITULO_CODIGO_USUARIO);
+        DB.execSQL(CREATE_INDEX_TITULO_CODIGO_AGENTE_COBRADOR);
+        DB.execSQL(CREATE_INDEX_TITULO_CODIGO_TIPO_COBRANCA);
+        // RETORNO PEDIDO
         DB.execSQL(CREATE_RETORNO_PEDIDO);
 		DB.execSQL(CREATE_RETORNO_PEDIDO_ITENS);
         DB.execSQL(CREATE_TIPO_COBRANCA);
