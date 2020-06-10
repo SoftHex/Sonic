@@ -118,10 +118,9 @@ public class sonicSincronizacaoDownloadAdapterT extends RecyclerView.Adapter {
 
         switch (v.getId()){
             case 0:
-                mPrefs.Geral.setSincRefresh(true);
                 mPrefs.Geral.setFirstSinc(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
-                file = String.format("%5s",mPrefs.Users.getUsuarioId()).replace(" ", "0")+".TXT";
+                file = mPrefs.Users.getArquivoSinc();
                 myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
                 break;
             case 1:

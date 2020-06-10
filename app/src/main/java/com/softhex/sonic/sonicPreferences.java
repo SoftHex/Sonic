@@ -13,6 +13,8 @@ public class sonicPreferences{
     private Context mContex;
     private static final String KEEP_LOGGED = "keepLogged";
     private static final String USUARIO_ID = "usuarioId";
+    private static final String USUARIO_CODIGO_SINC = "usuarioCodigoSinc";
+    private static final String USUARIO_ARQUIVO_SINC = "usuarioArquivoSinc";
     private static final String USUARIO_NOME = "usuarioNome";
     private static final String USUARIO_CARGO = "usuarioCargo";
     private static final String USUARIO_IMEI = "usuarioImei";
@@ -65,13 +67,14 @@ public class sonicPreferences{
     private static final String MATRIZ_PATH = "matrizPath";
     private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
     private static final String GERAL_HOME_REFRESH = "homeRefresh";
-    private static final String GERAL_SINC_REFRESH = "sincRefresh";
     private static final String GERAL_DRAWER_REFRESH = "drawerRefresh";
     private static final String GERAL_HOME_CHART_TYPE = "homeChartType";
     private static final String GERAL_TIPO_HORA = "tipoHora";
     private static final String GERAL_SITE = "site";
-    private static final String GERAL_FIRST_SINC = "firstSinc";
-    private static final String SINC_DOWNLOAD_TYPE = "downloadType";
+    private static final String GERAL_FIRST_SINC = "sincFirst";
+    private static final String SINC_REFRESH = "sincRefresh";
+    private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
+    private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
     private static final String ROTA_ID = "rotaId";
     private static final String ROTA_ITEM_POSITION = "rotaItemPosition";
     private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
@@ -511,6 +514,23 @@ public class sonicPreferences{
         public int getUsuarioId(){
             return sharedpreferences.getInt(USUARIO_ID,0);
         }
+
+        public void setCodigoSinc(int codigo){
+            editor = sharedpreferences.edit();
+            editor.putString(USUARIO_CODIGO_SINC, String.format("%5s",codigo).replace(" ", "0"));
+            editor.apply();
+        }
+        public String getCodigoSinc(){
+            return sharedpreferences.getString(USUARIO_CODIGO_SINC,"");
+        }
+        public void setArquivoSinc(int codigo){
+            editor = sharedpreferences.edit();
+            editor.putString(USUARIO_ARQUIVO_SINC, String.format("%5s",codigo).replace(" ", "0")+".TXT");
+            editor.apply();
+        }
+        public String getArquivoSinc(){
+            return sharedpreferences.getString(USUARIO_ARQUIVO_SINC,"");
+        }
         public void setUsuarioNome(String nome){
             editor = sharedpreferences.edit();
             editor.putString(USUARIO_NOME, nome);
@@ -646,14 +666,6 @@ public class sonicPreferences{
         public boolean getHomeRefresh(){
             return sharedpreferences.getBoolean(GERAL_HOME_REFRESH ,false);
         }
-        public void setSincRefresh(boolean value){
-            editor = sharedpreferences.edit();
-            editor.putBoolean(GERAL_SINC_REFRESH, value);
-            editor.apply();
-        }
-        public boolean getSincRefresh(){
-            return sharedpreferences.getBoolean(GERAL_SINC_REFRESH, false);
-        }
         public void setDrawerRefresh(boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(GERAL_DRAWER_REFRESH, value);
@@ -696,6 +708,14 @@ public class sonicPreferences{
         }
     }
     public class Sincronizacao{
+        public void setSincRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(SINC_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getSincRefresh(){
+            return sharedpreferences.getBoolean(SINC_REFRESH, false);
+        }
         public void setDownloadType(String value){
             editor = sharedpreferences.edit();
             editor.putString(SINC_DOWNLOAD_TYPE,    value);
@@ -703,6 +723,14 @@ public class sonicPreferences{
         }
         public String getDownloadType(){
             return sharedpreferences.getString(SINC_DOWNLOAD_TYPE, "DADOS");
+        }
+        public void setCalledActivity(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(SINC_CALLED_ACTIVITY, value);
+            editor.apply();
+        }
+        public String getCalledActivity(){
+            return sharedpreferences.getString(SINC_CALLED_ACTIVITY, "");
         }
     }
     public class Rota{

@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,7 +158,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                 Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
                 v.getContext().startActivity(i);
 
-            });
+        });
 
             holder.tvLinha1.setText(prod.getNome());
             //holder.tvNome.setTextColor(Color.parseColor(prod.getSituacaoCor()));
@@ -175,18 +174,17 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
             holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
 
-            File fileJpg = new File(Environment.getExternalStorageDirectory(), myCons.LOCAL_IMG_CATALOGO +String.valueOf(prod.getCodigo())+".JPG");
+            File f = sonicFile.searchFile(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
 
-            if(fileJpg.exists()){
+            if(f.exists()){
 
                 Glide.with(mContext)
-                        .load(fileJpg)
+                        .load(f)
                         .circleCrop()
                         .apply(new RequestOptions().override(100,100))
                         .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                         .into(holder.mImage);
 
-                //sonicGlide.glideFile(mContext, holder.mImage, fileJpg);
                 holder.mImage.setVisibility(View.VISIBLE);
                 holder.tvLetra.setVisibility(View.GONE);
 
@@ -195,7 +193,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                 holder.mImage.setVisibility(View.GONE);
                 holder.tvLetra.setVisibility(View.VISIBLE);
                 holder.tvLetra.setText(String.valueOf(prod.getNome().charAt(0)));
-                //holder.tvLetra.setTypeface(Typeface.DEFAULT_BOLD);
             }
 
         }
@@ -238,7 +235,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     }
 
-
     @Override
     public Filter getFilter() {
         if(prodFilter == null)
@@ -249,7 +245,6 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     @Override
     public int getItemViewType(int position) {
-        //return super.getItemViewType(position);
         return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
         }
 

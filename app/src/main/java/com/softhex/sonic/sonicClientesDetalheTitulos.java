@@ -109,7 +109,7 @@ public class sonicClientesDetalheTitulos extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulos(mPrefs.Clientes.getId());
+            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulosPorCliente(mPrefs.Clientes.getId());
             return myList.size();
 
         }

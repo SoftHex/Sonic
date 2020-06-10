@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
@@ -27,15 +29,23 @@ import java.util.List;
 
 public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Filterable{
 
+    private static final int VIEW_PROG = 123456789;
+    private static final int VIEW_ITEM = 987654321;
     private Context mContext;
-    private List<sonicProdutosHolder> produtos;
-    private List<sonicProdutosHolder> produtos_filtered;
+    private List<sonicProdutosHolder> mTotalList;
+    private List<sonicProdutosHolder> mFilteredList;
+    private List<sonicProdutosHolder> mPartialList;
     private prodFilter prodFilter;
-    private sonicDatabaseCRUD DBC;
+    private sonicDatabaseCRUD mData;
     private sonicUtils mUtil;
     private sonicPreferences mPrefs;
+    private sonicConstants myCons;
+    private RecyclerView mRecycler;
+    private boolean isLoading = false;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
     private String mDataAtual = mDateFormat.format(new Date());
+    private LinearLayoutManager linearLayoutManager;
+    private int dias, diasDiff;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -60,59 +70,88 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             mImage = view.findViewById(R.id.ivImagem);
             ivNew = view.findViewById(R.id.ivNew);
 
-            DBC = new sonicDatabaseCRUD(mContext);
-
-            linearItem.setOnClickListener((View v)-> {
-
-                    mPrefs.Produtos.setProdutoId(codigo);
-                    mPrefs.Produtos.setProdutoNome(tvNome.getText().toString());
-                    mPrefs.Produtos.setProdutoGrupo(tvGrupo);
-                    mPrefs.Produtos.setDetalhe(tvDetalhe);
-                    Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-
-                    v.getContext().startActivity(i);
-
-            });
-
         }
     }
 
-    public sonicProdutosGridAdapter(List<sonicProdutosHolder> produto, Context ctx) {
+    public sonicProdutosGridAdapter(List<sonicProdutosHolder> produto, Context context, RecyclerView recycler) {
 
-        this.produtos = produto;
-        this.produtos_filtered = produto;
-        this.mContext = ctx;
-        this.mUtil = new sonicUtils(ctx);
-        this.mPrefs = new sonicPreferences(ctx);
-    }
+        this.myCons = new sonicConstants();
+        this.mTotalList = produto;
+        this.mFilteredList = produto;
+        this.mContext = context;
+        this.mUtil = new sonicUtils(context);
+        this.mPrefs = new sonicPreferences(context);
+        this.mRecycler = recycler;
 
-    public void updateList(List<sonicProdutosHolder> list){
-        produtos = list;
-        notifyDataSetChanged();
-    }
+        if(mPrefs.Geral.getListagemCompleta()){
 
-    @Override
-    public Filter getFilter() {
-        if(prodFilter == null)
-            prodFilter = new prodFilter(this, produtos);
-        return prodFilter;
+            mPartialList = mTotalList;
+
+        }else{
+
+            mPartialList = new ArrayList();
+
+            if(produto.size()< sonicConstants.TOTAL_ITENS_LOAD){
+                for(int i = 0; i < produto.size(); i++){
+                    mPartialList.add(produto.get(i));
+                }
+            }else{
+                for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
+                    mPartialList.add(produto.get(i));
+                }
+            }
+
+            linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+
+            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if(!isLoading){
+                        if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
+                            if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
+                                loadMore();
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            View view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid, parent, false);
-            prodHolder produtos = new prodHolder(view);
-            return produtos;
-
+        View view;
+        if(viewType==VIEW_ITEM){
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid, parent, false);
+        }else{
+            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid_shimmer, parent, false);
+        }
+        return new prodHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
         prodHolder holder = (prodHolder) viewHolder;
-        sonicProdutosHolder prod = produtos.get(position);
+        sonicProdutosHolder prod = mTotalList.get(position);
+
+        if(holder.getItemViewType()==VIEW_ITEM){
+
+            holder.linearItem.setOnClickListener((View v)-> {
+
+                mPrefs.Produtos.setProdutoId(prod.getCodigo());
+                mPrefs.Produtos.setProdutoNome(prod.getNome());
+                mPrefs.Produtos.setProdutoGrupo(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
+                mPrefs.Produtos.setDetalhe("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+                Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
+                v.getContext().startActivity(i);
+
+            });
+
+
+
         holder.codigo = prod.getCodigo();
         holder.tvNome.setText(prod.getNome());
         holder.tvGrupo = prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo();
@@ -137,11 +176,57 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
 
+        }
+
+    }
+
+    private void loadMore(){
+
+        isLoading = true;
+        mPartialList.add(null);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        },0);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                mPartialList.remove(mPartialList.size()-1);
+                notifyItemRemoved(mPartialList.size());
+
+                if(!mRecycler.isComputingLayout()){
+                    notifyDataSetChanged();
+                    int scrollPosition = mPartialList.size();
+                    int currentSize = scrollPosition;
+                    int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
+                    for(int i = currentSize; i < nextLimit; i++) {
+                        if(currentSize< mTotalList.size()){
+                            mPartialList.add(mTotalList.get(i));
+                            currentSize++;
+                        }
+                    }
+                }
+                isLoading = false;
+            }
+        }, 1000);
+
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(prodFilter == null)
+            prodFilter = new prodFilter(this, mTotalList);
+        return prodFilter;
+
     }
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
         }
 
     @Override
@@ -151,10 +236,11 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
     @Override
     public int getItemCount() {
-        return produtos == null ? 0 : produtos.size();
+        return mTotalList.size();
     }
 
     private static class prodFilter extends Filter {
+
         private final sonicProdutosGridAdapter adapter;
 
         private final List<sonicProdutosHolder> originalList;
@@ -173,8 +259,6 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             filteredList.clear();
             final FilterResults results = new FilterResults();
 
-
-
             if (constraint.length() == 0) {
                 filteredList.addAll(originalList);
 
@@ -182,18 +266,15 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
-
-
                 for (final sonicProdutosHolder prod : originalList) {
 
-                    String codigo = String.valueOf(prod.getCodigo());
-
-                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) ||codigo.contains(filterPattern)) {
+                    if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) || String.valueOf(prod.getCodigo()).contains(filterPattern)) {
                         filteredList.add(prod);
 
                     }
 
                 }
+
             }
             results.values = filteredList;
             results.count = filteredList.size();
@@ -202,9 +283,9 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.produtos.clear();
-            adapter.produtos_filtered.addAll((ArrayList<sonicProdutosHolder>) results.values);
-            adapter.notifyDataSetChanged();
+                adapter.mTotalList.clear();
+                adapter.mFilteredList.addAll((ArrayList<sonicProdutosHolder>) results.values);
+                adapter.notifyDataSetChanged();
         }
     }
 

@@ -208,7 +208,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     public void loadDetails(){
-        mList = mData.Rota.selectRotaId(mPref.Rota.getCodigo());
+        mList = mData.Rota.selectRotaPorID(mPref.Rota.getCodigo());
         tvLogradrouro.setText(mPref.Clientes.getLogradouro());
         tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
         tvCep.setText("CEP: "+mPref.Clientes.getCep());

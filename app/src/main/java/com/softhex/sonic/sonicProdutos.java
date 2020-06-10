@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class sonicProdutos extends AppCompatActivity {
+
+    private ViewPagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,10 @@ public class sonicProdutos extends AppCompatActivity {
     }
 
     public void setUpViewPager(ViewPager viewpager){
-        ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicProdutosLista(), "Lista");
-        myAdapter.addFragment(new sonicProdutosGrid(), "Catálogo");
-        viewpager.setAdapter(myAdapter);
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mAdapter.addFragment(new sonicProdutosLista(), "LISTA");
+        mAdapter.addFragment(new sonicProdutosGrid(), "CATÁLOGO");
+        viewpager.setAdapter(mAdapter);
 
     }
 
@@ -100,5 +103,21 @@ public class sonicProdutos extends AppCompatActivity {
         }
 
     }
+
+    public void refreshFragments(){
+
+        for(int i=0; i<mAdapter.getCount();i++){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(mAdapter.getItem(i)).attach(mAdapter.getItem(i)).commit();
+        }
+    }
+
+    public void refreshFragments(int position){
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.detach(mAdapter.getItem(position)).attach(mAdapter.getItem(position)).commit();
+
+    }
+
 
 }

@@ -13,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -46,7 +49,6 @@ public class sonicClientesCNPJ extends Fragment {
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesAdapter myAdapter;
-    private List<sonicClientesHolder> mPartialList;
     private List<sonicClientesHolder> mList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
@@ -59,6 +61,9 @@ public class sonicClientesCNPJ extends Fragment {
     private Context mContext;
     private ImageView myImage;
     private sonicPreferences mPrefs;
+    private LinearLayout llNoResult;
+    private RelativeLayout rlDesert;
+    private Button btSinc;
 
 
     @Nullable
@@ -82,6 +87,12 @@ public class sonicClientesCNPJ extends Fragment {
         myToolBar = getActivity().findViewById(R.id.mToolbar);
 
         myTabLayout = getActivity().findViewById(R.id.mTabs);
+
+        llNoResult = myView.findViewById(R.id.llNoResult);
+
+        rlDesert = myView.findViewById(R.id.rlDesert);
+
+        btSinc = myView.findViewById(R.id.btSinc);
 
         tvTexto = myView.findViewById(R.id.tvText);
 
@@ -218,7 +229,7 @@ public class sonicClientesCNPJ extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1000));
+                    ,mList.size()>1000 ? mList.size() : sonicUtils.Randomizer.generate(500, 1000));
 
 
         }
@@ -230,8 +241,10 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
+        llNoResult.setVisibility(GONE);
+        rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(getActivity(), mList, myRecycler, "CNPJ: ");
+        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, "CNPJ: ");
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -246,21 +259,23 @@ public class sonicClientesCNPJ extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(VISIBLE);
+        rlDesert.setVisibility(VISIBLE);
+        llNoResult.startAnimation(fadeIn);
+        rlDesert.startAnimation(fadeIn);
         allowSearch = false;
-        //myImage.setVisibility(VISIBLE);
-        tvTitle.setVisibility(VISIBLE);
-        tvTexto.setVisibility(VISIBLE);
-        tvTitle.startAnimation(fadeIn);
-        tvTexto.startAnimation(fadeIn);
-        tvTitle.setText(R.string.noClientesTitle);
-        tvTexto.setText(R.string.noClientesText);
-        /*Glide.with(mContext)
-                .load(R.drawable.nopeople)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(myImage);*/
+        myImage.setVisibility(GONE);
+        tvTitle.setText("Ops, nada por enquanto...");
+        tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
+        btSinc.setOnClickListener((View v)->{
+            mPrefs.Geral.setHomeRefresh(true);
+            mPrefs.Geral.setDrawerRefresh(true);
+            mPrefs.Sincronizacao.setDownloadType("DADOS");
+            mPrefs.Sincronizacao.setCalledActivity(getActivity().getClass().getSimpleName());
+            sonicFtp myFtp = new sonicFtp(getActivity());
+            String file = mPrefs.Users.getArquivoSinc();
+            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+        });
 
     }
 

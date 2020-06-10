@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -47,7 +49,7 @@ public class sonicProdutosLista extends Fragment {
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicProdutosListaAdapter myAdapter;
-    private List<sonicProdutosHolder> myList;
+    private List<sonicProdutosHolder> mList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
@@ -56,28 +58,22 @@ public class sonicProdutosLista extends Fragment {
     private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
-    private Context _this;
+    private Context mContext;
     private ImageView myImage;
-    private sonicDatabaseCRUD DBC;
-    Intent i;
+    private sonicPreferences mPrefs;
+    private LinearLayout llNoResult;
+    private RelativeLayout rlDesert;
+    private Button btSinc;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
-        _this = getActivity();
-
-        DBC = new sonicDatabaseCRUD(_this);
-
+        mContext = getActivity();
+        mPrefs = new sonicPreferences(getActivity());
         loadFragment();
 
         return myView;
-
-    }
-
-    public void bindRecyclerView(){
-
-        new myAsyncTask().execute();
 
     }
 
@@ -90,6 +86,12 @@ public class sonicProdutosLista extends Fragment {
         myToolBar = getActivity().findViewById(R.id.mToolbar);
 
         myTabLayout = getActivity().findViewById(R.id.mTabs);
+
+        llNoResult = myView.findViewById(R.id.llNoResult);
+
+        rlDesert = myView.findViewById(R.id.rlDesert);
+
+        btSinc = myView.findViewById(R.id.btSinc);
 
         tvSearch = myView.findViewById(R.id.tvSearch);
 
@@ -118,6 +120,11 @@ public class sonicProdutosLista extends Fragment {
 
         bindRecyclerView();
 
+    }
+
+    public void bindRecyclerView(){
+
+        new myAsyncTask().execute();
 
     }
 
@@ -200,8 +207,8 @@ public class sonicProdutosLista extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(_this).Produto.selectProdutoLista();
-            return myList.size();
+            mList =  new sonicDatabaseCRUD(mContext).Produto.selectProdutoLista();
+            return mList.size();
 
         }
 
@@ -212,7 +219,6 @@ public class sonicProdutosLista extends Fragment {
             Handler handler = new Handler();
             handler.postDelayed(() -> {
 
-                        //result>0 ? showResult() : showNoResult();
 
                         if(result>0){
 
@@ -228,7 +234,7 @@ public class sonicProdutosLista extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1000));
+                    ,mList.size()>1000 ? mList.size() : sonicUtils.Randomizer.generate(500, 1000));
 
 
         }
@@ -240,9 +246,10 @@ public class sonicProdutosLista extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(GONE);
+        rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicProdutosListaAdapter(myList, _this, myRecycler);
+        myAdapter = new sonicProdutosListaAdapter(mList, mContext, myRecycler);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -258,21 +265,24 @@ public class sonicProdutosLista extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(VISIBLE);
+        rlDesert.setVisibility(VISIBLE);
+        llNoResult.startAnimation(fadeIn);
+        rlDesert.startAnimation(fadeIn);
         allowSearch = false;
-        //myImage.setVisibility(VISIBLE);
-        tvTitle.setVisibility(VISIBLE);
-        tvTexto.setVisibility(VISIBLE);
-        tvTitle.startAnimation(fadeIn);
-        tvTexto.startAnimation(fadeIn);
-        tvTitle.setText(R.string.noProdutosTitle);
-        tvTexto.setText(R.string.noProdutosText);
-        /*Glide.with(_this)
-                .load(R.drawable.nopeople)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(myImage);*/
+        myImage.setVisibility(GONE);
+        tvTitle.setText("Ops, nada por enquanto...");
+        tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
+        btSinc.setOnClickListener((View v)->{
+            mPrefs.Geral.setHomeRefresh(true);
+            mPrefs.Geral.setDrawerRefresh(true);
+            mPrefs.Sincronizacao.setDownloadType("DADOS");
+            mPrefs.Sincronizacao.setCalledActivity("sonicProdutos");
+            mPrefs.Sincronizacao.setSincRefresh(true);
+            sonicFtp myFtp = new sonicFtp(getActivity());
+            String file = mPrefs.Users.getArquivoSinc();
+            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+        });
 
 
     }
@@ -281,7 +291,7 @@ public class sonicProdutosLista extends Fragment {
 
         List<sonicGrupoProdutosHolder> grupo;
 
-        grupo = DBC.GrupoProduto.selectGrupoProduto();
+        grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
 
         List<String> l = new ArrayList<String>();
 

@@ -27,7 +27,7 @@ public class sonicSincronizacao extends AppCompatActivity{
     private ActionBar myActionBar;
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
     private Activity mAct;
     private sonicPreferences mPrefs;
 

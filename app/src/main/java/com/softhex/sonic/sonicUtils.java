@@ -911,7 +911,6 @@ public class sonicUtils {
                                 public void onClick(PromptDialog dialog) {
                                     dialog.dismiss();
                                     ((sonicSincronizacao)mAct).refreshSincFragment();
-                                    mPrefs.Geral.setSincRefresh(false);
                                 }
                             }).show();
                 }else{

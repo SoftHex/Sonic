@@ -88,7 +88,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     }
 
 
-    public sonicClientesAdapter(Context context, List<sonicClientesHolder> cliente, RecyclerView recycler, String prefix) {
+    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, String prefix) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = cliente;

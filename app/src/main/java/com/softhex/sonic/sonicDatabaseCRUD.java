@@ -177,33 +177,23 @@ public class sonicDatabaseCRUD {
 
             }
 
-
         }
 
         public Boolean saveData(String tabela, List<String> values, String type){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result;
+            ContentValues cv = new ContentValues();
+            Cursor cursor = DB.getWritableDatabase().query(tabela, null, null, null, null, null, null);
 
             try{
 
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(tabela, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
+                for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
 
-                for(int i = 0; i < columnNames.length-1; i++) {
-
-                    cv.put(columnNames[i+1], values.get(i));
+                    cv.put(cursor.getColumnNames()[i+1], values.get(i));
 
                 }
 
-                result = DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0;
-
-					// insertOrThrow, insertWithOnConflict
-                    //result = DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0;
-
             }catch (SQLiteException e){
 
-                Log.d("TABELA", tabela);
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -212,11 +202,11 @@ public class sonicDatabaseCRUD {
                         mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
-                result = false;
-
             }
 
-            return result;
+            return type.equals("save")
+                    ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
+                    : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
         }
 
         public boolean cleanData(String tabela){
@@ -1359,33 +1349,31 @@ public class sonicDatabaseCRUD {
         public List<sonicUsuariosHolder> selectUsuarioAtivo(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicUsuariosHolder> USUARIO = new ArrayList<sonicUsuariosHolder>();
+            List<sonicUsuariosHolder> usuarios = new ArrayList<sonicUsuariosHolder>();
 
             String query = "SELECT " +
-                    "u.codigo, " +
-                    "u.nome, " +
-                    "u.login, " +
-                    "u.senha, " +
-                    "u.imei, " +
-                    "u.nivel_acesso, " +
-                    "eu.mvenda AS mvenda, " +
-                    "eu.mvisita AS mvisita, " +
-                    "e.nome_fantasia AS empresa, " +
-                    "e.codigo AS empresa_id, " +
-                    "(SELECT u2.nome FROM " + TABLE_USUARIO + " u2 WHERE u2.codigo = u.usuario_superior) AS usuario_superior, " +
-                    "(SELECT na.nome FROM " + TABLE_NIVEL_ACESSO + " na WHERE na.codigo = u.nivel_acesso) AS cargo " +
-                    " FROM " + TABLE_USUARIO + " u " +
-                    " JOIN " + TABLE_EMPRESA_USUARIO + " eu ON eu.codigo_usuario = u.codigo " +
-                    " JOIN " + TABLE_EMPRESA + " e ON e.codigo = eu.codigo_empresa WHERE e.selecionada = 1 AND u.ativo = 1 ";
+                    "U.codigo, " +
+                    "U.nome, " +
+                    "U.login, " +
+                    "U.senha, " +
+                    "U.imei, " +
+                    "U.nivel_acesso, " +
+                    "EU.meta_venda, " +
+                    "EU.meta_visita, " +
+                    "E.nome_fantasia AS empresa, " +
+                    "E.codigo AS empresa_id, " +
+                    "(SELECT U2.nome FROM " + TABLE_USUARIO + " U2 WHERE U2.codigo = U.usuario_superior) AS usuario_superior, " +
+                    "(SELECT NA.nome FROM " + TABLE_NIVEL_ACESSO + " NA WHERE NA.codigo = U.nivel_acesso) AS cargo " +
+                    " FROM " + TABLE_USUARIO + " U " +
+                    " JOIN " + TABLE_EMPRESA_USUARIO + " EU ON EU.codigo_usuario = U.codigo " +
+                    " JOIN " + TABLE_EMPRESA + " E ON E.codigo = EU.codigo_empresa WHERE E.selecionada = 1 AND U.ativo = 1 ";
 
 
             try{
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
-                if(cursor.moveToFirst()){
-
-                    //Log.d("MOVED", DatabaseUtils.dumpCursorToString(cursor));
+                if(cursor!=null && cursor.moveToFirst()){
 
                     sonicUsuariosHolder usuario = new sonicUsuariosHolder();
 
@@ -1399,9 +1387,9 @@ public class sonicDatabaseCRUD {
                     usuario.setUsuarioSuperior(cursor.getString(cursor.getColumnIndex("usuario_superior")));
                     usuario.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                     usuario.setEmpresaId(cursor.getInt(cursor.getColumnIndex("empresa_id")));
-                    usuario.setMetaVenda(cursor.getString(cursor.getColumnIndex("mvenda")));
-                    usuario.setMetaVisita(cursor.getInt(cursor.getColumnIndex("mvisita")));
-                    USUARIO.add(usuario);
+                    usuario.setMetaVenda(cursor.getString(cursor.getColumnIndex("meta_venda")));
+                    usuario.setMetaVisita(cursor.getInt(cursor.getColumnIndex("meta_visita")));
+                    usuarios.add(usuario);
                 }
 
 
@@ -1412,7 +1400,7 @@ public class sonicDatabaseCRUD {
                 e.printStackTrace();
             }
 
-            return USUARIO;
+            return usuarios;
         }
 
         public List<sonicUsuariosHolder> selectUsuarioImei(String imei){
@@ -2149,7 +2137,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public List<sonicTitulosHolder> selectTitulos(int cliente){
+        public List<sonicTitulosHolder> selectTitulosPorCliente(int cliente){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicTitulosHolder> titulos = new ArrayList<sonicTitulosHolder>();
@@ -2875,7 +2863,7 @@ public class sonicDatabaseCRUD {
             return rotas;
         }
 
-        public List<sonicRotaHolder> selectRotaId(int codigo){
+        public List<sonicRotaHolder> selectRotaPorID(int codigo){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicRotaHolder> rotas = new ArrayList<>();

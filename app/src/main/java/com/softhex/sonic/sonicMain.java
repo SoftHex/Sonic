@@ -320,7 +320,7 @@ public class sonicMain extends AppCompatActivity{
                         sonicGlide.glideImageView(mActivity,myProgressProfile,picture);
                         calcularPercentual("2200000", usuarioMeta);
                         lerDadosUsuario();
-                        refreshHomeFragment();
+                        refreshFragments();
 
                         return true;
                     }
@@ -894,18 +894,9 @@ public class sonicMain extends AppCompatActivity{
         }
 
 
-        refreshHomeFragment();
+        refreshFragments();
 
     }
-
-    public void refreshHomeFragment(){
-
-        for(int i=0; i<myAdapter.getCount();i++){
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
-        }
-    }
-
 
     private void addBottomDots(int position){
 
@@ -955,12 +946,12 @@ public class sonicMain extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Notificação", Toast.LENGTH_SHORT).show();
                 return false;
             case R.id.itSincronizar:
-                mPrefs.Geral.setHomeRefresh(true);
+                mPrefs.Sincronizacao.setCalledActivity(this.getClass().getSimpleName());
                 mPrefs.Geral.setDrawerRefresh(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
                 myFtp = new sonicFtp(mActivity);
                 String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+file);
                 return false;
 
         }
@@ -1001,9 +992,8 @@ public class sonicMain extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(mPrefs.Geral.getSincRefresh() || mPrefs.Geral.getHomeRefresh()){
-            refreshHomeFragment();
-            mPrefs.Geral.setSincRefresh(false);
+        if(mPrefs.Geral.getHomeRefresh()){
+            refreshFragments();
             mPrefs.Geral.setHomeRefresh(false);
         }
 
@@ -1036,6 +1026,18 @@ public class sonicMain extends AppCompatActivity{
             }
 
         }
+    }
+
+    public void refreshFragments(){
+        for(int i=0; i<myAdapter.getCount();i++){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
+        }
+    }
+
+    public void refreshHomeFragments(int position){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.detach(myAdapter.getItem(position)).attach(myAdapter.getItem(position)).commit();
     }
 
     @Override

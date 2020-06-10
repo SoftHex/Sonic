@@ -49,25 +49,26 @@ public class sonicPopularTabelas {
             { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
             { "[MATRIZ]", sonicConstants.TB_MATRIZ, "Matriz", "save"},
             { "[CLIENTES]", sonicConstants.TB_CLIENTE, "Clientes", "save" },
-            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "replace" },
-            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "replace" },
-            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "Produtos", "replace" },
-            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "replace" },
-            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "replace" },
-            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "replace" },
-            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "replace" },
-            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "replace" },
-            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "replace" },
-            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "replace" },
+            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "save" },
+            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "save" },
+            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "Produtos", "save" },
+            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "save" },
+            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "save" },
+            { "[BLOQUEIO_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "Bloqueio de Produtos", "save" },
+            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "save" },
+            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "save" },
+            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "save" },
+            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "save" },
+            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "save" },
             { "[AGENTE_COBRADOR]", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
             { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "replace" },
-            { "[ROTA]", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
+            { "[ROTA]", sonicConstants.TB_ROTA, "Agenda de Visitas", "save" },
             { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
             { "[TITULOS]", sonicConstants.TB_TITULO, "Títulos", "save" },
-            { "[PRAZO]", sonicConstants.TB_PRAZO, "Prazo", "replace" },
-            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "replace" },
-            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "replace" },
-            { "[VENDAS]", sonicConstants.TB_VENDA, "Vendas", "replace" },
+            { "[PRAZO]", sonicConstants.TB_PRAZO, "Prazo", "save" },
+            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "save" },
+            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "save" },
+            { "[VENDAS]", sonicConstants.TB_VENDA, "Vendas", "save" },
             { "[]", sonicConstants.TB_VENDA, "", "replace" }
 
     };
@@ -93,7 +94,7 @@ public class sonicPopularTabelas {
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setTitle("Gravando...\n\n");
+                //myProgress.setTitle("Gravando");
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
@@ -157,7 +158,7 @@ public class sonicPopularTabelas {
 
                                     }else{
                                         count += 1;
-                                        publishProgress(tabela2, String.valueOf(count));
+                                        publishProgress("Gravando em "+tabela2, String.valueOf(count));
 
                                         String str = line;
                                         int pos = str.indexOf("=") + 1;
@@ -206,8 +207,6 @@ public class sonicPopularTabelas {
                 sonicDatabaseCRUD mData = new sonicDatabaseCRUD(myCtx);
                 switch (mPref.Sincronizacao.getDownloadType()){
                     case "DADOS":
-                        mPref.Geral.setDrawerRefresh(true);
-                        mPref.Geral.setFirstSinc(true);
                         new PromptDialog(myCtx)
                                 .setDialogType(sonicDialog.MSG_SUCCESS)
                                 .setAnimationEnable(true)
@@ -217,15 +216,23 @@ public class sonicPopularTabelas {
                                     @Override
                                     public void onClick(PromptDialog dialog) {
                                         dialog.dismiss();
-                                        if(mPref.Geral.getSincRefresh()){
-                                            ((sonicSincronizacao)mAct).refreshSincFragment();
-                                            mPref.Geral.setSincRefresh(false);
-                                        }
-                                        if(mPref.Geral.getHomeRefresh()){
-                                            ((sonicMain)mAct).refreshHomeFragment();
-                                            mPref.Geral.setHomeRefresh(false);
-                                        }
+                                        if(mPref.Sincronizacao.getSincRefresh()){
+                                            switch (mPref.Sincronizacao.getCalledActivity()){
+                                                case "sonicClientes":
+                                                    ((sonicClientes)mAct).refreshFragments();
+                                                    break;
+                                                case "sonicProdutos":
+                                                    ((sonicProdutos)mAct).refreshFragments();
+                                                    break;
+                                                case "sonicMain":
+                                                    ((sonicMain)mAct).refreshFragments();
+                                                    break;
+                                                case "sonicRota":
+                                                    ((sonicRota)mAct).refreshFragments();
+                                                    break;
+                                            }
 
+                                        }
                                     }
                                 }).show();
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_TODAS, sonicConstants.TIPO_SINC_DADOS);
@@ -245,7 +252,6 @@ public class sonicPopularTabelas {
                                     public void onClick(PromptDialog dialog) {
                                         dialog.dismiss();
                                         ((sonicSincronizacao)mAct).refreshSincFragment();
-                                        mPref.Geral.setSincRefresh(false);
                                     }
                                 }).show();
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTO, sonicConstants.TIPO_SINC_DADOS);

@@ -166,18 +166,22 @@ public class sonicRota extends AppCompatActivity{
 
     }
 
-    public void refreshRotaFragment(){
-
+    public void refreshFragments(){
         for(int i=0; i<myAdapter.getCount();i++){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
         }
     }
 
+    public void refreshHomeFragments(int position){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.detach(myAdapter.getItem(position)).attach(myAdapter.getItem(position)).commit();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(mPrefs.Rota.getRefresh() || mPrefs.RotaPessoal.getRefresh())
-        refreshRotaFragment();
+        refreshFragments();
     }
 }

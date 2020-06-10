@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,8 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -47,7 +49,7 @@ public class sonicProdutosGrid extends Fragment {
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicProdutosGridAdapter myAdapter;
-    private List<sonicProdutosHolder> myList;
+    private List<sonicProdutosHolder> mList;
     private MenuItem mySearch;
     private Toolbar myToolBar;
     private TabLayout myTabLayout;
@@ -58,20 +60,17 @@ public class sonicProdutosGrid extends Fragment {
     private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
-    private sonicDatabaseCRUD DBC;
-    private sonicPreferences prefs;
-    Intent i;
+    private sonicPreferences mPrefs;
+    private LinearLayout llNoResult;
+    private RelativeLayout rlDesert;
+    private Button btSinc;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.sonic_recycler_layout_grid, container, false);
 
         mContext = getActivity();
-
-        DBC = new sonicDatabaseCRUD(mContext);
-
-        prefs = new sonicPreferences(mContext);
-
+        mPrefs = new sonicPreferences(getActivity());
         loadFragment();
 
         return myView;
@@ -87,6 +86,12 @@ public class sonicProdutosGrid extends Fragment {
         myToolBar = getActivity().findViewById(R.id.mToolbar);
 
         myTabLayout = getActivity().findViewById(R.id.mTabs);
+
+        llNoResult = myView.findViewById(R.id.llNoResult);
+
+        rlDesert = myView.findViewById(R.id.rlDesert);
+
+        btSinc = myView.findViewById(R.id.btSinc);
 
         tvSearch = myView.findViewById(R.id.tvSearch);
 
@@ -105,9 +110,9 @@ public class sonicProdutosGrid extends Fragment {
         myRecycler.setHasFixedSize(true);
 
         String[] array = getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
-        int colunas = prefs.Produtos.getCatalogoColunas().equals(array[0]) ? 2 :
-                            prefs.Produtos.getCatalogoColunas().equals(array[1]) ? 3 :
-                                prefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
+        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(array[0]) ? 2 :
+                            mPrefs.Produtos.getCatalogoColunas().equals(array[1]) ? 3 :
+                                mPrefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
 
         myLayout = new GridLayoutManager(getContext(), colunas);
 
@@ -119,7 +124,6 @@ public class sonicProdutosGrid extends Fragment {
         myShimmer.startShimmer();
 
         bindRecyclerView();
-
 
     }
 
@@ -206,8 +210,8 @@ public class sonicProdutosGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Produto.selectProdutoGrid();
-            return myList.size();
+            mList =  new sonicDatabaseCRUD(mContext).Produto.selectProdutoGrid();
+            return mList.size();
 
         }
 
@@ -232,7 +236,7 @@ public class sonicProdutosGrid extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,sonicUtils.Randomizer.generate(500,1000));
+                    ,mList.size()>1000 ? mList.size() : sonicUtils.Randomizer.generate(500, 1000));
 
 
         }
@@ -244,9 +248,10 @@ public class sonicProdutosGrid extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(GONE);
+        rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicProdutosGridAdapter(myList, mContext);
+        myAdapter = new sonicProdutosGridAdapter(mList, mContext, myRecycler);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -262,30 +267,31 @@ public class sonicProdutosGrid extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(VISIBLE);
+        rlDesert.setVisibility(VISIBLE);
+        llNoResult.startAnimation(fadeIn);
+        rlDesert.startAnimation(fadeIn);
         allowSearch = false;
-        //myImage.setVisibility(VISIBLE);
-        tvTitle.setVisibility(VISIBLE);
-        tvTexto.setVisibility(VISIBLE);
-        tvTitle.startAnimation(fadeIn);
-        tvTexto.startAnimation(fadeIn);
-        tvTitle.setText(R.string.noProdutosTitle);
-        tvTexto.setText(R.string.noProdutosText);
-        /*Glide.with(mContext)
-                .load(R.drawable.nopeople)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(myImage);*/
-
-
+        myImage.setVisibility(GONE);
+        tvTitle.setText("Ops, nada por enquanto...");
+        tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
+        btSinc.setOnClickListener((View v)->{
+            mPrefs.Geral.setHomeRefresh(true);
+            mPrefs.Geral.setDrawerRefresh(true);
+            mPrefs.Sincronizacao.setDownloadType("DADOS");
+            mPrefs.Sincronizacao.setCalledActivity("sonicProdutos");
+            mPrefs.Sincronizacao.setSincRefresh(true);
+            sonicFtp myFtp = new sonicFtp(getActivity());
+            String file = mPrefs.Users.getArquivoSinc();
+            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+        });
     }
 
     private void exibirFiltro() {
 
         List<sonicGrupoProdutosHolder> grupo = new ArrayList<sonicGrupoProdutosHolder>();
 
-        grupo = DBC.GrupoProduto.selectGrupoProduto();
+        grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
 
         List<String> l = new ArrayList<String>();
 

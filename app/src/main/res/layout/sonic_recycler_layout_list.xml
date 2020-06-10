@@ -21,6 +21,7 @@
         android:layout_margin="10sp"/>
 
     <LinearLayout
+        android:id="@+id/llNoResult"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,6 +29,7 @@
         android:layout_centerHorizontal="true"
         android:elevation="1dp"
         android:translationZ="1dp"
+        android:visibility="gone"
         android:layout_marginTop="-100dp"
         android:layout_centerVertical="true">
 
@@ -37,7 +39,6 @@
             android:layout_height="96dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:visibility="gone"
             android:contentDescription="@string/placeholderText"
             android:scaleType="center" />
 
@@ -47,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="gone"
             android:textColor="@color/colorTextPrimary"
             android:textSize="20sp"
             android:text="Titulo"
@@ -63,12 +63,31 @@
             android:layout_marginLeft="10sp"
             android:layout_marginRight="10sp"
             android:gravity="center"
-            android:visibility="gone"
             android:textColor="@color/colorTextAccent"
-            android:textSize="16sp"
-            android:text="Texto"
+            android:textSize="14sp"
+            android:text="Mensagem"
             android:paddingLeft="20sp"
             android:paddingRight="20sp"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_down"/>
+
+        <Button
+            android:id="@+id/btSinc"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="Sincronizar"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textColor="@color/colorPrimaryWhite"
+            android:background="@drawable/botao_rect_accent"/>
 
     </LinearLayout>
 
@@ -108,5 +127,20 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:visibility="gone"/>
 
+    <RelativeLayout
+        android:id="@+id/rlDesert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/desert"/>
+
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

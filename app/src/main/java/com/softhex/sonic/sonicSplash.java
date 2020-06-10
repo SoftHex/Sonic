@@ -37,15 +37,19 @@ public class sonicSplash extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Integer... integers) {
 
-            Boolean res = mData.Usuario.usuarioAtivo();
-            List<sonicUsuariosHolder> mListUser;
-            List<sonicGrupoEmpresasHolder> mListEmpresa;
-            mListUser = mData.Usuario.selectUsuarioAtivo();
-            mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
-            mPrefs.RotaPessoal.setAdding(false);
+            return mData.Usuario.usuarioAtivo();
+        }
 
-            if(res){
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
 
+            if(result){
+
+                List<sonicUsuariosHolder> mListUser;
+                List<sonicGrupoEmpresasHolder> mListEmpresa;
+                mListUser = mData.Usuario.selectUsuarioAtivo();
+                mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
                 mPrefs.Matriz.setNome(mListEmpresa.get(0).getNome());
                 mPrefs.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
                 mPrefs.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
@@ -63,20 +67,8 @@ public class sonicSplash extends AppCompatActivity {
                 mPrefs.Users.setUsuarioCargo(mListUser.get(0).getCargo());
                 mPrefs.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
                 mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
-
-
-            }else{
-                res = false;
-            }
-
-            return res;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-
-            if(result){
+                mPrefs.Users.setCodigoSinc(mListUser.get(0).getCodigo());
+                mPrefs.Users.setArquivoSinc(mListUser.get(0).getCodigo());
 
                 // VERIFICA SE O USUARIO ESCOLHEU EXIGIR SENHA AO ENTRAR
                 if(mPrefs.Users.getStatusLogin()){

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
@@ -59,14 +58,14 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         });
 
-        File file = new File(Environment.getExternalStorageDirectory(), mPref.Users.getPicture(mPref.Users.getEmpresaId()));
+        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_USUARIO, mPref.Users.getEmpresaId());
 
-        if(file.exists()){
+        if(f.exists()){
 
             Glide.with(this).clear(myImage);
             Glide.get(this).clearMemory();
             Glide.with(getApplicationContext())
-                    .load(file)
+                    .load(f)
                     .apply(new RequestOptions().override(600,600))
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -117,6 +116,13 @@ public class sonicFirstAccess extends AppCompatActivity {
             mPref.Matriz.setEmail(mListEmpresa.get(0).getEmail());
             mPref.Matriz.setSite(mListEmpresa.get(0).getSite());
             mPref.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
+            mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
+            mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
+            mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());
+            mPref.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
+            mPref.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
+            mPref.Users.setCodigoSinc(mListUser.get(0).getCodigo());
+            mPref.Users.setArquivoSinc(mListUser.get(0).getCodigo());
             sonicConstants.USUARIO_ATIVO_NIVEL = mListUser.get(0).getNivelAcessoId();
             sonicConstants.USUARIO_ATIVO_CARGO = mListUser.get(0).getCargo();
             sonicConstants.USUARIO_ATIVO_META_VENDA = mListUser.get(0).getMetaVenda();
