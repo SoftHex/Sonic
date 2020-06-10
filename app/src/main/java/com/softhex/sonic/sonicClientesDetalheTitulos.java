@@ -1,37 +1,27 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -46,21 +36,17 @@ public class sonicClientesDetalheTitulos extends Fragment {
     private View myView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
-    private sonicClientesAdapter myAdapter;
-    ArrayList<String> rowsArrayList = new ArrayList<>();
-    private List<sonicClientesHolder> myList;
-    private MenuItem mySearch;
-    private Toolbar myToolBar;
-    private TabLayout myTabLayout;
+    private sonicClientesDetalheTitulosAdapter myAdapter;
+    private List<sonicTitulosHolder> myList;
+
     private CoordinatorLayout myCoordinatorLayout;
     private ShimmerFrameLayout myShimmer;
     private TextView tvTexto, tvTitle, tvSearch;
-    private sonicConstants myCons;
-    private boolean allowSearch;
     private Context mContext;
     private ImageView myImage;
     private sonicDatabaseCRUD DBC;
-    Intent i;
+    private Intent i;
+    private sonicPreferences mPrefs;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +55,8 @@ public class sonicClientesDetalheTitulos extends Fragment {
         mContext = getActivity();
 
         DBC = new sonicDatabaseCRUD(mContext);
+
+        mPrefs = new sonicPreferences(getActivity());
 
         loadFragment();
 
@@ -85,12 +73,6 @@ public class sonicClientesDetalheTitulos extends Fragment {
     public void loadFragment(){
 
         setHasOptionsMenu(true);
-
-        myCons = new sonicConstants();
-
-        myToolBar = getActivity().findViewById(R.id.mToolbar);
-
-        myTabLayout = getActivity().findViewById(R.id.mTabs);
 
         tvTexto = myView.findViewById(R.id.tvText);
 
@@ -122,80 +104,12 @@ public class sonicClientesDetalheTitulos extends Fragment {
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.sonic_clientes, menu);
-        mySearch = menu.findItem(R.id.itemSearch);
-
-        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
-        searchView.setQueryHint("Pesquisar...");
-        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(allowSearch){
-                    Filter.FilterListener listener = new Filter.FilterListener() {
-                        @Override
-                        public void onFilterComplete(int count) {
-                            if (allowSearch) {
-                                if (myAdapter.getItemCount()==0) {
-                                    tvSearch.setVisibility(VISIBLE);
-                                    tvSearch.setText("Nenhum resultado para '"+newText+"'");
-                                } else {
-                                    tvSearch.setVisibility(View.INVISIBLE);
-                                }
-                            }
-                        }
-                    };
-                    myAdapter.getFilter().filter(newText, listener);
-                }
-                return false;
-            }
-        });
-
-        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View view) {
-                myTabLayout.setVisibility(GONE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,true,true);
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View view) {
-                myTabLayout.setVisibility(VISIBLE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
-
-            }
-        });
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.itemSearch:
-                return false;
-            case R.id.itemFiltro:
-                exibirFiltro();
-                return false;
-            default:
-                break;
-        }
-
-        return false;
-    }
-
     class myAsyncTask extends AsyncTask<Integer, Integer, Integer> {
 
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("F");
+            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulos(mPrefs.Clientes.getId());
             return myList.size();
 
         }
@@ -244,8 +158,7 @@ public class sonicClientesDetalheTitulos extends Fragment {
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
 
-        allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mContext, myList, myRecycler, "CPF: ");
+        myAdapter = new sonicClientesDetalheTitulosAdapter(mContext, myList, myRecycler, "CPF: ");
         if(!myAdapter.hasObservers()){
             myAdapter.setHasStableIds(true);
         }
@@ -264,7 +177,6 @@ public class sonicClientesDetalheTitulos extends Fragment {
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
 
-        allowSearch = false;
         //myImage.setVisibility(VISIBLE);
         tvTitle.setVisibility(VISIBLE);
         tvTexto.setVisibility(VISIBLE);
@@ -280,50 +192,6 @@ public class sonicClientesDetalheTitulos extends Fragment {
                 .into(myImage);*/
 
     }
-
-    private void exibirFiltro() {
-
-        List<sonicGrupoClientesHolder> grupo;
-
-        grupo = DBC.GrupoCliente.selectGrupoCliente("F");
-
-        List<String> l = new ArrayList<String>();
-
-        for(int i=0; i < grupo.size(); i++ ){
-            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CPF){
-                l.add(grupo.get(i).getNome());
-            }
-        }
-
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um grupo...");
-        builder.setItems(chars, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                sonicConstants.GRUPO_CLIENTES_CPF = chars[item].toString();
-                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "LIMPAR FILTRO";
-                dialog.dismiss();
-                refreshFragment();
-
-            }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                sonicConstants.GRUPO_CLIENTES_CPF = "TODOS";
-                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "";
-                refreshFragment();
-            }
-        }).show();
-
-    }
-
 
     public void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();

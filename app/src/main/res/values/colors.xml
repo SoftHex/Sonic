@@ -1,180 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- DEFAULT APP COLORS -->
-    <color name="colorPrimaryDark">#151515</color>
-    <color name="colorPrimary">#1C1C1C</color>
-    <color name="colorAccent">#6E6E6E</color>
-    <color name="colorAccent2">#A4A4A4</color>
-    <color name="colorAccentLight">#D8D8D8</color>
-    <color name="colorSpotLight">#6E6E6E</color>
-    <color name="colorSpotLight2">#848484</color>
-    <color name="colorPrimaryDarkT">#99151515</color>
-    <color name="colorPrimaryT">#901C1C1C</color>
-    <color name="colorAccentT">#906E6E6E</color>
-    <color name="colorAccent2T">#90A4A4A4</color>
-    <color name="colorAccentLightT">#90D8D8D8</color>
-    <color name="colorPrimaryLight">#A4A4A4</color>
-    <color name="colorPrimaryLightT">#90A4A4A4</color>
-    <color name="colorPrimaryOrangeDark">#DD4D0F</color>
-    <color name="colorPrimaryOrange">#FF8C00</color>
-    <color name="colorPrimaryOrangeLight">#FFD700</color>
-    <color name="colorPrimaryOrangeDarkT">#90DD4D0F</color>
-    <color name="colorPrimaryOrangeT">#90FF8C00</color>
-    <color name="colorPrimaryOrangeLightT">#90FFD700</color>
-    <color name="colorPrimaryGreen">#3C9130</color>
-    <color name="colorPrimaryGreenT">#903C9130</color>
-    <color name="colorPrimaryGreenDark">#234B20</color>
-    <color name="colorPrimaryGreenDarkT">#90234B20</color>
-    <color name="colorPrimaryGreenLight">#32CD32</color>
-    <color name="colorPrimaryGreenLightT">#2032CD32</color>
-    <color name="colorPrimaryBrown">#A0522D</color>
-    <color name="colorPrimaryBrownT">#90A0522D</color>
-    <color name="colorPrimaryBrownDark">#8B4513</color>
-    <color name="colorPrimaryBrownDarkT">#908B4513</color>
-    <color name="colorPrimaryBrownLight">#CD853F</color>
-    <color name="colorPrimaryBrownLightT">#90CD853F</color>
-    <color name="colorPrimaryBlackDark">#000000</color>
-    <color name="colorPrimaryBlackDarkT">#90000000</color>
-    <color name="colorPrimaryBlackDarkT2">#10363636</color>
-    <color name="colorPrimaryBlack">#363636</color>
-    <color name="colorPrimaryBlackT">#90363636</color>
-    <color name="colorPrimaryBlackLight">#696969</color>
-    <color name="colorPrimaryBlackLightT">#90696969</color>
-    <color name="colorPrimaryBlackExtraLightT">#90DCDCDC</color>
-    <color name="colorTextWhite">#FFFFFF</color>
-    <color name="colorTextWhiteLight">#F8F8FF</color>
-    <color name="colorTextDark">#000</color>
-    <color name="colorTextPrimary">#363636</color>
-    <color name="colorTextAccent">#A9A9A9</color>
-    <color name="colorTextAccentDark">#696969</color>
-    <color name="colorTextAccentLight">#C0C0C0</color>
-    <color name="colorTextDarkT">#90000000</color>
-    <color name="colorTextPrimaryT">#90363636</color>
-    <color name="colorTextAccentT">#90696969</color>
-    <color name="colorTextNoAccentT">#90C0C0C0</color>
-    <color name="colorTextOrange">#FF8C00</color>
-    <color name="colorTextOrangeLight">#FFD700</color>
-    <color name="colorPrimaryBlueDark">#002A73</color>
-    <color name="colorPrimaryBlue">#1850AE</color>
-    <color name="colorPrimaryBlueLight">#4688F7</color>
-    <color name="colorPrimaryBlueDarkT">#90002A73</color>
-    <color name="colorPrimaryBlueT">#901850AE</color>
-    <color name="colorPrimaryBlueLightT">#904688F7</color>
-    <color name="colorPrimaryRedDark">#8B0000</color>
-    <color name="colorPrimaryRed">#FF0000</color>
-    <color name="colorPrimaryRedLight">#FF6347</color>
-    <color name="colorPrimaryRedDarkT">#908B0000</color>
-    <color name="colorPrimaryRedT">#90FF0000</color>
-    <color name="colorPrimaryRedLightT">#90FF6347</color>
-    <color name="colorPrimaryYellowDark">#FFD700</color>
-    <color name="colorPrimaryYellow">#FFFF00</color>
-    <color name="colorPrimaryYellowLight">#F0E68C</color>
-    <color name="colorPrimaryYellowDarkT">#90FFD700</color>
-    <color name="colorPrimaryYellowT">#90FFFF00</color>
-    <color name="colorPrimaryYellowLightT">#90F0E68C</color>
-    <color name="colorPrimaryGrayDark">#363636</color>
-    <color name="colorPrimaryGray">#696969</color>
-    <color name="colorPrimaryGrayLight">#A9A9A9</color>
-    <color name="colorPrimaryGrayDarkT">#90363636</color>
-    <color name="colorPrimaryGrayT">#90696969</color>
-    <color name="colorPrimaryGrayLightT">#90A9A9A9</color>
-    <color name="colorPrimaryWhite">#FFFFFF</color>
-    <color name="colorPrimaryGreen1">#59C354</color>
-    <color name="colorPrimaryGreen2">#00FA9A</color>
-    <color name="colorPrimaryGreen3">#66CDAA</color>
-    <color name="colorPrimaryGreen4">#2E8B57</color>
-    <color name="colorPrimaryGreen5">#008080</color>
-    <color name="colorTypeInfo">#79b3e4</color>
-    <color name="colorTypeHelp">#C0C0C0</color>
-    <color name="colorTypeWrong">#ed7861</color>
-    <color name="colorTypeWarning">#e8bd4b</color>
-    <color name="colorTypeSuccess">#90b06e</color>
-    <color name="colorLogin">#6E6E6E</color>
-    <color name="colorLoginT">#996E6E6E</color>
-    <color name="colorLoginStatusBar">#424242</color>
+  <!-- DEFAULT APP COLORS -->
+  <color name="colorPrimaryDark">#151515</color>
+  <color name="colorPrimary">#1C1C1C</color>
+  <color name="colorAccent">#6E6E6E</color>
+  <color name="colorAccent2">#A4A4A4</color>
+  <color name="colorAccentLight">#D8D8D8</color>
+  <color name="colorSpotLight">#6E6E6E</color>
+  <color name="colorSpotLight2">#848484</color>
+  <color name="colorPrimaryDarkT">#99151515</color>
+  <color name="colorPrimaryT">#901C1C1C</color>
+  <color name="colorAccentT">#906E6E6E</color>
+  <color name="colorAccent2T">#90A4A4A4</color>
+  <color name="colorAccentLightT">#90D8D8D8</color>
+  <color name="colorPrimaryLight">#A4A4A4</color>
+  <color name="colorPrimaryLightT">#90A4A4A4</color>
+  <color name="colorPrimaryOrangeDark">#DD4D0F</color>
+  <color name="colorPrimaryOrange">#FF8C00</color>
+  <color name="colorPrimaryOrangeLight">#FFD700</color>
+  <color name="colorPrimaryOrangeDarkT">#90DD4D0F</color>
+  <color name="colorPrimaryOrangeT">#90FF8C00</color>
+  <color name="colorPrimaryOrangeLightT">#90FFD700</color>
+  <color name="colorPrimaryGreen">#3C9130</color>
+  <color name="colorPrimaryGreenT">#903C9130</color>
+  <color name="colorPrimaryGreenDark">#234B20</color>
+  <color name="colorPrimaryGreenDarkT">#90234B20</color>
+  <color name="colorPrimaryGreenLight">#32CD32</color>
+  <color name="colorPrimaryGreenLightT">#2032CD32</color>
+  <color name="colorPrimaryBrown">#A0522D</color>
+  <color name="colorPrimaryBrownT">#90A0522D</color>
+  <color name="colorPrimaryBrownDark">#8B4513</color>
+  <color name="colorPrimaryBrownDarkT">#908B4513</color>
+  <color name="colorPrimaryBrownLight">#CD853F</color>
+  <color name="colorPrimaryBrownLightT">#90CD853F</color>
+  <color name="colorPrimaryBlackDark">#000000</color>
+  <color name="colorPrimaryBlackDarkT">#90000000</color>
+  <color name="colorPrimaryBlackDarkT2">#10363636</color>
+  <color name="colorPrimaryBlack">#363636</color>
+  <color name="colorPrimaryBlackT">#90363636</color>
+  <color name="colorPrimaryBlackLight">#696969</color>
+  <color name="colorPrimaryBlackLightT">#90696969</color>
+  <color name="colorPrimaryBlackExtraLightT">#90DCDCDC</color>
+  <color name="colorTextWhite">#FFFFFF</color>
+  <color name="colorTextWhiteLight">#F8F8FF</color>
+  <color name="colorTextDark">#000</color>
+  <color name="colorTextPrimary">#363636</color>
+  <color name="colorTextAccent">#A9A9A9</color>
+  <color name="colorTextAccentDark">#696969</color>
+  <color name="colorTextAccentLight">#C0C0C0</color>
+  <color name="colorTextDarkT">#90000000</color>
+  <color name="colorTextPrimaryT">#90363636</color>
+  <color name="colorTextAccentT">#90696969</color>
+  <color name="colorTextNoAccentT">#90C0C0C0</color>
+  <color name="colorTextOrange">#FF8C00</color>
+  <color name="colorTextOrangeLight">#FFD700</color>
+  <color name="colorPrimaryBlueDark">#002A73</color>
+  <color name="colorPrimaryBlue">#1850AE</color>
+  <color name="colorPrimaryBlueLight">#4688F7</color>
+  <color name="colorPrimaryBlueDarkT">#90002A73</color>
+  <color name="colorPrimaryBlueT">#901850AE</color>
+  <color name="colorPrimaryBlueLightT">#904688F7</color>
+  <color name="colorPrimaryRedDark">#8B0000</color>
+  <color name="colorPrimaryRed">#FF0000</color>
+  <color name="colorPrimaryRedLight">#FF6347</color>
+  <color name="colorPrimaryRedDarkT">#908B0000</color>
+  <color name="colorPrimaryRedT">#90FF0000</color>
+  <color name="colorPrimaryRedLightT">#90FF6347</color>
+  <color name="colorPrimaryYellowDark">#FFD700</color>
+  <color name="colorPrimaryYellow">#FFFF00</color>
+  <color name="colorPrimaryYellowLight">#F0E68C</color>
+  <color name="colorPrimaryYellowDarkT">#90FFD700</color>
+  <color name="colorPrimaryYellowT">#90FFFF00</color>
+  <color name="colorPrimaryYellowLightT">#90F0E68C</color>
+  <color name="colorPrimaryGrayDark">#363636</color>
+  <color name="colorPrimaryGray">#696969</color>
+  <color name="colorPrimaryGrayLight">#A9A9A9</color>
+  <color name="colorPrimaryGrayDarkT">#90363636</color>
+  <color name="colorPrimaryGrayT">#90696969</color>
+  <color name="colorPrimaryGrayLightT">#90A9A9A9</color>
+  <color name="colorPrimaryWhite">#FFFFFF</color>
+  <color name="colorPrimaryGreen1">#59C354</color>
+  <color name="colorPrimaryGreen2">#00FA9A</color>
+  <color name="colorPrimaryGreen3">#66CDAA</color>
+  <color name="colorPrimaryGreen4">#2E8B57</color>
+  <color name="colorPrimaryGreen5">#008080</color>
+  <color name="colorTypeInfo">#79b3e4</color>
+  <color name="colorTypeHelp">#C0C0C0</color>
+  <color name="colorTypeWrong">#ed7861</color>
+  <color name="colorTypeWarning">#e8bd4b</color>
+  <color name="colorTypeSuccess">#90b06e</color>
+  <color name="colorLogin">#6E6E6E</color>
+  <color name="colorLoginT">#996E6E6E</color>
+  <color name="colorLoginStatusBar">#424242</color>
 
-    <!-- CHART COLORS -->
-    <color name="colorChartBlue">#79b3e4</color>
-    <color name="colorChartBlueT">#9079b3e4</color>
+  <!-- CHART COLORS -->
+  <color name="colorChartBlue">#79b3e4</color>
+  <color name="colorChartBlueT">#9079b3e4</color>
 
-    <!-- WINE THEME -->
-    <color name="colorWinePrimaryDark">#610B0B</color>
-    <color name="colorWinePrimary">#8A0808</color>
-    <color name="colorWineAccent">#B43104</color>
+  <!-- WINE THEME -->
+  <color name="colorWinePrimaryDark">#610B0B</color>
+  <color name="colorWinePrimary">#8A0808</color>
+  <color name="colorWineAccent">#B43104</color>
 
-    <!-- NIGHT THEME -->
-    <color name="colorNightPrimaryDark">#1C1C1C</color>
-    <color name="colorNightPrimary">#424242</color>
-    <color name="colorNightAccent">#6E6E6E</color>
+  <!-- NIGHT THEME -->
+  <color name="colorNightPrimaryDark">#1C1C1C</color>
+  <color name="colorNightPrimary">#424242</color>
+  <color name="colorNightAccent">#6E6E6E</color>
 
-    <!-- GREEN THEME -->
-    <color name="colorGreenPrimaryDark">#0B6138</color>
-    <color name="colorGreenPrimaryDarkT">#900B6138</color>
-    <color name="colorGreenPrimary">#04B45F</color>
-    <color name="colorGreenPrimaryT">#9004B45F</color>
-    <color name="colorGreenAccent">#01DFA5</color>
-    <color name="colorGreenAccentT">#9001DFA5</color>
+  <!-- GREEN THEME -->
+  <color name="colorGreenPrimaryDark">#0B6138</color>
+  <color name="colorGreenPrimaryDarkT">#900B6138</color>
+  <color name="colorGreenPrimary">#04B45F</color>
+  <color name="colorGreenPrimaryT">#9004B45F</color>
+  <color name="colorGreenAccent">#01DFA5</color>
+  <color name="colorGreenAccentT">#9001DFA5</color>
 
-    <!-- dots colors -->
-    <color name="dotActive">@color/colorPrimary</color>
-    <color name="dotInactive">#90C0C0C0</color>
-    <color name="dotSlideActive">@color/colorPrimaryWhite</color>
-    <color name="dotSlideInactive">#90C0C0C0</color>
+  <!-- dots colors -->
+  <color name="dotActive">@color/colorPrimary</color>
+  <color name="dotInactive">#90C0C0C0</color>
+  <color name="dotSlideActive">@color/colorPrimaryWhite</color>
+  <color name="dotSlideInactive">#90C0C0C0</color>
 
-    <!-- tab colors -->
-    <color name="iconTabSelected">@color/colorPrimaryOrange</color>
-    <color name="iconTabUnselected">@color/colorPrimaryWhite</color>
-    <color name="textTabSelected">@color/colorPrimaryOrange</color>
-    <color name="textTabUnselected">@color/colorPrimaryWhite</color>
+  <!-- tab colors -->
+  <color name="iconTabSelected">@color/colorPrimaryOrange</color>
+  <color name="iconTabUnselected">@color/colorPrimaryWhite</color>
+  <color name="textTabSelected">@color/colorPrimaryOrange</color>
+  <color name="textTabUnselected">@color/colorPrimaryWhite</color>
 
-    <!-- PROGRESS PROFILE -->
-    <array name="progressProfile0">
-        <item>@color/colorPrimaryRed</item>
-        <item>@color/colorPrimaryRed</item>
-    </array>
-    <array name="progressProfile0t025">
-        <item>@color/colorPrimaryRed</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-    </array>
-    <array name="progressProfile25t050">
-        <item>@color/colorPrimaryRed</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-    </array>
-    <array name="progressProfile50to75">
-        <item>@color/colorPrimaryRed</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-    </array>
-    <array name="progressProfile75to100">
-        <item>@color/colorPrimaryRed</item>
-        <item>@color/colorPrimaryOrangeLight</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-    </array>
-    <array name="progressProfile100">
-        <item>@color/colorPrimaryGreen</item>
-        <item>@color/colorPrimaryGreen</item>
-    </array>
+  <!-- PROGRESS PROFILE -->
+  <array name="progressProfile0">
+    <item>@color/colorPrimaryRed</item>
+    <item>@color/colorPrimaryRed</item>
+  </array>
+  <array name="progressProfile0t025">
+    <item>@color/colorPrimaryRed</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+  </array>
+  <array name="progressProfile25t050">
+    <item>@color/colorPrimaryRed</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+  </array>
+  <array name="progressProfile50to75">
+    <item>@color/colorPrimaryRed</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+  </array>
+  <array name="progressProfile75to100">
+    <item>@color/colorPrimaryRed</item>
+    <item>@color/colorPrimaryOrangeLight</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+  </array>
+  <array name="progressProfile100">
+    <item>@color/colorPrimaryGreen</item>
+    <item>@color/colorPrimaryGreen</item>
+  </array>
 
-    <!-- OTHER COLORS -->
-    <color name="colorSeparador">#DCDCDC</color>
+  <!-- OTHER COLORS -->
+  <color name="colorSeparador">#DCDCDC</color>
 
 </resources>

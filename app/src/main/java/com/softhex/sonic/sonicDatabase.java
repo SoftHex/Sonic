@@ -46,6 +46,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_RETORNO_PEDIDO = sonicConstants.TB_RETORNO_PEDIDO;
 	private static final String DB_RETORNO_PEDIDO_ITENS = sonicConstants.TB_RETORNO_PEDIDO_ITEM;
     private static final String DB_TIPO_COBRANCA = sonicConstants.TB_TIPO_COBRANCA;
+    private static final String DB_AGENTE_COBRADOR = sonicConstants.TB_AGENTE_COBRADOR;
     private static final String DB_CONDICAO_PAGAMENTO = sonicConstants.TB_CONDICAO_PAGAMENTO;
     private static final String DB_VENDA = sonicConstants.TB_VENDA;
     private static final String DB_VENDA_ITEM = sonicConstants.TB_VENDA_ITEM;
@@ -232,24 +233,24 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
-            "forma int NOT NULL, " +            // 1=AGENDAMENTO, 2=REAGENDAMENTO
-            "status int NOT NULL, " +           // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
-            "data_agendamento varchar, " +
-            "hora_agendamento varchar, " +
+            "tipo int NOT NULL, " +                 // 1=AGENDAMENTO, 2=REAGENDAMENTO
+            "status int NOT NULL, " +               // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
+            "data_agendamento varchar NOT NULL, " +
+            "hora_agendamento varchar NOT NULL, " +
+            "proprietario INT NOT NULL, "  +        // 1=EMPRESA, 2=PESSOAL
             "atendente string, " +
             "ordem int, " +
-            "tipo INT NOT NULL, "  +            // 1=EMPRESA, 2=PESSOAL
             "observacao string, " +
             "data_inicio varchar, " +
             "hora_inicio varchar, " +
             "data_fim varchar, " +
             "hora_fim varchar, " +
-            "reagendamento int, " +             // CODIGO AGENDAMENTO ANTERIOR
+            "reagendamento int, " +                 // CODIGO AGENDAMENTO ANTERIOR
             "data_reagendamento varchar, " +
             "hora_reagendamento varchar, " +
-            "situacao int, " +                  // 1=POSITIVADO, 2=NEGATIVADO
-            "negativacao string, " +            // MOTIVO DA NEGATIVAÇÃO
-            "cancelamento string);";            // MOTIVO DO CANCELAMENTO
+            "situacao int, " +                      // 1=POSITIVADO, 2=NEGATIVADO
+            "negativacao string, " +                // MOTIVO DA NEGATIVAÇÃO
+            "cancelamento string);";                // MOTIVO DO CANCELAMENTO
     private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE UNIQUE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
     private static final String CREATE_INDEX_ROTA_CODIGO_USUARIO = "CREATE INDEX index_rota_codigo_usuario ON "+DB_ROTA+" (codigo_usuario);";
     private static final String CREATE_INDEX_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
@@ -333,8 +334,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_agente_cobrador int NOT NULL, " +
             "codigo_tipo_cobranca int NOT NULL, " +
             "vendedor varchar, " +
-            "valor decimal(9,2), " +
-			"saldo decimal(9,2), " +
+            "valor varchar, " +
+			"saldo varchar, " +
+            "juros varchar, " +
             "situacao int);";
     private static final String CREATE_INDEX_TITULO_CODIGO = "CREATE INDEX index_estoque_titulo_codigo ON "+DB_TITTULO+" (codigo);";
     private static final String CREATE_INDEX_TITULO_CODIGO_USUARIO = "CREATE INDEX index_titulo_codigo_usuario ON "+DB_TITTULO+" (codigo_usuario);";
@@ -365,6 +367,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
 			"valor_desconto decimal(9,2));";
 
     private static final String CREATE_TIPO_COBRANCA = "CREATE TABLE IF NOT EXISTS "+DB_TIPO_COBRANCA+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo int, " +
+            "nome string);";
+
+    private static final String CREATE_AGENTE_COBRADOR = "CREATE TABLE IF NOT EXISTS "+DB_AGENTE_COBRADOR+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo int, " +
             "nome string);";
@@ -653,6 +660,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_RETORNO_PEDIDO);
 		DB.execSQL(CREATE_RETORNO_PEDIDO_ITENS);
         DB.execSQL(CREATE_TIPO_COBRANCA);
+        DB.execSQL(CREATE_AGENTE_COBRADOR);
         //DB.execSQL(CREATE_CONDICOES_PAGAMENTO);
         //DB.execSQL(CREATE_TRANSPORTADORA);
         DB.execSQL(CREATE_UNIDADE_MEDIDA);

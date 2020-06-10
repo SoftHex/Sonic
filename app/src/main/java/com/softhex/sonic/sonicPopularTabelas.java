@@ -41,33 +41,34 @@ public class sonicPopularTabelas {
     private String arquivo;
     private String[][] mTables = {
 
-            { "[SITE]", sonicConstants.TB_SITE, "save"},
-            { "[FTP]", sonicConstants.TB_FTP ,"save" },
-            { "[EMPRESAS]", sonicConstants.TB_EMPRESA, "save" },
-            { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "save" },
-            { "[USUARIOS]", sonicConstants.TB_USUARIO, "save" },
-            { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "save" },
-            { "[MATRIZ]", sonicConstants.TB_MATRIZ, "save"},
-            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "save" },
-            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "replace" },
-            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "replace" },
-            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "replace" },
-            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "replace" },
-            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "replace" },
-            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "replace" },
-            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "replace" },
-            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "replace" },
-            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "replace" },
-            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "replace" },
-            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "replace" },
-            { "[ROTA]", sonicConstants.TB_ROTA, "replace" },
-            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "save" },
-            { "[TITULOS]", sonicConstants.TB_TITULO, "save" },
-            { "[PRAZO]", sonicConstants.TB_PRAZO, "replace" },
-            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "replace" },
-            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "replace" },
-            { "[VENDAS]", sonicConstants.TB_VENDA, "replace" },
-            { "[]", sonicConstants.TB_VENDA, "replace" }
+            { "[SITE]", sonicConstants.TB_SITE, "Site", "save"},
+            { "[FTP]", sonicConstants.TB_FTP, "Ftp" ,"save" },
+            { "[EMPRESAS]", sonicConstants.TB_EMPRESA, "Empresas", "save" },
+            { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "Nível de Acesso", "save" },
+            { "[USUARIOS]", sonicConstants.TB_USUARIO, "Usuários" ,"save" },
+            { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
+            { "[MATRIZ]", sonicConstants.TB_MATRIZ, "Matriz", "save"},
+            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "Clientes", "save" },
+            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "replace" },
+            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "replace" },
+            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "Produtos", "replace" },
+            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "replace" },
+            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "replace" },
+            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "replace" },
+            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "replace" },
+            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "replace" },
+            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "replace" },
+            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "replace" },
+            { "[AGENTE_COBRADOR]", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
+            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "replace" },
+            { "[ROTA]", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
+            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
+            { "[TITULOS]", sonicConstants.TB_TITULO, "Títulos", "save" },
+            { "[PRAZO]", sonicConstants.TB_PRAZO, "Prazo", "replace" },
+            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "replace" },
+            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "replace" },
+            { "[VENDAS]", sonicConstants.TB_VENDA, "Vendas", "replace" },
+            { "[]", sonicConstants.TB_VENDA, "", "replace" }
 
     };
 
@@ -92,7 +93,7 @@ public class sonicPopularTabelas {
                 myProgress = new ProgressDialog(myCtx);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                myProgress.setTitle("Gravando...\n");
+                myProgress.setTitle("Gravando...\n\n");
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
@@ -130,6 +131,7 @@ public class sonicPopularTabelas {
                     int count=0;
                     myProgress.setMax(sonicUtils.countFileLines(file));
                     String tabela = "";
+                    String tabela2 = "";
 
                     String line = reader.readLine();
 
@@ -144,6 +146,7 @@ public class sonicPopularTabelas {
                                 DBC.Database.cleanData(arr[1]);
 
                                 tabela = line;
+                                tabela2 = arr[2];
                                 line = reader.readLine();
 
                                 while (line != null && line.indexOf("[") != 0) {
@@ -154,7 +157,7 @@ public class sonicPopularTabelas {
 
                                     }else{
                                         count += 1;
-                                        publishProgress(tabela, String.valueOf(count));
+                                        publishProgress(tabela2, String.valueOf(count));
 
                                         String str = line;
                                         int pos = str.indexOf("=") + 1;

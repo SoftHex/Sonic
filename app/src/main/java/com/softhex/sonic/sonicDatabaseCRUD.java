@@ -44,6 +44,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_RETORNO_PEDIDO = sonicConstants.TB_RETORNO_PEDIDO;
     private final String TABLE_RETORNO_PEDIDO_ITEM = sonicConstants.TB_RETORNO_PEDIDO_ITEM;
     private final String TABLE_TIPO_COBRANCA = sonicConstants.TB_TIPO_COBRANCA;
+    private final String TABLE_AGENTE_COBRADOR = sonicConstants.TB_AGENTE_COBRADOR;
     private final String TABLE_CONDICAO_PAGAMENTO = sonicConstants.TB_CONDICAO_PAGAMENTO;
     private final String TABLE_PRECO_PRODUTO = sonicConstants.TB_TABELA_PRECO_PRODUTO;
     private final String TABLE_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
@@ -2148,129 +2149,50 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public long countTituloCliente(int cliente, int situacao){
+        public List<sonicTitulosHolder> selectTitulos(int cliente){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            long count=0;
-            SQLiteDatabase db = DB.getWritableDatabase();
-            try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULO, "codigo_cliente="+cliente+" AND situacao="+situacao);
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
+            List<sonicTitulosHolder> titulos = new ArrayList<sonicTitulosHolder>();
 
-            return count;
-        }
+            Cursor cursor = DB.getReadableDatabase().rawQuery(
+                    "SELECT " +
+                            "T._id, " +
+                            "T.codigo, " +
+                            "T.numero, " +
+                            "T.data_emissao, " +
+                            "T.data_vencimento, " +
+                            "(SELECT AC.nome FROM "+ TABLE_AGENTE_COBRADOR +" AC WHERE AC.codigo = T.codigo_agente_cobrador) AS agente_cobrador, " +
+                            "(SELECT TC.nome FROM "+ TABLE_TIPO_COBRANCA +" TC WHERE TC.codigo = T.codigo_tipo_cobranca) AS tipo_cobranca, " +
+                            "T.numero, " +
+                            "T.codigo, " +
+                            "T.valor, " +
+                            "T.saldo, " +
+                            "T.situacao, " +
+                            "T.data_vencimento - strftime('%Y%m%d', date('now')) AS atraso, " +
+                            "T.juros, " +
+                            "T.situacao " +
+                            " FROM "+TABLE_TITULO+
+                            " T WHERE T.codigo_cliente=? AND T.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1)", new String[]{String.valueOf(cliente)});
 
-        public String sumTituloAtraso(){
+            if(cursor!=null){
+                while(cursor.moveToNext()){
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String count = "";
+                    sonicTitulosHolder titulo = new sonicTitulosHolder();
 
-            try{
-
-                Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT sum(valor) " +
-                                " FROM "+TABLE_TITULO+
-                                " t JOIN "+TABLE_CLIENTE+
-                                " c ON c.codigo_cliente = t.codigo_cliente "+
-                                " WHERE t.situacao = 2" , null);
-
-
-                if(cursor.moveToFirst()){
-
-                    count = cursor.getString(0);
-                }
-
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-
-        }
-
-        public boolean saveTitulo(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_TITULO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
+                    titulo.setNumero(cursor.getString(cursor.getColumnIndex("numero")));
+                    titulos.add(titulo);
 
                 }
-
-                result = DB.getWritableDatabase().insert(TABLE_TITULO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
             }
 
-            return result;
+            cursor.close();
+
+            return titulos;
         }
 
         public boolean cleanTitulo(){
 
             return DB.getWritableDatabase().delete(TABLE_TITULO, null, null)>0;
-        }
-
-
-        public List<sonicTitulosHolder> selectTitulo(int situacao){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicTitulosHolder> TITULO = new ArrayList<sonicTitulosHolder>();
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "c.codigo_cliente as codigo," +
-                            "c.nome_fantasia as fantasia," +
-                            "(SELECT g.nome FROM "+ TABLE_GRUPO_CLIENTE + " g WHERE g.codigo_grupo = c.codigo_grupo) as grupo," +
-                            "t.numero as numero," +
-                            "t.data_emissao as emissao," +
-                            "t.data_vencimento as vencimento," +
-                            "t.valor as valor," +
-                            "t.saldo as saldo," +
-                            "t.situacao as situacao" +
-                            " FROM "+TABLE_TITULO +
-                            " t JOIN "+ TABLE_CLIENTE +
-                            " c ON c.codigo_cliente = t.codigo_cliente" +
-                            " WHERE t.situacao = "+situacao +" ORDER BY t.data_vencimento", null);
-
-            while(cursor.moveToNext()){
-
-                sonicTitulosHolder titulo = new sonicTitulosHolder();
-
-                titulo.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo")));
-                titulo.setNomeFantasia(cursor.getString(cursor.getColumnIndex("fantasia")));
-                titulo.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
-                titulo.setNumero(cursor.getString(cursor.getColumnIndex("numero")));
-                titulo.setDataEmissao(cursor.getString(cursor.getColumnIndex("emissao")));
-                titulo.setDataVencimento(cursor.getString(cursor.getColumnIndex("vencimento")));
-                titulo.setValor(cursor.getString(cursor.getColumnIndex("valor")));
-                titulo.setSaldo(cursor.getString(cursor.getColumnIndex("saldo")));
-                titulo.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-
-                TITULO.add(titulo);
-
-            }
-            cursor.close();
-            return TITULO;
         }
 
         public List<sonicTitulosHolder> selectTituloClienteSelecionado(){
