@@ -234,7 +234,7 @@ public class sonicClientesCPF extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,mList.size()>1000 ? mList.size() : sonicUtils.Randomizer.generate(500, 1000));
+                    ,mList.size()>1000 ? mList.size() : 500);
 
         }
     }
@@ -269,7 +269,7 @@ public class sonicClientesCPF extends Fragment {
         rlDesert.startAnimation(fadeIn);
         allowSearch = false;
         myImage.setVisibility(GONE);
-        tvTitle.setText("Ops, nada por enquanto...");
+        tvTitle.setText("Ops, nenhum cliente por enquanto...");
         tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
         btSinc.setOnClickListener((View v)->{
             mPrefs.Geral.setHomeRefresh(true);

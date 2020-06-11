@@ -68,6 +68,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_SINCRONIZACAO = sonicConstants.TB_SINCRONIZACAO;
     private static final String DB_LOCALIZACAO = sonicConstants.TB_LOCALIZACAO;
     private static final String DB_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
+
+    // TABELAS PREENCHIDAS SEM SINCRONIZAÇÃO
+    private static final String DB_BANCOS = sonicConstants.TB_BANCOS;
+
     private Context myCtx;
 
     private static final String CREATE_SITE = "CREATE TABLE IF NOT EXISTS "+DB_SITE+" (" +
@@ -253,7 +257,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "status int NOT NULL, " +               // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
             "data_agendamento varchar NOT NULL, " +
             "hora_agendamento varchar NOT NULL, " +
-            "proprietario INT NOT NULL, "  +        // 1=EMPRESA, 2=PESSOAL
+            "proprietario INT NOT NULL, "  +        // 1=AGENDA, 2=PESSOAL
             "atendente string, " +
             "ordem int, " +
             "observacao string, " +
@@ -558,6 +562,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "latitude varchar, " +
             "longitude varchar);";
 
+    // TABELAS PREENCHIDAS SEM SINCRONIZAÇÃO
+    private static final String CREATE_BANCOS = "CREATE TABLE IF NOT EXISTS "+DB_BANCOS+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo varchar, " +
+            "nome varchar, " +
+            "nome_completo varchar);";
+
     private static final String DROP_TABLE = " DROP TABLE [IF EXISTS] ";
     private static final int DB_VERSION = 2;
 
@@ -703,6 +714,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_SINCRONIZACAO);
         DB.execSQL(CREATE_LOCALIZACAO);
         DB.execSQL(CREATE_LOG_ERRO);
+
+        // TABELAS PREENCHIDAS SEM SINCRONIZAÇÃO
+        DB.execSQL(CREATE_BANCOS);
 
     }
 

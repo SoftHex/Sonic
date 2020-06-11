@@ -271,7 +271,7 @@ public class sonicProdutosLista extends Fragment {
         rlDesert.startAnimation(fadeIn);
         allowSearch = false;
         myImage.setVisibility(GONE);
-        tvTitle.setText("Ops, nada por enquanto...");
+        tvTitle.setText("Ops, nenhum produto por enquanto...");
         tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
         btSinc.setOnClickListener((View v)->{
             mPrefs.Geral.setHomeRefresh(true);

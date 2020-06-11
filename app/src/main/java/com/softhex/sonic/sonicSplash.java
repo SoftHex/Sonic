@@ -89,6 +89,7 @@ public class sonicSplash extends AppCompatActivity {
 
     private void logar(Intent i){
 
+
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {

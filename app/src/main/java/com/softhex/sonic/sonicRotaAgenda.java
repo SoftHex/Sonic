@@ -2,7 +2,6 @@ package com.softhex.sonic;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -29,9 +30,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
@@ -47,34 +45,35 @@ import static android.view.View.VISIBLE;
 
 public class sonicRotaAgenda extends Fragment {
 
-    private View myView;
-    private RecyclerView myRecycler;
-    private RecyclerView.LayoutManager myLayout;
-    private sonicRotaAdapter myAdapter;
-    private List<sonicRotaHolder> myList;
-    private MenuItem mySearch;
-    private Toolbar myToolBar;
-    private TabLayout myTabLayout;
-    private CoordinatorLayout myCoordinatorLayout;
-    private ShimmerFrameLayout myShimmer;
-    private TextView myTextView, tvSearch;
+    private View mView;
+    private RecyclerView mRecycler;
+    private RecyclerView.LayoutManager mLayout;
+    private sonicRotaAdapter mAdapter;
+    private List<sonicRotaHolder> mList;
+    private MenuItem mSearch;
+    private Toolbar mToolBar;
+    private TabLayout mTabLayout;
+    private CoordinatorLayout mCoordinatorLayout;
+    private ShimmerFrameLayout mShimmer;
+    private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
     private Context mContext;
-    private ImageView myImage;
-    private Intent i;
+    private ImageView mImage;
     private sonicPreferences mPrefs;
+    private LinearLayout llNoResult;
+    private RelativeLayout rlDesert;
+    private Button btSinc;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
+        mView = inflater.inflate(R.layout.sonic_recycler_layout_rota, container, false);
 
         mContext = getActivity();
-        mPrefs = new sonicPreferences(mContext);
-
+        mPrefs = new sonicPreferences(getActivity());
         loadFragment();
 
-        return myView;
+        return mView;
 
     }
 
@@ -84,40 +83,47 @@ public class sonicRotaAgenda extends Fragment {
 
         myCons = new sonicConstants();
 
-        myToolBar = getActivity().findViewById(R.id.mToolbar);
+        mToolBar = getActivity().findViewById(R.id.mToolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.mTabs);
+        mTabLayout = getActivity().findViewById(R.id.mTabs);
 
-        myTextView = myView.findViewById(R.id.tvText);
+        llNoResult = mView.findViewById(R.id.llNoResult);
 
-        tvSearch = myView.findViewById(R.id.tvSearch);
+        rlDesert = mView.findViewById(R.id.rlDesert);
 
-        myImage = myView.findViewById(R.id.ivImage);
+        btSinc = mView.findViewById(R.id.btSinc);
 
-        myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
+        tvTexto = mView.findViewById(R.id.tvText);
 
-        myShimmer = myView.findViewById(R.id.mShimmerLayout);
+        tvTitle = mView.findViewById(R.id.tvTitle);
 
-        myRecycler =  myView.findViewById(R.id.recyclerList);
+        tvSearch = mView.findViewById(R.id.tvSearch);
 
-        myRecycler.setHasFixedSize(true);
+        mImage = mView.findViewById(R.id.ivImage);
 
-        myRecycler.getRecycledViewPool().setMaxRecycledViews(1,50);
+        mCoordinatorLayout = mView.findViewById(R.id.layoutMain);
 
-        myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        mShimmer = mView.findViewById(R.id.mShimmerLayout);
 
-        myLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
+        mRecycler =  mView.findViewById(R.id.recyclerList);
+
+        mRecycler.setHasFixedSize(true);
+
+        mRecycler.getRecycledViewPool().setMaxRecycledViews(1,50);
+
+        mLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+
+        mLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
         //myLayout.smoothScrollToPosition(myRecycler, new RecyclerView.State(), mPrefs.Rota.getItemPosition());
 
-        myRecycler.setLayoutManager(myLayout);
+        mRecycler.setLayoutManager(mLayout);
 
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        ViewGroup.LayoutParams params = mCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        myShimmer.startShimmer();
+        mShimmer.startShimmer();
 
         bindRecyclerView();
-
 
     }
 
@@ -131,9 +137,9 @@ public class sonicRotaAgenda extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.sonic_rota, menu);
-        mySearch = menu.findItem(R.id.itSearch);
+        mSearch = menu.findItem(R.id.itSearch);
 
-        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
+        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint("Pesquisar");
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -148,7 +154,7 @@ public class sonicRotaAgenda extends Fragment {
                         @Override
                         public void onFilterComplete(int count) {
                             if (allowSearch) {
-                                if (myAdapter.getItemCount()==0) {
+                                if (mAdapter.getItemCount()==0) {
                                     tvSearch.setVisibility(VISIBLE);
                                     tvSearch.setText("Nenhum resultado para '"+newText+"'");
                                 } else {
@@ -157,7 +163,7 @@ public class sonicRotaAgenda extends Fragment {
                             }
                         }
                     };
-                    myAdapter.getFilter().filter(newText, listener);
+                    mAdapter.getFilter().filter(newText, listener);
                 }
                 return false;
             }
@@ -166,14 +172,14 @@ public class sonicRotaAgenda extends Fragment {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-                myTabLayout.setVisibility(GONE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,2,true,true);
+                mTabLayout.setVisibility(GONE);
+                sonicAppearence.searchAppearence(getActivity(),searchView, mToolBar,2,true,true);
             }
 
             @Override
             public void onViewDetachedFromWindow(View view) {
-                myTabLayout.setVisibility(VISIBLE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,2,false,false);
+                mTabLayout.setVisibility(VISIBLE);
+                sonicAppearence.searchAppearence(getActivity(),searchView, mToolBar,2,false,false);
 
             }
         });
@@ -200,8 +206,8 @@ public class sonicRotaAgenda extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Rota.selectRota();
-            return myList.size();
+            mList =  new sonicDatabaseCRUD(mContext).Rota.selectRota(false);
+            return mList.size();
 
         }
 
@@ -222,11 +228,11 @@ public class sonicRotaAgenda extends Fragment {
 
                         }
 
-                        myShimmer.stopShimmer();
-                        myShimmer.setVisibility(GONE);
+                        mShimmer.stopShimmer();
+                        mShimmer.setVisibility(GONE);
 
                     }
-                    ,result*10);
+                    ,mList.size()>1000 ? mList.size() : 500);
 
 
         }
@@ -238,20 +244,16 @@ public class sonicRotaAgenda extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(GONE);
+        rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicRotaAdapter(myList, this.getContext(), this.getActivity(), myRecycler);
-        myRecycler.setVisibility(VISIBLE);
-        myRecycler.setAdapter(myAdapter);
-        myRecycler.startAnimation(fadeIn);
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        mAdapter = new sonicRotaAdapter(mList, mContext, mRecycler, getActivity(), false);
+        mRecycler.setVisibility(VISIBLE);
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.startAnimation(fadeIn);
+        ViewGroup.LayoutParams params = mCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-    }
-
-    public void teste(){
-        //myAdapter.notifyItemChanged(0);
-        Toast.makeText(this.getContext(), "TESTES", Toast.LENGTH_SHORT).show();
     }
 
     private void showNoResult(){
@@ -260,18 +262,22 @@ public class sonicRotaAgenda extends Fragment {
         fadeIn = new AlphaAnimation(0,1);
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
-
+        llNoResult.setVisibility(VISIBLE);
+        rlDesert.setVisibility(VISIBLE);
+        llNoResult.startAnimation(fadeIn);
+        rlDesert.startAnimation(fadeIn);
         allowSearch = false;
-        myImage.setVisibility(VISIBLE);
-        myTextView.setVisibility(VISIBLE);
-        myTextView.startAnimation(fadeIn);
-        myTextView.setText(R.string.noClientesText);
-        Glide.with(mContext)
-                .load(R.drawable.nopeople)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(R.anim.fade_in))
-                .into(myImage);
+        mImage.setVisibility(GONE);
+        tvTitle.setText("Ops, nenhuma rota por enquanto...");
+        tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
+        btSinc.setOnClickListener((View v)->{
+            mPrefs.Sincronizacao.setSincRefresh(true);
+            mPrefs.Sincronizacao.setDownloadType("DADOS");
+            mPrefs.Sincronizacao.setCalledActivity(getActivity().getClass().getSimpleName());
+            sonicFtp myFtp = new sonicFtp(getActivity());
+            String file = mPrefs.Users.getArquivoSinc();
+            myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
+        });
 
     }
 
@@ -279,10 +285,10 @@ public class sonicRotaAgenda extends Fragment {
 
 
         List<String> l = new ArrayList<String>();
-        l.add("NÃO INICIADA");
+        l.add("NÃO INICIADO");
         l.add("EM ATENDIMENTO");
-        l.add("CONCLUIDA");
-        l.add("CANCELADA");
+        l.add("CONCLUIDO");
+        l.add("CANCELADO");
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 

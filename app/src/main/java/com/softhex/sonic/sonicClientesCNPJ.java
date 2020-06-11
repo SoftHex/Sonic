@@ -121,7 +121,6 @@ public class sonicClientesCNPJ extends Fragment {
 
         bindRecyclerView();
 
-
     }
 
     public void bindRecyclerView(){
@@ -229,7 +228,7 @@ public class sonicClientesCNPJ extends Fragment {
                         myShimmer.setVisibility(GONE);
 
                     }
-                    ,mList.size()>1000 ? mList.size() : sonicUtils.Randomizer.generate(500, 1000));
+                    ,mList.size()>1000 ? mList.size() : 500);
 
 
         }
@@ -265,8 +264,8 @@ public class sonicClientesCNPJ extends Fragment {
         rlDesert.startAnimation(fadeIn);
         allowSearch = false;
         myImage.setVisibility(GONE);
-        tvTitle.setText("Ops, nada por enquanto...");
-        tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
+        tvTitle.setText("Ops, nenhum cliente por enquanto...");
+        tvTexto.setText(R.string.noSincText);
         btSinc.setOnClickListener((View v)->{
             mPrefs.Geral.setHomeRefresh(true);
             mPrefs.Geral.setDrawerRefresh(true);

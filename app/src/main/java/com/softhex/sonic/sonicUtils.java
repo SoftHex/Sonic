@@ -247,6 +247,9 @@ public class sonicUtils {
         public static int generate(int min,int max) {
             return min + (int)(Math.random() * ((max - min) + 1));
         }
+        public static String generateString(Float min, Float max) {
+            return String.valueOf(min + (int)(Math.random() * ((max - min) + 1))) ;
+        }
     }
 
     public static Bitmap blurRenderScript(Bitmap smallBitmap, int radius, Context ctx) {

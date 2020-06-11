@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class sonicFirstAccess extends AppCompatActivity {
@@ -102,33 +103,9 @@ public class sonicFirstAccess extends AppCompatActivity {
         @Override
         protected ProgressDialog doInBackground(ProgressDialog... progressDialogs) {
 
-            mListUser = DBC.Usuario.selectUsuarioAtivo();
-            mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
-            mPref.Matriz.setNome(mListEmpresa.get(0).getNome());
-            mPref.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
-            mPref.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
-            mPref.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
-            mPref.Matriz.setBairro(mListEmpresa.get(0).getBairro());
-            mPref.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
-            mPref.Matriz.setUF(mListEmpresa.get(0).getUf());
-            mPref.Matriz.setCep(mListEmpresa.get(0).getCep());
-            mPref.Matriz.setFone(mListEmpresa.get(0).getFone());
-            mPref.Matriz.setEmail(mListEmpresa.get(0).getEmail());
-            mPref.Matriz.setSite(mListEmpresa.get(0).getSite());
-            mPref.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
-            mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
-            mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
-            mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());
-            mPref.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
-            mPref.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
-            mPref.Users.setCodigoSinc(mListUser.get(0).getCodigo());
-            mPref.Users.setArquivoSinc(mListUser.get(0).getCodigo());
-            sonicConstants.USUARIO_ATIVO_NIVEL = mListUser.get(0).getNivelAcessoId();
-            sonicConstants.USUARIO_ATIVO_CARGO = mListUser.get(0).getCargo();
-            sonicConstants.USUARIO_ATIVO_META_VENDA = mListUser.get(0).getMetaVenda();
-            sonicConstants.USUARIO_ATIVO_META_VISITA = mListUser.get(0).getMetaVisita();
-            sonicConstants.EMPRESA_SELECIONADA_ID = mListUser.get(0).getEmpresaId();
-            sonicConstants.EMPRESA_SELECIONADA_NOME = mListUser.get(0).getEmpresa(); //NOME FANTASIA
+            preencherTabelasFixas();
+            carregarDados();
+
             return progressDialogs[0];
         }
 
@@ -145,6 +122,52 @@ public class sonicFirstAccess extends AppCompatActivity {
         Intent i = new Intent(sonicFirstAccess.this, sonicMain.class);
         startActivity(i);
         finish();
+    }
+
+    private void carregarDados(){
+        mListUser = DBC.Usuario.selectUsuarioAtivo();
+        mListEmpresa = DBC.GrupoEmpresas.selectGrupoEmpresas();
+        mPref.Matriz.setNome(mListEmpresa.get(0).getNome());
+        mPref.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
+        mPref.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+        mPref.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
+        mPref.Matriz.setBairro(mListEmpresa.get(0).getBairro());
+        mPref.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
+        mPref.Matriz.setUF(mListEmpresa.get(0).getUf());
+        mPref.Matriz.setCep(mListEmpresa.get(0).getCep());
+        mPref.Matriz.setFone(mListEmpresa.get(0).getFone());
+        mPref.Matriz.setEmail(mListEmpresa.get(0).getEmail());
+        mPref.Matriz.setSite(mListEmpresa.get(0).getSite());
+        mPref.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
+        mPref.Users.setUsuarioId(mListUser.get(0).getCodigo());
+        mPref.Users.setUsuarioNome(mListUser.get(0).getNome());
+        mPref.Users.setUsuarioCargo(mListUser.get(0).getCargo());
+        mPref.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
+        mPref.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
+        mPref.Users.setCodigoSinc(mListUser.get(0).getCodigo());
+        mPref.Users.setArquivoSinc(mListUser.get(0).getCodigo());
+        sonicConstants.USUARIO_ATIVO_NIVEL = mListUser.get(0).getNivelAcessoId();
+        sonicConstants.USUARIO_ATIVO_CARGO = mListUser.get(0).getCargo();
+        sonicConstants.USUARIO_ATIVO_META_VENDA = mListUser.get(0).getMetaVenda();
+        sonicConstants.USUARIO_ATIVO_META_VISITA = mListUser.get(0).getMetaVisita();
+        sonicConstants.EMPRESA_SELECIONADA_ID = mListUser.get(0).getEmpresaId();
+        sonicConstants.EMPRESA_SELECIONADA_NOME = mListUser.get(0).getEmpresa(); //NOME FANTASIA
+    }
+
+    private void preencherTabelasFixas(){
+
+        new sonicDatabaseCRUD(this).Database.cleanData(sonicConstants.TB_BANCOS);
+        String[] codigoBancos = getResources().getStringArray(R.array.codigoBancos);
+        String[] nomeBancos = getResources().getStringArray(R.array.nomeBancos);
+        String[] nomeBancosFull = getResources().getStringArray(R.array.nomeBancosFull);
+        for(int x=0; x<codigoBancos.length; x++){
+            List<String> mTotalList = new ArrayList<>();
+            mTotalList.add(codigoBancos[x]);
+            mTotalList.add(nomeBancos[x]);
+            mTotalList.add(nomeBancosFull[x]);
+            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, "save");
+        }
+
     }
 
 }

@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
+import android.text.Html;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -144,7 +145,9 @@ public class sonicPopularTabelas {
 
                             if(line!=null && (line.contains(arr[0]) || arr[0].contains(line))){
 
-                                DBC.Database.cleanData(arr[1]);
+                                if(arr[3].equals("save")){
+                                    DBC.Database.cleanData(arr[1]);
+                                }
 
                                 tabela = line;
                                 tabela2 = arr[2];
@@ -158,7 +161,7 @@ public class sonicPopularTabelas {
 
                                     }else{
                                         count += 1;
-                                        publishProgress("Gravando em "+tabela2, String.valueOf(count));
+                                        publishProgress("Gravando em "+ Html.fromHtml("<b>"+tabela2+"</b>"), String.valueOf(count));
 
                                         String str = line;
                                         int pos = str.indexOf("=") + 1;

@@ -7,6 +7,7 @@ import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -56,6 +57,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -87,8 +89,6 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private sonicDatabaseCRUD mData;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
-    private LinearLayout linearNew;
-    private sonicPreferences mPref;
     private TextView tvLogradrouro;
     private TextView tvEndCompleto;
     private TextView tvCep;
@@ -119,16 +119,17 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private ProgressDialog myProgress;
     private sonicUtils mUtils;
     private List<sonicRotaHolder> mList;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_rota_detalhe);
 
-        mPref = new sonicPreferences(this);
         mData = new sonicDatabaseCRUD(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mContex = this;
+        mPrefs = new sonicPreferences(this);
         mUtils = new sonicUtils(mContex);
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
@@ -195,7 +196,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.INVISIBLE);
                     //fbNavegar.setVisibility(View.INVISIBLE);
-                    mCollapsingToolbar.setTitle(mPref.Clientes.getNome());
+                    mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome());
                 }else {
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
                     dotsLayout.setVisibility(View.VISIBLE);
@@ -208,10 +209,10 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     public void loadDetails(){
-        mList = mData.Rota.selectRotaPorID(mPref.Rota.getCodigo());
-        tvLogradrouro.setText(mPref.Clientes.getLogradouro());
-        tvEndCompleto.setText(mPref.Clientes.getBairro()+", "+mPref.Clientes.getMunicipio()+" - "+mPref.Clientes.getUf());
-        tvCep.setText("CEP: "+mPref.Clientes.getCep());
+        mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
+        tvLogradrouro.setText(mPrefs.Clientes.getLogradouro());
+        tvEndCompleto.setText(mPrefs.Clientes.getBairro()+", "+mPrefs.Clientes.getMunicipio()+" - "+mPrefs.Clientes.getUf());
+        tvCep.setText("CEP: "+mPrefs.Clientes.getCep());
         switch (mList.get(0).getStatus()){
             case 1:
                 llDetalhe.setVisibility(View.GONE);
@@ -229,9 +230,9 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
                 btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
                 btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
-                mPref.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
-                mPref.Rota.setEmAtendimentoCliente(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
-                mPref.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
+                mPrefs.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
+                mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
+                mPrefs.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
                 break;
             case 3:
                 llTime.setVisibility(View.GONE);
@@ -299,7 +300,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 @Override
                 public void run() {
                     myProgress.dismiss();
-                    if(mPref.Rota.getEmAtendimento()){
+                    if(mPrefs.Rota.getEmAtendimento()){
                         finalizarAtendimento();
                     }else {
                         btIniciar.setText("FINALIZAR ATENDIMENTO");
@@ -331,7 +332,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         //BOTÃO DE CANCELAR ATENDIMENTO/IR PARA O CADASTRO DO CLIENTE
         btCancelar.setOnClickListener((View v)->{
-            if(mPref.Rota.getEmAtendimento()){
+            if(mPrefs.Rota.getEmAtendimento()){
                 Intent i = new Intent(mContex, sonicClientesDetalhe.class);
                 startActivityForResult(i, 1);
             }else{
@@ -360,11 +361,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         final AlertDialog alertDialog = dialogBuilder.create();
 
         TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Atendimento #" + mPref.Rota.getCodigo());
+        tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
         TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
-        tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
+        tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
         TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
-        tvDataHora.setText(mPref.Rota.getDataHora());
+        tvDataHora.setText(mPrefs.Rota.getDataHora());
         RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
         RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
         EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
@@ -446,9 +447,9 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             final AlertDialog alertDialog = dialogBuilder.create();
 
             TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-            tvTitulo.setText("Atendimento #" + mPref.Rota.getCodigo());
+            tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
             TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
-            tvDescricao.setText(mPref.Clientes.getNome()+" - "+mPref.Clientes.getEnderecoCompleto());
+            tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
             TextView tvInfo = dialogView.findViewById(R.id.tvInfo);
             tvInfo.setText(R.string.rotaCancelada);
             EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
@@ -502,26 +503,26 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... strings) {
-            String codigo = String.valueOf(mPref.Rota.getCodigo());
+            String codigo = String.valueOf(mPrefs.Rota.getCodigo());
             Boolean result = false;
             switch (strings[0]){
                 case "INICIAR":
                     result = mData.Rota.iniciarRota(codigo);
-                    mPref.Rota.setEmAtendimento(true);
-                    mPref.Rota.setCancelada(false);
+                    mPrefs.Rota.setEmAtendimento(true);
+                    mPrefs.Rota.setCancelada(false);
                     break;
                 case "POSITIVAR":
                     result = mData.Rota.positivarRota(codigo, strings[1]);
-                    mPref.Rota.setEmAtendimento(false);
+                    mPrefs.Rota.setEmAtendimento(false);
                     break;
                 case "NEGATIVAR":
                     result = mData.Rota.negativarRota(codigo, strings[1], strings[2]);
-                    mPref.Rota.setEmAtendimento(false);
+                    mPrefs.Rota.setEmAtendimento(false);
                     break;
                 case "CANCELAR":
                     result = mData.Rota.cancelarRota(codigo, strings[1], strings[2]);
-                    mPref.Rota.setEmAtendimento(false);
-                    mPref.Rota.setCancelada(true);
+                    mPrefs.Rota.setEmAtendimento(false);
+                    mPrefs.Rota.setCancelada(true);
                     break;
             }
 
@@ -535,22 +536,41 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 myProgress.dismiss();
             }
             if(aBoolean){
-                mPref.Rota.setRefresh(true);
-                if(!clockCounting && !mPref.Rota.getCancelada()){
+                mPrefs.Rota.setRefresh(true);
+                if(!clockCounting && !mPrefs.Rota.getCancelada()){
                     startClock();
                 }else{
                     stopClock();
                 }
             }else{
-                Toast.makeText(mContex, "Não foi possivel concluir o atendimento...", Toast.LENGTH_SHORT).show();
-                mPref.Rota.setEmAtendimento(false);
+                Snackbar snackbar = Snackbar
+                        .make(getWindow().getDecorView().getRootView(), "ERRO", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("DETALHE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                new android.app.AlertDialog.Builder(mContex)
+                                        .setMessage(mPrefs.Geral.getError())
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+                            }
+                        });
+
+                View sbView = snackbar.getView();
+                TextView textView = sbView.findViewById(com.google.android.material.R.id.snackbar_text);
+                sbView.setBackgroundColor(mContex.getResources().getColor(R.color.colorPrimary));
+                textView.setTextColor(mContex.getResources().getColor(R.color.colorPrimaryWhite));
+                snackbar.show();
+                mPrefs.Rota.setEmAtendimento(false);
             }
 
         }
     }
 
     public void startClock(){
-        mPref.Rota.setStartTime(SystemClock.uptimeMillis());
+        mPrefs.Rota.setStartTime(SystemClock.uptimeMillis());
         clockCounting = true;
         customHandler.postDelayed(updateTimerThread, 0);
 
@@ -561,7 +581,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
     private Runnable updateTimerThread = new Runnable() {
         public void run() {
-            timeInMilliseconds = SystemClock.uptimeMillis() - mPref.Rota.getStartTime();
+            timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
             tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
             customHandler.postDelayed(this, 1000);
         }
@@ -588,7 +608,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPrefs.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
@@ -600,7 +620,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         for(int i = 0; i < count ; i++){
 
-            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPrefs.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             myImages[i] = file.toString();
@@ -612,9 +632,6 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             myImages = new String[1];
             myImages[0] = sonicUtils.getURIForResource(R.drawable.nophoto);
         }
-
-        linearNew = findViewById(R.id.linearNew);
-        //linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
 
         sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
         mViewpager.setAdapter(myAdapter);
@@ -664,7 +681,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                                 if (location == null) {
                                     requestNewLocationData();
                                 } else {
-                                    String uri = "geo:"+location.getLongitude()+","+location.getLongitude()+"?q="+mPref.Rota.getAddressMap();
+                                    String uri = "geo:"+location.getLongitude()+","+location.getLongitude()+"?q="+mPrefs.Rota.getAddressMap();
                                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(uri)));
                                 }
                             }

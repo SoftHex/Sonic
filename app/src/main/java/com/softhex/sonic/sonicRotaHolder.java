@@ -37,6 +37,10 @@ public class sonicRotaHolder{
     public sonicRotaHolder() {
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getCodigo() {
         return codigo;
     }
@@ -127,6 +131,10 @@ public class sonicRotaHolder{
 
     public String getLongitude() {
         return longitude;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setCodigo(int codigo) {

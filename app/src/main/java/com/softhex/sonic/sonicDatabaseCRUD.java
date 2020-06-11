@@ -111,7 +111,6 @@ public class sonicDatabaseCRUD {
     Produto Produto = new Produto();
     GrupoProduto GrupoProduto = new GrupoProduto();
     Rota Rota = new Rota();
-    RotaPessoal RotaPessoal = new RotaPessoal();
     Estoque Estoque = new Estoque();
     Titulo Titulo = new Titulo();
     Retorno Retorno = new Retorno();
@@ -147,8 +146,9 @@ public class sonicDatabaseCRUD {
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA_USUARIO , null);
                     result = result &&  cursor.moveToFirst();
                 }catch (SQLiteException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     e.printStackTrace();
-                                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
 
             return result;
@@ -172,7 +172,8 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -193,7 +194,7 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -204,9 +205,10 @@ public class sonicDatabaseCRUD {
 
             }
 
-            return type.equals("save")
-                    ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
-                    : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
+            //return type.equals("save")
+            //        ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
+             //       : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
+            return DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0;
         }
 
         public boolean cleanData(String tabela){
@@ -273,7 +275,8 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -295,7 +298,8 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -314,7 +318,8 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -333,7 +338,8 @@ public class sonicDatabaseCRUD {
                 }
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -341,28 +347,29 @@ public class sonicDatabaseCRUD {
         }
 
         public List<sonicEmpresasHolder> selectEmpresa(){
-            List<sonicEmpresasHolder> EMPRESA = new ArrayList<sonicEmpresasHolder>();
+            List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT * FROM "+TABLE_EMPRESA , null);
 
-            while(cursor.moveToNext()){
+            if(cursor!=null){
+                while(cursor.moveToNext()){
 
-                sonicEmpresasHolder empresa = new sonicEmpresasHolder();
+                    sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
-                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                    empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                    empresas.add(empresa);
 
-
-                EMPRESA.add(empresa);
-
+                }
             }
+
             cursor.close();
-            return EMPRESA;
+            return empresas;
         }
 
         public List<sonicEmpresasHolder> empresaUsuario(){
-            List<sonicEmpresasHolder> EMPRESA = new ArrayList<sonicEmpresasHolder>();
+            List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             String query = "SELECT " +
                     "e.nome_fantasia, " +
@@ -377,19 +384,21 @@ public class sonicDatabaseCRUD {
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
-            while(cursor.moveToNext()){
+            if(cursor!=null){
+                while(cursor.moveToNext()){
 
-                sonicEmpresasHolder empresa = new sonicEmpresasHolder();
+                    sonicEmpresasHolder empresa = new sonicEmpresasHolder();
 
-                empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                empresa.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                    empresa.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    empresa.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                    empresa.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                    empresas.add(empresa);
 
-                EMPRESA.add(empresa);
-
+                }
             }
+
             cursor.close();
-            return EMPRESA;
+            return empresas;
         }
 
         public void desmarcarEmpresa() {
@@ -403,7 +412,8 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
 
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -421,7 +431,8 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
 
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -439,7 +450,8 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_EMPRESA, args, "codigo="+codigo, null);
 
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -456,7 +468,7 @@ public class sonicDatabaseCRUD {
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT * FROM " + TABLE_GRUPO_EMPRESAS, null);
 
-            if(cursor.moveToFirst()){
+            if(cursor!=null && cursor.moveToFirst()){
 
                 sonicGrupoEmpresasHolder grupoEmpresas = new sonicGrupoEmpresasHolder();
 
@@ -493,6 +505,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_EMPRESA_CLIENTE);
             } catch (SQLiteException e) {
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -520,6 +533,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_AVISO);
             } catch (SQLiteException e) {
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
@@ -537,7 +551,8 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = db.rawQuery("SELECT _id FROM "+TABLE_AVISO+" WHERE codigo NOT IN (SELECT DISTINCT(codigo) FROM "+TABLE_AVISO_LIDO+")", null);;
                 count = cursor.getCount();
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -559,22 +574,25 @@ public class sonicDatabaseCRUD {
                             "CASE WHEN EXISTS(SELECT DISTINCT(al.codigo) FROM "+TABLE_AVISO_LIDO+" al WHERE al.codigo = a.codigo) THEN 1 ELSE 0 END AS status" +
                             " FROM " + TABLE_AVISO + " a ORDER BY a.data DESC" , null);
 
-            while(cursor.moveToNext()){
+            if(cursor!=null){
+                while(cursor.moveToNext()){
 
-                sonicAvisosHolder aviso = new sonicAvisosHolder();
+                    sonicAvisosHolder aviso = new sonicAvisosHolder();
 
-                aviso.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                aviso.setPrioridade(cursor.getInt(cursor.getColumnIndex("prioridade")));
-                aviso.setAutor(cursor.getString(cursor.getColumnIndex("autor")));
-                aviso.setData(cursor.getString(cursor.getColumnIndex("data")));
-                aviso.setHora(cursor.getString(cursor.getColumnIndex("hora")));
-                aviso.setTitulo(cursor.getString(cursor.getColumnIndex("titulo")));
-                aviso.setMensagem(cursor.getString(cursor.getColumnIndex("dialogRedefinir")));
-                aviso.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                    aviso.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    aviso.setPrioridade(cursor.getInt(cursor.getColumnIndex("prioridade")));
+                    aviso.setAutor(cursor.getString(cursor.getColumnIndex("autor")));
+                    aviso.setData(cursor.getString(cursor.getColumnIndex("data")));
+                    aviso.setHora(cursor.getString(cursor.getColumnIndex("hora")));
+                    aviso.setTitulo(cursor.getString(cursor.getColumnIndex("titulo")));
+                    aviso.setMensagem(cursor.getString(cursor.getColumnIndex("dialogRedefinir")));
+                    aviso.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
 
-                avisos.add(aviso);
+                    avisos.add(aviso);
 
+                }
             }
+
             cursor.close();
             return avisos;
         }
@@ -592,7 +610,8 @@ public class sonicDatabaseCRUD {
                 result = DB.getWritableDatabase().insert(TABLE_AVISO_LIDO, null, cv) > 0;
 
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -611,6 +630,7 @@ public class sonicDatabaseCRUD {
                 try {
                     count = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTE);
                 } catch (SQLiteException e) {
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(
                             e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
@@ -634,6 +654,7 @@ public class sonicDatabaseCRUD {
                     Cursor cursor = db.rawQuery("SELECT c.codigo FROM " + TABLE_CLIENTE + " c WHERE c.codigo IN (SELECT ec.codigo_cliente FROM " + TABLE_EMPRESA_CLIENTE + " ec WHERE ec.codigo_empresa = (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1))", null);
                     count = cursor.getCount();
                 } catch (SQLiteException e) {
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
@@ -724,6 +745,7 @@ public class sonicDatabaseCRUD {
                     }
 
                 } catch (SQLiteException e) {
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
@@ -773,6 +795,7 @@ public class sonicDatabaseCRUD {
                     }
 
                 }catch (SQLException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
                             mySystem.System.getActivityName(),
@@ -827,6 +850,7 @@ public class sonicDatabaseCRUD {
                     }
 
                 }catch (SQLException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
                             mySystem.System.getActivityName(),
@@ -905,6 +929,7 @@ public class sonicDatabaseCRUD {
                     cursor.close();
 
                 } catch (SQLiteException e) {
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
                             mySystem.System.getActivityName(),
@@ -1003,6 +1028,7 @@ public class sonicDatabaseCRUD {
                 }
 
             } catch (SQLiteException e) {
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
                         mySystem.System.getActivityName(),
@@ -1081,6 +1107,7 @@ public class sonicDatabaseCRUD {
                 }
 
             } catch (SQLiteException e) {
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
                         mySystem.System.getActivityName(),
@@ -1103,7 +1130,8 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_VENDA_ITEM);
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1122,7 +1150,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_GRUPO_CLIENTE);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1145,18 +1174,21 @@ public class sonicDatabaseCRUD {
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     query , new String[]{args[0]});
 
-            while(cursor.moveToNext()){
+            if(cursor!=null){
+                while(cursor.moveToNext()){
 
-                sonicGrupoClientesHolder grupo = new sonicGrupoClientesHolder();
+                    sonicGrupoClientesHolder grupo = new sonicGrupoClientesHolder();
 
-                grupo.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-                grupo.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                grupo.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                    grupo.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                    grupo.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    grupo.setNome(cursor.getString(cursor.getColumnIndex("nome")));
 
 
-                grupos.add(grupo);
+                    grupos.add(grupo);
 
+                }
             }
+
             cursor.close();
             return grupos;
         }
@@ -1173,7 +1205,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_CLIENTE);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1236,7 +1269,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTE_SEM_COMPRA);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1277,6 +1311,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_USUARIO);
             }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -1396,7 +1431,8 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1437,10 +1473,12 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(),
-                                        mySystem.System.getActivityName(),
-                                        mySystem.System.getClassName(el),
-                                        mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1456,7 +1494,8 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT u.codigo FROM "+TABLE_USUARIO+" u WHERE u.ativo = 1", null);
                 result = cursor.moveToFirst();
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
             return result;
@@ -1474,7 +1513,8 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_USUARIO, args, " codigo = "+codigo, null);
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1491,7 +1531,8 @@ public class sonicDatabaseCRUD {
                 DB.getWritableDatabase().update(TABLE_USUARIO, args, null, null);
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1513,7 +1554,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_SINCRONIZACAO);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1539,7 +1581,8 @@ public class sonicDatabaseCRUD {
                 cv.put("hora_sinc", hora_atual);
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
             }
@@ -1570,6 +1613,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
@@ -1599,7 +1643,8 @@ public class sonicDatabaseCRUD {
 
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1666,7 +1711,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_PRODUTO);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1683,7 +1729,8 @@ public class sonicDatabaseCRUD {
                 Cursor cursor = db.rawQuery("SELECT p._id FROM " + TABLE_PRODUTO + " p WHERE p.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESA + " e WHERE e.selecionada=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -1698,6 +1745,7 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_PRODUTO);
             }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -2130,7 +2178,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULO);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2239,7 +2288,8 @@ public class sonicDatabaseCRUD {
             try{
                 count  = DatabaseUtils.queryNumEntries(db, TABLE_RETORNO_PEDIDO);
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2650,44 +2700,6 @@ public class sonicDatabaseCRUD {
 
     class GrupoProduto{
 
-        public boolean saveGrupoProduto(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_GRUPO_PRODUTO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_GRUPO_PRODUTO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanGrupoProduto(){
-
-            return DB.getWritableDatabase().delete(TABLE_GRUPO_PRODUTO, null, null)>0;
-        }
-
         public List<sonicGrupoProdutosHolder> selectGrupoProduto(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -2723,7 +2735,8 @@ public class sonicDatabaseCRUD {
 
 
             }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
 
@@ -2744,6 +2757,7 @@ public class sonicDatabaseCRUD {
             try {
                 count = DatabaseUtils.queryNumEntries(db, TABLE_ROTA);
             } catch (SQLiteException e) {
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -2774,7 +2788,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public List<sonicRotaHolder> selectRota(){
+        public List<sonicRotaHolder> selectRota(boolean pessoal){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicRotaHolder> rotas = new ArrayList<>();
@@ -2808,18 +2822,19 @@ public class sonicDatabaseCRUD {
                         "C.cep " +
                         " FROM " + TABLE_ROTA +
                         " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
-                        " WHERE R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY R.codigo DESC";
+                        " WHERE R.proprietario=? AND R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY "+ (pessoal ? "R._id" : "R.codigo") +" DESC";
 
                 try{
 
                     Cursor cursor = DB.getReadableDatabase().rawQuery(
-                            query , null);
+                            query , new String[]{String.valueOf((pessoal ? 2 : 1))});
 
 
                         while(cursor.moveToNext()){
 
                             sonicRotaHolder rota = new sonicRotaHolder();
 
+                            rota.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                             rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
                             rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
@@ -2852,6 +2867,7 @@ public class sonicDatabaseCRUD {
                         cursor.close();
 
                 }catch (SQLiteException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(
                             e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
@@ -2869,6 +2885,7 @@ public class sonicDatabaseCRUD {
             List<sonicRotaHolder> rotas = new ArrayList<>();
 
             String query = "SELECT " +
+                    "R._id, " +
                     "R.codigo, " +
                     "R.codigo_empresa, " +
                     "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
@@ -2895,12 +2912,12 @@ public class sonicDatabaseCRUD {
                     "C.uf, " +
                     "C.cep " +
                     " FROM " + TABLE_ROTA +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente WHERE R.codigo="+codigo;
+                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente WHERE "+ (mPrefs.Rota.getPessoal() ? "R._id=?" : "R.codigo=?");
 
             try{
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        query , null);
+                        query , new String[]{String.valueOf(codigo)});
 
                 if(cursor!=null){
 
@@ -2908,6 +2925,7 @@ public class sonicDatabaseCRUD {
 
                         sonicRotaHolder rota = new sonicRotaHolder();
 
+                        rota.setId(cursor.getInt(cursor.getColumnIndex("_id")));
                         rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                         rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
                         rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
@@ -2941,6 +2959,7 @@ public class sonicDatabaseCRUD {
                 cursor.close();
 
             }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -2954,97 +2973,6 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public boolean iniciarRota(String codigo){
-            mCalendar = Calendar.getInstance();
-            ContentValues cv = new ContentValues();
-            cv.put("status", 2);
-            cv.put("situacao", 1);
-            cv.put("data_inicio", data.format(mCalendar.getTime()));
-            cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
-        }
-
-        public boolean positivarRota(String codigo, String obs){
-            mCalendar = Calendar.getInstance();
-            ContentValues cv = new ContentValues();
-            cv.put("status", 3);
-            cv.put("situacao", 1);
-            cv.put("observacao", obs);
-            cv.put("data_fim", data.format(mCalendar.getTime()));
-            cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
-        }
-
-        public boolean negativarRota(String codigo, String neg, String obs){
-            mCalendar = Calendar.getInstance();
-            ContentValues cv = new ContentValues();
-            cv.put("status", 3);
-            cv.put("situacao", 2);
-            cv.put("negativacao", neg);
-            cv.put("observacao", obs);
-            cv.put("data_fim", data.format(mCalendar.getTime()));
-            cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
-        }
-
-        public boolean cancelarRota(String codigo, String canc, String obs){
-            mCalendar = Calendar.getInstance();
-            ContentValues cv = new ContentValues();
-            cv.put("status", 4);
-            cv.put("observacao", obs);
-            cv.put("cancelamento", canc);
-            cv.put("data_inicio", data.format(mCalendar.getTime()));
-            cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA, cv, " codigo=? ", new String[]{codigo})>0;
-        }
-
-        public boolean cleanRota() {
-
-            return DB.getWritableDatabase().delete(TABLE_ROTA, null, null) > 0;
-        }
-    }
-
-    class RotaPessoal{
-
-        public long count() {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            long count = 0;
-
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_ROTA_PESSOAL);
-            } catch (SQLiteException e) {
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public int countPorEmpresa() {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            int count = 0;
-
-            SQLiteDatabase db = DB.getReadableDatabase();
-
-            try {
-                Cursor cursor = db.rawQuery("SELECT R._id FROM " + TABLE_ROTA_PESSOAL + " R WHERE R.codigo_empresa IN (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1)", null);
-                count = cursor.getCount();
-            } catch (SQLiteException e) {
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
         public Boolean insertRota(String data, String hora){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Boolean result;
@@ -3052,17 +2980,21 @@ public class sonicDatabaseCRUD {
             try{
 
                 ContentValues cv = new ContentValues();
+                cv.put("codigo", sonicUtils.Randomizer.generate(100000000,999999999));
+                cv.put("codigo_usuario", mPrefs.Users.getUsuarioId());
                 cv.put("codigo_empresa", mPrefs.Users.getEmpresaId());
                 cv.put("codigo_cliente", mPrefs.Clientes.getId());
                 cv.put("tipo", 1); // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
                 cv.put("status", 1); // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
                 cv.put("data_agendamento", data);
                 cv.put("hora_agendamento", hora);
+                cv.put("proprietario", 2); //1=AGENDA, 2=PESSOAL
                 cv.put("atendente", mPrefs.Users.getUsuarioNome());
 
-                result = DB.getWritableDatabase().insertOrThrow(TABLE_ROTA_PESSOAL, null, cv)>0;
+                result = DB.getWritableDatabase().insertOrThrow(TABLE_ROTA, null, cv)>0;
 
             }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -3080,26 +3012,58 @@ public class sonicDatabaseCRUD {
 
         public boolean iniciarRota(String codigo){
             mCalendar = Calendar.getInstance();
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
             ContentValues cv = new ContentValues();
             cv.put("status", 2);
+            cv.put("situacao", 1);
             cv.put("data_inicio", data.format(mCalendar.getTime()));
             cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
+            try{
+                result = DB.getWritableDatabase().update(TABLE_ROTA, cv, (mPrefs.Rota.getPessoal() ? "_id=?" : "codigo=?"), new String[]{codigo})>0;
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+            return result;
         }
 
         public boolean positivarRota(String codigo, String obs){
             mCalendar = Calendar.getInstance();
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
             ContentValues cv = new ContentValues();
             cv.put("status", 3);
             cv.put("situacao", 1);
             cv.put("observacao", obs);
             cv.put("data_fim", data.format(mCalendar.getTime()));
             cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
+
+            try{
+                result = DB.getWritableDatabase().update(TABLE_ROTA, cv, (mPrefs.Rota.getPessoal() ? "_id=?" : "codigo=?"), new String[]{codigo})>0;
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+            return result;
         }
 
         public boolean negativarRota(String codigo, String neg, String obs){
             mCalendar = Calendar.getInstance();
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
             ContentValues cv = new ContentValues();
             cv.put("status", 3);
             cv.put("situacao", 2);
@@ -3107,97 +3071,37 @@ public class sonicDatabaseCRUD {
             cv.put("observacao", obs);
             cv.put("data_fim", data.format(mCalendar.getTime()));
             cv.put("hora_fim", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
+
+            try{
+                result = DB.getWritableDatabase().update(TABLE_ROTA, cv, (mPrefs.Rota.getPessoal() ? "_id=?" : "codigo=?"), new String[]{codigo})>0;
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+            return result;
         }
 
         public boolean cancelarRota(String codigo, String canc, String obs){
             mCalendar = Calendar.getInstance();
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Boolean result = false;
             ContentValues cv = new ContentValues();
             cv.put("status", 4);
             cv.put("observacao", obs);
             cv.put("cancelamento", canc);
             cv.put("data_inicio", data.format(mCalendar.getTime()));
             cv.put("hora_inicio", hora.format(mCalendar.getTime()));
-            return DB.getWritableDatabase().update(TABLE_ROTA_PESSOAL, cv, " _id=? ", new String[]{codigo})>0;
-        }
-
-        public List<sonicRotaHolder> selectRota(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicRotaHolder> rotas = new ArrayList<>();
-
-            String query = "SELECT " +
-                    "R._id, " +
-                    "R.codigo_empresa, " +
-                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
-                    "R.codigo_cliente, " +
-                    "R.tipo, " +
-                    "R.status, " +
-                    "R.data_agendamento, " +
-                    "R.hora_agendamento, " +
-                    "R.atendente, " +
-                    "R.ordem, " +
-                    "R.observacao, " +
-                    "R.data_inicio, " +
-                    "R.data_fim, " +
-                    "R.hora_inicio, " +
-                    "R.hora_fim, " +
-                    "R.situacao, " +
-                    "R.negativacao, " +
-                    "R.cancelamento, " +
-                    "C.razao_social, " +
-                    "C.nome_fantasia, " +
-                    "C.endereco, " +
-                    "C.bairro, " +
-                    "C.municipio, " +
-                    "C.uf, " +
-                    "C.cep " +
-                    " FROM " + TABLE_ROTA_PESSOAL +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
-                    " WHERE R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY R._id DESC";
 
             try{
-
-                Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        query , null);
-
-
-                while(cursor.moveToNext()){
-
-                    sonicRotaHolder rota = new sonicRotaHolder();
-
-                    rota.setCodigo(cursor.getInt(cursor.getColumnIndex("_id")));
-                    rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                    rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                    rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
-                    rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
-                    rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                    rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
-                    rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                    rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
-                    rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
-                    rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
-                    rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
-                    rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
-                    rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
-                    rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
-                    rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                    rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
-                    rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
-                    rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
-                    rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                    rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
-                    rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                    rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
-                    rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
-                    rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
-
-                    rotas.add(rota);
-
-                }
-                cursor.close();
-
+                result = DB.getWritableDatabase().update(TABLE_ROTA, cv, (mPrefs.Rota.getPessoal() ? "_id=?" : "codigo=?"), new String[]{codigo})>0;
             }catch (SQLiteException e){
+                mPrefs.Geral.setError("Não foi possível executar a operação.\n\nDetalhe -> "+e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -3206,519 +3110,54 @@ public class sonicDatabaseCRUD {
                         mySystem.System.getMethodNames(el));
                 e.printStackTrace();
             }
-            return rotas;
-        }
+            return result;
 
-        public List<sonicRotaHolder> selectRotaId(int codigo){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicRotaHolder> rotas = new ArrayList<>();
-
-            String query = "SELECT " +
-                    "R._id, " +
-                    "R.codigo_empresa, " +
-                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
-                    "R.codigo_cliente, " +
-                    "R.tipo, " +
-                    "R.status, " +
-                    "R.data_agendamento, " +
-                    "R.hora_agendamento, " +
-                    "R.atendente, " +
-                    "R.ordem, " +
-                    "R.observacao, " +
-                    "R.data_inicio, " +
-                    "R.data_fim, " +
-                    "R.hora_inicio, " +
-                    "R.hora_fim, " +
-                    "R.situacao, " +
-                    "R.negativacao, " +
-                    "R.cancelamento, " +
-                    "C.razao_social, " +
-                    "C.nome_fantasia, " +
-                    "C.endereco, " +
-                    "C.bairro, " +
-                    "C.municipio, " +
-                    "C.uf, " +
-                    "C.cep " +
-                    " FROM " + TABLE_ROTA_PESSOAL +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente WHERE R._id="+codigo;
-
-            try{
-
-                Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        query , null);
-
-                if(cursor!=null){
-
-                    if(cursor.moveToFirst()){
-
-                        sonicRotaHolder rota = new sonicRotaHolder();
-
-                        rota.setCodigo(cursor.getInt(cursor.getColumnIndex("_id")));
-                        rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                        rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                        rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
-                        rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
-                        rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-                        rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
-                        rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
-                        rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
-                        rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
-                        rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
-                        rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
-                        rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
-                        rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
-                        rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
-                        rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
-                        rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
-                        rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
-                        rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
-                        rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
-                        rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
-                        rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
-                        rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
-                        rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
-
-                        rotas.add(rota);
-                    }
-
-                }
-                cursor.close();
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return rotas;
-
-        }
-
-        public boolean cleanData(String tabela){
-
-            return DB.getWritableDatabase().delete(tabela, null, null)>0;
         }
 
     }
 
     class TabelaPreco{
 
-        public boolean saveTabelaPreco(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo", lista.get(0));
-                    cv.put("nome", lista.get(1));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TABELA_PRECO, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        public boolean cleanTabelaPreco(){
-
-            return DB.getWritableDatabase().delete(TABLE_TABELA_PRECO, null, null)>0;
-        }
-
     }
 
     class TipoCobranca{
-
-        public boolean saveTipoCobranca(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_TIPO_COBRANCA, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TIPO_COBRANCA, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanTipoCobranca(){
-
-            return DB.getWritableDatabase().delete(TABLE_TIPO_COBRANCA, null, null)>0;
-        }
 
     }
 
     class CondicoesPagamento{
 
-        public boolean saveCondicoesPagamento(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_CONDICAO_PAGAMENTO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_CONDICAO_PAGAMENTO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        public boolean cleanCondicoesPagamento(){
-
-            return DB.getWritableDatabase().delete(TABLE_CONDICAO_PAGAMENTO, null, null)>0;
-        }
 
     }
 
-
     class Transportadora{
-
-        public boolean saveTransportadora(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo", lista.get(0));
-                    cv.put("nome", lista.get(1));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TRANSPORTADORA, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanTransportadora(){
-
-            return DB.getWritableDatabase().delete(TABLE_TRANSPORTADORA, null, null)>0;
-        }
 
     }
 
     class UnidadeMedida{
 
-        public boolean saveUnidadeMedida(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_UNIDADE_MEDIDA, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_UNIDADE_MEDIDA, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanUnidadeMedida(){
-
-            return DB.getWritableDatabase().delete(TABLE_UNIDADE_MEDIDA, null, null)>0;
-        }
-
     }
 
     class TipoPedido{
-
-        public boolean saveTipoPedido(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_TIPO_PEDIDO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TIPO_PEDIDO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        public boolean cleanTipoPedido(){
-
-            return DB.getWritableDatabase().delete(TABLE_TIPO_PEDIDO, null, null)>0;
-        }
 
     }
 
     class TipoDocumento{
 
-        public boolean saveTipoDocumento(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo", lista.get(0));
-                    cv.put("nome", lista.get(1));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TIPO_DOCUMENTO, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean dropTipoDocumento(){
-
-            return DB.getWritableDatabase().delete(TABLE_TIPO_DOCUMENTO, null, null)>0;
-        }
-
     }
 
     class Desconto{
-
-        public boolean saveDesconto(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo_vendedor", lista.get(0));
-                    cv.put("perc_desconto", lista.get(1));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_DESCONTO, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean dropDesconto(){
-
-            return DB.getWritableDatabase().delete(TABLE_DESCONTO, null, null)>0;
-        }
 
     }
 
     class Prazo{
 
-        public boolean savePrazo(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_PRAZO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_PRAZO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanPrazo(){
-
-            return DB.getWritableDatabase().delete(TABLE_PRAZO, null, null)>0;
-        }
-
     }
 
     class TabelaPrecoCliente{
 
-        public boolean saveTabelaPrecoCliente(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-            
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo_tabela", lista.get(0));
-                    cv.put("codigo_cliente", lista.get(1));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_TABELA_PRECO_CLIENTE, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        public boolean dropTabelaPrecoCliente(){
-
-            return DB.getWritableDatabase().delete(TABLE_TABELA_PRECO_CLIENTE, null, null)>0;
-        }
-
     }
 
     class Mensagem{
-
-        public boolean saveMensagem(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            int size = lista.size();
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < size; i++){
-
-                    cv.put("codigo", lista.get(0));
-                    cv.put("dialogRedefinir", lista.get(1));
-
-                }
-
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return DB.getWritableDatabase().insert(TABLE_TABELA_PRECO_CLIENTE, null, cv)>0;
-        }
-
-        public boolean dropMensagem(){
-
-            return DB.getWritableDatabase().delete(TABLE_TABELA_PRECO_CLIENTE, null, null)>0;
-        }
 
     }
 
@@ -3737,77 +3176,6 @@ public class sonicDatabaseCRUD {
             }
 
             return count;
-        }
-
-        public boolean saveLocalizacao(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            int size = lista.size();
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < size; i++){
-
-                    cv.put("codigo_vendedor", lista.get(0));
-                    cv.put("data", myUtil.Data.dataFotmatadaUS(lista.get(1)));
-                    cv.put("hora", myUtil.Data.horaFotmatadaBR(lista.get(2)));
-                    cv.put("latitude", lista.get(3));
-                    cv.put("longitude", lista.get(4));
-
-                }
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return DB.getWritableDatabase().insert(TABLE_LOCALIZACAO, null, cv)>0;
-        }
-
-        public boolean cleanLocalizacao(){
-
-            return DB.getWritableDatabase().delete(TABLE_LOCALIZACAO, null, null)>0;
-        }
-
-        public List<sonicLocalizacaoHolder> selectLocalizacao(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicLocalizacaoHolder> locs = new ArrayList<sonicLocalizacaoHolder>();
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "l.codigo_vendedor," +
-                            "u.login," +
-                            "u.nome," +
-                            "na.nome_acesso," +
-                            "l.data," +
-                            "l.hora," +
-                            "l.latitude," +
-                            "l.longitude" +
-                            " FROM "+TABLE_LOCALIZACAO+" l "+
-                            " JOIN "+TABLE_USUARIO+" u " +
-                            " ON l.codigo_vendedor = u.codigo" +
-                            " JOIN "+TABLE_NIVEL_ACESSO+" na " +
-                            " ON na.nivel = u.nivel_acesso ", null);
-
-            while(cursor.moveToNext()){
-
-                sonicLocalizacaoHolder loc = new sonicLocalizacaoHolder();
-
-                loc.setCodigoVendedor(cursor.getInt(cursor.getColumnIndex("codigo_vendedor")));
-                loc.setLogin(cursor.getString(cursor.getColumnIndex("login")));
-                loc.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-                loc.setNivelAcesso(cursor.getString(cursor.getColumnIndex("nome_acesso")));
-                loc.setData(myUtil.Data.dataFotmatadaBR(cursor.getString(cursor.getColumnIndex("data"))));
-                loc.setHora(cursor.getString(cursor.getColumnIndex("hora")));
-                loc.setLatitude(cursor.getString(cursor.getColumnIndex("latitude")));
-                loc.setLongitude(cursor.getString(cursor.getColumnIndex("longitude")));
-
-                locs.add(loc);
-
-            }
-            cursor.close();
-            return locs;
         }
 
     }
@@ -3829,30 +3197,6 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public String selectLastError() {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String log = "";
-
-            try {
-                Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT log FROM " + TABLE_LOG_ERRO + " ORDER BY _id DESC LIMIT 1 ", null);
-                if (cursor.moveToFirst()) {
-                    log = cursor.getString(cursor.getColumnIndex("log"));
-                }
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-            return log;
-        }
-
-        public boolean cleanLogErro(){
-
-            return DB.getWritableDatabase().delete(TABLE_LOG_ERRO, null, null)>0;
-        }
-
     }
-
 
 }

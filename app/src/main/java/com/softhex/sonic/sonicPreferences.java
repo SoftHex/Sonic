@@ -72,6 +72,7 @@ public class sonicPreferences{
     private static final String GERAL_TIPO_HORA = "tipoHora";
     private static final String GERAL_SITE = "site";
     private static final String GERAL_FIRST_SINC = "sincFirst";
+    private static final String GERAL_ERROR = "geralError";
     private static final String SINC_REFRESH = "sincRefresh";
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
@@ -87,14 +88,12 @@ public class sonicPreferences{
     private static final String ROTA_STATUS = "rotaStatus";
     private static final String ROTA_SITUACAO = "rotaSituacao";
     private static final String ROTA_DATA_HORA = "rotaDataHora";
+    private static final String ROTA_PESSOAL = "rotaPessoal";
     private static final String ROTA_PESSOAL_ID = "rotaPessoalId";
-    private static final String ROTA_PESSOAL_ITEM_POSITION = "rotaPessoalItemPosition";
-    private static final String ROTA_PESSOAL_ADDRESS_MAP = "rotaPessoalAddressMap";
     private static final String ROTA_PESSOAL_REFRESH = "rotaPessoalRefresh";
     private static final String ROTA_PESSOAL_FROM_CLIENTE = "rotaPessoalFromCliente";
     private static final String ROTA_PESSOAL_ADDING = "rotaPessoalAdding";
     private static final String ROTA_CLIENTE_PICKED= "rotaClientePicked";
-    private static final String ROTA_PESSOAL = "rotaPessoal";
     private static final String ROTA_PESSOAL_DATA = "rotaPessoalData";
     private static final String ROTA_PESSOAL_HORA = "rotaPessoalHora";
 
@@ -682,6 +681,14 @@ public class sonicPreferences{
         public String getHomeChartType(){
             return sharedpreferences.getString(GERAL_HOME_CHART_TYPE, "Linhas");
         }
+        public void setError(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_ERROR, value);
+            editor.apply();
+        }
+        public String getError(){
+            return sharedpreferences.getString(GERAL_ERROR, "Linhas");
+        }
         public void setTipoHora(String value){
             editor = sharedpreferences.edit();
             editor.putString(GERAL_TIPO_HORA, value);
@@ -734,6 +741,14 @@ public class sonicPreferences{
         }
     }
     public class Rota{
+        public void setPessoal(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_PESSOAL, value);
+            editor.apply();
+        }
+        public boolean getPessoal(){
+            return sharedpreferences.getBoolean(ROTA_PESSOAL, false);
+        }
         public void setStartTime(long value){
             editor = sharedpreferences.edit();
             editor.putLong(ROTA_START_TIME, value);
@@ -859,19 +874,6 @@ public class sonicPreferences{
             editor = sharedpreferences.edit();
             editor.putString(ROTA_PESSOAL_ID, value);
             editor.apply();
-        }
-        public String getAddressMap(){
-            return sharedpreferences.getString(ROTA_PESSOAL_ADDRESS_MAP, "");
-        }
-
-        public void setItemPosition(int value){
-            editor = sharedpreferences.edit();
-            editor.putInt(ROTA_PESSOAL_ITEM_POSITION, value);
-            editor.apply();
-        }
-
-        public int getItemPosition(){
-            return sharedpreferences.getInt(ROTA_PESSOAL_ITEM_POSITION, 0);
         }
 
         public void setRefresh(boolean value){

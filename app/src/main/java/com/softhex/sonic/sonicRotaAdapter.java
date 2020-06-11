@@ -78,7 +78,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         String CANCELAR = "Cancelar Atendimento";
     }
 
-    private Context myCtx;
+    private Context mContext;
     private Activity mActivity;
     private List<sonicRotaHolder> rotas;
     private List<sonicRotaHolder> filteredRotas;
@@ -88,6 +88,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
     private sonicPreferences mPrefs;
     private sonicUtils mUtils;
     private RecyclerView mRecycler;
+    private boolean rotaPessoal;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -122,13 +123,14 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         }
     }
 
-    sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, Activity activity, RecyclerView mRecycler) {
-        this.myCtx = context;
+    sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, RecyclerView mRecycler, Activity act, boolean pessoal) {
+        this.mContext = context;
         this.filteredRotas = rotas;
-        this.mActivity = activity;
         this.rotas = rotas;
-        this.mUtils = new sonicUtils(myCtx);
-        this.mPrefs = new sonicPreferences(myCtx);
+        this.mActivity = act;
+        this.rotaPessoal = pessoal;
+        this.mUtils = new sonicUtils(mContext);
+        this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
     }
@@ -147,7 +149,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.setIsRecyclable(false);
         String cliNomeExibicao = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
 
-        holder.tvCodigo.setText("#"+rota.getCodigo());
+        holder.tvCodigo.setText("#"+(!rotaPessoal ? rota.getCodigo() : rota.getId()));
         holder.tvNome.setText(cliNomeExibicao);
         holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
@@ -160,7 +162,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         if(f.exists()){
             holder.ivImagem.setVisibility(View.VISIBLE);
             holder.tvLetra.setVisibility(View.GONE);
-            Glide.with(myCtx)
+            Glide.with(mContext)
                     .load(f)
                     .circleCrop()
                     .override(100,100)
@@ -177,12 +179,12 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         }
         holder.tvStatus.setBackground(
                 rota.getStatus()==Status.NAO_INICIADO ?
-                    myCtx.getResources().getDrawable(R.drawable.status_nao_iniciado) :
+                    mContext.getResources().getDrawable(R.drawable.status_nao_iniciado) :
                         rota.getStatus()==Status.EM_ATENDIMENTO ?
-                            myCtx.getResources().getDrawable(R.drawable.status_em_atendimento) :
+                            mContext.getResources().getDrawable(R.drawable.status_em_atendimento) :
                                 rota.getStatus()==Status.CONCLUIDO ?
-                                    myCtx.getResources().getDrawable(R.drawable.status_concluido) :
-                                        myCtx.getResources().getDrawable(R.drawable.status_cancelado));
+                                    mContext.getResources().getDrawable(R.drawable.status_concluido) :
+                                        mContext.getResources().getDrawable(R.drawable.status_cancelado));
 
         holder.tvStatus.setText(
                 rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
@@ -195,11 +197,11 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             switch (rota.getSituacao()){
                 case Situacao.POSITIVADO:
                     holder.tvSituacao.setText(SituacaoText.POSITIVADO);
-                    holder.tvSituacao.setBackground(myCtx.getResources().getDrawable(R.drawable.situacao_positivado));
+                    holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_positivado));
                     break;
                 case Situacao.NEGATIVADO:
                     holder.tvSituacao.setText(SituacaoText.NEGATIVADO);
-                    holder.tvSituacao.setBackground(myCtx.getResources().getDrawable(R.drawable.situacao_negativado));
+                    holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_negativado));
                     break;
             }
 
@@ -208,7 +210,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         holder.linearItem.setOnClickListener((View v)-> {
             if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADO){
 
-                new PromptDialog(myCtx)
+                new PromptDialog(mContext)
                         .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
                         .setAnimationEnable(true)
                         .setTitleText(R.string.msgAtencao)
@@ -264,11 +266,13 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                 mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
                 mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro()+", "+rota.getBairro()+" - "+rota.getMunicipio()+"/"+rota.getUf());
                 mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
-                mPrefs.Rota.setCodigo(rota.getCodigo());
+                mPrefs.Rota.setCodigo(!rotaPessoal ? rota.getCodigo() : rota.getId());
+                mPrefs.Rota.setPessoal(rotaPessoal);
                 mPrefs.Rota.setItemPosition(position);
                 mPrefs.Rota.setRefresh(false);
-                Intent i = new Intent(mActivity, sonicRotaDetalhe.class);
+                Intent i = new Intent(mContext, sonicRotaDetalhe.class);
                 mActivity.startActivityForResult(i, 0);
+
             }
 
         });

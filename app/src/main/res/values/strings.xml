@@ -293,6 +293,50 @@
         <item>1</item>
     </string-array>
 
+    <!-- BANCOS -->
+    <string-array name="codigoBancos">
+        <item name="1">001</item>
+        <item name="2">237</item>
+        <item name="3">104</item>
+        <item name="4">745</item>
+        <item name="5">399</item>
+        <item name="6">341</item>
+        <item name="7">422</item>
+        <item name="8">033</item>
+        <item name="9">031</item>
+        <item name="10">748</item>
+        <item name="11">004</item>
+        <item name="12">260</item>
+    </string-array>
+    <string-array name="nomeBancos">
+        <item name="1">Banco do Brasil</item>
+        <item name="2">Bradesco</item>
+        <item name="3">Caixa</item>
+        <item name="4">Citibank</item>
+        <item name="5">HSBC</item>
+        <item name="6">Itaú</item>
+        <item name="7">Safra</item>
+        <item name="8">Santander</item>
+        <item name="9">BMG</item>
+        <item name="10">Sicredi</item>
+        <item name="11">Banco do Nordeste</item>
+        <item name="12">Nubank</item>
+    </string-array>
+    <string-array name="nomeBancosFull">
+        <item name="1">Banco do Brasil S.A</item>
+        <item name="2">Banco Bradesco S.A</item>
+        <item name="3">Caixa Econômica Federal</item>
+        <item name="4">Banco Citibank S.A</item>
+        <item name="5">HSBC Bank Brasil S.A - Banco Múltiplo</item>
+        <item name="6">Banco Itaú S.A</item>
+        <item name="7">Banco Safra S.A</item>
+        <item name="8">Banco Santander (Brasil) S.A</item>
+        <item name="9">Banco BMG S.A</item>
+        <item name="10">Banco Cooperativo Sicredi S.A</item>
+        <item name="11">Banco Do Nordeste do Brasil S.A</item>
+        <item name="11">Nubank - Banco Digital</item>
+    </string-array>
+
     <!-- OUTROS -->
     <string name="msgAtencao">Atenção!</string>
     <string name="msgErro">Erro!</string>
@@ -301,6 +345,10 @@
     <string name="rotaObs">Digite uma observação aqui...</string>
     <string name="rotaEmAtendimento">Existe um rota em atendimento. Finalize-a para iniciar a próxima.</string>
     <string name="rotaCancelada">Se cancelada, não poderá ser utilizada posteriormente.</string>
+    <string name="noRotaNewTitle">Ops, nada por enquanto...</string>
+    <string name="noRotaNewText">Você pode agendar uma visita clicando no botão abaixo.</string>
+    <string name="noSincTitle">Ops, nada por enquanto...</string>
+    <string name="noSincText">Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.</string>
 
     <string-array name="rotaNegativadaOptions">
         <item name="1">ESCOLHA UMA OPÇÃO...</item>
