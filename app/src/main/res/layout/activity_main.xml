@@ -32,7 +32,7 @@
       android:background="@color/colorPrimaryDark"/>
 
   <Button
-      android:id="@+id/btn_next"
+      android:id="@+id/btProximo"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
@@ -40,10 +40,10 @@
       android:background="@null"
       android:textSize="14sp"
       tools:ignore="RelativeOverlap"
-      android:text="@string/textNext" />
+      android:text="@string/btProximo" />
 
   <Button
-      android:id="@+id/btn_skip"
+      android:id="@+id/btPular"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_alignParentBottom="true"
@@ -51,6 +51,6 @@
       android:background="@null"
       android:textSize="14sp"
       tools:ignore="RelativeOverlap"
-      android:text="@string/textSkip"/>
+      android:text="@string/btPular"/>
 
 </RelativeLayout>

@@ -81,9 +81,10 @@
     <string name="appVerify">Verificaremos se o código digitado encontra-se em nossa base de dados.</string>
     <string name="appConfirm">Confirme se esses são seus dados, caso contrário contate na sua empresa o responsável pela administração do sistema.</string>
     <string name="msgPerms">Permissões necessárias...</string>
-    <string name="textNext">PRÓXIMO</string>
-    <string name="textFinish">INICIAR</string>
-    <string name="textSkip">PULAR</string>
+    <string name="btProximo">PRÓXIMO</string>
+    <string name="btIniciar">INICIAR</string>
+    <string name="btPular">PULAR</string>
+    <string name="btVoltar">VOLTAR</string>
 
     <!-- HEADER DIALOGS -->
     <string name="headerDefault">::: Aviso :::</string>
@@ -374,25 +375,4 @@
     <string name="button_sinc_error">Erro, tente novamente...</string>
 
 
-    <string-array name="cource_title">
-        <item>ANDROID</item>
-        <item>JAVA</item>
-        <item>PHP</item>
-    </string-array>
-    <string-array name="android_item">
-        <item>Activity Life Circle</item>
-        <item>Fragments</item>
-        <item>Recycler View</item>
-    </string-array>
-    <string-array name="java_item">
-        <item>Exception</item>
-        <item>Multithreading Multithreading Multithreading Multithreading</item>
-        <item>Inheritance</item>
-    </string-array>
-    <string-array name="php_item">
-        <item>Looping</item>
-        <item>Mysql</item>
-        <item>Session</item>
-        <item>Post</item>
-    </string-array>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +16,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private ViewPagerAdapter viewPagerAdapter;
-    private Button next,skip;
+    private Button btProximo, btPular;
     private TextView[] dots;
     private LinearLayout dotsLayout;
     private int[] layouts;
     private sonicDatabaseCRUD DBC;
     private Intent i;
+    private int current;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mPrefs = new sonicPreferences(this);
+        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_USUARIO, mPrefs.Users.getEmpresaId());
+
+        Log.d("IMAGEM", f.toString());
 
         DBC = new sonicDatabaseCRUD(this);
 
@@ -46,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager);
         dotsLayout = findViewById(R.id.layoutDots);
-        skip = findViewById(R.id.btn_skip);
-        next = findViewById(R.id.btn_next);
+        btPular = findViewById(R.id.btPular);
+        btProximo = findViewById(R.id.btProximo);
 
         layouts = new int[]{R.layout.sonic_slide_one,R.layout.sonic_slide_two,R.layout.sonic_slide_tree,R.layout.sonic_slide_four};
         addBottomDots(0);
@@ -55,15 +64,25 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(viewListener);
 
-        skip.setOnClickListener((View v)-> {
-                Intent i  = new Intent(MainActivity.this,sonicEmpresa.class);
-                startActivity(i);
-                finish();
+        btPular.setOnClickListener((View v)-> {
+                //Intent i  = new Intent(MainActivity.this,sonicEmpresa.class);
+                //startActivity(i);
+                //finish();
+                if(current==0){
+
+                    Intent i  = new Intent(MainActivity.this,sonicEmpresa.class);
+                    startActivity(i);
+                    finish();
+                }
+                else {
+                    current = getItem(-1);
+                    viewPager.setCurrentItem(current);
+                }
         });
 
-        next.setOnClickListener((View v)->{
+        btProximo.setOnClickListener((View v)->{
 
-                int current = getItem(+1);
+                current = getItem(+1);
 
                 if(current<layouts.length){
                     viewPager.setCurrentItem(current);
@@ -108,14 +127,16 @@ public class MainActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
 
             addBottomDots(position);
-            if(position==layouts.length-1){
 
-                next.setText(R.string.textFinish);
-                skip.setVisibility(View.GONE);
+            if(position==layouts.length-1){
+                btProximo.setText(R.string.btIniciar);
             }
             else{
-                next.setText(R.string.textNext);
-                skip.setVisibility(View.VISIBLE);
+                btProximo.setText(R.string.btProximo);
+                btPular.setText(R.string.btVoltar);
+                if(position==0){
+                    btPular.setText(R.string.btPular);
+                }
             }
 
         }

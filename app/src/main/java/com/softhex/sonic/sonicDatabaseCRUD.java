@@ -36,6 +36,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_CLIENTE_SEM_COMPRA = sonicConstants.TB_CLIENTE_SEM_COMPRA;
     private final String TABLE_PRODUTO = sonicConstants.TB_PRODUTO;
     private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTO;
+    private final String TABLE_BLOQUEIO_PRODUTO = sonicConstants.TB_BLOQUEIO_PRODUTO;
     private final String TABLE_ROTA = sonicConstants.TB_ROTA;
     private final String TABLE_ROTA_PESSOAL = sonicConstants.TB_ROTA_PESSOAL;
     private final String TABLE_ESTOQUE_PRODUTO = sonicConstants.TB_ESTOQUE_PRODUTO;
@@ -113,7 +114,6 @@ public class sonicDatabaseCRUD {
     Rota Rota = new Rota();
     Estoque Estoque = new Estoque();
     Titulo Titulo = new Titulo();
-    Retorno Retorno = new Retorno();
     Financeiro Financeiro = new Financeiro();
     TabelaPreco TabelaPreco = new TabelaPreco();
     UnidadeMedida UnidadeMedida = new UnidadeMedida();
@@ -208,7 +208,7 @@ public class sonicDatabaseCRUD {
             //return type.equals("save")
             //        ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
              //       : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
-            return DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0;
+            return DB.getWritableDatabase().insert(tabela, null, cv)>0;
         }
 
         public boolean cleanData(String tabela){
@@ -620,7 +620,8 @@ public class sonicDatabaseCRUD {
         }
 
         }
-        class Cliente {
+
+    class Cliente {
 
             public long count() {
 
@@ -1726,7 +1727,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                Cursor cursor = db.rawQuery("SELECT p._id FROM " + TABLE_PRODUTO + " p WHERE p.codigo_empresa = (SELECT e.codigo FROM " + TABLE_EMPRESA + " e WHERE e.selecionada=1)", null);
+                Cursor cursor = db.rawQuery("SELECT P._id FROM " + TABLE_PRODUTO + " P WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -1772,25 +1773,25 @@ public class sonicDatabaseCRUD {
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
                     "SELECT " +
-                            "p.codigo, " +
-                            "p.nome, " +
-                            "p.codigo_empresa, " +
-                            "p.data_cadastro, " +
-                            "p.codigo_alternativo, " +
-                            "p.descricao, " +
-                            "p.ncm, " +
-                            "p.peso_bruto, " +
-                            "p.peso_liquido, " +
-                            "p.estoque_minimo, " +
-                            "p.estoque_maximo, " +
-                            "p.multiplicidade, " +
-                            "p.codigo_ean, " +
-                            "p.codigo_ean_tributavel, " +
-                            " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
-                            " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
-                            " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
-                            " FROM " + TABLE_PRODUTO + " p " +
-                            " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1)" + where + " ORDER BY p.nome ", null);
+                            "P.codigo, " +
+                            "P.nome, " +
+                            "P.codigo_empresa, " +
+                            "P.data_cadastro, " +
+                            "P.codigo_alternativo, " +
+                            "P.descricao, " +
+                            "P.ncm, " +
+                            "P.peso_bruto, " +
+                            "P.peso_liquido, " +
+                            "P.estoque_minimo, " +
+                            "P.estoque_maximo, " +
+                            "P.multiplicidade, " +
+                            "P.codigo_ean, " +
+                            "P.codigo_ean_tributavel, " +
+                            " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
+                            " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida, " +
+                            " (SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto " +
+                            " FROM " + TABLE_PRODUTO + " P " +
+                            " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)" + where + " ORDER BY P.nome ", null);
 
 
             if(cursor.moveToFirst()){
@@ -1856,7 +1857,7 @@ public class sonicDatabaseCRUD {
                             " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
                             " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
                             " FROM " + TABLE_PRODUTO + " p " +
-                            " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1)" + where + " ORDER BY p.nome ", null);
+                            " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)" + where + " ORDER BY P.nome ", null);
 
             if(cursor.moveToFirst()){
                 while(cursor.moveToNext()){
@@ -1912,7 +1913,7 @@ public class sonicDatabaseCRUD {
                     " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
                     " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
                     " FROM " + TABLE_PRODUTO + " p " +
-                    " WHERE p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1) AND p.codigo = "+args;
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1) AND p.codigo = "+args;
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
             Log.d("QUERY", query);
@@ -2032,43 +2033,6 @@ public class sonicDatabaseCRUD {
 
     class Estoque{
 
-        public boolean saveEstoque(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_ESTOQUE_PRODUTO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_ESTOQUE_PRODUTO, null, cv)>0;
-
-            }catch (SQLiteException e){
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-            return result;
-        }
-
-        public boolean cleanEstoque(){
-
-            return DB.getWritableDatabase().delete(TABLE_ESTOQUE_PRODUTO, null, null)>0;
-        }
-
     }
 
     class Financeiro{
@@ -2085,45 +2049,6 @@ public class sonicDatabaseCRUD {
             }
 
             return count;
-        }
-
-        public boolean saveFinanceiro(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-
-
-            try{
-
-                ContentValues cv = new ContentValues();
-                Cursor cursor = DB.getWritableDatabase().query(TABLE_FINANCEIRO, null, null, null, null, null, null);
-                String[] columnNames = cursor.getColumnNames();
-
-                for(int i = 0; i < columnNames.length-1; i++){
-
-                    cv.put(columnNames[i+1], lista.get(i));
-
-                }
-
-                    result = DB.getWritableDatabase().insert(TABLE_FINANCEIRO, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        public boolean cleanFinanceiro(){
-
-            return DB.getWritableDatabase().delete(TABLE_FINANCEIRO, null, null)>0;
         }
 
         public List<sonicFinanceiroHolder> selectFinanceiro(){
@@ -2227,11 +2152,6 @@ public class sonicDatabaseCRUD {
             return titulos;
         }
 
-        public boolean cleanTitulo(){
-
-            return DB.getWritableDatabase().delete(TABLE_TITULO, null, null)>0;
-        }
-
         public List<sonicTitulosHolder> selectTituloClienteSelecionado(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -2277,426 +2197,6 @@ public class sonicDatabaseCRUD {
         }
 
     }
-
-    class Retorno{
-
-        public long count(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            long count=0;
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_RETORNO_PEDIDO);
-            }catch (SQLiteException e){
-                mPrefs.Geral.setError(e.getMessage());
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public long countRetornoSituacao(int situacao){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            String data = "";
-
-            switch (situacao){
-                case 1:
-                    switch (myCons.RETORNO_PENDENTE_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch (myCons.RETORNO_FATURADO_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (myCons.RETORNO_EM_ROTA_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 4:
-                    switch (myCons.RETORNO_ENTREGUE_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 5:
-                    switch (myCons.RETORNO_CANCELADO_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-
-            }
-
-            long count=0;
-
-            SQLiteDatabase db = DB.getWritableDatabase();
-            try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_RETORNO_PEDIDO, "situacao="+situacao+" AND data_pedido "+data);
-            }catch (SQLiteException e){
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public boolean saveRetornoPedido(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo_cliente", lista.get(0));
-                    cv.put("codigo_pedido", lista.get(1));
-                    cv.put("numero_pedido_mobile", lista.get(2));
-                    cv.put("data_pedido", lista.get(3));
-                    cv.put("valor_pedido", lista.get(4));
-					cv.put("valor_desconto", lista.get(5));
-                    cv.put("codigo_tipo_pedido", lista.get(6));
-                    cv.put("codigo_prazo", lista.get(7));
-					cv.put("situacao", lista.get(8));
-					cv.put("situacao_cor", lista.get(9));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_RETORNO_PEDIDO, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-		
-		public boolean saveRetornoPedidoITEM(List<String> lista){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try{
-                for(int i = 0; i < lista.size(); i++){
-
-                    cv.put("codigo_pedido", lista.get(0));
-                    cv.put("codigo_produto", lista.get(1));
-                    cv.put("codigo_unidade", lista.get(2));
-                    cv.put("quantidade", lista.get(3));
-                    cv.put("valor", lista.get(4));
-					cv.put("valor_desconto", lista.get(5));
-
-                }
-
-                result = DB.getWritableDatabase().insert(TABLE_RETORNO_PEDIDO_ITEM, null, cv)>0;
-
-            }catch (SQLiteException e){
-
-                                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        public boolean cleanRetornoPedido(){
-
-            return DB.getWritableDatabase().delete(TABLE_RETORNO_PEDIDO, null, null)>0;
-        }
-		public boolean cleanRetornoPedidoITEM(){
-
-            return DB.getWritableDatabase().delete(TABLE_RETORNO_PEDIDO_ITEM, null, null)>0;
-        }
-
-        /*public List<sonicRetornoPedidosHolder> selectRetornoPedido(int situacao){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicRetornoPedidosHolder> retornos = new ArrayList<sonicRetornoPedidosHolder>();
-
-            String data = "";
-
-            switch (situacao){
-                case 1:
-                    switch (myCons.RETORNO_PENDENTE_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch (myCons.RETORNO_FATURADO_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 3:
-                    switch (myCons.RETORNO_EM_ROTA_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 4:
-                    switch (myCons.RETORNO_ENTREGUE_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-                case 5:
-                    switch (myCons.RETORNO_CANCELADO_DATA){
-                        case "HOJE":
-                            data = myUtil.Data.hoje();
-                            break;
-                        case "ONTEM":
-                            data = myUtil.Data.ontem();
-                            break;
-                        case "SEMANA ATUAL":
-                            data = myUtil.Data.semanaAtual();
-                            break;
-                        case "SEMANA ANTERIOR":
-                            data = myUtil.Data.semanaAnterior();
-                            break;
-                        case "MÊS ATUAL":
-                            data = myUtil.Data.mesAtual();
-                            break;
-                        case "MÊS ANTERIOR":
-                            data = myUtil.Data.mesAnterior();
-                            break;
-                        case "ÚLTIMOS TRÊS MÊSES":
-                            data = myUtil.Data.tresMeses();
-                            break;
-                    }
-                    break;
-
-            }
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "r.codigo_cliente as codigo_cliente," +
-                            "c.razao_social as nome_cliente," +
-                            "r.numero_pedido_mobile as numero," +
-                            "r.codigo_pedido as codigo_pedido," +
-                            "r.data_pedido as data_pedido," +
-                            "r.valor_pedido as valor_pedido," +
-                            "tp.nome as tipo_pedido_nome," +
-                            "p.nome as prazo," +
-                            "r.situacao as situacao," +
-                            "r.situacao_cor as situacao_cor" +
-                            " FROM "+TABLE_RETORNO_PEDIDO+" r " +
-                            " JOIN "+TABLE_CLIENTE+
-                            " c ON c.codigo_cliente = r.codigo_cliente" +
-                            " JOIN "+TABLE_TIPO_PEDIDO+
-                            " tp ON tp.codigo_tipo = r.codigo_tipo_pedido" +
-                            " JOIN "+TABLE_PRAZO+
-                            " p ON p.codigo_prazo = r.codigo_prazo" +
-                            " WHERE r.situacao = "+situacao+" AND r.data_pedido "+data+" ORDER BY r.data_pedido DESC", null);
-
-            while(cursor.moveToNext()){
-
-                sonicRetornoPedidosHolder retorno = new sonicRetornoPedidosHolder();
-
-                retorno.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                retorno.setNomeCliente(cursor.getString(cursor.getColumnIndex("nome_cliente")));
-                retorno.setNumeroPedidoMobile(cursor.getString(cursor.getColumnIndex("numero")));
-                retorno.setCodigoPedido(cursor.getInt(cursor.getColumnIndex("codigo_pedido")));
-                retorno.setDataPedido(cursor.getString(cursor.getColumnIndex("data_pedido")));
-                retorno.setValorPedido(cursor.getString(cursor.getColumnIndex("valor_pedido")));
-                retorno.setSituacaoPedido(cursor.getInt(cursor.getColumnIndex("situacao")));
-                retorno.setSituacaoPedidoCor(cursor.getString(cursor.getColumnIndex("situacao_cor")));
-                retorno.setTipoPedido(cursor.getString(cursor.getColumnIndex("tipo_pedido_nome")));
-                retorno.setPrazo(cursor.getString(cursor.getColumnIndex("prazo")));
-
-                retornos.add(retorno);
-
-            }
-            cursor.close();
-            return retornos;
-        }*/
-
-    }
-
 
     class GrupoProduto{
 
