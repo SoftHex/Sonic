@@ -157,7 +157,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         //holder.tvObservacao.setText(rota.getObservacao()==null ? "Observação:" : "Observação: "+rota.getObservacao());
         //holder.tvDuracao.setText(rota.getHoraFim()=="" ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
 
-        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
+        File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
 
         if(f.exists()){
             holder.ivImagem.setVisibility(View.VISIBLE);

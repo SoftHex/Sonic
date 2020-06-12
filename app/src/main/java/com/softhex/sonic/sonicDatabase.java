@@ -249,7 +249,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_ROTA = "CREATE TABLE IF NOT EXISTS "+DB_ROTA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
-            "codigo int NOT NULL UNIQUE, " +
+            "codigo int NOT NULL, " +
             "codigo_usuario int NOT NULL, " +
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
@@ -274,7 +274,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "FOREIGN KEY (codigo_usuario) REFERENCES "+DB_USUARIO+"(codigo)," +
             "FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo)," +
             "FOREIGN KEY (codigo_cliente) REFERENCES "+DB_CLIENTE+"(codigo));";
-    private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE UNIQUE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
+    private static final String CREATE_INDEX_ROTA_CODIGO = "CREATE INDEX index_rota_codigo ON "+DB_ROTA+" (codigo);";
     private static final String CREATE_INDEX_ROTA_CODIGO_USUARIO = "CREATE INDEX index_rota_codigo_usuario ON "+DB_ROTA+" (codigo_usuario);";
     private static final String CREATE_INDEX_ROTA_CODIGO_EMPRESA = "CREATE INDEX index_rota_codigo_empresa ON "+DB_ROTA+" (codigo_empresa);";
     private static final String CREATE_INDEX_ROTA_CODIGO_CLIENTE = "CREATE INDEX index_rota_codigo_cliente ON "+DB_ROTA+" (codigo_cliente);";

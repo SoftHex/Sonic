@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mPrefs = new sonicPreferences(this);
-        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_USUARIO, mPrefs.Users.getEmpresaId());
+        File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_USUARIO, mPrefs.Users.getEmpresaId());
 
         Log.d("IMAGEM", f.toString());
 

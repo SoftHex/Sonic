@@ -182,7 +182,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 holder.tvLinha2.setText(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
                 holder.tvLinha3.setText(cli.getEnderecoCompleto());
 
-                File f = sonicFile.searchFile(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
+                File f = sonicFile.searchImage(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
 
                 if(f.exists()){
 

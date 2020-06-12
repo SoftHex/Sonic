@@ -158,7 +158,7 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
         holder.tvDesconto = convertView.findViewById(R.id.tvDescontoItem);
         holder.tvLetra = convertView.findViewById(R.id.tvLetra);
 
-        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_CATALOGO, mItens.getCodigoProduto());
+        File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_CATALOGO, mItens.getCodigoProduto());
 
         if(f.exists()){
 

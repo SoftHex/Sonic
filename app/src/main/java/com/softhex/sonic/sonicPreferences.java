@@ -19,12 +19,15 @@ public class sonicPreferences{
     private static final String USUARIO_CARGO = "usuarioCargo";
     private static final String USUARIO_IMEI = "usuarioImei";
     private static final String USUARIO_PATH = "userPath";
+    private static final String USUARIO_PICTURE = "userPicture";
     private static final String PRODUTO_ID = "produtoId";
     private static final String PRODUTO_NOME = "produtoNome";
     private static final String PRODUTO_GRUPO = "produtoGrupo";
     private static final String PRODUTO_NOVO = "produtoNovo";
     private static final String PRODUTO_DETALHE = "produtoDetalhe";
     private static final String PRODUTO_DATA_CADASTRO = "produtoDataCadastro";
+    private static final String GRUPO_PRODUTO_LISTA = "grupoProdutoLista";
+    private static final String GRUPO_PRODUTO_GRID = "grupoProdutoGrid";
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
@@ -104,6 +107,7 @@ public class sonicPreferences{
     Clientes Clientes = new Clientes();
     Matriz Matriz = new Matriz();
     Produtos Produtos = new Produtos();
+    GrupoProduto GrupoProduto = new GrupoProduto();
     Util Util = new Util();
     Geral Geral = new Geral();
     Sincronizacao Sincronizacao = new Sincronizacao();
@@ -183,6 +187,24 @@ public class sonicPreferences{
             editor = sharedpreferences.edit();
             editor.putString(mContex.getResources().getString(R.string.produtoNovoDias), value);
             editor.apply();
+        }
+    }
+    public class GrupoProduto{
+        public void setItemLista(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(GRUPO_PRODUTO_LISTA, value);
+            editor.apply();
+        }
+        public int getItemLista(){
+            return sharedpreferences.getInt(GRUPO_PRODUTO_LISTA, 0);
+        }
+        public void setItemGrid(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(GRUPO_PRODUTO_GRID, value);
+            editor.apply();
+        }
+        public int getItemGrid(){
+            return sharedpreferences.getInt(GRUPO_PRODUTO_GRID, 0);
         }
     }
     public class Matriz {
@@ -562,16 +584,13 @@ public class sonicPreferences{
         public String getEmpresaNome(){
             return sharedpreferences.getString(EMPRESA_NOME, "");
         }
-        public String getPicture(){
-            return  sharedpreferences.getString(USUARIO_PATH,"")
-                    +sharedpreferences.getInt(EMPRESA_ID,0) +"_"
-                    +sharedpreferences.getInt(USUARIO_ID,0) +".JPG";
+        public void setPicture(){
+            editor = sharedpreferences.edit();
+            editor.putString(USUARIO_PICTURE, sharedpreferences.getInt(EMPRESA_ID,0)+"_"+sharedpreferences.getInt(USUARIO_ID,0)+".JPG");
+            editor.apply();
         }
-        public String getPicture(int value){
-            return  sonicConstants.LOCAL_IMG_USUARIO
-                    + value +"_"
-                    + sharedpreferences.getInt(USUARIO_ID,0)
-                    + ".JPG";
+        public String getPicture(int empresa){
+            return empresa+"_"+sharedpreferences.getInt(USUARIO_ID,0)+".JPG";
         }
     }
     public class Path{

@@ -62,7 +62,7 @@ public class sonicPopularTabelas {
             { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "save" },
             { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "save" },
             { "[AGENTE_COBRADOR]", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
-            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "replace" },
+            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "save" },
             { "[ROTA]", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
             { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
             { "[TITULOS]", sonicConstants.TB_TITULO, "Títulos", "save" },
@@ -168,7 +168,7 @@ public class sonicPopularTabelas {
                                         int len = str.length();
                                         String str2 = str.substring(pos, len);
                                         List<String> data = Arrays.asList(str2.split(";", -1));
-                                        DBC.Database.saveData(arr[1], data, arr[2]);
+                                        DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? sonicDatabaseCRUD.DB_MODE_SAVE : sonicDatabaseCRUD.DB_MODE_SAVE_UNIQUE);
                                         line = reader.readLine();
                                     }
 

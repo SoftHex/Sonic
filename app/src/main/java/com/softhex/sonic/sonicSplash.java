@@ -69,6 +69,8 @@ public class sonicSplash extends AppCompatActivity {
                 mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
                 mPrefs.Users.setCodigoSinc(mListUser.get(0).getCodigo());
                 mPrefs.Users.setArquivoSinc(mListUser.get(0).getCodigo());
+                mPrefs.GrupoProduto.setItemLista(0);
+                mPrefs.GrupoProduto.setItemGrid(0);
 
                 // VERIFICA SE O USUARIO ESCOLHEU EXIGIR SENHA AO ENTRAR
                 if(mPrefs.Users.getStatusLogin()){

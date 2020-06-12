@@ -289,41 +289,38 @@ public class sonicProdutosLista extends Fragment {
 
     private void exibirFiltro() {
 
-        List<sonicGrupoProdutosHolder> grupo;
+        List<sonicGrupoProdutosHolder> grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
 
-        grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
-
-        List<String> l = new ArrayList<String>();
+        List<String> l = new ArrayList<>();
+        List<Integer> lId = new ArrayList<>();
 
         for(int i=0; i < grupo.size(); i++ ){
             if(grupo.get(i).getDescricao() != sonicConstants.GRUPO_PRODUTOS_LISTA){
                 l.add(grupo.get(i).getDescricao());
+                lId.add(grupo.get(i).getCodigo());
             }
         }
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um tvGrupo...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
-                sonicConstants.GRUPO_PRODUTOS_LISTA = chars[item].toString();
-                sonicConstants.GRUPO_PRODUTOS_LISTA_LIMPAR = "LIMPAR FILTRO";
+                mPrefs.GrupoProduto.setItemLista(lId.get(item));
                 dialog.dismiss();
                 refreshFragment();
 
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
-        }).setPositiveButton(sonicConstants.GRUPO_PRODUTOS_LISTA_LIMPAR, new DialogInterface.OnClickListener() {
+        }).setPositiveButton(mPrefs.GrupoProduto.getItemLista()>0 ? "LIMPAR FILTRO" : "CANCELAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                sonicConstants.GRUPO_PRODUTOS_LISTA = "TODOS";
-                sonicConstants.GRUPO_PRODUTOS_LISTA_LIMPAR = "";
+                mPrefs.GrupoProduto.setItemLista(0);
                 refreshFragment();
             }
         }).show();

@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -60,9 +60,7 @@ public class sonicFirstAccess extends AppCompatActivity {
 
         });
 
-        File f = sonicFile.searchFile(sonicConstants.LOCAL_IMG_USUARIO, mPref.Users.getEmpresaId());
-
-        Log.d("IMAGEM", f.toString());
+        File f = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO+mPref.Users.getPicture(mPref.Users.getEmpresaId()));
 
         if(f.exists()){
 
@@ -168,7 +166,7 @@ public class sonicFirstAccess extends AppCompatActivity {
             mTotalList.add(codigoBancos[x]);
             mTotalList.add(nomeBancos[x]);
             mTotalList.add(nomeBancosFull[x]);
-            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, "save");
+            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, sonicDatabaseCRUD.DB_MODE_SAVE);
         }
 
     }

@@ -174,7 +174,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
             holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
 
-            File f = sonicFile.searchFile(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
+            File f = sonicFile.searchImage(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
 
             if(f.exists()){
 

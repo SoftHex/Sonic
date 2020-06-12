@@ -289,40 +289,38 @@ public class sonicProdutosGrid extends Fragment {
 
     private void exibirFiltro() {
 
-        List<sonicGrupoProdutosHolder> grupo = new ArrayList<sonicGrupoProdutosHolder>();
+        List<sonicGrupoProdutosHolder> grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
 
-        grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
-
-        List<String> l = new ArrayList<String>();
+        List<String> l = new ArrayList<>();
+        List<Integer> lId = new ArrayList<>();
 
         for(int i=0; i < grupo.size(); i++ ){
-            l.add(grupo.get(i).getDescricao());
+            if(grupo.get(i).getDescricao() != sonicConstants.GRUPO_PRODUTOS_LISTA){
+                l.add(grupo.get(i).getDescricao());
+                lId.add(grupo.get(i).getCodigo());
+            }
         }
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um tvGrupo...");
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
 
-                myCons.GRUPO_PRODUTOS_GRID = chars[item].toString();
-                myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR = "LIMPAR FILTRO";
+                mPrefs.GrupoProduto.setItemGrid(lId.get(item));
                 dialog.dismiss();
                 refreshFragment();
 
             }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
-        }).setPositiveButton(myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR, new DialogInterface.OnClickListener() {
+        }).setPositiveButton(mPrefs.GrupoProduto.getItemGrid()>0 ? "LIMPAR FILTRO" : "CANCELAR", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                myCons.GRUPO_PRODUTOS_GRID = "TODOS";
-                myCons.GRUPO_PRODUTOS_GRUPO_LIMPAR = "";
+                mPrefs.GrupoProduto.setItemGrid(0);
                 refreshFragment();
             }
         }).show();

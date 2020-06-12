@@ -79,9 +79,10 @@ public class sonicVerificarSite{
 
                     if(myFtp.downloadFile(strings[1], strings[2])){
 
-                        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + strings[0] + ".TXT");
+                        //File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + strings[0] + ".TXT");
+                        //File f = sonicFile.seachTxtFile(sonicConstants.LOCAL_TEMP, strings[0]);
 
-                        if (file.exists()) {
+                        if (sonicFile.checkTxtFile(sonicConstants.LOCAL_TEMP, strings[0])) {
 
                             publishProgress("Salvando configurações...");
 
@@ -98,6 +99,10 @@ public class sonicVerificarSite{
                         File delete = new File(Environment.getExternalStorageDirectory(), strings[2]);
                         delete.delete();
                         myMessage.showMS("Atenção", "Empresa não encontrada.", myMessage.MSG_WARNING);
+                        //Snackbar snack = Snackbar.make(mAct.getParent().getWindow().getDecorView().getRootView(),"Empresa não encontrada",Snackbar.LENGTH_SHORT);
+                        //SnackbarHelper.configSnackbar(mAct, snack);
+                        //snack.show();
+                        //new sonicDialog(myCtx).showSnackBar(mAct.getParent().getWindow().getDecorView().getRootView(),"Empresa não enontrada");
                         res = false;
 
                     }

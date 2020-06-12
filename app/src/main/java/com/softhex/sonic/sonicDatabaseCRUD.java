@@ -22,6 +22,9 @@ import java.util.List;
 
 public class sonicDatabaseCRUD {
 
+    public static final int DB_MODE_SAVE = 1;
+    public static final int DB_MODE_UPDATE = 2;
+    public static final int DB_MODE_SAVE_UNIQUE = 3;
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
     private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
@@ -180,17 +183,29 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public Boolean saveData(String tabela, List<String> values, String type){
+        public Boolean saveData(String tabela, List<String> values, int type){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues cv = new ContentValues();
             Cursor cursor = DB.getWritableDatabase().query(tabela, null, null, null, null, null, null);
+            boolean result = false;
 
             try{
 
-                for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
-
-                    cv.put(cursor.getColumnNames()[i+1], values.get(i));
-
+                if(type==DB_MODE_SAVE_UNIQUE){
+                        Cursor c = DB.getReadableDatabase().rawQuery("SELECT * FROM "+tabela+" WHERE "+cursor.getColumnNames()[1]+"=?", new String[]{values.get(0)});
+                        if(c==null || c.getCount()==0){
+                            for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                                cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                            }
+                            result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+                        }else {
+                            result = false;
+                        }
+                }else{
+                    for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                        cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                    }
+                    result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
                 }
 
             }catch (SQLiteException e){
@@ -208,7 +223,7 @@ public class sonicDatabaseCRUD {
             //return type.equals("save")
             //        ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
              //       : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
-            return DB.getWritableDatabase().insert(tabela, null, cv)>0;
+            return result;
         }
 
         public boolean cleanData(String tabela){
@@ -1764,62 +1779,66 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
 
-            String where = "";
+            String query = "SELECT " +
+                    "P.codigo, " +
+                    "P.nome, " +
+                    "P.codigo_empresa, " +
+                    "P.data_cadastro, " +
+                    "P.codigo_alternativo, " +
+                    "P.descricao, " +
+                    "P.ncm, " +
+                    "P.peso_bruto, " +
+                    "P.peso_liquido, " +
+                    "P.estoque_minimo, " +
+                    "P.estoque_maximo, " +
+                    "P.multiplicidade, " +
+                    "P.codigo_ean, " +
+                    "P.codigo_ean_tributavel, " +
+                    " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
+                    " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida, " +
+                    " (SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto " +
+                    " FROM " + TABLE_PRODUTO + " P " +
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND "+(mPrefs.GrupoProduto.getItemLista()>0 ? "P.codigo_grupo=?" : "P.codigo_grupo<>?")+" ORDER BY P.nome ";
 
+            Log.d("QUERY", query);
 
-            if(sonicConstants.GRUPO_PRODUTOS_LISTA != "TODOS"){
-                where+= " AND grupo_produto = '"+ myCons.GRUPO_PRODUTOS_LISTA+"' ";
-            }
+            Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{String.valueOf(mPrefs.GrupoProduto.getItemLista())});
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "P.codigo, " +
-                            "P.nome, " +
-                            "P.codigo_empresa, " +
-                            "P.data_cadastro, " +
-                            "P.codigo_alternativo, " +
-                            "P.descricao, " +
-                            "P.ncm, " +
-                            "P.peso_bruto, " +
-                            "P.peso_liquido, " +
-                            "P.estoque_minimo, " +
-                            "P.estoque_maximo, " +
-                            "P.multiplicidade, " +
-                            "P.codigo_ean, " +
-                            "P.codigo_ean_tributavel, " +
-                            " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
-                            " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida, " +
-                            " (SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto " +
-                            " FROM " + TABLE_PRODUTO + " P " +
-                            " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)" + where + " ORDER BY P.nome ", null);
+            try{
 
+                if(cursor!=null){
 
-            if(cursor.moveToFirst()){
-                while(cursor.moveToNext()){
+                    while(cursor.moveToNext()){
 
-                    sonicProdutosHolder produtos = new sonicProdutosHolder();
+                        sonicProdutosHolder produtos = new sonicProdutosHolder();
 
-                    produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                    produtos.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-                    produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
-                    produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                    produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
-                    produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
-                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
-                    produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
-                    produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
-                    produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
-                    produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
-                    produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
-                    produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
-                    produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
-                    produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
-                    produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
+                        produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                        produtos.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                        produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
+                        produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
+                        produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
+                        produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
+                        produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                        produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
+                        produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
+                        produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
+                        produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
+                        produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
+                        produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
+                        produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
+                        produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
+                        produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
 
-                    produto.add(produtos);
+                        produto.add(produtos);
 
+                    }
                 }
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
             }
 
             cursor.close();
@@ -1831,67 +1850,73 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
 
-            String where = "";
+            String query = "SELECT " +
+                    "p.codigo, " +
+                    "p.nome, " +
+                    "p.codigo_empresa, " +
+                    "p.data_cadastro, " +
+                    "p.codigo_alternativo, " +
+                    "p.descricao, " +
+                    "p.ncm, " +
+                    "p.peso_bruto, " +
+                    "p.peso_liquido, " +
+                    "p.estoque_minimo, " +
+                    "p.estoque_maximo, " +
+                    "p.multiplicidade, " +
+                    "p.codigo_ean, " +
+                    "p.codigo_ean_tributavel, " +
+                    " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
+                    " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
+                    " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
+                    " FROM " + TABLE_PRODUTO + " p " +
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND "+(mPrefs.GrupoProduto.getItemGrid()>0 ? "P.codigo_grupo=?" : "P.codigo_grupo<>?")+" ORDER BY P.nome ";
 
-            if(sonicConstants.GRUPO_PRODUTOS_GRID != "TODOS"){
-                where+= " AND grupo_produto = '"+ myCons.GRUPO_PRODUTOS_GRID+"' ";
-            }
+            Cursor cursor = DB.getReadableDatabase().rawQuery(query,new String[]{String.valueOf(mPrefs.GrupoProduto.getItemGrid())});
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "p.codigo, " +
-                            "p.nome, " +
-                            "p.codigo_empresa, " +
-                            "p.data_cadastro, " +
-                            "p.codigo_alternativo, " +
-                            "p.descricao, " +
-                            "p.ncm, " +
-                            "p.peso_bruto, " +
-                            "p.peso_liquido, " +
-                            "p.estoque_minimo, " +
-                            "p.estoque_maximo, " +
-                            "p.multiplicidade, " +
-                            "p.codigo_ean, " +
-                            "p.codigo_ean_tributavel, " +
-                            " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
-                            " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
-                            " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
-                            " FROM " + TABLE_PRODUTO + " p " +
-                            " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)" + where + " ORDER BY P.nome ", null);
+            try{
 
-            if(cursor.moveToFirst()){
-                while(cursor.moveToNext()){
+                if(cursor!=null){
 
-                    sonicProdutosHolder produtos = new sonicProdutosHolder();
+                    while(cursor.moveToNext()){
 
-                    produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                    produtos.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-                    produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
-                    produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                    produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
-                    produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
-                    produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
-                    produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
-                    produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
-                    produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
-                    produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
-                    produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
-                    produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
-                    produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
-                    produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
-                    produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
+                        sonicProdutosHolder produtos = new sonicProdutosHolder();
 
-                    produto.add(produtos);
+                        produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                        produtos.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                        produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
+                        produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
+                        produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
+                        produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
+                        produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                        produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
+                        produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
+                        produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
+                        produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
+                        produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
+                        produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
+                        produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
+                        produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
+                        produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
 
+                        produto.add(produtos);
+
+                    }
                 }
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
             }
 
             cursor.close();
             return produto;
         }
 
-        public List<sonicProdutosHolder> selectProdutoID(int args){
+        public List<sonicProdutosHolder> selectProdutoID(int codigo){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicProdutosHolder> produto = new ArrayList<>();
 
             String query = "SELECT " +
@@ -1913,12 +1938,13 @@ public class sonicDatabaseCRUD {
                     " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
                     " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
                     " FROM " + TABLE_PRODUTO + " p " +
-                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1) AND p.codigo = "+args;
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1) AND p.codigo=?";
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
-            Log.d("QUERY", query);
-            if(cursor.moveToFirst()){
-                //while(cursor.moveToNext()){
+            Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{String.valueOf(codigo)});
+
+            try{
+
+                if(cursor!=null && cursor.moveToFirst()){
 
                     sonicProdutosHolder produtos = new sonicProdutosHolder();
 
@@ -1940,10 +1966,13 @@ public class sonicDatabaseCRUD {
                     produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
                     produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
 
-
                     produto.add(produtos);
 
-                //}
+                }
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
             }
 
             cursor.close();
@@ -2209,15 +2238,15 @@ public class sonicDatabaseCRUD {
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
                         "SELECT " +
-                                "g._id as id," +
-                                "g.codigo as codigo," +
-                                "g.nome as nome" +
+                                "G._id as id," +
+                                "G.codigo as codigo," +
+                                "G.nome as nome" +
                                 " FROM " + TABLE_GRUPO_PRODUTO +
-                                " g JOIN " + TABLE_PRODUTO +
-                                " p ON p.codigo_grupo = g.codigo" +
+                                " G JOIN " + TABLE_PRODUTO +
+                                " P ON P.codigo_grupo = G.codigo" +
                                 " JOIN " + TABLE_EMPRESA +
-                                " e ON e.codigo = p.codigo_empresa " +
-                                " WHERE e.selecionada = 1 GROUP BY g.nome " , null);
+                                " E ON E.codigo = P.codigo_empresa " +
+                                " WHERE E.selecionada = 1 GROUP BY G.nome " , null);
 
                 while(cursor.moveToNext()){
 
