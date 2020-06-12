@@ -349,6 +349,7 @@ public class sonicProdutosLista extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mPrefs.GrupoProduto.setItemLista(0);
 
     }
 

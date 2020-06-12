@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -71,11 +72,12 @@ import java.util.TimeZone;
 public class sonicRotaDetalhe extends AppCompatActivity {
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO})
+    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO, Status.CANCELADO})
     public @interface Status{
         int NAO_INICIADO = 1;
         int EM_ATENDIMENTO = 2;
         int CONCLUIDO = 3;
+        int CANCELADO = 4;
     }
 
     private static final int REQUEST_PERMISSION = 10;
@@ -120,6 +122,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private sonicUtils mUtils;
     private List<sonicRotaHolder> mList;
     private sonicPreferences mPrefs;
+    private ProgressBar pbDuracao;
+    private TextView tvTempo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +162,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvTextoInicio = findViewById(R.id.tvTextoInicio);
         tvTextoFim = findViewById(R.id.tvTextoFim);
         tvDuracaoMini = findViewById(R.id.tvDuracaoMini);
+        pbDuracao = findViewById(R.id.pbDuracao);
+        tvTempo = findViewById(R.id.tvTempo);
 
         createInterface();
         slideImages();
@@ -214,14 +220,17 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvEndCompleto.setText(mPrefs.Clientes.getBairro()+", "+mPrefs.Clientes.getMunicipio()+" - "+mPrefs.Clientes.getUf());
         tvCep.setText("CEP: "+mPrefs.Clientes.getCep());
         switch (mList.get(0).getStatus()){
-            case 1:
+            case Status.NAO_INICIADO:
                 llDetalhe.setVisibility(View.GONE);
                 llBotoes.setVisibility(View.VISIBLE);
                 btIniciar.setText("INICIAR ATENDIMENTO");
                 btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
                 break;
-            case 2:
+            case Status.EM_ATENDIMENTO:
                 continueClock();
+                pbDuracao.setVisibility(View.VISIBLE);
+                tvTempo.setVisibility(View.VISIBLE);
+                tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
                 llBotoes.setVisibility(View.VISIBLE);
                 llSituacao.setVisibility(View.GONE);
                 llDetalhe.setVisibility(View.GONE);
@@ -234,7 +243,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
                 mPrefs.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
                 break;
-            case 3:
+            case Status.CONCLUIDO:
                 llTime.setVisibility(View.GONE);
                 llTime2.setVisibility(View.VISIBLE);
                 tvData.setText("Data: "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio()));
@@ -262,7 +271,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                         break;
                 }
                 break;
-            case 4:
+            case Status.CANCELADO:
                 llDetalhe.setVisibility(View.VISIBLE);
                 llSituacao.setVisibility(View.VISIBLE);
                 tvDuracao.setTextSize(14f);
@@ -304,6 +313,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                         finalizarAtendimento();
                     }else {
                         btIniciar.setText("FINALIZAR ATENDIMENTO");
+                        pbDuracao.setVisibility(View.VISIBLE);
+                        pbDuracao.animate();
+                        tvTempo.setVisibility(View.VISIBLE);
+                        tvTempo.animate();
+                        tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
                         btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
                         btCancelar.animate()
                                 .translationX(btCancelar.getWidth()+100)
@@ -582,6 +596,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private Runnable updateTimerThread = new Runnable() {
         public void run() {
             timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
+            pbDuracao.setMax(2*60);
+            pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
             tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
             customHandler.postDelayed(this, 1000);
         }

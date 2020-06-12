@@ -350,6 +350,7 @@
     <string name="noRotaNewText">Você pode agendar uma visita clicando no botão abaixo.</string>
     <string name="noSincTitle">Ops, nada por enquanto...</string>
     <string name="noSincText">Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.</string>
+    <string name="rotaTime">Você tem %1$s entre o início e o fim do atendimento. Após esse intervalo o atendimento será NEGATIVADO e finalizado automaticamente.</string>
 
     <string-array name="rotaNegativadaOptions">
         <item name="1">ESCOLHA UMA OPÇÃO...</item>

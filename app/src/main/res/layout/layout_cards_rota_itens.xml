@@ -261,6 +261,19 @@
                             android:textColor="@color/colorTextAccentDark"
                             android:textSize="14sp" />
 
+                        <ProgressBar
+                            android:id="@+id/pbDuracao"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:indeterminate="false"
+                            android:maxHeight="8dip"
+                            android:minHeight="8dip"
+                            android:progress="50"
+                            android:visibility="gone"
+                            android:progressDrawable="@drawable/progressgreen" />
+
                     </LinearLayout>
 
                 </LinearLayout>

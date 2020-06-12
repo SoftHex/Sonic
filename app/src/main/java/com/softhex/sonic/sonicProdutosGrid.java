@@ -349,6 +349,7 @@ public class sonicProdutosGrid extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mPrefs.GrupoProduto.setItemGrid(0);
 
     }
 

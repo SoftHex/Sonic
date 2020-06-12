@@ -252,7 +252,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        //return super.getItemViewType(position);
         return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
     }
 

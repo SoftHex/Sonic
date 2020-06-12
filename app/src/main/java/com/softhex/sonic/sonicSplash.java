@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ public class sonicSplash extends AppCompatActivity {
     private sonicDatabaseCRUD mData;
     private Activity mActivity;
     private sonicPreferences mPrefs;
+    private Long timeInMilliseconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class sonicSplash extends AppCompatActivity {
             super.onPostExecute(result);
 
             if(result){
-
+                finalizarRota();
                 List<sonicUsuariosHolder> mListUser;
                 List<sonicGrupoEmpresasHolder> mListEmpresa;
                 mListUser = mData.Usuario.selectUsuarioAtivo();
@@ -106,4 +108,12 @@ public class sonicSplash extends AppCompatActivity {
 
     }
 
+    private void finalizarRota(){
+        timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
+        if(timeInMilliseconds>2*60*60*1000){
+            if(mData.Rota.negativarRota(String.valueOf(mPrefs.Rota.getCodigo()), "TEMPO MÁXIMO ATINGIDO","")){
+                mPrefs.Rota.setEmAtendimento(false);
+            }
+        }
+    }
 }

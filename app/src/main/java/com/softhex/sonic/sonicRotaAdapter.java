@@ -3,6 +3,8 @@ package com.softhex.sonic;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +12,15 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringDef;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.softhex.materialdialog.PromptDialog;
@@ -28,7 +32,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.ViewHolder> implements Filterable {
+public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rotaHolder> implements Filterable {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({Tipo.PADRAO, Tipo.AGENDAMENTO, Tipo.REAGENDAMENTO})
@@ -78,19 +82,25 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         String CANCELAR = "Cancelar Atendimento";
     }
 
+    private static final int VIEW_PROG = 123456789;
+    private static final int VIEW_ITEM = 987654321;
     private Context mContext;
     private Activity mActivity;
-    private List<sonicRotaHolder> rotas;
-    private List<sonicRotaHolder> filteredRotas;
-    private List<sonicRotaHolder> alteredRotas;
+    private List<sonicRotaHolder> mTotalList;
+    private List<sonicRotaHolder> mPartialList;
+    private List<sonicRotaHolder> mFilteredList;
     private RotaFilter rotaFilter;
     private Boolean nFantasia;
     private sonicPreferences mPrefs;
     private sonicUtils mUtils;
     private RecyclerView mRecycler;
     private boolean rotaPessoal;
+    private boolean isLoading = false;
+    private LinearLayoutManager linearLayoutManager;
+    private Long timeInMilliseconds;
+    private Handler customHandler = new Handler();
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class rotaHolder extends RecyclerView.ViewHolder {
 
         TextView tvCodigo;
         TextView tvNome;
@@ -104,8 +114,9 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
         TextView tvLetra;
         TextView tvDuracao;
         LinearLayout linearItem;
+        ProgressBar pbDuracao;
 
-        ViewHolder(View view) {
+        rotaHolder(View view) {
             super(view);
             linearItem = view.findViewById(R.id.linearItem);
             tvCodigo = view.findViewById(R.id.tvCodigo);
@@ -119,109 +130,170 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
             tvDataHora = view.findViewById(R.id.tvDataHora);
             tvDuracao = view.findViewById(R.id.tvDuracao);
             tvObservacao = view.findViewById(R.id.tvObservacao);
+            pbDuracao = view.findViewById(R.id.pbDuracao);
 
         }
     }
 
     sonicRotaAdapter(List<sonicRotaHolder> rotas, Context context, RecyclerView mRecycler, Activity act, boolean pessoal) {
         this.mContext = context;
-        this.filteredRotas = rotas;
-        this.rotas = rotas;
+        this.mTotalList = rotas;
+        this.mFilteredList = rotas;
         this.mActivity = act;
         this.rotaPessoal = pessoal;
         this.mUtils = new sonicUtils(mContext);
         this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
-    }
 
+        if(mPrefs.Geral.getListagemCompleta()){
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_cards_rota_itens, parent, false);
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-
-        sonicRotaHolder rota = rotas.get(position);
-        holder.setIsRecyclable(false);
-        String cliNomeExibicao = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
-
-        holder.tvCodigo.setText("#"+(!rotaPessoal ? rota.getCodigo() : rota.getId()));
-        holder.tvNome.setText(cliNomeExibicao);
-        holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
-        holder.tvEndereco.setText(rota.getEnderecoCompleto());
-        holder.tvDataHora.setText("Agendado para: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento()));
-        //holder.tvObservacao.setText(rota.getObservacao()==null ? "Observação:" : "Observação: "+rota.getObservacao());
-        //holder.tvDuracao.setText(rota.getHoraFim()=="" ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
-
-        File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
-
-        if(f.exists()){
-            holder.ivImagem.setVisibility(View.VISIBLE);
-            holder.tvLetra.setVisibility(View.GONE);
-            Glide.with(mContext)
-                    .load(f)
-                    .circleCrop()
-                    .override(100,100)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                    .into(holder.ivImagem);
-
+            mPartialList = mTotalList;
 
         }else{
 
-            holder.tvLetra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
+            mPartialList = new ArrayList();
 
+            if(rotas.size()< sonicConstants.TOTAL_ITENS_LOAD){
+                for(int i = 0; i < rotas.size(); i++){
+                    mPartialList.add(rotas.get(i));
+                }
+            }else{
+                for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
+                    mPartialList.add(rotas.get(i));
+                }
+            }
+
+            linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
+
+            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if(!isLoading){
+                        if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
+                            if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
+                                loadMore();
+                            }
+                        }
+                    }
+                }
+            });
         }
-        holder.tvStatus.setBackground(
-                rota.getStatus()==Status.NAO_INICIADO ?
-                    mContext.getResources().getDrawable(R.drawable.status_nao_iniciado) :
-                        rota.getStatus()==Status.EM_ATENDIMENTO ?
-                            mContext.getResources().getDrawable(R.drawable.status_em_atendimento) :
-                                rota.getStatus()==Status.CONCLUIDO ?
-                                    mContext.getResources().getDrawable(R.drawable.status_concluido) :
-                                        mContext.getResources().getDrawable(R.drawable.status_cancelado));
 
-        holder.tvStatus.setText(
-                rota.getStatus()==Status.NAO_INICIADO ? StatusText.NAO_INICIADO :
-                rota.getStatus()==Status.EM_ATENDIMENTO ? StatusText.EM_ATENDIMENTO :
-                        rota.getStatus()==Status.CONCLUIDO ? StatusText.CONCLUIDO :
-                        StatusText.CANCELADO);
+    }
 
-        if(rota.getStatus()==Status.CONCLUIDO){
-            holder.tvSituacao.setVisibility(View.VISIBLE);
-            switch (rota.getSituacao()){
-                case Situacao.POSITIVADO:
-                    holder.tvSituacao.setText(SituacaoText.POSITIVADO);
-                    holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_positivado));
+
+    @Override
+    public rotaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view;
+        if(viewType==VIEW_ITEM){
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_itens, parent, false);
+        }else{
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_itens_shimmer, parent, false);
+        }
+        return new rotaHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(rotaHolder holder, int position) {
+
+        sonicRotaHolder rota = mTotalList.get(position);
+        holder.setIsRecyclable(false);
+
+        if(holder.getItemViewType()==VIEW_ITEM){
+
+            String cliNomeExibicao = nFantasia ? rota.getNomeFantasia() : rota.getRazaoSocial();
+
+            holder.tvCodigo.setText("#"+(!rotaPessoal ? rota.getCodigo() : rota.getId()));
+            holder.tvNome.setText(cliNomeExibicao);
+            holder.tvAtendente.setText("Responsável: "+rota.getAtendente());
+            holder.tvEndereco.setText(rota.getEnderecoCompleto());
+            holder.tvDataHora.setText("Agendado para: "+mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento()));
+            //holder.tvObservacao.setText(rota.getObservacao()==null ? "Observação:" : "Observação: "+rota.getObservacao());
+            //holder.tvDuracao.setText(rota.getHoraFim()=="" ? "Duração:" : "Duração: "+sonicUtils.getDifferenceTime(rota.getHoraInicio(), rota.getHoraFim()));
+
+            File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
+
+            if(f.exists()){
+                holder.ivImagem.setVisibility(View.VISIBLE);
+                holder.tvLetra.setVisibility(View.GONE);
+                Glide.get(mContext).clearMemory();
+                Glide.with(mContext)
+                        .load(f)
+                        .circleCrop()
+                        .override(100,100)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        //.transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                        .into(holder.ivImagem);
+
+
+            }else{
+
+                holder.tvLetra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
+
+            }
+            switch (rota.getStatus()){
+                case Status.NAO_INICIADO:
+                    holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_nao_iniciado));
+                    holder.tvStatus.setText(StatusText.NAO_INICIADO);
                     break;
-                case Situacao.NEGATIVADO:
-                    holder.tvSituacao.setText(SituacaoText.NEGATIVADO);
-                    holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_negativado));
+                case Status.EM_ATENDIMENTO:
+                    holder.pbDuracao.setVisibility(View.VISIBLE);
+                    holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_em_atendimento));
+                    holder.tvStatus.setText(StatusText.EM_ATENDIMENTO);
+                    holder.pbDuracao.setVisibility(View.VISIBLE);
+                    timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
+                    holder.pbDuracao.setMax(2*60);
+                    holder.pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
+                            holder.pbDuracao.setMax(2*60);
+                            holder.pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
+                            customHandler.postDelayed(this, 1000);
+                        }
+                    };
+                    customHandler.postDelayed(r, 0);
+                    break;
+                case Status.CONCLUIDO:
+                    holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_concluido));
+                    holder.tvStatus.setText(StatusText.CONCLUIDO);
+                    holder.tvSituacao.setVisibility(View.VISIBLE);
+                    switch (rota.getSituacao()){
+                        case Situacao.POSITIVADO:
+                            holder.tvSituacao.setText(SituacaoText.POSITIVADO);
+                            holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_positivado));
+                            break;
+                        case Situacao.NEGATIVADO:
+                            holder.tvSituacao.setText(SituacaoText.NEGATIVADO);
+                            holder.tvSituacao.setBackground(mContext.getResources().getDrawable(R.drawable.situacao_negativado));
+                            break;
+                    }
+                    break;
+                case Status.CANCELADO:
+                    holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_cancelado));
+                    holder.tvStatus.setText(StatusText.CANCELADO);
                     break;
             }
 
-        }
+            holder.linearItem.setOnClickListener((View v)-> {
+                if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADO){
 
-        holder.linearItem.setOnClickListener((View v)-> {
-            if(mPrefs.Rota.getEmAtendimento() && rota.getStatus()==Status.NAO_INICIADO){
-
-                new PromptDialog(mContext)
-                        .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
-                        .setAnimationEnable(true)
-                        .setTitleText(R.string.msgAtencao)
-                        .setContentText("Existe um rota em atendimento para o cliente "+mPrefs.Rota.getEmAtendimentoCliente()+". Finalize-a para iniciar a próxima.")
-                        .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
-                            @Override
-                            public void onClick(PromptDialog dialog){
-                                dialog.dismiss();
-                                //mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
-                            }
-                        }).show();
+                    new PromptDialog(mContext)
+                            .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
+                            .setAnimationEnable(true)
+                            .setTitleText(R.string.msgAtencao)
+                            .setContentText("Existe um rota em atendimento para o cliente "+mPrefs.Rota.getEmAtendimentoCliente()+". Finalize-a para iniciar a próxima.")
+                            .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                @Override
+                                public void onClick(PromptDialog dialog){
+                                    dialog.dismiss();
+                                    //mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
+                                }
+                            }).show();
                 /*new AlertDialog.Builder(myCtx)
                         .setTitle("Atenção")
                         .setMessage("Existe uma rota em atendimento. \nFinalize a rota para iniciar a próxima.")
@@ -255,51 +327,88 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
                         .show();*/
 
 
-            }else{
+                }else{
 
-                mPrefs.Clientes.setId(rota.getCodigoCliente());
-                mPrefs.Clientes.setNome(cliNomeExibicao);
-                mPrefs.Clientes.setLogradouro(rota.getLogradrouro());
-                mPrefs.Clientes.setBairro(rota.getBairro());
-                mPrefs.Clientes.setMunicipio(rota.getMunicipio());
-                mPrefs.Clientes.setUf(rota.getUf());
-                mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
-                mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro()+", "+rota.getBairro()+" - "+rota.getMunicipio()+"/"+rota.getUf());
-                mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
-                mPrefs.Rota.setCodigo(!rotaPessoal ? rota.getCodigo() : rota.getId());
-                mPrefs.Rota.setPessoal(rotaPessoal);
-                mPrefs.Rota.setItemPosition(position);
-                mPrefs.Rota.setRefresh(false);
-                Intent i = new Intent(mContext, sonicRotaDetalhe.class);
-                mActivity.startActivityForResult(i, 0);
+                    mPrefs.Clientes.setId(rota.getCodigoCliente());
+                    mPrefs.Clientes.setNome(cliNomeExibicao);
+                    mPrefs.Clientes.setLogradouro(rota.getLogradrouro());
+                    mPrefs.Clientes.setBairro(rota.getBairro());
+                    mPrefs.Clientes.setMunicipio(rota.getMunicipio());
+                    mPrefs.Clientes.setUf(rota.getUf());
+                    mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
+                    mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro()+", "+rota.getBairro()+" - "+rota.getMunicipio()+"/"+rota.getUf());
+                    mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro()+"+"+rota.getCep()+"+"+rota.getMunicipio()));
+                    mPrefs.Rota.setCodigo(!rotaPessoal ? rota.getCodigo() : rota.getId());
+                    mPrefs.Rota.setPessoal(rotaPessoal);
+                    mPrefs.Rota.setItemPosition(position);
+                    mPrefs.Rota.setRefresh(false);
+                    Intent i = new Intent(mContext, sonicRotaDetalhe.class);
+                    mActivity.startActivityForResult(i, 0);
 
+                }
+
+            });
+
+        }
+
+    }
+
+    private void loadMore(){
+
+        isLoading = true;
+        mPartialList.add(null);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
             }
+        },0);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-        });
+                mPartialList.remove(mPartialList.size()-1);
+                notifyItemRemoved(mPartialList.size());
 
-    }
+                if(!mRecycler.isComputingLayout()){
+                    notifyDataSetChanged();
+                    int scrollPosition = mPartialList.size();
+                    int currentSize = scrollPosition;
+                    int nextLimit = currentSize + sonicConstants.TOTAL_ITENS_LOAD;
+                    for(int i = currentSize; i < nextLimit; i++) {
+                        if(currentSize< mTotalList.size()){
+                            mPartialList.add(mTotalList.get(i));
+                            currentSize++;
+                        }
+                    }
+                }
+                isLoading = false;
+            }
+        }, 1000);
 
-    private Void scrollToPosition(){
-        mRecycler.smoothScrollToPosition(mPrefs.Rota.getItemPosition());
-        return null;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return R.layout.layout_cards_rota_itens;
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return rotas.size();
     }
 
     @Override
     public Filter getFilter() {
         if(rotaFilter == null)
-            rotaFilter = new RotaFilter(this, rotas);
+            rotaFilter = new RotaFilter(this, mTotalList);
         return rotaFilter;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mTotalList.size();
     }
 
     private static class RotaFilter extends Filter {
@@ -344,8 +453,8 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.View
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.rotas.clear();
-            adapter.filteredRotas.addAll((ArrayList<sonicRotaHolder>) results.values);
+            adapter.mTotalList.clear();
+            adapter.mFilteredList.addAll((ArrayList<sonicRotaHolder>) results.values);
             adapter.notifyDataSetChanged();
         }
     }
