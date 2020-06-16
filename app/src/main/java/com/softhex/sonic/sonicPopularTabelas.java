@@ -316,7 +316,7 @@ public class sonicPopularTabelas {
 
     public void startActivity(List<sonicUsuariosHolder> mList){
 
-        Intent i = new Intent(myCtx, sonicFirstAccess.class);
+        Intent i = new Intent(myCtx, sonicPrimeiroAcesso.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mPref.Users.setEmpresaId(mList.get(0).getEmpresaId());
         mPref.Users.setEmpresaNome(mList.get(0).getEmpresa());

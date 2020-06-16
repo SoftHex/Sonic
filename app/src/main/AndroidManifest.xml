@@ -60,7 +60,7 @@
             android:theme="@style/IntroTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".sonicFirstAccess"
+            android:name=".sonicPrimeiroAcesso"
             android:theme="@style/IntroTheme" />
         <activity
             android:name=".sonicLogin"

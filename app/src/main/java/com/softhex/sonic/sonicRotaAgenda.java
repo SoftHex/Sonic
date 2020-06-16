@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -14,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -34,6 +37,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -64,6 +68,7 @@ public class sonicRotaAgenda extends Fragment {
     private LinearLayout llNoResult;
     private RelativeLayout rlDesert;
     private Button btSinc;
+    private Calendar mCalendar;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -194,6 +199,9 @@ public class sonicRotaAgenda extends Fragment {
             case R.id.itFilter:
                 exibirFiltro();
                 return false;
+            case R.id.itDate:
+                exibirDateOptions();
+                return false;
             default:
                 break;
         }
@@ -283,7 +291,6 @@ public class sonicRotaAgenda extends Fragment {
 
     private void exibirFiltro() {
 
-
         List<String> l = new ArrayList<String>();
         l.add("NÃO INICIADO");
         l.add("EM ATENDIMENTO");
@@ -319,6 +326,77 @@ public class sonicRotaAgenda extends Fragment {
         }).show();
 
     }
+
+    public void exibirDateOptions(){
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View myView = inflater.inflate(R.layout.dialog_datepicker, null, false);
+        AlertDialog b = new AlertDialog.Builder(mContext).setNegativeButton("SAIR", (dialog, which) -> {
+
+        }).create();
+        b.setTitle("SELECIONE UM DATA...");
+        b.setView(myView);
+
+        LinearLayout ll = myView.findViewById(R.id.llGroupButton);
+        String[] values = getResources().getStringArray(R.array.datePickerValues);
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        p.setMargins(sonicUtils.convertDpToPixel(16, mContext), sonicUtils.convertDpToPixel(16, mContext), sonicUtils.convertDpToPixel(16, mContext), 0);
+        p2.setMargins(sonicUtils.convertDpToPixel(16, mContext), sonicUtils.convertDpToPixel(16, mContext), sonicUtils.convertDpToPixel(16, mContext), sonicUtils.convertDpToPixel(16, mContext));
+        for (String s: values) {
+            Button bt = new Button(mContext);
+            bt.setOnClickListener((View v)-> {
+                switch (bt.getText().toString()){
+                    case "HOJE":
+                        Toast.makeText(mContext, "HOJE", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "ONTEM":
+                        b.dismiss();
+                        exibirDateOptionsRange();
+                        break;
+                }
+            });
+            p.height = sonicUtils.convertDpToPixel(40, mContext);
+            p2.height = sonicUtils.convertDpToPixel(40, mContext);
+            bt.setLayoutParams(p);
+            bt.setText(s);
+            bt.setTextSize(12);
+            bt.setBackground(getResources().getDrawable(R.drawable.botao_rect_neutro));
+            if(s.contains("FAIXA ESPECÍFICA")){
+                bt.setLayoutParams(p2);
+            }else {
+                bt.setLayoutParams(p);
+            }
+            ll.addView(bt);
+        }
+        b.show();
+
+    }
+
+    public void exibirDateOptionsRange(){
+        mCalendar = Calendar.getInstance();
+        DatePickerDialog d = new DatePickerDialog(mContext,
+                mDate,
+                mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH),
+                mCalendar.get(Calendar.DAY_OF_MONTH));
+        d.getDatePicker().setCalendarViewShown(false);
+        //d.getDatePicker().setMinDate(System.currentTimeMillis());
+        //d.getDatePicker().setMaxDate(System.currentTimeMillis()+(1000*60*60*24));//MAX 30 DIAS
+        d.show();
+
+    }
+
+    DatePickerDialog.OnDateSetListener mDate = new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mCalendar.set(Calendar.YEAR, year);
+            mCalendar.set(Calendar.MONTH, monthOfYear);
+            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        }
+
+    };
 
     public void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();

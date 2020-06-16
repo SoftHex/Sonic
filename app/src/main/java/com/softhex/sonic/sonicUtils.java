@@ -32,6 +32,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -141,6 +142,14 @@ public class sonicUtils {
     public static int intToDps(Context c, int a){
         float scale = c.getResources().getDisplayMetrics().density;
         return (int) (a * scale + 0.5f);
+    }
+
+    public static int convertDpToPixel(int dp, Context context){
+        return dp * ((int) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static int convertPixelsToDp(int px, Context context){
+        return px / ((int) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
     public static String saudacao(){
