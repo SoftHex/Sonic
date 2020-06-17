@@ -373,13 +373,14 @@
 
     <!-- DATAPICKER -->
     <string-array name="datePickerValues">
-        <item name="1">HOJE</item>
-        <item name="2">ONTEM</item>
-        <item name="3">SEMANA ATUAL</item>
-        <item name="4">SEMANA ANTERIOR</item>
-        <item name="5">MÊS ATUAL</item>
-        <item name="6">MÊS ANTERIOR</item>
-        <item name="7">FAIXA ESPECÍFICA</item>
+        <item name="1">TUDO</item>
+        <item name="2">HOJE</item>
+        <item name="3">ONTEM</item>
+        <item name="4">SEMANA ATUAL</item>
+        <item name="5">SEMANA ANTERIOR</item>
+        <item name="6">MÊS ATUAL</item>
+        <item name="7">MÊS ANTERIOR</item>
+        <item name="8">FAIXA ESPECÍFICA</item>
     </string-array>
 
     <!--  BUTTONS SINC -->

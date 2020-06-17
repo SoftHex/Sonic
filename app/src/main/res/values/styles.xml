@@ -157,4 +157,9 @@
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
 
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+    </style>
+
 </resources>

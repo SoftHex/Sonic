@@ -102,11 +102,12 @@ public class sonicUtils {
     private sonicDatabaseLogCRUD DBCL;
     private sonicSystem mySystem;
     private sonicConstants myCons;
-    private Date date = new Date();
     private String zipName;
-    ProgressDialog myProgress;
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-    Locale brasil = new Locale("pt", "BR");
+    private ProgressDialog myProgress;
+    private Calendar mCalendar;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+    private Locale brasil = new Locale("pt", "BR");
+
 
     sonicUtils(Activity act){
         this.myCtx = act;
@@ -115,6 +116,7 @@ public class sonicUtils {
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
         this.mySystem = new sonicSystem(myCtx);
         this.myCons = new sonicConstants();
+        this.mCalendar = GregorianCalendar.getInstance();
     }
 
     sonicUtils(Context ctx){
@@ -1615,9 +1617,10 @@ public class sonicUtils {
 
             Calendar cal_de = Calendar.getInstance();
 
-            cal_de.set(Calendar.DAY_OF_WEEK, 0);
+            cal_de.set(Calendar.DAY_OF_MONTH, (Calendar.getInstance()).get(Calendar.DAY_OF_MONTH));
 
             return  "='"+simpleDateFormat.format(cal_de.getTime())+"'";
+
 
 
         }
@@ -1626,7 +1629,7 @@ public class sonicUtils {
 
             Calendar cal_de = Calendar.getInstance();
 
-            cal_de.set(Calendar.DAY_OF_WEEK, -1);
+            cal_de.set(Calendar.DAY_OF_MONTH, (Calendar.getInstance()).get(Calendar.DAY_OF_MONTH)-1);
 
             return  "='"+simpleDateFormat.format(cal_de.getTime())+"'";
 

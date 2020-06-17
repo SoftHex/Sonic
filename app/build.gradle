@@ -65,6 +65,8 @@ dependencies {
     implementation 'com.diogobernardino:williamchart:3.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart-Realm:v3.0.3@aar'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    // DATERANGE
+    //implementation 'com.borax12.materialdaterangepicker:library:2.0'
     //implementation 'com.highsoft.highcharts:highcharts:6.1r'
     implementation project(':materialdialog')
     implementation project(':progressprofile')

@@ -173,7 +173,7 @@ public class sonicRota extends AppCompatActivity{
         }
     }
 
-    public void refreshHomeFragments(int position){
+    public void refreshFragments(int position){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.detach(myAdapter.getItem(position)).attach(myAdapter.getItem(position)).commit();
     }

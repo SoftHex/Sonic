@@ -76,6 +76,8 @@ public class sonicPreferences{
     private static final String GERAL_SITE = "site";
     private static final String GERAL_FIRST_SINC = "sincFirst";
     private static final String GERAL_ERROR = "geralError";
+    private static final String GERAL_DATA_RANGE = "geralDataRange";
+    private static final String GERAL_DATA_SEARCH = "geralDataSearch";
     private static final String SINC_REFRESH = "sincRefresh";
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
@@ -675,6 +677,22 @@ public class sonicPreferences{
         }
         public boolean getListagemCompleta(){
             return sharedpreferences.getBoolean(GERAL_LISTAGEM_COMPLETA, false);
+        }
+        public void setDataRange(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_DATA_RANGE, value);
+            editor.apply();
+        }
+        public String getDataRange(){
+            return sharedpreferences.getString(GERAL_DATA_RANGE, "");
+        }
+        public void setDataSearch(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(GERAL_DATA_SEARCH, value);
+            editor.apply();
+        }
+        public boolean getDataSearch(){
+            return sharedpreferences.getBoolean(GERAL_DATA_SEARCH, false);
         }
         public void setHomeRefresh(boolean value){
             editor = sharedpreferences.edit();

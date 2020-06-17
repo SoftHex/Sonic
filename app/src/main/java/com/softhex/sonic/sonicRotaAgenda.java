@@ -1,6 +1,5 @@
 package com.softhex.sonic;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -68,7 +67,9 @@ public class sonicRotaAgenda extends Fragment {
     private LinearLayout llNoResult;
     private RelativeLayout rlDesert;
     private Button btSinc;
-    private Calendar mCalendar;
+    private Calendar mCalendarStart, mCalendarEnd;
+    private SimpleDateFormat dataSearch = new SimpleDateFormat("yyyyMMdd");
+    private sonicUtils mUtils;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class sonicRotaAgenda extends Fragment {
 
         mContext = getActivity();
         mPrefs = new sonicPreferences(getActivity());
+        mUtils = new sonicUtils(getActivity());
         loadFragment();
 
         return mView;
@@ -198,9 +200,6 @@ public class sonicRotaAgenda extends Fragment {
                 return false;
             case R.id.itFilter:
                 exibirFiltro();
-                return false;
-            case R.id.itDate:
-                exibirDateOptions();
                 return false;
             default:
                 break;
@@ -334,7 +333,6 @@ public class sonicRotaAgenda extends Fragment {
         AlertDialog b = new AlertDialog.Builder(mContext).setNegativeButton("SAIR", (dialog, which) -> {
 
         }).create();
-        b.setTitle("SELECIONE UM DATA...");
         b.setView(myView);
 
         LinearLayout ll = myView.findViewById(R.id.llGroupButton);
@@ -346,12 +344,27 @@ public class sonicRotaAgenda extends Fragment {
         for (String s: values) {
             Button bt = new Button(mContext);
             bt.setOnClickListener((View v)-> {
+                b.dismiss();
                 switch (bt.getText().toString()){
                     case "HOJE":
-                        Toast.makeText(mContext, "HOJE", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, mUtils.Data.hoje(), Toast.LENGTH_SHORT).show();
                         break;
                     case "ONTEM":
-                        b.dismiss();
+                        Toast.makeText(mContext, mUtils.Data.ontem(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case "SEMANA ATUAL":
+                        Toast.makeText(mContext, mUtils.Data.semanaAtual(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case "SEMANA ANTERIOR":
+                        Toast.makeText(mContext, mUtils.Data.semanaAnterior(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case "MÊS ATUAL":
+                        Toast.makeText(mContext, mUtils.Data.mesAtual(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case "MÊS ANTERIOR":
+                        Toast.makeText(mContext, mUtils.Data.mesAnterior(), Toast.LENGTH_SHORT).show();
+                        break;
+                    case "FAIXA ESPECÍFICA":
                         exibirDateOptionsRange();
                         break;
                 }
@@ -374,29 +387,38 @@ public class sonicRotaAgenda extends Fragment {
     }
 
     public void exibirDateOptionsRange(){
-        mCalendar = Calendar.getInstance();
-        DatePickerDialog d = new DatePickerDialog(mContext,
-                mDate,
-                mCalendar.get(Calendar.YEAR),
-                mCalendar.get(Calendar.MONTH),
-                mCalendar.get(Calendar.DAY_OF_MONTH));
-        d.getDatePicker().setCalendarViewShown(false);
-        //d.getDatePicker().setMinDate(System.currentTimeMillis());
-        //d.getDatePicker().setMaxDate(System.currentTimeMillis()+(1000*60*60*24));//MAX 30 DIAS
-        d.show();
+
+        DateRangePickerFragment d = new DateRangePickerFragment();
+        d.setOnDateRangeSelectedListener(new DateRangePickerFragment.OnDateRangeSelectedListener() {
+                @Override
+                public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear, boolean isCanceled) {
+                               if(isCanceled){
+                                   if(mPrefs.Geral.getDataSearch()){
+                                       ((sonicRota)mContext).refreshFragments(0);
+                                       mPrefs.Geral.setDataSearch(false);
+                                   }
+
+                               }else{
+                                   mPrefs.Geral.setDataSearch(true);
+                                   mCalendarStart = Calendar.getInstance();
+                                   mCalendarStart.set(Calendar.YEAR, startYear);
+                                   mCalendarStart.set(Calendar.MONTH, startMonth);
+                                   mCalendarStart.set(Calendar.DAY_OF_MONTH, startDay);
+                                   mCalendarEnd = Calendar.getInstance();
+                                   mCalendarEnd.set(Calendar.YEAR, endYear);
+                                   mCalendarEnd.set(Calendar.MONTH, endMonth);
+                                   mCalendarEnd.set(Calendar.DAY_OF_MONTH, endDay);
+                                   mPrefs.Geral.setDataRange("BETWEEN "+ dataSearch.format(mCalendarStart.getTime())+" AND "+dataSearch.format(mCalendarEnd.getTime()));
+                                   ((sonicRota)mContext).refreshFragments(0);
+                               }
+
+                    }
+                });
+        d.show(getFragmentManager(), "start");
 
     }
 
-    DatePickerDialog.OnDateSetListener mDate = new DatePickerDialog.OnDateSetListener() {
 
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mCalendar.set(Calendar.YEAR, year);
-            mCalendar.set(Calendar.MONTH, monthOfYear);
-            mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        }
-
-    };
 
     public void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
