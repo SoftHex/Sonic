@@ -239,36 +239,38 @@ public class sonicDatabaseCRUD {
 
     class Ftp{
 
-        public String ftp() {
+        public List<sonicFtpHolder> selectFtpAtivo(){
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicFtpHolder> ftps = new ArrayList<>();
+            Cursor cursor = DB.getWritableDatabase().rawQuery("SELECT * FROM " + TABLE_FTP + " WHERE ativo=? ", new String[]{"1"});
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT ftp FROM "+TABLE_FTP , null);
-            String ftp = null;
-            if(cursor.moveToFirst()) {
-                ftp = cursor.getString(cursor.getColumnIndex("ftp"));
+            try{
+
+                if(cursor!=null){
+
+                    while (cursor.moveToNext()){
+                        sonicFtpHolder ftp = new sonicFtpHolder();
+                        ftp.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                        ftp.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
+                        ftp.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                        ftp.setUsuario(cursor.getString(cursor.getColumnIndex("usuario")));
+                        ftp.setSenha(cursor.getString(cursor.getColumnIndex("senha")));
+                        ftp.setAtivo(cursor.getInt(cursor.getColumnIndex("ativo")));
+                        ftps.add(ftp);
+                    }
+
+                    cursor.close();
+
+                }
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
             }
-            return ftp;
-        }
-        public String user() {
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT user FROM "+TABLE_FTP , null);
-            String user = null;
-            if(cursor.moveToFirst()) {
-                    user = cursor.getString(cursor.getColumnIndex("user"));
-            }
-            return user;
-        }
+            return ftps;
 
-        public String pass() {
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT pass FROM "+TABLE_FTP , null);
-            String pass = null;
-            if(cursor.moveToFirst()) {
-                pass = cursor.getString(cursor.getColumnIndex("pass"));
-            }
-            return pass;
         }
 
     }

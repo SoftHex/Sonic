@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -97,7 +96,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     private List<sonicRotaHolder> mFilteredList;
     private RotaFilter rotaFilter;
     private Boolean nFantasia;
-    private sonicPreferences mPrefs;
+    private final sonicPreferences mPrefs;
     private sonicUtils mUtils;
     private RecyclerView mRecycler;
     private boolean rotaPessoal;
@@ -107,6 +106,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     private Handler customHandler = new Handler();
     private Calendar mCalendarStart, mCalendarEnd;
     private SimpleDateFormat dataSearch = new SimpleDateFormat("yyyyMMdd");
+    private SimpleDateFormat dataShow = new SimpleDateFormat("dd/MM/yyyy");
 
     public class rotaHolder extends RecyclerView.ViewHolder {
 
@@ -156,14 +156,16 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         this.mRecycler = mRecycler;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
 
+        mPartialList = new ArrayList();
+        mPartialList.add(null);
+
         if(mPrefs.Geral.getListagemCompleta()){
 
-            mPartialList = mTotalList;
+            for(int i=0;i<rotas.size();i++){
+                mPartialList.add(rotas.get(i));
+            }
 
         }else{
-
-            mPartialList = new ArrayList();
-            mPartialList.add(null);
 
             if(rotas.size()< sonicConstants.TOTAL_ITENS_LOAD){
 
@@ -192,8 +194,6 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 }
             });
         }
-
-
 
     }
 
@@ -230,48 +230,38 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 p.setMargins(0,0, sonicUtils.convertDpToPixel(6, mContext), 0);
                 p2.setMargins(sonicUtils.convertDpToPixel(12, mContext),0, sonicUtils.convertDpToPixel(6, mContext), 0);
                 String[] values = mContext.getResources().getStringArray(R.array.datePickerValues);
-
+                Button bt1 = new Button(mContext);
+                bt1.setText(mPrefs.Rota.getTermSearch());
+                bt1.setTextSize(12);
+                bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
+                bt1.setLayoutParams(p2);
+                bt1.setPadding(30,0,30,0);
+                holder.llGroupDate.addView(bt1);
                 for (String s: values) {
-                    Button bt = new Button(mContext);
-                    bt.setOnClickListener((View v)-> {
-                        switch (bt.getText().toString()){
-                            case "HOJE":
-                                ((sonicRota)mContext).refreshFragments(rotaPessoal ? 1 : 0);
-                                break;
-                            case "ONTEM":
-                                Toast.makeText(mContext, mUtils.Data.ontem(), Toast.LENGTH_SHORT).show();
-                                break;
-                            case "SEMANA ATUAL":
-                                Toast.makeText(mContext, mUtils.Data.semanaAtual(), Toast.LENGTH_SHORT).show();
-                                break;
-                            case "SEMANA ANTERIOR":
-                                Toast.makeText(mContext, mUtils.Data.semanaAnterior(), Toast.LENGTH_SHORT).show();
-                                break;
-                            case "MÊS ATUAL":
-                                Toast.makeText(mContext, mUtils.Data.mesAtual(), Toast.LENGTH_SHORT).show();
-                                break;
-                            case "MÊS ANTERIOR":
-                                Toast.makeText(mContext, mUtils.Data.mesAnterior(), Toast.LENGTH_SHORT).show();
-                                break;
-                            case "FAIXA ESPECÍFICA":
-                                exibirDateOptionsRange();
-                                break;
-                        }
+                    if(!s.contains(mPrefs.Rota.getTermSearch())){
+                        Button bt2 = new Button(mContext);
 
-                    });
-                    bt.setText(s);
-                    bt.setTextSize(12);
-                    if(s.contains("TUDO")){
-                        bt.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
-                        bt.setLayoutParams(p2);
-                    }else{
-                        bt.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
-                        bt.setLayoutParams(p);
+                        bt2.setOnClickListener((View v)-> {
+
+                            switch (bt2.getText().toString()){
+                                case "FAIXA ESPECÍFICA":
+                                    exibirDateOptionsRange();
+                                    break;
+                                default:
+                                    mPrefs.Rota.setTermSearch(bt2.getText().toString());
+                                    ((sonicRota)mContext).refreshFragments(rotaPessoal ? 1 : 0);
+                                    break;
+                            }
+
+                        });
+                        bt2.setText(s);
+                        bt2.setTextSize(12);
+                        bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                        bt2.setLayoutParams(p);
+
+                        bt2.setPadding(30,0,30,0);
+                        holder.llGroupDate.addView(bt2);
                     }
-
-
-                    bt.setPadding(30,0,30,0);
-                    holder.llGroupDate.addView(bt);
                 }
 
                 break;
@@ -474,7 +464,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     @Override
     public int getItemViewType(int position) {
         //return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
-        return (position==0) ? VIEW_HEADER : mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROGRESS : VIEW_ITEM;
+        return (position==0) ? VIEW_HEADER : mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null && position!=0 ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
     @Override
@@ -510,6 +500,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                     mCalendarEnd.set(Calendar.MONTH, endMonth);
                     mCalendarEnd.set(Calendar.DAY_OF_MONTH, endDay);
                     mPrefs.Geral.setDataRange("BETWEEN "+ dataSearch.format(mCalendarStart.getTime())+" AND "+dataSearch.format(mCalendarEnd.getTime()));
+                    mPrefs.Rota.setTermSearch(dataShow.format(mCalendarStart.getTime())+" / "+dataShow.format(mCalendarEnd.getTime()));
                     ((sonicRota)mContext).refreshFragments(0);
                 }
 
@@ -547,9 +538,8 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicRotaHolder rota : originalList) {
-                    if (String.valueOf(rota.getCodigoCliente()).contains(filterPattern) || rota.getRazaoSocial().contains(filterPattern) || rota.getNomeFantasia().contains(filterPattern)|| rota.getAtendente().contains(filterPattern)) {
+                    if (rota.getRazaoSocial().contains(filterPattern) || rota.getNomeFantasia().contains(filterPattern) || rota.getAtendente().contains(constraint.toString())) {
                         filteredList.add(rota);
-
                     }
 
                 }

@@ -9,15 +9,18 @@ import android.os.SystemClock;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class sonicSplash extends AppCompatActivity {
 
-    private Intent i;
-    private sonicDatabaseCRUD mData;
     private Activity mActivity;
     private sonicPreferences mPrefs;
     private Long timeInMilliseconds;
+    private sonicDatabaseCRUD mData;
+    private List<sonicUsuariosHolder> mListUser;
+    private List<sonicGrupoEmpresasHolder> mListEmpresa;
+    private List<sonicFtpHolder> mListFtp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,81 +33,91 @@ public class sonicSplash extends AppCompatActivity {
 
         sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
 
-        new myAsyncTaskLogar().execute();
-
-    }
-
-    class myAsyncTaskLogar extends AsyncTask<Integer, Integer, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Integer... integers) {
-
-            return mData.Usuario.usuarioAtivo();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-
-            if(result){
-                finalizarRota();
-                List<sonicUsuariosHolder> mListUser;
-                List<sonicGrupoEmpresasHolder> mListEmpresa;
-                mListUser = mData.Usuario.selectUsuarioAtivo();
-                mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
-                mPrefs.Matriz.setNome(mListEmpresa.get(0).getNome());
-                mPrefs.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
-                mPrefs.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
-                mPrefs.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
-                mPrefs.Matriz.setBairro(mListEmpresa.get(0).getBairro());
-                mPrefs.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
-                mPrefs.Matriz.setUF(mListEmpresa.get(0).getUf());
-                mPrefs.Matriz.setCep(mListEmpresa.get(0).getCep());
-                mPrefs.Matriz.setFone(mListEmpresa.get(0).getFone());
-                mPrefs.Matriz.setEmail(mListEmpresa.get(0).getEmail());
-                mPrefs.Matriz.setSite(mListEmpresa.get(0).getSite());
-                mPrefs.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
-                mPrefs.Users.setUsuarioId(mListUser.get(0).getCodigo());
-                mPrefs.Users.setUsuarioNome(mListUser.get(0).getNome());
-                mPrefs.Users.setUsuarioCargo(mListUser.get(0).getCargo());
-                mPrefs.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
-                mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
-                mPrefs.Users.setCodigoSinc(mListUser.get(0).getCodigo());
-                mPrefs.Users.setArquivoSinc(mListUser.get(0).getCodigo());
-                mPrefs.GrupoProduto.setItemLista(0);
-                mPrefs.GrupoProduto.setItemGrid(0);
-
-                // VERIFICA SE O USUARIO ESCOLHEU EXIGIR SENHA AO ENTRAR
-                if(mPrefs.Users.getStatusLogin()){
-                    i  = new Intent(mActivity,sonicLogin.class);
-                }else {
-                    i = new Intent(mActivity, sonicMain.class);
-                }
-
-            }else{
-
-                i  = new Intent(sonicSplash.this,sonicEmpresa.class);
-            }
-
-           logar(i);
-
-        }
-    }
-
-    private void logar(Intent i){
-
-
         Handler handler = new Handler();
 
         handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
 
-                                    startActivity(i);
-                                    finish();
+                                    verificarUsuario(mData.Usuario.usuarioAtivo());
+
                                 }
                             }
                 ,sonicUtils.Randomizer.generate(1500, 3000));
+
+
+    }
+
+    class mAsyncTaskCarregarDados extends AsyncTask<Integer, Integer, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            carregarDados();
+            finalizarRota();
+            preencherTabelasFixas();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+           startActivity(mPrefs.Users.getStatusLogin() ? new Intent(mActivity,sonicLogin.class) : new Intent(mActivity, sonicMain.class));
+
+        }
+    }
+
+    public void verificarUsuario(boolean logar){
+
+        if(logar){
+            new mAsyncTaskCarregarDados().execute();
+        }else {
+            startActivity(new Intent(mActivity,sonicLogin.class));
+        }
+    }
+
+    private void carregarDados(){
+        mListUser = mData.Usuario.selectUsuarioAtivo();
+        mListEmpresa = mData.GrupoEmpresas.selectGrupoEmpresas();
+        mListFtp = mData.Ftp.selectFtpAtivo();
+        mPrefs.Ftp.setDescricao(mListFtp.get(0).getDescricao());
+        mPrefs.Ftp.setEndereco(mListFtp.get(0).getEndereco());
+        mPrefs.Ftp.setUsuario(mListFtp.get(0).getUsuario());
+        mPrefs.Ftp.setSenha(mListFtp.get(0).getSenha());
+        mPrefs.Matriz.setNome(mListEmpresa.get(0).getNome());
+        mPrefs.Matriz.setDescricao(mListEmpresa.get(0).getDescricao());
+        mPrefs.Matriz.setDataFundacao(mListEmpresa.get(0).getDataFundacao());
+        mPrefs.Matriz.setEndereco(mListEmpresa.get(0).getEndereco());
+        mPrefs.Matriz.setBairro(mListEmpresa.get(0).getBairro());
+        mPrefs.Matriz.setMunicipio(mListEmpresa.get(0).getMunicipio());
+        mPrefs.Matriz.setUF(mListEmpresa.get(0).getUf());
+        mPrefs.Matriz.setCep(mListEmpresa.get(0).getCep());
+        mPrefs.Matriz.setFone(mListEmpresa.get(0).getFone());
+        mPrefs.Matriz.setEmail(mListEmpresa.get(0).getEmail());
+        mPrefs.Matriz.setSite(mListEmpresa.get(0).getSite());
+        mPrefs.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
+        mPrefs.Users.setUsuarioId(mListUser.get(0).getCodigo());
+        mPrefs.Users.setUsuarioNome(mListUser.get(0).getNome());
+        mPrefs.Users.setUsuarioCargo(mListUser.get(0).getCargo());
+        mPrefs.Users.setEmpresaId(mListUser.get(0).getEmpresaId());
+        mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
+        mPrefs.Users.setCodigoSinc(mListUser.get(0).getCodigo());
+        mPrefs.Users.setArquivoSinc(mListUser.get(0).getCodigo());
+    }
+
+    private void preencherTabelasFixas(){
+
+        new sonicDatabaseCRUD(this).Database.cleanData(sonicConstants.TB_BANCOS);
+        String[] codigoBancos = getResources().getStringArray(R.array.codigoBancos);
+        String[] nomeBancos = getResources().getStringArray(R.array.nomeBancos);
+        String[] nomeBancosFull = getResources().getStringArray(R.array.nomeBancosFull);
+        for(int x=0; x<codigoBancos.length; x++){
+            List<String> mTotalList = new ArrayList<>();
+            mTotalList.add(codigoBancos[x]);
+            mTotalList.add(nomeBancos[x]);
+            mTotalList.add(nomeBancosFull[x]);
+            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, sonicDatabaseCRUD.DB_MODE_SAVE);
+        }
 
     }
 

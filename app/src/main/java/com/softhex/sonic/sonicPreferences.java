@@ -20,11 +20,16 @@ public class sonicPreferences{
     private static final String USUARIO_IMEI = "usuarioImei";
     private static final String USUARIO_PATH = "userPath";
     private static final String USUARIO_PICTURE = "userPicture";
+    private static final String FTP_DESCRICAO = "ftpDescricao";
+    private static final String FTP_ENDERECO = "ftpEndereco";
+    private static final String FTP_USUARIO = "ftpUsuario";
+    private static final String FTP_SENHA = "ftpSenha";
     private static final String PRODUTO_ID = "produtoId";
     private static final String PRODUTO_NOME = "produtoNome";
     private static final String PRODUTO_GRUPO = "produtoGrupo";
     private static final String PRODUTO_NOVO = "produtoNovo";
     private static final String PRODUTO_DETALHE = "produtoDetalhe";
+    private static final String PRODUTO_TERM_SEARCH = "produtoTermSearch";
     private static final String PRODUTO_DATA_CADASTRO = "produtoDataCadastro";
     private static final String GRUPO_PRODUTO_LISTA = "grupoProdutoLista";
     private static final String GRUPO_PRODUTO_GRID = "grupoProdutoGrid";
@@ -53,6 +58,7 @@ public class sonicPreferences{
     private static final String CLIENTE_NUNCA_COMPROU = "clienteNuncaComprou";
     private static final String CLIENTE_COMPRAS = "clienteCompras";
     private static final String CLIENTE_TITULOS = "clienteTitulos";
+    private static final String CLIENTE_TERM_SEARCH = "clienteTermSearch";
     private static final String SAUDACAO = "saudacao";
     private static final String MATRIZ_NOME = "matrizNome";
     private static final String MATRIZ_DESCRICAO = "matrizDescricao";
@@ -78,6 +84,7 @@ public class sonicPreferences{
     private static final String GERAL_ERROR = "geralError";
     private static final String GERAL_DATA_RANGE = "geralDataRange";
     private static final String GERAL_DATA_SEARCH = "geralDataSearch";
+    private static final String GERAL_TERM_SEARCH = "geralTermSearch";
     private static final String SINC_REFRESH = "sincRefresh";
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
@@ -101,9 +108,10 @@ public class sonicPreferences{
     private static final String ROTA_CLIENTE_PICKED= "rotaClientePicked";
     private static final String ROTA_PESSOAL_DATA = "rotaPessoalData";
     private static final String ROTA_PESSOAL_HORA = "rotaPessoalHora";
+    private static final String ROTA_TERM_SEARCH = "rotaTermSearch";
 
 
-
+    Ftp Ftp = new Ftp();
     Users Users = new Users();
     Path Path = new Path();
     Clientes Clientes = new Clientes();
@@ -121,6 +129,40 @@ public class sonicPreferences{
         mContex = context;
     }
 
+    public class Ftp{
+        public void setDescricao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(FTP_DESCRICAO, value);
+            editor.apply();
+        }
+        public String getDescricao(){
+            return sharedpreferences.getString(FTP_DESCRICAO, "");
+        }
+        public void setEndereco(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(FTP_ENDERECO, value);
+            editor.apply();
+        }
+        public String getEndereco(){
+            return sharedpreferences.getString(FTP_ENDERECO, "");
+        }
+        public void setUsuario(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(FTP_USUARIO, value);
+            editor.apply();
+        }
+        public String getUsuario(){
+            return sharedpreferences.getString(FTP_USUARIO, "");
+        }
+        public void setSenha(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(FTP_SENHA, value);
+            editor.apply();
+        }
+            public String getSenha(){
+            return sharedpreferences.getString(FTP_SENHA, "");
+        }
+    }
     public class Produtos{
 
         public void setProdutoId(int value){
@@ -694,6 +736,14 @@ public class sonicPreferences{
         public boolean getDataSearch(){
             return sharedpreferences.getBoolean(GERAL_DATA_SEARCH, false);
         }
+        public void setTermSearch(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_TERM_SEARCH, value);
+            editor.apply();
+        }
+        public String getTermSearch(){
+            return sharedpreferences.getString(GERAL_TERM_SEARCH, "TUDO");
+        }
         public void setHomeRefresh(boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(GERAL_HOME_REFRESH, value);
@@ -815,6 +865,15 @@ public class sonicPreferences{
             editor = sharedpreferences.edit();
             editor.putInt(ROTA_ITEM_POSITION, value);
             editor.apply();
+        }
+
+        public void setTermSearch(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(ROTA_TERM_SEARCH, value);
+            editor.apply();
+        }
+        public String getTermSearch(){
+            return sharedpreferences.getString(ROTA_TERM_SEARCH, "TUDO");
         }
 
         public int getItemPosition(){

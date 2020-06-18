@@ -81,9 +81,11 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private static final String CREATE_FTP = "CREATE TABLE IF NOT EXISTS "+DB_FTP+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
-            "ftp varchar NOT NULL, " +
-            "user varchar NOT NULL, " +
-            "pass varchar);";
+            "descricao varchar NOT NULL, " +
+            "endereco varchar NOT NULL, " +
+            "usuario varchar NOT NULL, " +
+            "senha varchar," +
+            "ativo bit);" ;
 
     private static final String CREATE_EMPRESA = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +

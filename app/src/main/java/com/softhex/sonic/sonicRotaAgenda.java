@@ -120,7 +120,7 @@ public class sonicRotaAgenda extends Fragment {
 
         mLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
-        mLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
+        //mLayout.scrollToPosition(mPrefs.Rota.getItemPosition());
         //myLayout.smoothScrollToPosition(myRecycler, new RecyclerView.State(), mPrefs.Rota.getItemPosition());
 
         mRecycler.setLayoutManager(mLayout);

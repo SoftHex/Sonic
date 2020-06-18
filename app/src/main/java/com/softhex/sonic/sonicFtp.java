@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.ConnectException;
 
 /**
  * Created by Administrador on 26/07/2017.
@@ -53,23 +54,11 @@ public class sonicFtp {
 
         StackTraceElement el = Thread.currentThread().getStackTrace()[2];
         Boolean result = false;
-        String server, user ,pass;
-
-        if(DBC.Usuario.usuarioAtivo()){
-            server = DBC.Ftp.ftp();
-            user = DBC.Ftp.user();
-            pass = DBC.Ftp.pass();
-
-        }else{
-            server = sonicConstants.FTP_SERVER;
-            user = sonicConstants.FTP_USER;
-            pass = sonicConstants.FTP_PASS;
-        }
 
         try{
 
             ftpClient.setDataTimeout(10*1000);
-            ftpClient.connect(server, 21);
+            ftpClient.connect(mPrefs.Ftp.getEndereco(), 21);
 
             try{
 
@@ -77,7 +66,7 @@ public class sonicFtp {
 
                 try{
 
-                    result = ftpClient.login(user, pass);
+                    result = ftpClient.login(mPrefs.Ftp.getUsuario(), mPrefs.Ftp.getSenha());
                     ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
                     ftpClient.enterLocalActiveMode();
 
@@ -91,7 +80,10 @@ public class sonicFtp {
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             }
 
-        } catch (IOException e) {
+        } catch (ConnectException e) {
+            e.printStackTrace();
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+        }catch (IOException e){
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }
