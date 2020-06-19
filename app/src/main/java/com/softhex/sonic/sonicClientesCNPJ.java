@@ -1,7 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,19 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -188,9 +184,6 @@ public class sonicClientesCNPJ extends Fragment {
         switch (item.getItemId()) {
             case R.id.itemSearch:
                 return false;
-            case R.id.itemFiltro:
-                exibirFiltro();
-                return false;
             default:
                 break;
         }
@@ -202,7 +195,7 @@ public class sonicClientesCNPJ extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("J");
+            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo(true);
             return mList.size();
 
         }
@@ -243,7 +236,7 @@ public class sonicClientesCNPJ extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, "CNPJ: ");
+        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, true);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -276,54 +269,6 @@ public class sonicClientesCNPJ extends Fragment {
             myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
         });
 
-    }
-
-    private void exibirFiltro() {
-
-        List<sonicGrupoClientesHolder> grupo;
-
-        grupo = new sonicDatabaseCRUD(mContext).GrupoCliente.selectGrupoCliente("J");
-
-        List<String> l = new ArrayList<>();
-
-        for(int i=0; i < grupo.size(); i++ ){
-            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CNPJ){
-                l.add(grupo.get(i).getNome());
-            }
-        }
-
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        //builder.setTitle("Selecione um grupo...");
-        builder.setItems(chars, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                sonicConstants.GRUPO_CLIENTES_CNPJ = chars[item].toString();
-                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "LIMPAR FILTRO";
-                dialog.dismiss();
-                refreshFragment();
-
-            }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                sonicConstants.GRUPO_CLIENTES_CNPJ = "TODOS";
-                sonicConstants.GRUPO_CLIENTES_CNPJ_LIMPAR = "";
-                refreshFragment();
-            }
-        }).show();
-
-    }
-
-    public void refreshFragment(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
     @Override

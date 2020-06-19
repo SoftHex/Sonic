@@ -1,11 +1,13 @@
 package com.softhex.sonic;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -13,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,12 +33,15 @@ import java.util.List;
 
 public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private static final int VIEW_PROG = 123456789;
-    private static final int VIEW_ITEM = 987654321;
+    private static final int VIEW_HEADER = 1;
+    private static final int VIEW_PROGRESS = 2;
+    private static final int VIEW_ITEM = 3;
+    private static final int TOTAL_ITENS_FILTRO = 6;
     private Context mContext;
     private List<sonicProdutosHolder> mTotalList;
     private List<sonicProdutosHolder> mFilteredList;
     private List<sonicProdutosHolder> mPartialList;
+    private List<sonicGrupoProdutosHolder> mGroupList;
     private prodFilter prodFilter;
     private sonicDatabaseCRUD mData;
     private sonicUtils mUtil;
@@ -46,6 +53,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     private String mDataAtual = mDateFormat.format(new Date());
     private LinearLayoutManager linearLayoutManager;
     private int dias, diasDiff;
+    private GridLayoutManager mLayout;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -57,6 +65,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         RelativeLayout rlCatalogo, linearItem;
         String status;
         String tvDetalhe;
+        LinearLayout llGroupDate;
 
         public prodHolder(View view) {
             super(view);
@@ -69,11 +78,12 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             //tvGrupo = view.findViewById(R.id.tvGrupo);
             mImage = view.findViewById(R.id.ivImagem);
             ivNew = view.findViewById(R.id.ivNew);
+            llGroupDate = view.findViewById(R.id.llGroupDate);
 
         }
     }
 
-    public sonicProdutosGridAdapter(List<sonicProdutosHolder> produto, Context context, RecyclerView recycler) {
+    public sonicProdutosGridAdapter(List<sonicProdutosHolder> produto, Context context, RecyclerView recycler, GridLayoutManager layout) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = produto;
@@ -82,14 +92,20 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         this.mUtil = new sonicUtils(context);
         this.mPrefs = new sonicPreferences(context);
         this.mRecycler = recycler;
+        this.mData = new sonicDatabaseCRUD(context);
+        this.mLayout = layout;
+
+        mPartialList = new ArrayList();
+        mPartialList.add(0,null);
+        mTotalList.add(0,null);
 
         if(mPrefs.Geral.getListagemCompleta()){
 
-            mPartialList = mTotalList;
+            for(int i=0; i<produto.size() ;i++){
+                mPartialList.add(produto.get(i));
+            }
 
         }else{
-
-            mPartialList = new ArrayList();
 
             if(produto.size()< sonicConstants.TOTAL_ITENS_LOAD){
                 for(int i = 0; i < produto.size(); i++){
@@ -122,11 +138,17 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        if(viewType==VIEW_ITEM){
-            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid, parent, false);
-        }else{
-            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid_shimmer, parent, false);
+        View view=null;
+        switch (viewType){
+            case VIEW_HEADER:
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
+                break;
+            case VIEW_ITEM:
+                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid, parent, false);
+                break;
+            case VIEW_PROGRESS:
+                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_grid_shimmer, parent, false);
+                break;
         }
         return new prodHolder(view);
     }
@@ -137,47 +159,38 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         prodHolder holder = (prodHolder) viewHolder;
         sonicProdutosHolder prod = mTotalList.get(position);
 
-        if(holder.getItemViewType()==VIEW_ITEM){
-
-            holder.linearItem.setOnClickListener((View v)-> {
-
-                mPrefs.Produtos.setProdutoId(prod.getCodigo());
-                mPrefs.Produtos.setProdutoNome(prod.getNome());
-                mPrefs.Produtos.setProdutoGrupo(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
-                mPrefs.Produtos.setDetalhe("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
-                Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
-                v.getContext().startActivity(i);
-
-            });
-
-
-
-        holder.codigo = prod.getCodigo();
-        holder.tvNome.setText(prod.getNome());
-        holder.tvGrupo = prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo();
-        holder.tvDetalhe = "CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo();
-
-        String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
-        int diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        int dias = mPrefs.Produtos.getDiasNovo().equals(arrayNovo[0]) ? 30 :
-                mPrefs.Produtos.getDiasNovo().equals(arrayNovo[1]) ? 60 :
-                        mPrefs.Produtos.getDiasNovo().equals(arrayNovo[2]) ? 90 : 30;
-
-        String[] arrayColumn = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
-        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[0]) ? 2 :
-                mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[1]) ? 3 :
-                        mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[2]) ? 4 : 3;
-
-        holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 120/colunas);
-        holder.ivNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
-        holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);
-
-        String fileJpg = prod.getCodigo()+".JPG";
-
-        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
-
+        switch (holder.getItemViewType()){
+            case VIEW_HEADER:
+                criarFiltroBusca(holder);
+                break;
+            case VIEW_ITEM:
+                exibirItemLista(holder, prod, position);
+                break;
         }
 
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(prodFilter == null)
+            prodFilter = new prodFilter(this, mTotalList);
+        return prodFilter;
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mTotalList.size();
     }
 
     private void loadMore(){
@@ -216,30 +229,163 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
     }
 
-    @Override
-    public Filter getFilter() {
-        if(prodFilter == null)
-            prodFilter = new prodFilter(this, mTotalList);
-        return prodFilter;
+    private void criarFiltroBusca(prodHolder holder){
 
-    }
+        holder.llGroupDate.removeAllViews();
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        p.height = sonicUtils.convertDpToPixel(36, mContext);
+        p2.height = sonicUtils.convertDpToPixel(36, mContext);
+        p.setMargins(0,0, sonicUtils.convertDpToPixel(6, mContext), 0);
+        p2.setMargins(sonicUtils.convertDpToPixel(12, mContext),0, sonicUtils.convertDpToPixel(6, mContext), 0);
+        mGroupList = mData.GrupoProduto.selectGrupo();
+        Button bt1 = new Button(mContext);
+        bt1.setText(mPrefs.GrupoProduto.getFiltroGrid());
+        bt1.setTextSize(12);
+        bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
+        bt1.setLayoutParams(p2);
+        bt1.setPadding(30,0,30,0);
+        holder.llGroupDate.addView(bt1);
+        List<sonicGrupoProdutosHolder> grupoAuxiliar;
+        grupoAuxiliar = new ArrayList<>();
+        for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
 
-    @Override
-    public int getItemViewType(int position) {
-        return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
+            grupoAuxiliar.add(mGroupList.get(i));
+
+            if(!mGroupList.get(i).getDescricao().contains(mPrefs.GrupoProduto.getFiltroGrid())){
+
+                Button bt2 = new Button(mContext);
+
+                bt2.setOnClickListener((View v)-> {
+
+                    mPrefs.GrupoProduto.setFiltroGrid(bt2.getText().toString());
+
+                    ((sonicProdutos)mContext).refreshFragments(1);
+
+                });
+
+                bt2.setText(mGroupList.get(i).getDescricao());
+                bt2.setTextSize(12);
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setLayoutParams(p);
+
+                bt2.setPadding(30,0,30,0);
+                holder.llGroupDate.addView(bt2);
+            }
+
         }
 
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
+        Button bt3 = new Button(mContext);
+
+        bt3.setOnClickListener((View v)-> {
+            exibirFiltroExtra(grupoAuxiliar);
+        });
+
+        bt3.setText("MAIS...");
+        bt3.setTextSize(12);
+        bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+        bt3.setLayoutParams(p);
+        bt3.setPadding(30,0,30,0);
+        holder.llGroupDate.addView(bt3);
+
     }
 
-    @Override
-    public int getItemCount() {
-        return mTotalList.size();
+    private void exibirItemLista(prodHolder holder, sonicProdutosHolder prod, int position){
+
+        holder.linearItem.setOnClickListener((View v)-> {
+
+            mPrefs.Produtos.setProdutoId(prod.getCodigo());
+            mPrefs.Produtos.setProdutoNome(prod.getNome());
+            mPrefs.Produtos.setProdutoGrupo(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
+            mPrefs.Produtos.setDetalhe("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+            Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
+            v.getContext().startActivity(i);
+
+        });
+
+
+
+        holder.codigo = prod.getCodigo();
+        holder.tvNome.setText(prod.getNome());
+        holder.tvGrupo = prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo();
+        holder.tvDetalhe = "CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo();
+
+        String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+        int diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
+        int dias = mPrefs.Produtos.getDiasNovo().equals(arrayNovo[0]) ? 30 :
+                mPrefs.Produtos.getDiasNovo().equals(arrayNovo[1]) ? 60 :
+                        mPrefs.Produtos.getDiasNovo().equals(arrayNovo[2]) ? 90 : 30;
+
+        String[] arrayColumn = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
+        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[0]) ? 2 :
+                mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[1]) ? 3 :
+                        mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[2]) ? 4 : 3;
+
+        holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 120/colunas);
+        holder.ivNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
+        holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);
+
+        String fileJpg = prod.getCodigo()+".JPG";
+
+        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
+
+
     }
 
-    private static class prodFilter extends Filter {
+    private void exibirFiltroExtra(List<sonicGrupoProdutosHolder> mListAuxiliar) {
+
+        List<sonicGrupoProdutosHolder> grupo;
+
+        grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupo();
+
+        List<String> l = new ArrayList<>();
+
+        for(int i=0; i < grupo.size(); i++ ){
+            l.add(grupo.get(i).getDescricao());
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                dialog.dismiss();
+                mPrefs.GrupoProduto.setFiltroGrid(chars[item].toString());
+                ((sonicProdutos)mContext).refreshFragments(1);
+
+            }
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setPositiveButton((mPrefs.GrupoProduto.getFiltroGrid().equals("TODOS") ? "" : "LIMPAR FILTRO"), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mPrefs.GrupoProduto.setFiltroGrid("TODOS");
+                ((sonicProdutos)mContext).refreshFragments(1);
+
+            }
+        }).show();
+
+    }
+
+    private void ajustarGrid(List<sonicProdutosHolder> filteredList){
+
+        String[] array = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
+        int colunas = mPrefs.Produtos.getCatalogoColunas().equals(array[0]) ? 2 :
+                mPrefs.Produtos.getCatalogoColunas().equals(array[1]) ? 3 :
+                        mPrefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
+        mLayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+
+                return (position==0 && filteredList.get(0)==null) ? colunas : 1;
+            }
+        });
+    }
+
+    private class prodFilter extends Filter {
 
         private final sonicProdutosGridAdapter adapter;
 
@@ -264,10 +410,12 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
             } else {
 
+                ajustarGrid(filteredList);
+
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicProdutosHolder prod : originalList) {
-
+                    if(prod!=null)
                     if (prod.getNome().contains(filterPattern) || prod.getCodigoAlternativo().contains(filterPattern) || String.valueOf(prod.getCodigo()).contains(filterPattern)) {
                         filteredList.add(prod);
 

@@ -29,10 +29,10 @@ public class sonicPreferences{
     private static final String PRODUTO_GRUPO = "produtoGrupo";
     private static final String PRODUTO_NOVO = "produtoNovo";
     private static final String PRODUTO_DETALHE = "produtoDetalhe";
-    private static final String PRODUTO_TERM_SEARCH = "produtoTermSearch";
+    private static final String GRUPO_PRODUTO_FILTRO = "grupoProdutoFiltro";
     private static final String PRODUTO_DATA_CADASTRO = "produtoDataCadastro";
-    private static final String GRUPO_PRODUTO_LISTA = "grupoProdutoLista";
-    private static final String GRUPO_PRODUTO_GRID = "grupoProdutoGrid";
+    private static final String GRUPO_PRODUTO_FILTRO_LISTA = "grupoProdutoFiltroLista";
+    private static final String GRUPO_PRODUTO_FILTRO_GRID = "grupoProdutoFiltroGrid";
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
@@ -58,7 +58,8 @@ public class sonicPreferences{
     private static final String CLIENTE_NUNCA_COMPROU = "clienteNuncaComprou";
     private static final String CLIENTE_COMPRAS = "clienteCompras";
     private static final String CLIENTE_TITULOS = "clienteTitulos";
-    private static final String CLIENTE_TERM_SEARCH = "clienteTermSearch";
+    private static final String GRUPO_CLIENTE_FILTRO_CPF = "grupoClienteFiltroCpf";
+    private static final String GRUPO_CLIENTE_FILTRO_CNPJ = "grupoClienteFiltroCnpj";
     private static final String SAUDACAO = "saudacao";
     private static final String MATRIZ_NOME = "matrizNome";
     private static final String MATRIZ_DESCRICAO = "matrizDescricao";
@@ -115,6 +116,7 @@ public class sonicPreferences{
     Users Users = new Users();
     Path Path = new Path();
     Clientes Clientes = new Clientes();
+    GrupoCliente GrupoCliente = new GrupoCliente();
     Matriz Matriz = new Matriz();
     Produtos Produtos = new Produtos();
     GrupoProduto GrupoProduto = new GrupoProduto();
@@ -234,21 +236,21 @@ public class sonicPreferences{
         }
     }
     public class GrupoProduto{
-        public void setItemLista(int value){
+        public void setFiltroLista(String value){
             editor = sharedpreferences.edit();
-            editor.putInt(GRUPO_PRODUTO_LISTA, value);
+            editor.putString(GRUPO_PRODUTO_FILTRO_LISTA, value);
             editor.apply();
         }
-        public int getItemLista(){
-            return sharedpreferences.getInt(GRUPO_PRODUTO_LISTA, 0);
+        public String getFiltroLista(){
+            return sharedpreferences.getString(GRUPO_PRODUTO_FILTRO_LISTA, "");
         }
-        public void setItemGrid(int value){
+        public void setFiltroGrid(String value){
             editor = sharedpreferences.edit();
-            editor.putInt(GRUPO_PRODUTO_GRID, value);
+            editor.putString(GRUPO_PRODUTO_FILTRO_GRID, value);
             editor.apply();
         }
-        public int getItemGrid(){
-            return sharedpreferences.getInt(GRUPO_PRODUTO_GRID, 0);
+        public String getFiltroGrid(){
+            return sharedpreferences.getString(GRUPO_PRODUTO_FILTRO_GRID, "TODOS");
         }
     }
     public class Matriz {
@@ -551,6 +553,24 @@ public class sonicPreferences{
         }
         public int getTitulos(){
             return sharedpreferences.getInt(CLIENTE_TITULOS, 0);
+        }
+    }
+    public class GrupoCliente{
+        public void setFiltroCpf(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_CLIENTE_FILTRO_CPF, value);
+            editor.apply();
+        }
+        public String getFiltroCpf(){
+            return sharedpreferences.getString(GRUPO_CLIENTE_FILTRO_CPF, "TODOS");
+        }
+        public void setFiltroCnpj(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_CLIENTE_FILTRO_CNPJ, value);
+            editor.apply();
+        }
+        public String getFiltroCnpj(){
+            return sharedpreferences.getString(GRUPO_CLIENTE_FILTRO_CNPJ, "TODOS");
         }
     }
     public class Users {

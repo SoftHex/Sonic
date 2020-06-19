@@ -2,11 +2,13 @@ package com.softhex.sonic;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,12 +35,15 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private static final int VIEW_PROG = 123456789;
-    private static final int VIEW_ITEM = 987654321;
+    private static final int VIEW_HEADER = 1;
+    private static final int VIEW_PROGRESS = 2;
+    private static final int VIEW_ITEM = 3;
+    private static final int TOTAL_ITENS_FILTRO = 6;
     private Context mContext;
     private List<sonicClientesHolder> mTotalList;
     private List<sonicClientesHolder> mFilteredList;
     private List<sonicClientesHolder> mPartialList;
+    private List<sonicGrupoClientesHolder> mGroupList;
     private UserFilter userFilter;
     private sonicConstants myCons;
     private sonicPreferences mPrefs;
@@ -46,7 +52,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private RecyclerView mRecycler;
     private boolean isLoading = false;
     private LinearLayoutManager linearLayoutManager;
-    private String mPrefix;
+    private boolean cnpj;
+    private sonicDatabaseCRUD mData;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -66,6 +73,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         LinearLayout lineraNew;
         LinearLayout llExtra;
         TextView tvSemCompra, tvAtraso;
+        LinearLayout llGroupDate;
 
 
         public cliHolder(View view) {
@@ -82,13 +90,14 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             llExtra = view.findViewById(R.id.llExtra);
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
+            llGroupDate = view.findViewById(R.id.llGroupDate);
 
         }
 
     }
 
 
-    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, String prefix) {
+    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, boolean cnpj) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = cliente;
@@ -96,18 +105,22 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.mContext = context;
         this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = recycler;
-        this.mPrefix = prefix;
+        this.cnpj = cnpj;
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
+        this.mData = new sonicDatabaseCRUD(mContext);
 
+        mPartialList = new ArrayList();
+        mPartialList.add(0,null);
+        mTotalList.add(0,null);
 
         if(mPrefs.Geral.getListagemCompleta()){
 
-            mPartialList = mTotalList;
+            for(int i=0;i<cliente.size();i++){
+                mPartialList.add(cliente.get(i));
+            }
 
         }else{
-
-            mPartialList = new ArrayList();
 
             if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
                 for(int i = 0; i < cliente.size(); i++){
@@ -140,15 +153,19 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view;
-        if(viewType==VIEW_ITEM){
-            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list, parent, false);
-        }else{
-            view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_list_shimmer, parent, false);
+        View view=null;
+        switch (viewType){
+            case VIEW_HEADER:
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
+                break;
+            case VIEW_ITEM:
+                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens, parent, false);
+                break;
+            case VIEW_PROGRESS:
+                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens_shimmer, parent, false);
+                break;
         }
         return new cliHolder(view);
-
     }
 
     @Override
@@ -157,53 +174,38 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             cliHolder holder = (cliHolder) viewHolder;
             sonicClientesHolder cli = mTotalList.get(position);
 
-            if(holder.getItemViewType()==VIEW_ITEM){
-                String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
-
-                holder.linearItem.setOnClickListener((View v)-> {
-
-                    mPrefs.Clientes.setId(cli.getCodigo());
-                    mPrefs.Clientes.setNome(cliNomeExibicao);
-                    mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
-                    if(mPrefs.RotaPessoal.getAdding()){
-                        mPrefs.RotaPessoal.setClientePicked(true);
-                        ((Activity)mContext).finish();
-                    }else{
-                        Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                        mContext.startActivity(i);
-                    }
-                });
-
-                holder.codigo = cli.getCodigo();
-                holder.clienteStatus = cli.getStatus();
-                holder.tvLinha1.setText(cliNomeExibicao);
-                holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
-                holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
-                holder.tvLinha2.setText(mPrefix+ sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()));
-                holder.tvLinha3.setText(cli.getEnderecoCompleto());
-
-                File f = sonicFile.searchImage(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
-
-                if(f.exists()){
-
-                    holder.mImage.setVisibility(View.VISIBLE);
-                    holder.letra.setVisibility(View.GONE);
-                    Glide.with(mContext)
-                            .load(f)
-                            .circleCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .skipMemoryCache(true)
-                            .into(holder.mImage);
-
-                }else{
-
-                    holder.mImage.setVisibility(View.GONE);
-                    holder.letra.setVisibility(View.VISIBLE);
-                    holder.letra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
-
-                }
+            switch (holder.getItemViewType()){
+                case VIEW_HEADER:
+                    criarFiltroBusca(holder);
+                    break;
+                case VIEW_ITEM:
+                    exibirItemLista(holder, cli, position);
+                    break;
             }
 
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(userFilter == null)
+            userFilter = new UserFilter(this, mTotalList);
+        return userFilter;
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mTotalList.size();
     }
 
     private void loadMore(){
@@ -242,29 +244,165 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     }
 
-    @Override
-    public Filter getFilter() {
-        if(userFilter == null)
-            userFilter = new UserFilter(this, mTotalList);
-        return userFilter;
+    private void criarFiltroBusca(cliHolder holder){
+
+        holder.llGroupDate.removeAllViews();
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        p.height = sonicUtils.convertDpToPixel(36, mContext);
+        p2.height = sonicUtils.convertDpToPixel(36, mContext);
+        p.setMargins(0,0, sonicUtils.convertDpToPixel(6, mContext), 0);
+        p2.setMargins(sonicUtils.convertDpToPixel(12, mContext),0, sonicUtils.convertDpToPixel(6, mContext), 0);
+        mGroupList = mData.GrupoCliente.selectGrupoCliente(cnpj ? "J" : "F");
+        Button bt1 = new Button(mContext);
+        bt1.setText(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf());
+        bt1.setTextSize(12);
+        bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
+        bt1.setLayoutParams(p2);
+        bt1.setPadding(30,0,30,0);
+        holder.llGroupDate.addView(bt1);
+        List<sonicGrupoClientesHolder> grupoAuxiliar;
+        grupoAuxiliar = new ArrayList<>();
+        for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
+
+            grupoAuxiliar.add(mGroupList.get(i));
+
+            if(!mGroupList.get(i).getNome().contains(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf())){
+
+                Button bt2 = new Button(mContext);
+
+                bt2.setOnClickListener((View v)-> {
+
+                    if(cnpj){
+                        mPrefs.GrupoCliente.setFiltroCnpj(bt2.getText().toString());
+                    }else{
+                        mPrefs.GrupoCliente.setFiltroCpf(bt2.getText().toString());
+                    }
+
+                ((sonicClientes)mContext).refreshFragments(cnpj ? 0 : 1);
+
+                });
+
+                bt2.setText(mGroupList.get(i).getNome());
+                bt2.setTextSize(12);
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setLayoutParams(p);
+
+                bt2.setPadding(30,0,30,0);
+                holder.llGroupDate.addView(bt2);
+            }
+
+        }
+
+        Button bt3 = new Button(mContext);
+
+        bt3.setOnClickListener((View v)-> {
+            exibirFiltroExtra(grupoAuxiliar);
+        });
+
+        bt3.setText("MAIS...");
+        bt3.setTextSize(12);
+        bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+        bt3.setLayoutParams(p);
+        bt3.setPadding(30,0,30,0);
+        holder.llGroupDate.addView(bt3);
 
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
+    private void exibirItemLista(cliHolder holder, sonicClientesHolder cli, int position){
+
+        String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
+
+        holder.linearItem.setOnClickListener((View v)-> {
+
+            mPrefs.Clientes.setId(cli.getCodigo());
+            mPrefs.Clientes.setNome(cliNomeExibicao);
+            mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
+            if(mPrefs.RotaPessoal.getAdding()){
+                mPrefs.RotaPessoal.setClientePicked(true);
+                ((Activity)mContext).finish();
+            }else{
+                Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                mContext.startActivity(i);
+            }
+        });
+
+        holder.codigo = cli.getCodigo();
+        holder.clienteStatus = cli.getStatus();
+        holder.tvLinha1.setText(cliNomeExibicao);
+        holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
+        holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
+        holder.tvLinha2.setText(cli.getGrupo());
+        holder.tvLinha3.setText(cli.getEnderecoCompleto());
+
+        File f = sonicFile.searchImage(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
+
+        if(f.exists()){
+
+            holder.mImage.setVisibility(View.VISIBLE);
+            holder.letra.setVisibility(View.GONE);
+            Glide.with(mContext)
+                    .load(f)
+                    .circleCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(holder.mImage);
+
+        }else{
+
+            holder.mImage.setVisibility(View.GONE);
+            holder.letra.setVisibility(View.VISIBLE);
+            holder.letra.setText(String.valueOf(cliNomeExibicao.charAt(0)).toUpperCase());
+
+        }
+
     }
 
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
-    }
+    private void exibirFiltroExtra(List<sonicGrupoClientesHolder> mListAuxiliar) {
 
-    @Override
-    public int getItemCount() {
-        return mTotalList.size();
-    }
+        List<sonicGrupoClientesHolder> grupo;
 
+        grupo = new sonicDatabaseCRUD(mContext).GrupoCliente.selectGrupoCliente(cnpj ? "J" : "F");
+
+        List<String> l = new ArrayList<>();
+
+        for(int i=0; i < grupo.size(); i++ ){
+            l.add(grupo.get(i).getNome());
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                dialog.dismiss();
+                if(cnpj){
+                    mPrefs.GrupoCliente.setFiltroCnpj(chars[item].toString());
+                    ((sonicClientes)mContext).refreshFragments(0);
+                }else{
+                    mPrefs.GrupoCliente.setFiltroCpf(chars[item].toString());
+                    ((sonicClientes)mContext).refreshFragments(1);
+                }
+            }
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).setPositiveButton(cnpj ? (mPrefs.GrupoCliente.getFiltroCnpj().equals("TODOS") ? "" : "LIMPAR FILTRO") : (mPrefs.GrupoCliente.getFiltroCpf().equals("TODOS") ? "" : "LIMPAR"), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(cnpj){
+                    mPrefs.GrupoCliente.setFiltroCnpj("TODOS");
+                    ((sonicClientes)mContext).refreshFragments(0);
+                }else{
+                    mPrefs.GrupoCliente.setFiltroCpf("TODOS");
+                    ((sonicClientes)mContext).refreshFragments(1);
+                }
+            }
+        }).show();
+
+    }
 
     private class UserFilter extends Filter {
 
@@ -294,16 +432,12 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 final String filterPattern = constraint.toString().toUpperCase().trim();
 
                 for (final sonicClientesHolder cli : originalList) {
-                    if(mPrefs.Clientes.getClienteExibicao().contains("Nome Fantasia")){
-                        if (cli.getNomeFantasia().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern) || cli.getCpfCnpj().contains(filterPattern)) {
+                    if(cli!=null)
+                        if (mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia")
+                                ? cli.getNomeFantasia().contains(filterPattern)
+                                : cli.getRazaoSocial().contains(filterPattern) || String.valueOf(cli.getCodigo()).contains(filterPattern) || cli.getCpfCnpj().contains(filterPattern)) {
                             filteredList.add(cli);
                         }
-                    }else {
-                        if (cli.getRazaoSocial().contains(filterPattern)|| String.valueOf(cli.getCodigo()).contains(filterPattern) || cli.getCpfCnpj().contains(filterPattern)) {
-                            filteredList.add(cli);
-                        }
-                    }
-
                 }
             }
             results.values = filteredList;

@@ -86,9 +86,9 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         String CANCELAR = "Cancelar Atendimento";
     }
 
-    private static final int VIEW_HEADER= -30;
-    private static final int VIEW_PROGRESS = -20;
-    private static final int VIEW_ITEM = -10;
+    private static final int VIEW_HEADER= 1;
+    private static final int VIEW_PROGRESS = 2;
+    private static final int VIEW_ITEM = 3;
     private Context mContext;
     private Activity mActivity;
     private List<sonicRotaHolder> mTotalList;
@@ -96,7 +96,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     private List<sonicRotaHolder> mFilteredList;
     private RotaFilter rotaFilter;
     private Boolean nFantasia;
-    private final sonicPreferences mPrefs;
+    private sonicPreferences mPrefs;
     private sonicUtils mUtils;
     private RecyclerView mRecycler;
     private boolean rotaPessoal;
@@ -169,7 +169,6 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         }else{
 
             if(rotas.size()< sonicConstants.TOTAL_ITENS_LOAD){
-
                 for(int i = 0; i < rotas.size(); i++){
                     mPartialList.add(rotas.get(i));
                 }
@@ -203,7 +202,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         View view=null;
         switch (viewType){
             case VIEW_HEADER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_header, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
                 break;
             case VIEW_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_itens, parent, false);
@@ -212,7 +211,6 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_itens_shimmer, parent, false);
                 break;
         }
-
         return new rotaHolder(view);
     }
 
@@ -224,14 +222,10 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
         switch (holder.getItemViewType()){
             case VIEW_HEADER:
-
                 criarFiltroBusca(holder);
-
                 break;
             case VIEW_ITEM:
-
                 exibirItemLista(holder, rota, position);
-
                 break;
         }
 
@@ -246,7 +240,6 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
     @Override
     public int getItemViewType(int position) {
-        //return mPartialList.get(position > mPartialList.size()-1 ? mPartialList.size()-1 : position ) == null ? VIEW_PROG : VIEW_ITEM;
         return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
@@ -297,6 +290,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     }
     private void criarFiltroBusca(rotaHolder holder){
 
+        holder.llGroupDate.removeAllViews();
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         p.height = sonicUtils.convertDpToPixel(36, mContext);
@@ -318,7 +312,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 bt2.setOnClickListener((View v)-> {
 
                     switch (bt2.getText().toString()){
-                        case "FAIXA ESPECÍFICA":
+                        case "FAIXA ESPECÍFICA...":
                             exibirDateOptionsRange();
                             break;
                         default:
@@ -490,7 +484,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
     }
 
-    private static class RotaFilter extends Filter {
+    private class RotaFilter extends Filter {
 
         private final sonicRotaAdapter adapter;
 
@@ -519,9 +513,11 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
                 for (final sonicRotaHolder rota : originalList) {
                     if(rota!=null)
-                    if (rota.getRazaoSocial().contains(filterPattern) || rota.getNomeFantasia().contains(filterPattern) || rota.getAtendente().contains(constraint.toString())) {
-                        filteredList.add(rota);
-                    }
+                        if (mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia")
+                                ? rota.getNomeFantasia().contains(filterPattern)
+                                : rota.getRazaoSocial().contains(filterPattern) || String.valueOf(rota.getCodigo()).contains(constraint.toString())) {
+                            filteredList.add(rota);
+                        }
                 }
             }
             results.values = filteredList;

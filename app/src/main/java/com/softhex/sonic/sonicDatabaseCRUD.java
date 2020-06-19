@@ -680,14 +680,10 @@ public class sonicDatabaseCRUD {
                 return count;
             }
 
-            public List<sonicClientesHolder> selectClienteTipo(String tipo) {
+            public List<sonicClientesHolder> selectClienteTipo(boolean cnpj) {
 
                 StackTraceElement el = Thread.currentThread().getStackTrace()[2];
                 List<sonicClientesHolder> cliente = new ArrayList<>();
-
-                String order = pref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? " ORDER BY C.nome_fantasia " : " ORDER BY C.razao_social ";
-                String grupo = tipo.equals("J") ? myCons.GRUPO_CLIENTES_CNPJ : myCons.GRUPO_CLIENTES_CPF;
-                String where = grupo != "TODOS" ? " AND GC.nome = '" + grupo + "' " : "";
 
                 String query = "SELECT " +
                         "C.codigo AS codigo, " +
@@ -718,16 +714,14 @@ public class sonicDatabaseCRUD {
                         " LEFT JOIN " + TABLE_GRUPO_CLIENTE +
                         " GC ON GC.codigo = C.codigo_grupo " +
                         " WHERE EC.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1)" +
-                        " AND C.tipo= '" + tipo + "' ";
+                        " AND C.tipo = ? " + (cnpj ? (mPrefs.GrupoCliente.getFiltroCnpj().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCnpj() + "'") : (mPrefs.GrupoCliente.getFiltroCpf().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCpf() + "'")) + " ORDER BY " + (mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? "C.nome_fantasia" : "C.razao_social");
 
                 try {
 
-
+                    Log.d("QUERY GRUPO CLIENTE", query);
 
                     Cursor cursor = DB.getReadableDatabase().rawQuery(
-                            query + where + order , null);
-
-                    Log.d("QUERY", query+" "+where+" "+order);
+                            query, new String[]{cnpj ? "J" : "F"});
 
                     if(cursor!=null){
 
@@ -1181,33 +1175,45 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicGrupoClientesHolder> grupos = new ArrayList<sonicGrupoClientesHolder>();
 
-            String query = "SELECT " +
-                            "GP._id, " +
-                            "GP.codigo, " +
-                            "GP.nome FROM " +
-                            TABLE_GRUPO_CLIENTE + " GP " +
-                            " JOIN " + TABLE_CLIENTE + " C " +
-                            " ON C.codigo_grupo = GP.codigo AND C.tipo = ? GROUP BY GP.nome ";
+            try{
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    query , new String[]{args[0]});
+                String query = "SELECT " +
+                        "GC._id, " +
+                        "GC.codigo, " +
+                        "GC.nome FROM " + TABLE_GRUPO_CLIENTE + " GC " +
+                        " JOIN " + TABLE_CLIENTE + " C " +
+                        " ON C.codigo_grupo = GC.codigo " +
+                        " JOIN " + TABLE_EMPRESA_CLIENTE + " EC " +
+                        " ON EC.codigo_cliente = C.codigo " +
+                        " JOIN " + TABLE_EMPRESA + " E " +
+                        " ON E.codigo = EC.codigo_empresa " +
+                        " WHERE E.selecionada=1 AND C.tipo = ? GROUP BY GC.nome ";
 
-            if(cursor!=null){
-                while(cursor.moveToNext()){
+                Cursor cursor = DB.getReadableDatabase().rawQuery(
+                        query , new String[]{args[0]});
 
-                    sonicGrupoClientesHolder grupo = new sonicGrupoClientesHolder();
+                if(cursor!=null){
+                    while(cursor.moveToNext()){
 
-                    grupo.setId(cursor.getInt(cursor.getColumnIndex("_id")));
-                    grupo.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    grupo.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                        sonicGrupoClientesHolder grupo = new sonicGrupoClientesHolder();
 
+                        grupo.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                        grupo.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        grupo.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                        grupos.add(grupo);
 
-                    grupos.add(grupo);
-
+                    }
                 }
+
+                cursor.close();
+
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
             }
 
-            cursor.close();
             return grupos;
         }
 
@@ -1776,7 +1782,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public List<sonicProdutosHolder> selectProdutoLista(){
+        public List<sonicProdutosHolder> selectProduto(boolean lista){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
@@ -1796,15 +1802,16 @@ public class sonicDatabaseCRUD {
                     "P.multiplicidade, " +
                     "P.codigo_ean, " +
                     "P.codigo_ean_tributavel, " +
+                    "GP.nome AS grupo_produto, " +
                     " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
-                    " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida, " +
-                    " (SELECT GP.nome FROM " + TABLE_GRUPO_PRODUTO + " GP WHERE GP.codigo = P.codigo_grupo) AS grupo_produto " +
+                    " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida " +
                     " FROM " + TABLE_PRODUTO + " P " +
-                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND "+(mPrefs.GrupoProduto.getItemLista()>0 ? "P.codigo_grupo=?" : "P.codigo_grupo<>?")+" ORDER BY P.nome ";
+                    " JOIN " + TABLE_GRUPO_PRODUTO + " GP ON GP.codigo = P.codigo_grupo " +
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) " + (lista ? (mPrefs.GrupoProduto.getFiltroLista().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroLista() +"'") : (mPrefs.GrupoProduto.getFiltroGrid().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroGrid() +"'"))+" ORDER BY P.nome ";
 
             Log.d("QUERY", query);
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{String.valueOf(mPrefs.GrupoProduto.getItemLista())});
+            Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
             try{
 
@@ -1837,82 +1844,16 @@ public class sonicDatabaseCRUD {
                     }
                 }
 
-            }catch (SQLiteException e){
-                mPrefs.Geral.setError(e.getMessage());
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            cursor.close();
-            return produto;
-        }
-
-        public List<sonicProdutosHolder> selectProdutoGrid(){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicProdutosHolder> produto = new ArrayList<sonicProdutosHolder>();
-
-            String query = "SELECT " +
-                    "p.codigo, " +
-                    "p.nome, " +
-                    "p.codigo_empresa, " +
-                    "p.data_cadastro, " +
-                    "p.codigo_alternativo, " +
-                    "p.descricao, " +
-                    "p.ncm, " +
-                    "p.peso_bruto, " +
-                    "p.peso_liquido, " +
-                    "p.estoque_minimo, " +
-                    "p.estoque_maximo, " +
-                    "p.multiplicidade, " +
-                    "p.codigo_ean, " +
-                    "p.codigo_ean_tributavel, " +
-                    " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
-                    " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
-                    " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
-                    " FROM " + TABLE_PRODUTO + " p " +
-                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND "+(mPrefs.GrupoProduto.getItemGrid()>0 ? "P.codigo_grupo=?" : "P.codigo_grupo<>?")+" ORDER BY P.nome ";
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(query,new String[]{String.valueOf(mPrefs.GrupoProduto.getItemGrid())});
-
-            try{
-
-                if(cursor!=null){
-
-                    while(cursor.moveToNext()){
-
-                        sonicProdutosHolder produtos = new sonicProdutosHolder();
-
-                        produtos.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                        produtos.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
-                        produtos.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-                        produtos.setUnidadeMedida(cursor.getString(cursor.getColumnIndex("unidade_medida")));
-                        produtos.setGrupo(cursor.getString(cursor.getColumnIndex("grupo_produto")));
-                        produtos.setDataCadastro(cursor.getString(cursor.getColumnIndex("data_cadastro")));
-                        produtos.setCodigoAlternativo(cursor.getString(cursor.getColumnIndex("codigo_alternativo")));
-                        produtos.setDescricao(cursor.getString(cursor.getColumnIndex("descricao")));
-                        produtos.setNcm(cursor.getString(cursor.getColumnIndex("ncm")));
-                        produtos.setPesoBruto(cursor.getString(cursor.getColumnIndex("peso_bruto")));
-                        produtos.setPesoLiquido(cursor.getString(cursor.getColumnIndex("peso_liquido")));
-                        produtos.setEstoque(cursor.getInt(cursor.getColumnIndex("estoque")));
-                        produtos.setEstoqueMinimo(cursor.getInt(cursor.getColumnIndex("estoque_minimo")));
-                        produtos.setEstoqueMaximo(cursor.getInt(cursor.getColumnIndex("estoque_maximo")));
-                        produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
-                        produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
-                        produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
-
-                        produto.add(produtos);
-
-                    }
-                }
 
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
+            }finally {
+                cursor.close();
+                DB.close();
             }
 
-            cursor.close();
             return produto;
         }
 
@@ -1975,9 +1916,11 @@ public class sonicDatabaseCRUD {
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
+            }finally {
+                cursor.close();
             }
 
-            cursor.close();
+
             return produto;
         }
 
@@ -2231,7 +2174,7 @@ public class sonicDatabaseCRUD {
 
     class GrupoProduto{
 
-        public List<sonicGrupoProdutosHolder> selectGrupoProduto(){
+        public List<sonicGrupoProdutosHolder> selectGrupo(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicGrupoProdutosHolder> groups = new ArrayList<sonicGrupoProdutosHolder>();

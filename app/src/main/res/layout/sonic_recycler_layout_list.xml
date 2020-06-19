@@ -104,16 +104,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
-            <include layout="@layout/sonic_layout_cards_list_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
+            <include layout="@layout/sonic_layout_cards_itens_shimmer"/>
 
         </LinearLayout>
 

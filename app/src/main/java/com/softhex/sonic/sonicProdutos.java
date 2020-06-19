@@ -22,6 +22,7 @@ import java.util.List;
 public class sonicProdutos extends AppCompatActivity {
 
     private ViewPagerAdapter mAdapter;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class sonicProdutos extends AppCompatActivity {
         setContentView(R.layout.sonic_layout_padrao);
 
         sonicAppearence.removeFlashingTransition(getWindow());
+        mPrefs = new sonicPreferences(this);
         createInterface();
 
     }
@@ -119,5 +121,10 @@ public class sonicProdutos extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrefs.GrupoProduto.setFiltroGrid("TODOS");
+        mPrefs.GrupoProduto.setFiltroLista("TODOS");
+    }
 }

@@ -53,6 +53,7 @@ public class sonicSplash extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Integer... integers) {
             carregarDados();
+            limparDados();
             finalizarRota();
             preencherTabelasFixas();
             return true;
@@ -72,7 +73,7 @@ public class sonicSplash extends AppCompatActivity {
         if(logar){
             new mAsyncTaskCarregarDados().execute();
         }else {
-            startActivity(new Intent(mActivity,sonicLogin.class));
+            startActivity(new Intent(mActivity,sonicEmpresa.class));
         }
     }
 
@@ -103,6 +104,13 @@ public class sonicSplash extends AppCompatActivity {
         mPrefs.Users.setEmpresaNome(mListUser.get(0).getEmpresa());
         mPrefs.Users.setCodigoSinc(mListUser.get(0).getCodigo());
         mPrefs.Users.setArquivoSinc(mListUser.get(0).getCodigo());
+    }
+
+    private void limparDados(){
+        mPrefs.GrupoCliente.setFiltroCnpj("TODOS");
+        mPrefs.GrupoCliente.setFiltroCpf("TODOS");
+        mPrefs.GrupoProduto.setFiltroGrid("TODOS");
+        mPrefs.GrupoProduto.setFiltroLista("TODOS");
     }
 
     private void preencherTabelasFixas(){

@@ -1,7 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,12 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -193,9 +190,6 @@ public class sonicClientesCPF extends Fragment {
         switch (item.getItemId()) {
             case R.id.itemSearch:
                 return false;
-            case R.id.itemFiltro:
-                exibirFiltro();
-                return false;
             default:
                 break;
         }
@@ -208,7 +202,7 @@ public class sonicClientesCPF extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo("F");
+            mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo(false);
             return mList.size();
 
         }
@@ -248,7 +242,7 @@ public class sonicClientesCPF extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, "CPF: ");
+        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, false);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -281,55 +275,6 @@ public class sonicClientesCPF extends Fragment {
             myFtp.downloadFile2(sonicConstants.FTP_USUARIOS+file, sonicConstants.LOCAL_TEMP+file);
         });
 
-    }
-
-    private void exibirFiltro() {
-
-        List<sonicGrupoClientesHolder> grupo;
-
-        grupo = DBC.GrupoCliente.selectGrupoCliente("F");
-
-        List<String> l = new ArrayList<String>();
-
-        for(int i=0; i < grupo.size(); i++ ){
-            if(grupo.get(i).getNome() != sonicConstants.GRUPO_CLIENTES_CPF){
-                l.add(grupo.get(i).getNome());
-            }
-        }
-
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Selecione um grupo...");
-        builder.setItems(chars, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                sonicConstants.GRUPO_CLIENTES_CPF = chars[item].toString();
-                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "LIMPAR FILTRO";
-                dialog.dismiss();
-                refreshFragment();
-
-            }
-        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).setPositiveButton(sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                sonicConstants.GRUPO_CLIENTES_CPF = "TODOS";
-                sonicConstants.GRUPO_CLIENTES_CPF_LIMPAR = "";
-                refreshFragment();
-            }
-        }).show();
-
-    }
-
-
-    public void refreshFragment(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
     }
 
     @Override

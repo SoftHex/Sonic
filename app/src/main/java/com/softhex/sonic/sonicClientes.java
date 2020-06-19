@@ -22,12 +22,14 @@ import java.util.List;
 public class sonicClientes extends AppCompatActivity {
 
     private ViewPagerAdapter mAdapter;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sonic_layout_padrao);
 
+        mPrefs = new sonicPreferences(this);
         createInterface();
 
     }
@@ -114,5 +116,10 @@ public class sonicClientes extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrefs.GrupoCliente.setFiltroCpf("TODOS");
+        mPrefs.GrupoCliente.setFiltroCnpj("TODOS");
+    }
 }

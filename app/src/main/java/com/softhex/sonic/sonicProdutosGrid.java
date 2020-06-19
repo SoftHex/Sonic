@@ -1,7 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,19 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -47,7 +43,7 @@ public class sonicProdutosGrid extends Fragment {
 
     private View myView;
     private RecyclerView myRecycler;
-    private RecyclerView.LayoutManager myLayout;
+    private GridLayoutManager myLayout;
     private sonicProdutosGridAdapter myAdapter;
     private List<sonicProdutosHolder> mList;
     private MenuItem mySearch;
@@ -115,6 +111,13 @@ public class sonicProdutosGrid extends Fragment {
                                 mPrefs.Produtos.getCatalogoColunas().equals(array[2]) ? 4 : 3;
 
         myLayout = new GridLayoutManager(getContext(), colunas);
+
+        myLayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? colunas : 1;
+            }
+        });
 
         myRecycler.setLayoutManager(myLayout);
 
@@ -195,9 +198,6 @@ public class sonicProdutosGrid extends Fragment {
             case R.id.pref:
                 //dialogDelete();
                 return false;
-            case R.id.filter:
-                exibirFiltro();
-                return false;
             default:
                 break;
         }
@@ -210,7 +210,7 @@ public class sonicProdutosGrid extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            mList =  new sonicDatabaseCRUD(mContext).Produto.selectProdutoGrid();
+            mList =  new sonicDatabaseCRUD(mContext).Produto.selectProduto(false);
             return mList.size();
 
         }
@@ -251,7 +251,7 @@ public class sonicProdutosGrid extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicProdutosGridAdapter(mList, mContext, myRecycler);
+        myAdapter = new sonicProdutosGridAdapter(mList, mContext, myRecycler, myLayout);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
@@ -287,51 +287,6 @@ public class sonicProdutosGrid extends Fragment {
         });
     }
 
-    private void exibirFiltro() {
-
-        List<sonicGrupoProdutosHolder> grupo = new sonicDatabaseCRUD(mContext).GrupoProduto.selectGrupoProduto();
-
-        List<String> l = new ArrayList<>();
-        List<Integer> lId = new ArrayList<>();
-
-        for(int i=0; i < grupo.size(); i++ ){
-            if(grupo.get(i).getDescricao() != sonicConstants.GRUPO_PRODUTOS_LISTA){
-                l.add(grupo.get(i).getDescricao());
-                lId.add(grupo.get(i).getCodigo());
-            }
-        }
-
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setItems(chars, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-
-                mPrefs.GrupoProduto.setItemGrid(lId.get(item));
-                dialog.dismiss();
-                refreshFragment();
-
-            }
-        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).setPositiveButton(mPrefs.GrupoProduto.getItemGrid()>0 ? "LIMPAR FILTRO" : "CANCELAR", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mPrefs.GrupoProduto.setItemGrid(0);
-                refreshFragment();
-            }
-        }).show();
-
-    }
-
-    public void refreshFragment(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -343,13 +298,6 @@ public class sonicProdutosGrid extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("PAUSE","");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mPrefs.GrupoProduto.setItemGrid(0);
 
     }
 
