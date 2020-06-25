@@ -2,20 +2,30 @@ package com.softhex.sonic;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 public class sonicEmpresa extends sonicRuntimePermission {
 
     private static final int REQUEST_PERMISSION = 10;
     private Button myRegister;
     private EditText myCode;
+    private TextInputEditText mCodigo;
     private Context mContext;
+    private ActionBar mActionBar;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +35,20 @@ public class sonicEmpresa extends sonicRuntimePermission {
         sonicAppearence.layoutWithStatusBarColorPrimary(this, getWindow());
 
         mContext = this;
+        mToolbar = findViewById(R.id.mToolbar);
+        setSupportActionBar(mToolbar);
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("");
         myRegister = findViewById(R.id.btRegistrar);
         myCode = findViewById(R.id.etCodigo);
+        mCodigo = findViewById(R.id.etCodigoEmpresa);
+        myCode.requestFocus();
 
         myRegister.setOnClickListener((View v)-> {
 
                 hideKeyboard(v);
 
-                if(new sonicUtils(sonicEmpresa.this).Feedback.statusNetwork()) {
+                if(new sonicUtils(this).Feedback.statusNetwork()) {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
@@ -63,6 +79,23 @@ public class sonicEmpresa extends sonicRuntimePermission {
                 Manifest.permission.WRITE_CONTACTS
                 },R.string.msgPerms,REQUEST_PERMISSION);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.sonic_empresa, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.itServer:
+                startActivity(new Intent(this, sonicServidor.class));
+                break;
+        }
+        return false;
     }
 
     @Override

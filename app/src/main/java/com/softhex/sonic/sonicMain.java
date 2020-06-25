@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -299,6 +298,7 @@ public class sonicMain extends AppCompatActivity{
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.backhome)
+                .withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
 
                     @Override
@@ -317,9 +317,8 @@ public class sonicMain extends AppCompatActivity{
                         tvEmpresa.setText(profile.getEmail().toString());
                         //tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
                         File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO + mPrefs.Users.getPicture((int)profile.getIdentifier()));
-                        Log.d("FILE", file.toString());
                         String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
-                        sonicGlide.glideImageView(mActivity,myProgressProfile,picture);
+                        sonicGlide.glideImageView(mActivity, myProgressProfile, picture, 100,100);
                         calcularPercentual("2200000", usuarioMeta);
                         lerDadosUsuario();
                         refreshFragments();
@@ -361,6 +360,7 @@ public class sonicMain extends AppCompatActivity{
             if(file.exists()){
                 myHeader.addProfiles(
                         new ProfileDrawerItem()
+                                 //.withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                                 .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
                                 .withEmail(listaEmpresa.get(x).getNomeFantasia())
                                 .withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(file.toString())))
@@ -370,6 +370,7 @@ public class sonicMain extends AppCompatActivity{
 
                 myHeader.addProfiles(
                         new ProfileDrawerItem()
+                                 //.withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                                 .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
                                 .withEmail(listaEmpresa.get(x).getNomeFantasia())
                                 .withIcon(getResources().getDrawable(R.drawable.no_profile))

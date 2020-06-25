@@ -26,8 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/DefaultAppTheme">
-        <activity android:name=".sonicRotaPessoalAdd"></activity>
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.softhex.sonic.FileProvider"
@@ -58,14 +56,18 @@
         <activity
             android:name=".sonicEmpresa"
             android:theme="@style/IntroTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".sonicServidor"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".sonicPrimeiroAcesso"
             android:theme="@style/IntroTheme" />
         <activity
             android:name=".sonicLogin"
             android:theme="@style/IntroTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".sonicAvisos"
             android:theme="@style/DefaultAppTheme"
@@ -134,6 +136,11 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".sonicRotaDetalhe"
+            android:parentActivityName=".sonicRota"
+            android:theme="@style/DefaultAppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".sonicRotaPessoalAdd"
             android:parentActivityName=".sonicRota"
             android:theme="@style/DefaultAppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />

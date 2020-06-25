@@ -18,12 +18,14 @@ public class sonicPreferences{
     private static final String USUARIO_NOME = "usuarioNome";
     private static final String USUARIO_CARGO = "usuarioCargo";
     private static final String USUARIO_IMEI = "usuarioImei";
-    private static final String USUARIO_PATH = "userPath";
-    private static final String USUARIO_PICTURE = "userPicture";
+    private static final String USUARIO_PATH = "usuarioPath";
+    private static final String USUARIO_PICTURE = "usuarioPicture";
+    private static final String USUARIO_ATIVO = "usuarioAtivo";
     private static final String FTP_DESCRICAO = "ftpDescricao";
     private static final String FTP_ENDERECO = "ftpEndereco";
     private static final String FTP_USUARIO = "ftpUsuario";
     private static final String FTP_SENHA = "ftpSenha";
+    private static final String FTP_ENDERECO_ALTERNATIVO = "ftpEnderecoAlternativo";
     private static final String PRODUTO_ID = "produtoId";
     private static final String PRODUTO_NOME = "produtoNome";
     private static final String PRODUTO_GRUPO = "produtoGrupo";
@@ -148,6 +150,16 @@ public class sonicPreferences{
         public String getEndereco(){
             return sharedpreferences.getString(FTP_ENDERECO, "");
         }
+
+        public void setEnderecoAlternativo(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(FTP_ENDERECO_ALTERNATIVO, value);
+            editor.apply();
+        }
+        public boolean getEnderecoAlternativo(){
+            return sharedpreferences.getBoolean(FTP_ENDERECO_ALTERNATIVO, false);
+        }
+
         public void setUsuario(String value){
             editor = sharedpreferences.edit();
             editor.putString(FTP_USUARIO, value);
@@ -574,6 +586,15 @@ public class sonicPreferences{
         }
     }
     public class Users {
+
+        public void setAtivo(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(USUARIO_ATIVO, value);
+            editor.apply();
+        }
+        public boolean getAtivo(){
+            return sharedpreferences.getBoolean(USUARIO_ATIVO, false);
+        }
 
         public void setUsuarioImei(String value){
             editor = sharedpreferences.edit();

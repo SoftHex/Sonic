@@ -1589,6 +1589,34 @@ public class sonicUtils {
 
         }
 
+        /**
+         *
+         * @param horas String com formato '000000' sem separador ou espaço.
+         * @return 00:00
+         */
+        public String horaFotmatadaSemSegundoBR(String horas){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            String hora_completa = "";
+
+            try{
+                String hora = horas.substring(0,2);
+                String minuto = horas.substring(2,4);
+
+                hora_completa = hora+":"+minuto;
+            }catch (Exception e){
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return hora_completa;
+
+        }
+
         public String stringToDate(String data){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];

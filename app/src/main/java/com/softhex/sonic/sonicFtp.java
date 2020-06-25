@@ -58,7 +58,7 @@ public class sonicFtp {
         try{
 
             ftpClient.setDataTimeout(10*1000);
-            ftpClient.connect(mPrefs.Ftp.getEndereco(), 21);
+            ftpClient.connect((mPrefs.Users.getAtivo() || mPrefs.Ftp.getEnderecoAlternativo()) ? mPrefs.Ftp.getEndereco() : sonicConstants.FTP_SERVER, 21);
 
             try{
 
@@ -66,24 +66,73 @@ public class sonicFtp {
 
                 try{
 
-                    result = ftpClient.login(mPrefs.Ftp.getUsuario(), mPrefs.Ftp.getSenha());
+                    result = mPrefs.Users.getAtivo() ? ftpClient.login(mPrefs.Ftp.getUsuario(), mPrefs.Ftp.getSenha()) : ftpClient.login(sonicConstants.FTP_USER, sonicConstants.FTP_PASS);
                     ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
                     ftpClient.enterLocalActiveMode();
 
                 }catch (IOException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     e.printStackTrace();
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 }
 
             }catch (Exception e){
+                mPrefs.Geral.setError(e.getMessage());
                 e.printStackTrace();
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             }
 
         } catch (ConnectException e) {
+            mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }catch (IOException e){
+            mPrefs.Geral.setError(e.getMessage());
+            e.printStackTrace();
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+        }
+
+        return result;
+    }
+
+    public Boolean ftpConnect(String endereco){
+
+        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+        Boolean result = false;
+
+        try{
+
+            ftpClient.setDataTimeout(10*500);
+            ftpClient.connect(endereco, 21);
+
+            try{
+
+                FTPReply.isPositiveCompletion(ftpClient.getReplyCode());
+
+                try{
+
+                    result = ftpClient.login(sonicConstants.FTP_USER, sonicConstants.FTP_PASS);
+                    ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                    ftpClient.enterLocalActiveMode();
+
+                }catch (IOException e){
+                    mPrefs.Geral.setError(e.getMessage());
+                    e.printStackTrace();
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                }
+
+            }catch (Exception e){
+                mPrefs.Geral.setError(e.getMessage());
+                e.printStackTrace();
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+            }
+
+        } catch (ConnectException e) {
+            mPrefs.Geral.setError(e.getMessage());
+            e.printStackTrace();
+            DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+        }catch (IOException e){
+            mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
         }
@@ -101,6 +150,7 @@ public class sonicFtp {
             ftpClient.disconnect();
 
         }catch (Exception e){
+            mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                     e.getMessage(),
@@ -128,6 +178,7 @@ public class sonicFtp {
                     destino.createNewFile();
                     return true;
                 }catch (FileNotFoundException e){
+                    mPrefs.Geral.setError(e.getMessage());
                     e.printStackTrace();
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
@@ -145,6 +196,7 @@ public class sonicFtp {
 
 
         }catch (Exception e){
+            mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                     e.getMessage(),
@@ -249,6 +301,7 @@ public class sonicFtp {
 
 
                         }catch (IOException e){
+                            mPrefs.Geral.setError(e.getMessage());
                             e.printStackTrace();
                             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                                     e.getMessage(),

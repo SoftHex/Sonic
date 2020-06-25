@@ -82,7 +82,7 @@ public class sonicDatabaseCRUD {
     private sonicPreferences mPrefs;
     private Calendar mCalendar;
     private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
-    private SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");
+    private SimpleDateFormat hora = new SimpleDateFormat("HHmmss");
 
     public sonicDatabaseCRUD(Context context){
 
@@ -218,11 +218,10 @@ public class sonicDatabaseCRUD {
                         mySystem.System.getMethodNames(el));
                 e.printStackTrace();
 
-            }
-
-            //return type.equals("save")
-            //        ? (DB.getWritableDatabase().insertOrThrow(tabela, null, cv)>0)
-             //       : (DB.getWritableDatabase().replaceOrThrow(tabela, null, cv)>0);
+            }finally{
+				cursor.close();
+			}
+			
             return result;
         }
 
@@ -267,7 +266,9 @@ public class sonicDatabaseCRUD {
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
                 e.printStackTrace();
-            }
+            }finally{
+				cursor.close();
+			}
 
             return ftps;
 
@@ -381,7 +382,6 @@ public class sonicDatabaseCRUD {
                 }
             }
 
-            cursor.close();
             return empresas;
         }
 
@@ -982,46 +982,53 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT * FROM (" +
 
                         "SELECT " +
-                        "5 AS sequencial, "+
+                        "6 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
                         "UNION " +
                         "SELECT " +
-                        "4 AS sequencial, "+
+                        "5 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-1 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-1 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "3 AS sequencial, "+
+                        "4 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-2 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-2 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "2 AS sequencial, "+
+                        "3 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-3 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-3 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "1 AS sequencial, "+
+                        "2 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-4 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-4 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "0 AS sequencial, "+
+                        "1 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-5 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-5 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')));";
+                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')) " +
+						"UNION " +
+                        "SELECT " +
+						"0 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-6 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-6 months')) AS ano, " +
+                        "IFNULL(SUM(v.valor),0) AS valor " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -1036,7 +1043,6 @@ public class sonicDatabaseCRUD {
 
                     }
 
-                    cursor.close();
                 }
 
             } catch (SQLiteException e) {
@@ -1061,46 +1067,53 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT * FROM (" +
 
                         "SELECT " +
-                        "5 AS sequencial, "+
+                        "6 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
                         "UNION " +
                         "SELECT " +
-                        "4 AS sequencial, "+
+                        "5 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-1 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-1 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "3 AS sequencial, "+
+                        "4 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-2 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-2 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "2 AS sequencial, "+
+                        "3 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-3 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-3 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "1 AS sequencial, "+
+                        "2 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-4 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-4 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
                         "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
-                        "0 AS sequencial, "+
+                        "1 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-5 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-5 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')));";
+                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-5 months')) AND strftime('%Y%m%d', date('now', 'start of month','-4 months', '-1 day')) " +
+						"UNION " +
+                        "SELECT " +
+                        "0 AS sequencial, "+
+                        "strftime('%m', date('now', 'start of month', '-6 months')) AS mes, " +
+                        "strftime('%Y', date('now', 'start of month', '-6 months')) AS ano, " +
+                        "IFNULL(COUNT(v._id),0) AS total " +
+                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -1115,7 +1128,6 @@ public class sonicDatabaseCRUD {
 
                     }
 
-                    cursor.close();
                 }
 
             } catch (SQLiteException e) {

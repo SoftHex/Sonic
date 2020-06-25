@@ -19,7 +19,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
@@ -53,7 +52,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     private RecyclerView mRecycler;
     private boolean isLoading = false;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
-    private String mDataAtual = mDateFormat.format(new Date());
+    private String mDataAtual;
     private LinearLayoutManager linearLayoutManager;
     private int dias, diasDiff;
 
@@ -99,6 +98,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         this.mPrefs = new sonicPreferences(context);
         this.mRecycler = recycler;
         this.mData = new sonicDatabaseCRUD(context);
+        this.mDataAtual = mDateFormat.format(new Date());
 
         mPartialList = new ArrayList();
         mPartialList.add(0,null);
@@ -322,6 +322,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                         mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 : 30;
 
         holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
+        //holder.linearNew.setVisibility(View.VISIBLE);
 
         File f = sonicFile.searchImage(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
 
@@ -331,7 +332,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                     .load(f)
                     .circleCrop()
                     .apply(new RequestOptions().override(100,100))
-                    .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
+                    //.transition(GenericTransitionOptions.with(android.R.anim.fade_in))
                     .into(holder.mImage);
 
             holder.mImage.setVisibility(View.VISIBLE);

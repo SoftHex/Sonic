@@ -114,13 +114,12 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         TextView tvNome;
         TextView tvEndereco;
         TextView tvStatus;
-        TextView tvObservacao;
         TextView tvAtendente;
         TextView tvDataHora;
+        TextView tvTempo;
         ImageView ivImagem;
         TextView tvSituacao;
         TextView tvLetra;
-        TextView tvDuracao;
         LinearLayout linearItem;
         ProgressBar pbDuracao;
         LinearLayout llGroupDate;
@@ -134,11 +133,10 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
             ivImagem = view.findViewById(R.id.ivImagem);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
+            tvTempo = view.findViewById(R.id.tvTempo);
             tvSituacao = view.findViewById(R.id.tvSituacao);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
-            tvDuracao = view.findViewById(R.id.tvDuracao);
-            tvObservacao = view.findViewById(R.id.tvObservacao);
             pbDuracao = view.findViewById(R.id.pbDuracao);
             llGroupDate = view.findViewById(R.id.llGroupDate);
 
@@ -340,9 +338,9 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
         holder.tvCodigo.setText("#" + (!rotaPessoal ? rota.getCodigo() : rota.getId()));
         holder.tvNome.setText(cliNomeExibicao);
-        holder.tvAtendente.setText("Responsável: " + rota.getAtendente());
+        holder.tvAtendente.setText(rota.getAtendente());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
-        holder.tvDataHora.setText("Agendado para: " + mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento()));
+        holder.tvDataHora.setText(mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento())+" às "+mUtils.Data.horaFotmatadaSemSegundoBR(rota.getHoraAgendamento()));
 
         File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_CLIENTES, rota.getCodigoCliente());
 
@@ -371,6 +369,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 holder.tvStatus.setText(StatusText.NAO_INICIADO);
                 break;
             case Status.EM_ATENDIMENTO:
+                holder.tvTempo.setVisibility(View.VISIBLE);
                 holder.pbDuracao.setVisibility(View.VISIBLE);
                 holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_em_atendimento));
                 holder.tvStatus.setText(StatusText.EM_ATENDIMENTO);
@@ -474,7 +473,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                     mCalendarEnd.set(Calendar.MONTH, endMonth);
                     mCalendarEnd.set(Calendar.DAY_OF_MONTH, endDay);
                     mPrefs.Geral.setDataRange("BETWEEN "+ dataSearch.format(mCalendarStart.getTime())+" AND "+dataSearch.format(mCalendarEnd.getTime()));
-                    mPrefs.Rota.setTermSearch(dataShow.format(mCalendarStart.getTime())+" / "+dataShow.format(mCalendarEnd.getTime()));
+                    mPrefs.Rota.setTermSearch(dataShow.format(mCalendarStart.getTime())+" à "+dataShow.format(mCalendarEnd.getTime()));
                     ((sonicRota)mContext).refreshFragments(0);
                 }
 

@@ -23,7 +23,7 @@ public class sonicGlide {
                 .into(i);
     }
 
-    public static void glideImageView(Context c, ImageView i, String file){
+    public static void glideImageView(Context c, ImageView i, String file, int width, int height){
 
         Glide.with(c).clear(i);
         Glide.get(c).clearMemory();
@@ -31,7 +31,7 @@ public class sonicGlide {
                 .load(file)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
-                .override(300, 300)
+                .override(width, height)
                 // MELHOR OPÇÃO PARA TODAS AS IMAGENS
                 .fitCenter()
                 .transition(GenericTransitionOptions.with(R.anim.fade_in))

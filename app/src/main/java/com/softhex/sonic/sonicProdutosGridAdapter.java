@@ -50,7 +50,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     private RecyclerView mRecycler;
     private boolean isLoading = false;
     private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyyMMdd");
-    private String mDataAtual = mDateFormat.format(new Date());
+    private String mDataAtual;
     private LinearLayoutManager linearLayoutManager;
     private int dias, diasDiff;
     private GridLayoutManager mLayout;
@@ -94,6 +94,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         this.mRecycler = recycler;
         this.mData = new sonicDatabaseCRUD(context);
         this.mLayout = layout;
+        this.mDataAtual = mDateFormat.format(new Date());
 
         mPartialList = new ArrayList();
         mPartialList.add(0,null);
@@ -321,14 +322,14 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
                 mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[1]) ? 3 :
                         mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[2]) ? 4 : 3;
 
-        holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 120/colunas);
+        //holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 90/colunas);
         holder.ivNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
+        holder.linearNew.setVisibility(View.VISIBLE);
         holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);
 
         String fileJpg = prod.getCodigo()+".JPG";
 
-        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg ,R.drawable.nophoto));
-
+        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg, R.drawable.nophoto), 900/colunas, 900/colunas);
 
     }
 
