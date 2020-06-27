@@ -64,6 +64,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         LinearLayout llDescription, linearNew;
         RelativeLayout rlCatalogo, linearItem;
         String status;
+        String dataCadastro;
         String tvDetalhe;
         LinearLayout llGroupDate;
 
@@ -304,25 +305,26 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
         });
 
-
-
         holder.codigo = prod.getCodigo();
         holder.tvNome.setText(prod.getNome());
         holder.tvGrupo = prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo();
         holder.tvDetalhe = "CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo();
 
-        String[] arrayNovo = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
-        int diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        int dias = mPrefs.Produtos.getDiasNovo().equals(arrayNovo[0]) ? 30 :
-                mPrefs.Produtos.getDiasNovo().equals(arrayNovo[1]) ? 60 :
-                        mPrefs.Produtos.getDiasNovo().equals(arrayNovo[2]) ? 90 : 30;
+        String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+        diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
+        dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
+                mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
+                        mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
+                                mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
+                                        mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 : 90;
+
 
         String[] arrayColumn = mContext.getResources().getStringArray(R.array.prefProdutoCatalogoOptions);
         int colunas = mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[0]) ? 2 :
                 mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[1]) ? 3 :
                         mPrefs.Produtos.getCatalogoColunas().equals(arrayColumn[2]) ? 4 : 3;
 
-        //holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 90/colunas);
+        holder.ivNew.getLayoutParams().height = sonicUtils.intToDps(mContext, 90/colunas);
         holder.ivNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
         holder.linearNew.setVisibility(View.VISIBLE);
         holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);

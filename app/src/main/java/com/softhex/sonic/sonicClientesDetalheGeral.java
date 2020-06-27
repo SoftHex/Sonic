@@ -57,10 +57,11 @@ public class sonicClientesDetalheGeral extends Fragment {
         mList = mData.Cliente.selectClienteByID(mPref.Clientes.getId());
         tvNome = myView.findViewById(R.id.tvNome);
         tvNome.setText(mList.get(0).getNome());
+        tvNome.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
         tvGrupo = myView.findViewById(R.id.tvGrupo);
-        tvGrupo.setText("#"+mList.get(0).getCodigo()+" / GRUPO: " +mList.get(0).getGrupo());
+        tvGrupo.setText("CÓD.: "+mList.get(0).getCodigo()+" / GRUPO: " +mList.get(0).getGrupo());
         tvFantRazao = myView.findViewById(R.id.tvFantRazao);
-        tvFantRazao.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
+        tvFantRazao.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getRazaoSocial() : mList.get(0).getNomeFantasia());
         tvCnpjCpf = myView.findViewById(R.id.tvCnpjCpf);
         tvCnpjCpf.setText("CNPJ/CPF: "+sonicUtils.stringToCnpjCpf(mList.get(0).getCpfCnpj()));
         tvEndereco = myView.findViewById(R.id.tvEndereco);

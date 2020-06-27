@@ -2,6 +2,7 @@ package com.softhex.sonic;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +11,18 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class sonicEmpresa extends sonicRuntimePermission {
 
@@ -26,6 +33,10 @@ public class sonicEmpresa extends sonicRuntimePermission {
     private Context mContext;
     private ActionBar mActionBar;
     private Toolbar mToolbar;
+    private LinearLayout llSuporte;
+    private Button btSuporte;
+    private LinearLayout llSnackBar;
+    private sonicPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,10 @@ public class sonicEmpresa extends sonicRuntimePermission {
         myCode = findViewById(R.id.etCodigo);
         mCodigo = findViewById(R.id.etCodigoEmpresa);
         myCode.requestFocus();
+        llSuporte = findViewById(R.id.llSuporte);
+        btSuporte = findViewById(R.id.btSuporte);
+        llSnackBar = findViewById(R.id.llSnackBar);
+        mPrefs = new sonicPreferences(this);
 
         myRegister.setOnClickListener((View v)-> {
 
@@ -118,6 +133,107 @@ public class sonicEmpresa extends sonicRuntimePermission {
     public void showKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    public void mensagemErro(){
+
+        Snackbar snackbar = Snackbar
+                .make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
+                .setAction("DETALHE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("Atenção!")
+                                .setMessage(mPrefs.Geral.getError())
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        llSnackBar.removeAllViews();
+                                        ativarSuporte();
+                                    }
+                                }).show();
+                    }
+                });
+        SnackbarHelper.configSnackbar(mContext, snackbar);
+        llSnackBar.addView(snackbar.getView());
+        snackbar.show();
+
+    }
+
+    public void ativarSuporte(){
+        llSuporte.setVisibility(View.VISIBLE);
+        btSuporte.setOnClickListener((View v)->{
+            senhaSuporte();
+        });
+    }
+
+    public void senhaSuporte() {
+
+        View v = getLayoutInflater().inflate(R.layout.dialog_suporte_senha, null);
+        EditText senha = v.findViewById(R.id.etSuporteSenha);
+        AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+        alertDialog.setTitle("Login Suporte");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!senha.getText().toString().equals("123456")){
+                    senhaIncorreta();
+                }else{
+                    //TODO LISTAR USUARIOS PARA SER ESCOLHIDO
+                    exibirListaUsuarios();
+                }
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(v);
+        alertDialog.show();
+
+    }
+
+    private void senhaIncorreta(){
+
+        Snackbar snackbar = Snackbar.make(llSnackBar, "SENHA INCORRETA", Snackbar.LENGTH_LONG);
+        SnackbarHelper.configSnackbar(mContext, snackbar);
+        llSnackBar.addView(snackbar.getView());
+        snackbar.show();
+
+    }
+
+    private void exibirListaUsuarios() {
+
+        List<sonicUsuariosHolder> users;
+
+        users = new sonicDatabaseCRUD(mContext).Usuario.listaUsuarios();
+
+        List<String> l = new ArrayList<>();
+        List<Integer> cod = new ArrayList<>();
+
+        for(int i=0; i < users.size(); i++ ){
+            l.add(users.get(i).getCodigo()+" - "+users.get(i).getNome());
+            cod.add(users.get(i).getCodigo());
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                new sonicDatabaseCRUD(mContext).Usuario.setAtivo(cod.get(item));
+                startActivity(new Intent(sonicEmpresa.this, sonicSplash.class));
+                finish();
+            }
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
+
     }
 
     @Override

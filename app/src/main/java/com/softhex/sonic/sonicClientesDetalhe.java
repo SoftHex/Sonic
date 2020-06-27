@@ -75,30 +75,32 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         createInterface();
         slideImages();
-        handlerFloatMenu();
+        handlerFloatMenu(false);
         loadAction();
 
     }
 
-    private void handlerFloatMenu(){
+    private void handlerFloatMenu(boolean anim){
 
         fbTelefone.setVisibility((mList.get(0).getFone()==null || mList.get(0).getFone().equals("")) ? View.GONE : View.VISIBLE);
         fbEmail.setVisibility((mList.get(0).getEmail()==null || mList.get(0).getEmail().equals("")) ? View.GONE : View.VISIBLE);
         fbWhatsApp.setVisibility((mList.get(0).getWhats()==null || mList.get(0).getWhats().equals("")) ? View.GONE : View.VISIBLE);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fbMenu.open(true);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fbMenu.close(true);
-                    }
-                },2000);
-            }
-        },700);
+        if(anim) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fbMenu.open(true);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fbMenu.close(true);
+                        }
+                    }, 2000);
+                }
+            }, 700);
+        }
 
     }
 
@@ -119,6 +121,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "FINANCEIRO");
         myAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
         myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mList.get(0).getTitulos()>0 ? "TÍTULOS("+ mList.get(0).getTitulos()+")" : "TÍTULOS"));
+        myAdapter.addFragment(new sonicClientesDetalheGeral(), "VISITAS");
         //viewpager.addOnPageChangeListener(viewListener);
         viewpager.setAdapter(myAdapter);
 

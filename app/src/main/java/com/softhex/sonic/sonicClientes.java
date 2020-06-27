@@ -67,6 +67,7 @@ public class sonicClientes extends AppCompatActivity {
         mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mAdapter.addFragment(new sonicClientesCNPJ(), "CNPJ");
         mAdapter.addFragment(new sonicClientesCPF(), "CPF");
+        viewpager.addOnPageChangeListener(listener);
         viewpager.setAdapter(mAdapter);
 
     }
@@ -100,6 +101,23 @@ public class sonicClientes extends AppCompatActivity {
         }
 
     }
+
+    private ViewPager.OnPageChangeListener listener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     public void refreshFragments(){
 

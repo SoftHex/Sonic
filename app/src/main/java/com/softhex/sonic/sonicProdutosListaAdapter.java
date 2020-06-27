@@ -62,14 +62,11 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         TextView tvLinha1;
         TextView tvLinha2;
         TextView tvLinha3;
-        String status;
         ImageView mImage;
         TextView tvLetra;
         CardView card;
-        String dataCadastro;
         LinearLayout linearItem, linearNew;
         LinearLayout llGroupDate;
-
 
         public prodHolder(View view) {
             super(view);
@@ -314,15 +311,15 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.tvLinha3.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
         holder.codigo = prod.getCodigo();
         holder.tvLinha2.setText(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
-        holder.dataCadastro = prod.getDataCadastro();
         String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
-        diasDiff = mUtil.Data.dateDiffDay(holder.dataCadastro, mDataAtual);
+        diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
         dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
                 mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
-                        mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 : 30;
+                        mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
+                                mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
+                                        mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 : 90;
 
         holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
-        //holder.linearNew.setVisibility(View.VISIBLE);
 
         File f = sonicFile.searchImage(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
 
@@ -344,6 +341,9 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             holder.tvLetra.setVisibility(View.VISIBLE);
             holder.tvLetra.setText(String.valueOf(prod.getNome().charAt(0)));
         }
+
+        //TextView tv = ((sonicProdutos)mContext).findViewById(R.id.tvHeader);
+        //tv.setText(String.valueOf(prod.getNome().charAt(0)));
 
     }
 

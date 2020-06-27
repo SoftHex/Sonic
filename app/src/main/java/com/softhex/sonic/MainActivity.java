@@ -17,6 +17,8 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,14 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
         DBC = new sonicDatabaseCRUD(this);
 
-        if (DBC.Database.checkMinimumData()){
+        if (DBC.Database.checkMinimumData() && mPrefs.Users.getAtivo()){
 
             sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
-            i  = new Intent(MainActivity.this,sonicSplash.class);
+            i  = new Intent(MainActivity.this, sonicSplash.class);
             startActivity(i);
             finish();
 
         }else {
+            //preencherTabelasFixas();
             sonicAppearence.layoutWhitLogicalMenu(this, getWindow());
         }
 
@@ -175,4 +178,17 @@ public class MainActivity extends AppCompatActivity {
             container.removeView(v);
         }
     }
+
+    private void preencherTabelasFixas(){
+
+        new sonicDatabaseCRUD(this).Database.cleanData(sonicConstants.TB_USUARIO);
+        String[] suporte = getResources().getStringArray(R.array.usuarioSuporte);
+        for(int x=0; x<suporte.length; x++){
+            List<String> mTotalList = new ArrayList<>();
+            mTotalList.add(suporte[x]);
+            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_USUARIO, mTotalList, sonicDatabaseCRUD.DB_MODE_SAVE);
+        }
+
+    }
+
 }

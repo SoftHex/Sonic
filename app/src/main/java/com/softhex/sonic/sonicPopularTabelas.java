@@ -283,8 +283,9 @@ public class sonicPopularTabelas {
 
             }else{
 
-                new sonicDialog(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicDialog.MSG_WARNING);
-                sonicConstants.EMP_TESTE = false;
+                //new sonicDialog(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicDialog.MSG_WARNING);
+                mPref.Geral.setError("Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.");
+                ((sonicEmpresa)myCtx).mensagemErro();
             }
 
         }else{
@@ -309,7 +310,9 @@ public class sonicPopularTabelas {
                 startActivity(mList);
             }
             else{
-                new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
+                mPref.Geral.setError("Seu IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema.\n\nFavor entrar em contato com o responsável na empresa pela administração do serviço.\n\nSe você for usuário de suporte, pode fazer loging agora.");
+                ((sonicEmpresa)myCtx).mensagemErro();
+                //new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
             }
         }
     }

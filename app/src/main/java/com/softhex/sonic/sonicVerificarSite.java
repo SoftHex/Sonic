@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.io.File;
 
@@ -23,6 +25,7 @@ public class sonicVerificarSite{
     private sonicDatabaseLogCRUD DBCL;
     private sonicSystem mySystem;
     private sonicPreferences mPrefs;
+
 
     public sonicVerificarSite(Activity act){
         this.mAct = act;

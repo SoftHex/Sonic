@@ -269,16 +269,20 @@
     <string name="produtoNovoDias" translatable="false">produtoNovoDias</string>
     <string name="prefProdutoNovoNome">Produtos Novos</string>
     <string name="prefProdutoNovoDescription">Quantidade de dias a partir da data de cadastro para que o produto seja destacado como novo.</string>
-    <string name="prefProdutoNovoDefault">30 Dias</string>
+    <string name="prefProdutoNovoDefault">90 Dias</string>
     <string-array name="prefProdutoNovoOptions">
         <item name="1">30 Dias</item>
         <item name="2">60 Dias</item>
         <item name="3">90 Dias</item>
+        <item name="4">6 Meses</item>
+        <item name="5">1 Ano</item>
     </string-array>
     <string-array name="prefProdutoNovoValues">
         <item name="1">30 Dias</item>
         <item name="2">60 Dias</item>
         <item name="3">90 Dias</item>
+        <item name="4">6 Meses</item>
+        <item name="5">1 Ano</item>
     </string-array>
 
     <!-- PREFERENCES FOR RETORNO -->
@@ -381,6 +385,18 @@
         <item name="6">MÊS ATUAL</item>
         <item name="7">MÊS ANTERIOR</item>
         <item name="8">FAIXA ESPECÍFICA...</item>
+    </string-array>
+
+    <!-- USUÁRIO SUPORTE -->
+    <string-array name="usuarioSuporte">
+        <item name="1">999999999</item>
+        <item name="2">SUPORTE</item>
+        <item name="3">SUPORTE</item>
+        <item name="4">123456</item>
+        <item name="5">0</item>
+        <item name="6">5</item>
+        <item name="7">5</item>
+        <item name="8">1</item>
     </string-array>
 
     <!--  BUTTONS SINC -->

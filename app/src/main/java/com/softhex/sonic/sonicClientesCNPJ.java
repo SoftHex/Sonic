@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class sonicClientesCNPJ extends Fragment {
     private LinearLayout llNoResult;
     private RelativeLayout rlDesert;
     private Button btSinc;
-
+    private FloatingActionButton fbUp;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -109,6 +110,8 @@ public class sonicClientesCNPJ extends Fragment {
         myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         myRecycler.setLayoutManager(myLayout);
+
+        fbUp = myView.findViewById(R.id.fbUp);
 
         ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -236,7 +239,7 @@ public class sonicClientesCNPJ extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, true);
+        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, fbUp, true);
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);

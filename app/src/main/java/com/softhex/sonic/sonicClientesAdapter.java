@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private LinearLayoutManager linearLayoutManager;
     private boolean cnpj;
     private sonicDatabaseCRUD mData;
+    private FloatingActionButton fbUp;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -97,7 +99,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     }
 
 
-    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, boolean cnpj) {
+    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, FloatingActionButton fbup, boolean cnpj) {
 
         this.myCons = new sonicConstants();
         this.mTotalList = cliente;
@@ -109,6 +111,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
         this.mData = new sonicDatabaseCRUD(mContext);
+        this.fbUp = fbup;
 
         mPartialList = new ArrayList();
         mPartialList.add(0,null);
@@ -132,12 +135,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 }
             }
 
-            linearLayoutManager = (LinearLayoutManager) recycler.getLayoutManager();
+            linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
 
-            recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
+                    fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
                     if(!isLoading){
                         if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
                             if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
@@ -148,6 +152,10 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 }
             });
         }
+
+        fbUp.setOnClickListener((View v)->{
+            mRecycler.scrollToPosition(0);
+        });
 
     }
 
@@ -283,6 +291,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
                 });
 
+                bt2.setOnLongClickListener((View v)->{
+                    //marcarFiltroPadrao(bt2.getText().toString());
+                    return false;
+                });
+
                 bt2.setText(mGroupList.get(i).getNome());
                 bt2.setTextSize(12);
                 bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
@@ -401,6 +414,31 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 }
             }
         }).show();
+
+    }
+
+    public void marcarFiltroPadrao(String filtro) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
+        alertDialogBuilder.setTitle("Filtro Padrão");
+
+        alertDialogBuilder
+                .setMessage("Deseja marcar esse filtro como padrão? Será apenas para a tela de clientes.")
+                .setCancelable(false)
+                .setPositiveButton("SIM",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        mPrefs.GrupoCliente.setFiltroPadrao(filtro);
+                    }
+                })
+                .setNegativeButton("CANCELAR",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
 
     }
 

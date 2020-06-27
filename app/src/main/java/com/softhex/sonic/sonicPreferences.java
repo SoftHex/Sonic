@@ -62,6 +62,7 @@ public class sonicPreferences{
     private static final String CLIENTE_TITULOS = "clienteTitulos";
     private static final String GRUPO_CLIENTE_FILTRO_CPF = "grupoClienteFiltroCpf";
     private static final String GRUPO_CLIENTE_FILTRO_CNPJ = "grupoClienteFiltroCnpj";
+    private static final String GRUPO_CLIENTE_FILTRO_PADRAO = "grupoClienteFiltroPadrao";
     private static final String SAUDACAO = "saudacao";
     private static final String MATRIZ_NOME = "matrizNome";
     private static final String MATRIZ_DESCRICAO = "matrizDescricao";
@@ -583,6 +584,14 @@ public class sonicPreferences{
         }
         public String getFiltroCnpj(){
             return sharedpreferences.getString(GRUPO_CLIENTE_FILTRO_CNPJ, "TODOS");
+        }
+        public void setFiltroPadrao(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GRUPO_CLIENTE_FILTRO_PADRAO, value);
+            editor.apply();
+        }
+        public String getFiltroPadrao(){
+            return sharedpreferences.getString(GRUPO_CLIENTE_FILTRO_PADRAO, "TODOS");
         }
     }
     public class Users {

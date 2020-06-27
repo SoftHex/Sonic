@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutMain"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvSearch"
@@ -119,28 +119,41 @@
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:visibility="gone"/>
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/recyclerList"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:scrollbars="vertical"
+           app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+           android:visibility="gone"/>
 
-    <RelativeLayout
-        android:id="@+id/rlDesert"
-        android:layout_width="match_parent"
+       <RelativeLayout
+           android:id="@+id/rlDesert"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="bottom"
+           android:gravity="bottom"
+           android:visibility="gone">
+
+           <ImageView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:scaleType="centerCrop"
+               android:src="@drawable/desert"/>
+
+       </RelativeLayout>
+
+    <com.github.clans.fab.FloatingActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fbUp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="bottom"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@drawable/desert"/>
-
-    </RelativeLayout>
+        android:layout_gravity="top|right"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        fab:fab_colorNormal="@color/colorPrimaryBlackLightT"
+        fab:fab_colorPressed="@color/colorPrimaryBlackLight"
+        android:src="@mipmap/ic_arrow_up_white_24dp"
+        fab:fab_size="mini"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

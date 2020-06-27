@@ -7,12 +7,12 @@
     android:theme="@style/IntroTheme"
     android:fitsSystemWindows="true">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/mToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="top"
-            android:theme="@style/ToolBarTheme"/>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="top"
+        android:theme="@style/ToolBarTheme"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -118,10 +118,56 @@
                 android:background="@drawable/button_login"
                 android:textStyle="bold"/>
 
+            <LinearLayout
+                android:id="@+id/llSuporte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuário suporte?"
+                    android:textColor="@color/colorPrimaryWhite"/>
+
+                <Button
+                    android:id="@+id/btSuporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Entre"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryWhite"
+                    android:background="@drawable/botao_rect_green"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
+
+
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
+        <LinearLayout
+            android:id="@+id/llSnackBar"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="bottom">
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

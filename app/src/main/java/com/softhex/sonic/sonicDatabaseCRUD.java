@@ -1475,6 +1475,45 @@ public class sonicDatabaseCRUD {
             return usuarios;
         }
 
+        public List<sonicUsuariosHolder> listaUsuarios(){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicUsuariosHolder> usuarios = new ArrayList<sonicUsuariosHolder>();
+
+            String query = "SELECT " +
+                    "U.codigo, " +
+                    "U.nome, " +
+                    "U.login " +
+                    " FROM " + TABLE_USUARIO + " U ";
+
+            try{
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
+
+                if(cursor!=null){
+
+                    while (cursor.moveToNext()){
+                        sonicUsuariosHolder usuario = new sonicUsuariosHolder();
+
+                        usuario.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        usuario.setNome(cursor.getString(cursor.getColumnIndex("nome")));
+                        usuario.setLogin(cursor.getString(cursor.getColumnIndex("login")));
+                        usuarios.add(usuario);
+                    }
+
+                }
+
+                cursor.close();
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return usuarios;
+        }
+
         public List<sonicUsuariosHolder> selectUsuarioImei(String imei){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
