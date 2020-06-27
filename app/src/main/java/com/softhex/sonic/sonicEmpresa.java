@@ -224,6 +224,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 new sonicDatabaseCRUD(mContext).Usuario.setAtivo(cod.get(item));
+                mPrefs.Users.setAtivo(true);
                 startActivity(new Intent(sonicEmpresa.this, sonicSplash.class));
                 finish();
             }
