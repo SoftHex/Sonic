@@ -69,7 +69,7 @@ public class sonicMain extends AppCompatActivity{
     static final String STATE_SCORE = "playerScore";
     static final String STATE_LEVEL = "playerLevel";
     static final int IMAGE_GALLERY_REQUEST = 20;
-    private sonicDatabaseCRUD DBC;
+    private sonicDatabaseCRUD mData;
     private Intent i;
     private TabLayout myTabLayout;
     private Toolbar myToolbar;
@@ -91,14 +91,15 @@ public class sonicMain extends AppCompatActivity{
     private PrimaryDrawerItem myDrawerRota;
     private PrimaryDrawerItem myDrawerVendedores;
     private ExpandableDrawerItem myDrawerRelatorios;
-    private PrimaryDrawerItem myDrawerSistema;
-    private PrimaryDrawerItem myDrawerRedefinir;
-    private PrimaryDrawerItem myDrawerExportar;
+    private ExpandableDrawerItem myDrawerSistema;
+    private SecondaryDrawerItem myDrawerRedefinir;
+    private SecondaryDrawerItem myDrawerExportar;
     private SwitchDrawerItem myDrawerLock;
     private SecondaryDrawerItem myDrawerRankingClientes;
     private SecondaryDrawerItem myDrawerRankingProdutos;
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
+    private PrimaryDrawerItem myDrawerItemSair;
     private LinearLayout llDetail;
     private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendas, tvMeta;
     private ProgressProfileView myProgressProfile;
@@ -126,7 +127,7 @@ public class sonicMain extends AppCompatActivity{
 
         mActivity = this;
         mContext = getApplicationContext();
-        DBC = new sonicDatabaseCRUD(mActivity);
+        mData = new sonicDatabaseCRUD(mActivity);
         mPrefs = new sonicPreferences(mActivity);
         sonicConstants.BACK = back;
 
@@ -266,8 +267,8 @@ public class sonicMain extends AppCompatActivity{
 
         List<sonicVendasValorHolder> mVendas = new ArrayList<>();
         List<sonicVendasPedidosHolder> mPedidos = new ArrayList<>();
-        mVendas = DBC.Venda.selectVendas();
-        mPedidos = DBC.Venda.selectPedidos();
+        mVendas = mData.Venda.selectVendas();
+        mPedidos = mData.Venda.selectPedidos();
         Float value = Float.valueOf(mVendas.get(5).getValor());
         nfVal.setMaximumFractionDigits(2);
         double v = (double)value/100;
@@ -292,11 +293,15 @@ public class sonicMain extends AppCompatActivity{
 
     public void createDrawerMenu(){
 
-        listaEmpresa = DBC.Empresa.empresaUsuario();
-        listaUser = DBC.Usuario.selectUsuarioAtivo();
+        listaEmpresa = mData.Empresa.empresaUsuario();
+        listaUser = mData.Usuario.selectUsuarioAtivo();
 
         myHeader = new AccountHeaderBuilder()
                 .withActivity(this)
+                .withAlternativeProfileHeaderSwitching(true)
+                .withDividerBelowHeader(true)
+                .withTranslucentStatusBar(true)
+                //.withDrawer(new DrawerBuilder().withActivity(this).addDrawerItems(myDrawerClientes).build())
                 .withHeaderBackground(R.drawable.backhome)
                 .withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -339,9 +344,7 @@ public class sonicMain extends AppCompatActivity{
                         if(current){
                             Intent i = new Intent(Intent.ACTION_PICK);
                             File picture = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                            String path = picture.getPath();
-
-                            i.setDataAndType(Uri.parse(path), "image/*");
+                            i.setDataAndType(Uri.parse(picture.getPath()), "image/*");
 
                             startActivityForResult(i, IMAGE_GALLERY_REQUEST);
                         }
@@ -380,7 +383,6 @@ public class sonicMain extends AppCompatActivity{
             }
 
         }
-
         myDrawerSincronizar = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName(R.string.sincronizarTitulo)
@@ -458,51 +460,60 @@ public class sonicMain extends AppCompatActivity{
                 .withSelectable(false)
                 .withSubItems(
                         myDrawerRankingClientes =  new SecondaryDrawerItem()
-                                .withIdentifier(14)
+                                .withIdentifier(11)
                                 .withSelectable(false)
                                 .withName(R.string.rankingClientes).withLevel(2)
                                 .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
                         myDrawerRankingProdutos = new SecondaryDrawerItem()
-                                .withIdentifier(15)
+                                .withIdentifier(12)
                                 .withSelectable(false)
                                 .withName(R.string.rankingProdutos).withLevel(2)
                                 .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
                         myDrawerClientesSemCompraa = new SecondaryDrawerItem()
-                                .withIdentifier(16)
+                                .withIdentifier(13)
                                 .withSelectable(false)
                                 .withName(R.string.clientesSemCompra).withLevel(2)
                                 .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp),
                         myDrawerPremiacoes = new SecondaryDrawerItem()
-                                .withIdentifier(17)
+                                .withIdentifier(14)
                                 .withSelectable(false)
                                 .withName(R.string.premiacoes).withLevel(2)
                                 .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp)
                         /*.withIcon(getResources().getDrawable(R.mipmap.ic_settings_black_24dp))*/
                 );
 
-        myDrawerSistema = new PrimaryDrawerItem()
-                .withIdentifier(11)
+
+        myDrawerSistema = new ExpandableDrawerItem()
+                .withIdentifier(20)
                 .withName(R.string.sistemaTitulo)
+                .withDescription(R.string.sistemaSubTitulo)
+                .withIcon(getResources().getDrawable(R.mipmap.ic_cogs))
+                .withIsExpanded(false)
                 .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.settings_24));
+                .withSubItems(
+                        myDrawerRedefinir = new SecondaryDrawerItem()
+                                .withIdentifier(21)
+                                .withName("Logs").withLevel(2)
+                                .withSelectable(false)
+                                .withIcon(R.mipmap.ic_wrench_grey600_24dp),
+                        myDrawerRedefinir = new SecondaryDrawerItem()
+                                .withIdentifier(22)
+                                .withName(R.string.redefinirTitulo).withLevel(2)
+                                .withSelectable(false)
+                                .withIcon(R.mipmap.ic_wrench_grey600_24dp),
+                        myDrawerExportar = new SecondaryDrawerItem()
+                                .withIdentifier(23)
+                                .withName("Exportar").withLevel(2)
+                                .withSelectable(false)
+                                .withIcon(R.mipmap.ic_database_export_grey600_24dp)
 
-        myDrawerRedefinir = new PrimaryDrawerItem()
-                .withIdentifier(12)
-                .withName(R.string.redefinirTitulo)
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_wrench_grey600_24dp));
+                                );
 
-        PrimaryDrawerItem item13 = new PrimaryDrawerItem()
-                .withIdentifier(13)
+        myDrawerItemSair = new PrimaryDrawerItem()
+                .withIdentifier(30)
                 .withName("Sair")
                 .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_power_settings_new_white_24dp));
-
-        myDrawerExportar = new PrimaryDrawerItem()
-                .withIdentifier(18)
-                .withName("Exportar")
-                .withSelectable(false)
-                .withIcon(getResources().getDrawable(R.mipmap.ic_database_export_grey600_24dp));
+                .withIcon(getResources().getDrawable(R.mipmap.ic_logout_grey600_24dp));
 
         /*myDrawerLock = new SwitchDrawerItem()
                 .withIdentifier(19)
@@ -522,6 +533,7 @@ public class sonicMain extends AppCompatActivity{
                 .withToolbar(myToolbar)
                 .withAccountHeader(myHeader)
                 .withSelectedItem(-1)
+                .withHeaderDivider(true)
                 .withShowDrawerUntilDraggedOpened(false)
                 .withOnDrawerListener(new Drawer.OnDrawerListener() {
                     @Override
@@ -547,9 +559,9 @@ public class sonicMain extends AppCompatActivity{
                     }
 
                 })
-                //.addStickyDrawerItems(
-                //myDrawerAvisos
-                //)
+                .addStickyDrawerItems(
+                    myDrawerItemSair
+                )
                 .addDrawerItems(
                         myDrawerSincronizar,
                         myDrawerAvisos,
@@ -565,16 +577,18 @@ public class sonicMain extends AppCompatActivity{
                         myDrawerRelatorios,
                         //new SectionDrawerItem().withName("Segurança"),
                         myDrawerLock,
-                        new SectionDrawerItem().withName(R.string.extraTitulo),
-                        myDrawerSistema,
-                        myDrawerRedefinir,
-                        myDrawerExportar
+                        new SectionDrawerItem().withName(R.string.sistemaTitulo),
+                        myDrawerSistema
+                        //myDrawerRedefinir,
+                        //myDrawerExportar
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
                         switch (view.getId()){
+                            case 0:
+                                break;
                             case 1:
                                 i = new Intent(sonicMain.this, sonicSincronizacao.class);
                                 startActivityForResult(i,1);
@@ -613,13 +627,13 @@ public class sonicMain extends AppCompatActivity{
                                 mPrefs.Util.deleteCache();
                                 mPrefs.Util.clearPreferences();
                                 break;
-                            case 11:
+                            case 21:
                                 new myAsyncStartActivity().execute(sonicSistema.class);
                                 //i = new Intent(sonicMain.this, sonicSistema.class);
                                 //startActivity(i);
                                 //border_bottom();
                                 break;
-                            case 12:
+                            case 22:
                                 dialogRedefinir();
                                 //normalListDialogNoTitle("MENU");
                                 break;
@@ -637,10 +651,12 @@ public class sonicMain extends AppCompatActivity{
                                 //i = new Intent(sonicMain.this, sonicClientesSemCompra.class);
                                 //startActivity(i);
                                 break;
-                            case 18:
+                            case 23:
                                 dialogBackup();
                                 break;
-
+                            case 30:
+                                logout();
+                                break;
                             default:
                                 break;
                         }
@@ -649,6 +665,61 @@ public class sonicMain extends AppCompatActivity{
 
                 })
                 .build();
+
+    }
+
+    private void logout(){
+        ProgressDialog mProgress = new ProgressDialog(sonicMain.this);
+        mProgress.setCancelable(false);
+        mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgress.setIndeterminate(true);
+        mProgress.setTitle("Saindo...");
+        mProgress.show();
+        mPrefs.Users.setLogado(false);
+        mData.Usuario.setAtivo(mPrefs.Users.getPrimeiroAcessoID());
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mProgress.dismiss();
+                startActivity(new Intent(sonicMain.this, MainActivity.class));
+                sonicMain.this.finish();
+            }
+        },1000);
+    }
+
+    private void exibirListaUsuarios() {
+
+        List<sonicUsuariosHolder> users;
+
+        users = new sonicDatabaseCRUD(sonicMain.this).Usuario.listaUsuarios();
+
+        List<String> l = new ArrayList<>();
+        List<Integer> cod = new ArrayList<>();
+
+        for(int i=0; i < users.size(); i++ ){
+            l.add(users.get(i).getCodigo()+" - "+users.get(i).getNome());
+            cod.add(users.get(i).getCodigo());
+        }
+
+        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(sonicMain.this);
+        builder.setItems(chars, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                mData.Usuario.setAtivo(cod.get(item));
+                mData.Empresa.selecionarPrimeiraEmpresa();
+                mData.Database.truncateAllTablesNonSite();
+                mPrefs.Users.setAtivo(true);
+                startActivity(new Intent(sonicMain.this, MainActivity.class));
+                sonicMain.this.finish();
+            }
+        }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        }).show();
 
     }
 
@@ -663,12 +734,11 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
-
     class lerDadosUsuarioAsyncTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            listaEmpresa = DBC.Empresa.empresaUsuario();
+            listaEmpresa = mData.Empresa.empresaUsuario();
             return null;
         }
 
@@ -807,16 +877,16 @@ public class sonicMain extends AppCompatActivity{
             switch (integers[0]){
                 case 2:
                     result[0] = integers[0];
-                    result[1] = DBC.Aviso.countNaoLido();
+                    result[1] = mData.Aviso.countNaoLido();
                     break;
                 case 3:
                     result[0] = integers[0];
-                    result[1] = DBC.Cliente.countPorEmpresa();
+                    result[1] = mData.Cliente.countPorEmpresa();
                     //updateBadge(3, result[1]+"");
                     break;
                 case 4:
                     result[0] = integers[0];
-                    result[1] = DBC.Produto.countPorEmpresa();
+                    result[1] = mData.Produto.countPorEmpresa();
                     //updateBadge(4, result[1]+"");
                     break;
             }
@@ -890,10 +960,10 @@ public class sonicMain extends AppCompatActivity{
         //allowHomeUpdate = true;
 
         if(tvEmpresa ==0){
-            DBC.Empresa.marcarEmpresa();
+            mData.Empresa.marcarEmpresa();
         }else{
-            DBC.Empresa.desmarcarEmpresa();
-            DBC.Empresa.setSelecionada((int) tvEmpresa);
+            mData.Empresa.selecionarPrimeiraEmpresa();
+            mData.Empresa.setSelecionada((int) tvEmpresa);
         }
 
 
@@ -950,7 +1020,7 @@ public class sonicMain extends AppCompatActivity{
                 return false;
             case R.id.itSincronizar:
                 mPrefs.Sincronizacao.setCalledActivity(this.getClass().getSimpleName());
-                mPrefs.Geral.setDrawerRefresh(true);
+                mPrefs.Geral.setHomeRefresh(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
                 myFtp = new sonicFtp(mActivity);
                 String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
@@ -978,11 +1048,12 @@ public class sonicMain extends AppCompatActivity{
                     mPrefs.Util.clearPreferences();
                     mPrefs.Util.deleteCache();
                     Intent mStartActivity = new Intent(sonicMain.this, MainActivity.class);
-                    int mPendingIntentId = 123456;
-                    PendingIntent mPendingIntent = PendingIntent.getActivity(mActivity, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                    int mPendingIntentId = 987654321;
+                    PendingIntent mPendingIntent = PendingIntent.getActivity(sonicMain.this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
                     AlarmManager mgr = (AlarmManager) mActivity.getSystemService(Context.ALARM_SERVICE);
                     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                     System.exit(0);
+                    finishAffinity();
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:

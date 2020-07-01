@@ -63,7 +63,12 @@ public class sonicSplash extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
 
-           startActivity(mPrefs.Users.getStatusLogin() ? new Intent(mActivity,sonicLogin.class) : new Intent(mActivity, sonicMain.class));
+            Intent i = new Intent(sonicSplash.this, sonicMain.class);
+            Intent i2 = new Intent(sonicSplash.this ,sonicLogin.class);
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            //i2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(mPrefs.Users.getLogado() ? i : i2);
+            finishAffinity();
 
         }
     }
@@ -73,7 +78,10 @@ public class sonicSplash extends AppCompatActivity {
         if(logar){
             new mAsyncTaskCarregarDados().execute();
         }else {
-            startActivity(new Intent(mActivity,sonicEmpresa.class));
+            Intent i  = new Intent(sonicSplash.this, sonicEmpresa.class);
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finishAffinity();
         }
     }
 
@@ -97,6 +105,7 @@ public class sonicSplash extends AppCompatActivity {
         mPrefs.Matriz.setEmail(mListEmpresa.get(0).getEmail());
         mPrefs.Matriz.setSite(mListEmpresa.get(0).getSite());
         mPrefs.Matriz.setWhats(mListEmpresa.get(0).getWhatsapp());
+        mPrefs.Users.setAdmin(mListUser.get(0).getAdmin() == 0 ? false : true);
         mPrefs.Users.setUsuarioId(mListUser.get(0).getCodigo());
         mPrefs.Users.setUsuarioNome(mListUser.get(0).getNome());
         mPrefs.Users.setUsuarioCargo(mListUser.get(0).getCargo());

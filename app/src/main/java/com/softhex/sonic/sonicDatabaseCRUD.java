@@ -25,6 +25,7 @@ public class sonicDatabaseCRUD {
     public static final int DB_MODE_SAVE = 1;
     public static final int DB_MODE_UPDATE = 2;
     public static final int DB_MODE_SAVE_UNIQUE = 3;
+    private final String DB_NAME = sonicConstants.DATABASE;
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
     private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
@@ -182,6 +183,33 @@ public class sonicDatabaseCRUD {
             }
 
         }
+
+        public void truncateAllTablesNonSite(){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+
+            try{
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM "+DB_NAME+" WHERE name NOT IN ('"+TABLE_SITE+"','"+TABLE_FTP+"','"+TABLE_EMPRESA+"','"+TABLE_NIVEL_ACESSO+"','"+TABLE_USUARIO+"','"+TABLE_EMPRESA_USUARIO+"')", null);
+                List<String> tables = new ArrayList<>();
+
+                while (cursor.moveToNext()){
+                    tables.add(cursor.getString(0));
+                }
+
+                for(String table: tables){
+                    DB.getWritableDatabase().delete(table, null, null);
+                }
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+
+            }
+
+        }
+
 
         public Boolean saveData(String tabela, List<String> values, int type){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -418,15 +446,18 @@ public class sonicDatabaseCRUD {
             return empresas;
         }
 
-        public void desmarcarEmpresa() {
+        public void selecionarPrimeiraEmpresa() {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues args = new ContentValues();
+            ContentValues args2 = new ContentValues();
             args.put("selecionada", 0);
+            args2.put("selecionada", 1);
 
             try {
 
                 DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESA, args2, "_id=(SELECT MIN(_id) FROM " + TABLE_EMPRESA + ")", null);
 
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -1360,6 +1391,31 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
+        public boolean checkCredenciais(String usuario, String senha){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            Cursor cursor;
+            boolean res = false;
+            String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE codigo = "+usuario+" AND senha = '"+senha+"'";
+            try{
+
+                cursor = DB.getReadableDatabase().rawQuery(query, null);
+
+                if(cursor!= null && cursor.moveToFirst() ){
+                    res =  true;
+                }
+                cursor.close();
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return res;
+
+        }
+
         public List<sonicUsuariosHolder> selectUsuario(int usuario_superior){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
@@ -1428,6 +1484,7 @@ public class sonicDatabaseCRUD {
                     "U.login, " +
                     "U.senha, " +
                     "U.imei, " +
+                    "U.admin, " +
                     "U.nivel_acesso, " +
                     "EU.meta_venda, " +
                     "EU.meta_visita, " +
@@ -1437,7 +1494,7 @@ public class sonicDatabaseCRUD {
                     "(SELECT NA.nome FROM " + TABLE_NIVEL_ACESSO + " NA WHERE NA.codigo = U.nivel_acesso) AS cargo " +
                     " FROM " + TABLE_USUARIO + " U " +
                     " JOIN " + TABLE_EMPRESA_USUARIO + " EU ON EU.codigo_usuario = U.codigo " +
-                    " JOIN " + TABLE_EMPRESA + " E ON E.codigo = EU.codigo_empresa WHERE E.selecionada = 1 AND U.ativo = 1 ";
+                    " JOIN " + TABLE_EMPRESA + " E ON E.codigo = EU.codigo_empresa AND U.ativo = 1 ORDER BY E.selecionada DESC";
 
 
             try{
@@ -1453,6 +1510,7 @@ public class sonicDatabaseCRUD {
                     usuario.setLogin(cursor.getString(cursor.getColumnIndex("login")));
                     usuario.setPass(cursor.getString(cursor.getColumnIndex("senha")));
                     usuario.setImei(cursor.getString(cursor.getColumnIndex("imei")));
+                    usuario.setAdmin(cursor.getInt(cursor.getColumnIndex("admin")));
                     usuario.setNivelAcessoId(cursor.getInt(cursor.getColumnIndex("nivel_acesso")));
                     usuario.setCargo(cursor.getString(cursor.getColumnIndex("cargo")));
                     usuario.setUsuarioSuperior(cursor.getString(cursor.getColumnIndex("usuario_superior")));
@@ -1463,6 +1521,7 @@ public class sonicDatabaseCRUD {
                     usuarios.add(usuario);
                 }
 
+                Log.d("QUERY", query);
 
                 cursor.close();
 
@@ -1581,11 +1640,14 @@ public class sonicDatabaseCRUD {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues args = new ContentValues();
-            args.put("ativo", 1);
+            ContentValues args2 = new ContentValues();
+            args.put("ativo", 0);
+            args2.put("ativo", 1);
 
             try{
 
-                DB.getWritableDatabase().update(TABLE_USUARIO, args, " codigo = "+codigo, null);
+                DB.getWritableDatabase().update(TABLE_USUARIO, args, null, null);
+                DB.getWritableDatabase().update(TABLE_USUARIO, args2, " codigo = ?", new String[]{String.valueOf(codigo)});
 
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());

@@ -31,10 +31,10 @@ public class sonicConfigSeguranca extends PreferenceActivity{
 
         mPreferenceLogin = (SwitchPreference) getPreferenceScreen().findPreference(getResources().getString(R.string.usuarioLogin));
 
-        mPreferenceLogin.setChecked(mPref.Users.getStatusLogin());
+        mPreferenceLogin.setChecked(mPref.Users.getLogado());
 
         mPreferenceLogin.setOnPreferenceChangeListener((preference, newValue) -> {
-            mPref.Users.setStatusLogin((Boolean)newValue);
+            mPref.Users.setLogado((Boolean)newValue);
             return true;
         });
 

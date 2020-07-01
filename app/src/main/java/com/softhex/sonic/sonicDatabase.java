@@ -127,7 +127,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "imei varchar NOT NULL, " +
             "nivel_acesso int NOT NULL, " +
             "usuario_superior int, " +
-            "master bit, " +
+            "admin bit, " +
             "ativo bit);";
     private static final String CREATE_INDEX_USUARIO_CODIGO = "CREATE UNIQUE INDEX index_usuario_codigo ON "+DB_USUARIO+" (codigo);";
     private static final String CREATE_INDEX_USUARIO_NIVEL_ACESSO = "CREATE INDEX index_usuario_nivel_acesso ON "+DB_USUARIO+" (nivel_acesso);";

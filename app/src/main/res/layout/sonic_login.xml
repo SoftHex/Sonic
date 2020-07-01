@@ -49,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
-
             </LinearLayout>
 
             <LinearLayout
@@ -69,7 +68,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:maxLines="2"
+                        android:maxLines="1"
                         android:ellipsize="end"
                         android:textColor="@color/colorTextWhite"
                         android:textSize="16dp"
@@ -84,7 +83,7 @@
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:textColor="@color/colorTextWhite"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="14dp"
                         android:text="NOME DO VENDEDOR"/>
 
                     <TextView
@@ -107,13 +106,12 @@
                     android:ems="10"
                     android:textSize="18sp"
                     android:layout_marginTop="10dp"
-                    android:padding="6dp"
-                    android:drawablePadding="-24dp"
+                    android:paddingBottom="6dp"
                     android:textColor="@color/colorTextWhite"
                     android:textCursorDrawable="@drawable/whitepipe"
                     android:background="@drawable/border_bottom"
-                    android:textAlignment="center"
-                    android:drawableLeft="@mipmap/ic_key_variant_white_24dp"
+                    android:hint="Senha..."
+                    android:textColorHint="@color/colorAccent2"
                     android:inputType="textPassword"
                     android:layout_gravity="center"/>
 
@@ -140,12 +138,62 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginTop="25dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Outro usuário?"
+                    android:textColor="@color/colorPrimaryWhite"/>
+
+                <Button
+                    android:id="@+id/btAcesse"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="Acesse"
+                    android:layout_marginLeft="12dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimaryWhite"
+                    android:background="@drawable/botao_rect_green"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:textSize="10sp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimaryWhite"
+            android:text="@string/userAdmin"/>
+
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
 
+        <LinearLayout
+            android:id="@+id/llSnackBar"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_gravity="bottom">
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

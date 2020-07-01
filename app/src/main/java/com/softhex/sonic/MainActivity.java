@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mPrefs = new sonicPreferences(this);
-        File f = sonicFile.searchImage(sonicConstants.LOCAL_IMG_USUARIO, mPrefs.Users.getEmpresaId());
 
         DBC = new sonicDatabaseCRUD(this);
 
@@ -43,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
             sonicAppearence.layoutWhitNoLogicalMenu(this, getWindow());
             i  = new Intent(MainActivity.this, sonicSplash.class);
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
-            finish();
+            finishAffinity();
 
         }else {
             sonicAppearence.layoutWhitLogicalMenu(this, getWindow());

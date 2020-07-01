@@ -310,7 +310,7 @@ public class sonicPopularTabelas {
                 startActivity(mList);
             }
             else{
-                mPref.Geral.setError("Seu IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema.\n\nFavor entrar em contato com o responsável na empresa pela administração do serviço.\n\nSe você for usuário de suporte, pode fazer loging agora.");
+                mPref.Geral.setError("Seu IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o aplicativo.\n\nFavor entrar em contato com o responsável na empresa pela administração do serviço.\n\nSe você for usuário de suporte, pode fazer login agora.");
                 ((sonicEmpresa)myCtx).mensagemErro();
                 //new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
             }

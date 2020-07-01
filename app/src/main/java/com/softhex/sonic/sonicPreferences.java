@@ -11,7 +11,7 @@ public class sonicPreferences{
     private final SharedPreferences sharedpreferences;
     private SharedPreferences.Editor editor;
     private Context mContex;
-    private static final String KEEP_LOGGED = "keepLogged";
+    private static final String KEEP_LOGGED = "usuarioLogado";
     private static final String USUARIO_ID = "usuarioId";
     private static final String USUARIO_CODIGO_SINC = "usuarioCodigoSinc";
     private static final String USUARIO_ARQUIVO_SINC = "usuarioArquivoSinc";
@@ -21,6 +21,10 @@ public class sonicPreferences{
     private static final String USUARIO_PATH = "usuarioPath";
     private static final String USUARIO_PICTURE = "usuarioPicture";
     private static final String USUARIO_ATIVO = "usuarioAtivo";
+    private static final String USUARIO_ADMIN = "usuarioAdmin";
+    private static final String USUARIO_ADMIN_ID = "usuarioAdminID";
+    private static final String USUARIO_PRIMEIRO_ACESSO = "usuarioPrimeiroAcesso";
+    private static final String USUARIO_CONFIRMADO = "usuarioConfirmado";
     private static final String FTP_DESCRICAO = "ftpDescricao";
     private static final String FTP_ENDERECO = "ftpEndereco";
     private static final String FTP_USUARIO = "ftpUsuario";
@@ -596,6 +600,42 @@ public class sonicPreferences{
     }
     public class Users {
 
+        public void setConfirmado(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(USUARIO_CONFIRMADO, value);
+            editor.apply();
+        }
+        public boolean getConfirmado(){
+            return sharedpreferences.getBoolean(USUARIO_CONFIRMADO, false);
+        }
+
+        public void setAdmin(Boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(USUARIO_ADMIN, value);
+            editor.apply();
+        }
+        public boolean getAdmin(){
+            return sharedpreferences.getBoolean(USUARIO_ADMIN, false);
+        }
+
+        public void setPrimeiroAcessoID(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(USUARIO_PRIMEIRO_ACESSO, value);
+            editor.apply();
+        }
+        public int getPrimeiroAcessoID(){
+            return sharedpreferences.getInt(USUARIO_PRIMEIRO_ACESSO, 0);
+        }
+
+        public void setAdminID(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(USUARIO_ADMIN_ID, value);
+            editor.apply();
+        }
+        public int getAdminID(){
+            return sharedpreferences.getInt(USUARIO_ADMIN_ID, 0);
+        }
+
         public void setAtivo(Boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(USUARIO_ATIVO, value);
@@ -613,13 +653,13 @@ public class sonicPreferences{
         public String getUsuarioImei(){
             return sharedpreferences.getString(USUARIO_IMEI, "");
         }
-        public void setStatusLogin(Boolean login){
+        public void setLogado(Boolean value){
             editor = sharedpreferences.edit();
-            editor.putBoolean(KEEP_LOGGED, login);
+            editor.putBoolean(KEEP_LOGGED, value);
             editor.apply();
         }
-        public boolean getStatusLogin(){
-            return sharedpreferences.getBoolean(KEEP_LOGGED, false);
+        public boolean getLogado(){
+            return sharedpreferences.getBoolean(KEEP_LOGGED, true);
         }
         public void setUsuarioId(int id){
             editor = sharedpreferences.edit();

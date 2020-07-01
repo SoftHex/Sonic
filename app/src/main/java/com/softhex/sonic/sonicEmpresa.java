@@ -77,7 +77,11 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    new sonicDialog(sonicEmpresa.this).showSnackBar(v,"Verifique sua conexão com a internet...");
+                    Snackbar snackbar = Snackbar.make(llSnackBar, "VERIFIQUE SUA CONEXAÕ COM A INTERNET...", Snackbar.LENGTH_LONG);
+                    SnackbarHelper.configSnackbar(mContext, snackbar);
+                    llSnackBar.addView(snackbar.getView());
+                    snackbar.show();
+                    //new sonicDialog(sonicEmpresa.this).showSnackBar(v,"Verifique sua conexão com a internet...");
 
                 }
 
@@ -107,7 +111,8 @@ public class sonicEmpresa extends sonicRuntimePermission {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.itServer:
-                startActivity(new Intent(this, sonicServidor.class));
+                Intent i = new Intent(sonicEmpresa.this, sonicServidor.class);
+                startActivity(i);
                 break;
         }
         return false;
@@ -126,15 +131,6 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-    public void showKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
-    }
-
     public void mensagemErro(){
 
         Snackbar snackbar = Snackbar
@@ -143,7 +139,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
                     @Override
                     public void onClick(View view) {
                         new android.app.AlertDialog.Builder(mContext)
-                                .setTitle("Atenção!")
+                                .setTitle("Atenção!\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -171,11 +167,13 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
         View v = getLayoutInflater().inflate(R.layout.dialog_suporte_senha, null);
         EditText senha = v.findViewById(R.id.etSuporteSenha);
+        senha.setHint("Senha de suporte...");
         AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
         alertDialog.setTitle("Login Suporte");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                hideKeyboard(v);
                 if(!senha.getText().toString().equals("123456")){
                     senhaIncorreta();
                 }else{
@@ -218,15 +216,17 @@ public class sonicEmpresa extends sonicRuntimePermission {
             cod.add(users.get(i).getCodigo());
         }
 
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+        CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 new sonicDatabaseCRUD(mContext).Usuario.setAtivo(cod.get(item));
                 mPrefs.Users.setAtivo(true);
-                startActivity(new Intent(sonicEmpresa.this, sonicSplash.class));
-                finish();
+                Intent i = new Intent(sonicEmpresa.this, sonicSplash.class);
+                //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                finishAffinity();
             }
         }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             @Override
@@ -236,6 +236,16 @@ public class sonicEmpresa extends sonicRuntimePermission {
         }).show();
 
     }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+    public void showKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
 
     @Override
     protected void onPause() {

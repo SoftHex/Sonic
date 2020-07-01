@@ -20,6 +20,7 @@ public class sonicUsuariosHolder {
      int empresa_id;
      String mvenda;
      int mvisita;
+     int admin;
      String  ativo;
      String  data;
      String  hora;
@@ -69,6 +70,11 @@ public class sonicUsuariosHolder {
         this.hora = hora;
         this.latitude = latitude;
         this.login = longitude;
+    }
+
+
+    public int getAdmin() {
+        return admin;
     }
 
     public Integer getId(){
@@ -140,6 +146,10 @@ public class sonicUsuariosHolder {
     }
     public String getLongitude(){
         return this.longitude;
+    }
+
+    public void setAdmin(int admin) {
+        this.admin = admin;
     }
 
     public void setId(Integer id) { this.id = id; }
