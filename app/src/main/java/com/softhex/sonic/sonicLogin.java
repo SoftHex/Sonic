@@ -112,7 +112,6 @@ public class sonicLogin extends AppCompatActivity {
 
         });
 
-
     }
 
     private void exibirListaUsuarios() {
@@ -125,22 +124,18 @@ public class sonicLogin extends AppCompatActivity {
         List<Integer> cod = new ArrayList<>();
 
         for(int i=0; i < users.size(); i++ ){
-            l.add(users.get(i).getCodigo()+" - "+users.get(i).getNome());
-            cod.add(users.get(i).getCodigo());
+            if(!users.get(i).getNome().contains(mPrefs.Users.getUsuarioNome())){
+                l.add(users.get(i).getCodigo()+" - "+users.get(i).getNome());
+                cod.add(users.get(i).getCodigo());
+            }
         }
 
-        final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
+        CharSequence[] chars = l.toArray(new CharSequence[l.size()]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(sonicLogin.this);
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                mData.Usuario.setAtivo(cod.get(item));
-                mData.Empresa.selecionarPrimeiraEmpresa();
-                mData.Database.truncateAllTablesNonSite();
-                mPrefs.Users.setAtivo(true);
-                mPrefs.Users.setLogado(true);
-                startActivity(new Intent(sonicLogin.this, sonicSplash.class));
-                sonicLogin.this.finish();
+                finalizarTroca(cod.get(item));
             }
         }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             @Override
@@ -151,6 +146,57 @@ public class sonicLogin extends AppCompatActivity {
 
     }
 
+    private void finalizarTroca(int cod){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(sonicLogin.this);
+        builder.setMessage("Se você trocar de usuário, todos os dados de "+mPrefs.Users.getUsuarioNome()+" serão apagados. Deseja prosseguir?")
+                .setPositiveButton("PROSSEGUIR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mData.Usuario.setAtivo(cod);
+                        mData.Empresa.selecionarPrimeiraEmpresa();
+                        mData.Database.truncateAllTablesNonNecessary();
+                        mPrefs.Users.setAtivo(true);
+                        mPrefs.Users.setLogado(true);
+                        confirmarTroca();
+
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+
+    }
+
+    private void confirmarTroca(){
+
+        mProgress = new ProgressDialog(mActivity);
+        mProgress.setCancelable(false);
+        mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgress.setIndeterminate(true);
+        mProgress.setMessage("Trocando usuário...");
+        mProgress.show();
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    mProgress.dismiss();
+                                    startActivity(new Intent(sonicLogin.this, sonicSplash.class));
+                                    finishAffinity();
+
+                                }
+                            }
+                , 1000);
+
+    }
 
     public class mAsyncTask extends AsyncTask<String, Void, Boolean>{
         @Override

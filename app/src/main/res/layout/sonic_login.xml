@@ -130,7 +130,7 @@
                 <Button
                     android:id="@+id/btEntrar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/largeButton"
                     android:layout_margin="25dp"
                     android:textColor="@color/colorPrimaryWhite"
                     android:text="ENTRAR"
@@ -146,19 +146,14 @@
                 android:visibility="gone"
                 android:layout_marginTop="25dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Outro usuário?"
-                    android:textColor="@color/colorPrimaryWhite"/>
-
                 <Button
                     android:id="@+id/btAcesse"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:text="Acesse"
-                    android:layout_marginLeft="12dp"
+                    android:layout_height="@dimen/normalButton"
+                    android:text="TROCAR USUÁRIO"
                     android:textSize="12sp"
+                    android:elevation="10dp"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimaryWhite"
                     android:background="@drawable/botao_rect_green"/>
 

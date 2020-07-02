@@ -54,7 +54,7 @@ public class sonicSplash extends AppCompatActivity {
         protected Boolean doInBackground(Integer... integers) {
             carregarDados();
             limparDados();
-            finalizarRota();
+            //finalizarRota();
             preencherTabelasFixas();
             return true;
         }
@@ -79,7 +79,6 @@ public class sonicSplash extends AppCompatActivity {
             new mAsyncTaskCarregarDados().execute();
         }else {
             Intent i  = new Intent(sonicSplash.this, sonicEmpresa.class);
-            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finishAffinity();
         }

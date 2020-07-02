@@ -673,7 +673,7 @@ public class sonicMain extends AppCompatActivity{
         mProgress.setCancelable(false);
         mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgress.setIndeterminate(true);
-        mProgress.setTitle("Saindo...");
+        mProgress.setMessage("Saindo...");
         mProgress.show();
         mPrefs.Users.setLogado(false);
         mData.Usuario.setAtivo(mPrefs.Users.getPrimeiroAcessoID());
@@ -709,7 +709,7 @@ public class sonicMain extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int item) {
                 mData.Usuario.setAtivo(cod.get(item));
                 mData.Empresa.selecionarPrimeiraEmpresa();
-                mData.Database.truncateAllTablesNonSite();
+                mData.Database.truncateAllTablesNonNecessary();
                 mPrefs.Users.setAtivo(true);
                 startActivity(new Intent(sonicMain.this, MainActivity.class));
                 sonicMain.this.finish();

@@ -29,7 +29,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
     private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
-    private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_MATRIZ;
+    private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
     private final String TABLE_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private final String TABLE_USUARIO = sonicConstants.TB_USUARIO;
     private final String TABLE_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
@@ -149,6 +149,8 @@ public class sonicDatabaseCRUD {
                     result = result && cursor.moveToFirst();
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA_USUARIO , null);
                     result = result &&  cursor.moveToFirst();
+                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_GRUPO_EMPRESAS , null);
+                    result = result &&  cursor.moveToFirst();
                 }catch (SQLiteException e){
                     mPrefs.Geral.setError(e.getMessage());
                     e.printStackTrace();
@@ -184,13 +186,13 @@ public class sonicDatabaseCRUD {
 
         }
 
-        public void truncateAllTablesNonSite(){
+        public void truncateAllTablesNonNecessary(){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
 
             try{
 
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM "+DB_NAME+" WHERE name NOT IN ('"+TABLE_SITE+"','"+TABLE_FTP+"','"+TABLE_EMPRESA+"','"+TABLE_NIVEL_ACESSO+"','"+TABLE_USUARIO+"','"+TABLE_EMPRESA_USUARIO+"')", null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN ('sqlite_master', 'sqlite_sequence','"+TABLE_SITE+"','"+TABLE_FTP+"','"+TABLE_EMPRESA+"','"+TABLE_NIVEL_ACESSO+"','"+TABLE_USUARIO+"','"+TABLE_EMPRESA_USUARIO+"','"+TABLE_GRUPO_EMPRESAS+"')", null);
                 List<String> tables = new ArrayList<>();
 
                 while (cursor.moveToNext()){
@@ -1414,63 +1416,6 @@ public class sonicDatabaseCRUD {
 
             return res;
 
-        }
-
-        public List<sonicUsuariosHolder> selectUsuario(int usuario_superior){
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicUsuariosHolder> USUARIO = new ArrayList<sonicUsuariosHolder>();
-
-            String order = prefs.getString("order_usuario", "");
-            Boolean vswitch = prefs.getBoolean("usuario_switch", false);
-            String order2 = "";
-            String vsswitch = "";
-            if(vswitch){
-                vsswitch = " OR u.codigo = "+usuario_superior;
-            }
-
-
-            switch (order){
-                case "0":
-                    order2 = "nome";
-                    break;
-                case "1":
-                    order2 = "u.nivel_acesso";
-                    break;
-                default:
-                    order2 = "nome";
-            }
-
-            String MY_QUERY = "" +
-                    "SELECT " +
-                    "u.codigo, " +
-                    "u.nome, " +
-                    "u.login, " +
-                    "na.nome AS nivel_acesso, " +
-                    "u.ativo " +
-                    "FROM "+TABLE_USUARIO+" u " +
-                    "JOIN "+TABLE_NIVEL_ACESSO+" na " +
-                    "ON u.nivel_acesso = na.nivel " +
-                    "WHERE u.usuario_superior IN " +
-                    "(SELECT u.codigo FROM "+TABLE_USUARIO+" u WHERE u.usuaario_superior = "+usuario_superior+") " +
-                    "OR u.usuario_superior = "+usuario_superior+vsswitch+" ORDER BY "+order2;
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(MY_QUERY, null);
-
-            while(cursor.moveToNext()){
-
-                sonicUsuariosHolder usuario = new sonicUsuariosHolder();
-
-                usuario.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                usuario.setNome(cursor.getString(cursor.getColumnIndex("nome")));
-                usuario.setLogin(cursor.getString(cursor.getColumnIndex("login")));
-                usuario.setNivelAcesso(cursor.getString(cursor.getColumnIndex("nivel_acesso")));
-                usuario.setAtivo(cursor.getString(cursor.getColumnIndex("ativo")));
-                USUARIO.add(usuario);
-
-            }
-            cursor.close();
-            return USUARIO;
         }
 
         public List<sonicUsuariosHolder> selectUsuarioAtivo(){

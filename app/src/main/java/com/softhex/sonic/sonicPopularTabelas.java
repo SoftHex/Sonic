@@ -48,7 +48,7 @@ public class sonicPopularTabelas {
             { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "Nível de Acesso", "save" },
             { "[USUARIOS]", sonicConstants.TB_USUARIO, "Usuários" ,"save" },
             { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
-            { "[MATRIZ]", sonicConstants.TB_MATRIZ, "Matriz", "save"},
+            { "[MATRIZ]", sonicConstants.TB_GRUPO_EMPRESAS, "Grupo Empresas", "save"},
             { "[CLIENTES]", sonicConstants.TB_CLIENTE, "Clientes", "save" },
             { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "save" },
             { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "save" },
@@ -161,7 +161,7 @@ public class sonicPopularTabelas {
 
                                     }else{
                                         count += 1;
-                                        publishProgress("Gravando em "+ Html.fromHtml("<b>"+tabela2+"</b>"), String.valueOf(count));
+                                        publishProgress("Gravando "+ Html.fromHtml("<b>"+tabela2+"</b>"), String.valueOf(count));
 
                                         String str = line;
                                         int pos = str.indexOf("=") + 1;

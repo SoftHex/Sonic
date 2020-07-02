@@ -23,7 +23,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_SITE = sonicConstants.TB_SITE;
     private static final String DB_FTP = sonicConstants.TB_FTP;
     private static final String DB_EMPRESA = sonicConstants.TB_EMPRESA;
-    private static final String DB_MATRIZ = sonicConstants.TB_MATRIZ;
+    private static final String DB_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
     private static final String DB_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
     private static final String DB_USUARIO = sonicConstants.TB_USUARIO;
     private static final String DB_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
@@ -74,6 +74,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private Context myCtx;
 
+    // INÍCIO TABELAS FUNDAMENTAIS/NECESSÁRIAS PARA INICIAR O APLICATIVO
+
     private static final String CREATE_SITE = "CREATE TABLE IF NOT EXISTS "+DB_SITE+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "site varchar NOT NULL, " +
@@ -95,7 +97,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "selecionada int);";
     private static final String CREATE_INDEX_EMPRESA_CODIGO = "CREATE UNIQUE INDEX index_empresa_codigo ON "+DB_EMPRESA+" (codigo);";
 
-    private static final String CREATE_MATRIZ = "CREATE TABLE IF NOT EXISTS "+ DB_MATRIZ +" (" +
+    private static final String CREATE_GRUPO_EMPRESAS = "CREATE TABLE IF NOT EXISTS "+ DB_GRUPO_EMPRESAS +" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_empresa int NOT NULL, " +
             "nome varchar NOT NULL, " +
@@ -110,7 +112,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "whatsapp varchar," +
             "email varchar," +
             "endereco_eletronico varchar);";
-    private static final String CREATE_INDEX_MATRIX_CODIGO_EMPRESA = "CREATE UNIQUE INDEX index_matriz_codigo_empresa ON "+ DB_MATRIZ +" (codigo_empresa);";
+    private static final String CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA = "CREATE UNIQUE INDEX index_grupo_empresas_codigo_empresa ON "+ DB_GRUPO_EMPRESAS +" (codigo_empresa);";
 
     private static final String CREATE_NIVEL_ACESSO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -144,6 +146,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo));" ;
     private static final String CREATE_INDEX_EMPRESA_USUARIO_CODIGO_USUARIO = "CREATE INDEX index_empresa_usuario_codigo_usuario ON "+DB_EMPRESA_USUARIO+" (codigo_usuario);";
     private static final String CREATE_INDEX_EMPRESA_USUARIO_CODIGO_EMPRESA = "CREATE INDEX index_empresa_usuario_codigo_empresa ON "+DB_EMPRESA_USUARIO+" (codigo_empresa);";
+
+    // FIM TABELAS FUNDAMENTAIS/NECESSÁRIAS PARA INICIAR O APLICATIVO
 
     private static final String CREATE_CLIENTE = "CREATE TABLE IF NOT EXISTS "+DB_CLIENTE+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -590,8 +594,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_EMPRESA);
         DB.execSQL(CREATE_INDEX_EMPRESA_CODIGO);
         // TABELA MATRIZ
-        DB.execSQL(CREATE_MATRIZ);
-        DB.execSQL(CREATE_INDEX_MATRIX_CODIGO_EMPRESA);
+        DB.execSQL(CREATE_GRUPO_EMPRESAS);
+        DB.execSQL(CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA);
         // TABELA NIVEL_ACESSO
         DB.execSQL(CREATE_NIVEL_ACESSO);
         DB.execSQL(CREATE_INDEX_NIVEL_ACESSO_NIVEL);
