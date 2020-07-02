@@ -99,6 +99,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     }
 
 
+    @Override
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
+        super.registerAdapterDataObserver(observer);
+    }
+
     public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, FloatingActionButton fbup, boolean cnpj) {
 
         this.myCons = new sonicConstants();
@@ -137,7 +142,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
 
-            mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            /*mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -150,14 +155,54 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                         }
                     }
                 }
-            });
+
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    switch (newState){
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            mRecycler.removeOnScrollListener(this);
+                            break;
+                    }
+                }
+            });*/
+
+            RecyclerView.OnScrollListener mListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
+                    if(!isLoading){
+                        if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
+                            if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
+                                loadMore();
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    switch (newState){
+                        case RecyclerView.SCROLL_STATE_IDLE:
+                            if(linearLayoutManager.findFirstCompletelyVisibleItemPosition()<sonicConstants.TOTAL_ITENS_LOAD*2)
+                                mRecycler.smoothScrollToPosition(0);
+                            break;
+                    }
+                }
+            };
+
+            mRecycler.addOnScrollListener(mListener);
         }
 
         fbUp.setOnClickListener((View v)->{
-            mRecycler.scrollToPosition(0);
+            mRecycler.scrollToPosition(sonicConstants.TOTAL_ITENS_LOAD);
         });
 
     }
+
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

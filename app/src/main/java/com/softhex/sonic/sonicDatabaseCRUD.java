@@ -2,13 +2,11 @@ package com.softhex.sonic;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -74,9 +72,7 @@ public class sonicDatabaseCRUD {
     private final String TABLE_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
     private sonicDatabase DB;
     private sonicDatabaseLogCRUD DBCL;
-    private sonicPreferences pref;
     private sonicUtils myUtil;
-    private SharedPreferences prefs;
     private sonicConstants myCons;
     private Context myCtx;
     private sonicSystem mySystem;
@@ -91,10 +87,8 @@ public class sonicDatabaseCRUD {
         this.mPrefs = new sonicPreferences(context);
         this.DB = new sonicDatabase(myCtx);
         this.DBCL = new sonicDatabaseLogCRUD(myCtx);
-        this.prefs = PreferenceManager.getDefaultSharedPreferences(myCtx);
         this.myCons = new sonicConstants();
         this.mySystem = new sonicSystem(myCtx);
-        this.pref = new sonicPreferences(myCtx);
 
     }
 

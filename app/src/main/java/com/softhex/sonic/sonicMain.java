@@ -39,6 +39,7 @@ import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -58,7 +59,9 @@ import com.softhex.view.ProgressProfileView;
 
 import java.io.File;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -112,10 +115,13 @@ public class sonicMain extends AppCompatActivity{
     private TextView[] dots;
     private Locale meuLocal = new Locale( "pt", "BR" );
     private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
+    private Calendar mCalendar;
+    private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
     private LinearLayout dotsLayout;
     private List<sonicUsuariosHolder> listaUser;
     private List<sonicEmpresasHolder> listaEmpresa;
     private LinearLayout llGroupVendas;
+    private LinearLayout llSnackBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +143,7 @@ public class sonicMain extends AppCompatActivity{
         myActionBar.setTitle(R.string.appName);
 
         // INSTANCIANDO OS OBJETOS
+        llSnackBar = findViewById(R.id.llSnackBar);
         llDetail = findViewById(R.id.llDetail);
         usuarioMeta = sonicConstants.USUARIO_ATIVO_META_VENDA;
         tvEmpresa = findViewById(R.id.tvEmpresa);
@@ -908,8 +915,9 @@ public class sonicMain extends AppCompatActivity{
 
     private void dialogBackup() {
 
+        mCalendar = Calendar.getInstance();
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(mActivity);
-        builder.setMessage("O backup será salvo no diretório: "+ sonicConstants.LOCAL_DATA_BACKUP)
+        builder.setMessage("O backup será salvo em "+ sonicConstants.LOCAL_DATA_BACKUP+"Sonic-bkp-"+(new SimpleDateFormat("dd-MM-yyy-HHmm").format(mCalendar.getTime())))
                 .setPositiveButton("FAZER BACKUP", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -935,7 +943,7 @@ public class sonicMain extends AppCompatActivity{
         myProgressDialog.setProgressStyle(0);
         myProgressDialog.show();
 
-        String result = new sonicDatabase(mActivity).exportDatabase();
+        boolean result = new sonicDatabase(mActivity).exportDatabase();
 
         Handler handler = new Handler();
 
@@ -944,14 +952,75 @@ public class sonicMain extends AppCompatActivity{
                                 public void run() {
 
                                     myProgressDialog.dismiss();
-
-                                    new sonicDialog(mActivity).showMS("Backup",result, sonicDialog.MSG_INFO);
+                                    if(result){
+                                        Snackbar snackbar = Snackbar.make(llSnackBar, "BACUKP SALVO", Snackbar.LENGTH_LONG);
+                                        SnackbarHelper.configSnackbar(sonicMain.this, snackbar, SnackbarHelper.SNACKBAR_SUCCESS);
+                                        llSnackBar.addView(snackbar.getView());
+                                        snackbar.show();
+                                    }else{
+                                        Snackbar snackbar = Snackbar.make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
+                                                .setAction("DETALHE", new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        new android.app.AlertDialog.Builder(sonicMain.this)
+                                                                .setMessage(mPrefs.Geral.getError())
+                                                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        dialog.dismiss();
+                                                                        llSnackBar.removeAllViews();
+                                                                    }
+                                                                }).show();
+                                                    }
+                                                });
+                                        SnackbarHelper.configSnackbar(sonicMain.this, snackbar, SnackbarHelper.SNACKBAR_WARNING);
+                                        llSnackBar.addView(snackbar.getView());
+                                        snackbar.show();
+                                    }
 
                                 }
                             }
                 , 1000);
 
+    }
 
+    public void mensagemErro(){
+
+        Snackbar snackbar = Snackbar
+                .make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
+                .setAction("DETALHE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new android.app.AlertDialog.Builder(mContext)
+                                .setTitle("Atenção!\n")
+                                .setMessage(mPrefs.Geral.getError())
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        llSnackBar.removeAllViews();
+                                    }
+                                }).show();
+                    }
+                });
+        SnackbarHelper.configSnackbar(mContext, snackbar, SnackbarHelper.SNACKBAR_WARNING);
+        llSnackBar.addView(snackbar.getView());
+        snackbar.show();
+
+    }
+
+    public void mensagemOK(String msg){
+
+        llSnackBar.removeAllViews();
+        Snackbar snackbar = Snackbar
+                .make(llSnackBar, msg, Snackbar.LENGTH_INDEFINITE)
+                .setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+        SnackbarHelper.configSnackbar(mContext, snackbar, SnackbarHelper.SNACKBAR_SUCCESS);
+        llSnackBar.addView(snackbar.getView());
+        snackbar.show();
 
     }
 
@@ -1005,8 +1074,6 @@ public class sonicMain extends AppCompatActivity{
 
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -1023,8 +1090,7 @@ public class sonicMain extends AppCompatActivity{
                 mPrefs.Geral.setHomeRefresh(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
                 myFtp = new sonicFtp(mActivity);
-                String file = String.format("%5s",listaUser.get(0).getCodigo()).replace(" ", "0")+".TXT";
-                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+file);
+                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+mPrefs.Users.getArquivoSinc());
                 return false;
 
         }

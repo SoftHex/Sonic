@@ -87,9 +87,9 @@
   <color name="colorPrimaryGreen5">#008080</color>
   <color name="colorTypeInfo">#79b3e4</color>
   <color name="colorTypeHelp">#C0C0C0</color>
-  <color name="colorTypeWrong">#ed7861</color>
-  <color name="colorTypeWarning">#e8bd4b</color>
-  <color name="colorTypeSuccess">#90b06e</color>
+  <color name="colorTypeError">#FF6347</color>
+  <color name="colorTypeWarning">#FFD700</color>
+  <color name="colorTypeSuccess">#59C354</color>
   <color name="colorLogin">#6E6E6E</color>
   <color name="colorLoginT">#996E6E6E</color>
   <color name="colorLoginStatusBar">#424242</color>

@@ -32,7 +32,7 @@ import java.util.List;
 
 public class sonicPopularTabelas {
 
-    private Context myCtx;
+    private Context mContext;
     private Activity mAct;
     private sonicPreferences mPref;
     private sonicDatabaseLogCRUD DBCL;
@@ -75,12 +75,12 @@ public class sonicPopularTabelas {
     };
 
     sonicPopularTabelas(Activity act){
-        this.myCtx = act;
+        this.mContext = act;
         this.mAct = act;
-        this.DBCL = new sonicDatabaseLogCRUD(myCtx);
-        this.mySystem = new sonicSystem(myCtx);
-        this.DBC = new sonicDatabaseCRUD(myCtx);
-        this.mPref = new sonicPreferences(myCtx);
+        this.DBCL = new sonicDatabaseLogCRUD(mContext);
+        this.mySystem = new sonicSystem(mContext);
+        this.DBC = new sonicDatabaseCRUD(mContext);
+        this.mPref = new sonicPreferences(mContext);
     }
 
 
@@ -92,10 +92,9 @@ public class sonicPopularTabelas {
 
             new Handler(Looper.getMainLooper()).post(()-> {
 
-                myProgress = new ProgressDialog(myCtx);
+                myProgress = new ProgressDialog(mContext);
                 myProgress.setCancelable(false);
                 myProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                //myProgress.setTitle("Gravando");
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
@@ -103,9 +102,25 @@ public class sonicPopularTabelas {
             });
 
         }else {
-            new sonicDialog(myCtx).showMI(R.string.headerWarning,R.string.fileNotFound, sonicDialog.MSG_WARNING);
+            mPref.Geral.setError(mContext.getResources().getString(R.string.fileNotFound));
+            enviarErro();
         }
 
+    }
+
+    private void enviarErro(){
+        switch (mPref.Sincronizacao.getCalledActivity()){
+            case "sonicMain":
+                ((sonicMain)mContext).mensagemErro();
+                break;
+            case "sonicSincronizacao":
+                break;
+            case "sonicProdutos":
+                break;
+            case "sonicClientes":
+                break;
+
+        }
     }
 
     protected static boolean contains(CharSequence sequence)
@@ -132,8 +147,6 @@ public class sonicPopularTabelas {
                     reader = new BufferedReader(new InputStreamReader(f, StandardCharsets.ISO_8859_1));
                     int count=0;
                     myProgress.setMax(sonicUtils.countFileLines(file));
-                    String tabela = "";
-                    String tabela2 = "";
 
                     String line = reader.readLine();
 
@@ -149,8 +162,6 @@ public class sonicPopularTabelas {
                                     DBC.Database.cleanData(arr[1]);
                                 }
 
-                                tabela = line;
-                                tabela2 = arr[2];
                                 line = reader.readLine();
 
                                 while (line != null && line.indexOf("[") != 0) {
@@ -161,7 +172,7 @@ public class sonicPopularTabelas {
 
                                     }else{
                                         count += 1;
-                                        publishProgress("Gravando "+ Html.fromHtml("<b>"+tabela2+"</b>"), String.valueOf(count));
+                                        publishProgress("Gravando "+ Html.fromHtml("<b>"+arr[2]+"</b>"), String.valueOf(count));
 
                                         String str = line;
                                         int pos = str.indexOf("=") + 1;
@@ -205,12 +216,15 @@ public class sonicPopularTabelas {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             myProgress.dismiss();
-            new sonicUtils(myCtx).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
+            new sonicUtils(mContext).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
             if(aBoolean){
-                sonicDatabaseCRUD mData = new sonicDatabaseCRUD(myCtx);
+                sonicDatabaseCRUD mData = new sonicDatabaseCRUD(mContext);
                 switch (mPref.Sincronizacao.getDownloadType()){
                     case "DADOS":
-                        new PromptDialog(myCtx)
+                        mPref.Geral.setFirstSinc(false);
+                        mPref.Users.setUltimaSincID(mPref.Users.getUsuarioId());
+                        mPref.Users.setUltimaSincNome(mPref.Users.getUsuarioNome());
+                        new PromptDialog(mContext)
                                 .setDialogType(sonicDialog.MSG_SUCCESS)
                                 .setAnimationEnable(true)
                                 .setTitleText(R.string.headerSuccess)
@@ -245,7 +259,7 @@ public class sonicPopularTabelas {
                         }
                         break;
                     case "ESTOQUE":
-                        new PromptDialog(myCtx)
+                        new PromptDialog(mContext)
                                 .setDialogType(sonicDialog.MSG_SUCCESS)
                                 .setAnimationEnable(true)
                                 .setTitleText(R.string.headerSuccess)
@@ -270,12 +284,12 @@ public class sonicPopularTabelas {
 
     public void primeiroAcesso(){
 
-        TelephonyManager myPhoneManager = (TelephonyManager)myCtx.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager myPhoneManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(myCtx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED){
 
 
-            if(new sonicDatabaseCRUD(myCtx).Database.checkMinimumData()){
+            if(new sonicDatabaseCRUD(mContext).Database.checkMinimumData()){
 
                 mPref.Users.setUsuarioImei(android.os.Build.VERSION.SDK_INT >= 26 ? myPhoneManager.getImei() : myPhoneManager.getDeviceId());
 
@@ -285,17 +299,18 @@ public class sonicPopularTabelas {
 
                 //new sonicDialog(myCtx).showMS("::: Atenção :::", "Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.", sonicDialog.MSG_WARNING);
                 mPref.Geral.setError("Não foi possível gravar os dados nas tabelas. O arquivo solicitado parece não conter dados suficientes ou está mal formatado.");
-                ((sonicEmpresa)myCtx).mensagemErro();
+                ((sonicEmpresa) mContext).mensagemErroDetalhe(false);
             }
 
         }else{
-            ActivityCompat.requestPermissions(((Activity) myCtx),
+            ActivityCompat.requestPermissions(((Activity) mContext),
                     new String[]{Manifest.permission.READ_PHONE_STATE},
                     1);
 
         }
 
     }
+
 
     private class mAsyncTask extends AsyncTask<String, String, List<sonicUsuariosHolder>>{
         @Override
@@ -311,7 +326,7 @@ public class sonicPopularTabelas {
             }
             else{
                 mPref.Geral.setError("Seu IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o aplicativo.\n\nFavor entrar em contato com o responsável na empresa pela administração do serviço.\n\nSe você for usuário de suporte, pode fazer login agora.");
-                ((sonicEmpresa)myCtx).mensagemErro();
+                ((sonicEmpresa) mContext).mensagemErroDetalhe(true);
                 //new sonicDialog(myCtx).showMS("::: Atenção :::" , "Seu aparelho com o IMEI: " + mPref.Users.getUsuarioImei() + " não está cadastrado para usar o sistema. Favor entrar em contato com o responsável na empresa pela administração do serviço.", sonicDialog.MSG_WARNING);
             }
         }
@@ -319,15 +334,15 @@ public class sonicPopularTabelas {
 
     public void startActivity(List<sonicUsuariosHolder> mList){
 
-        Intent i = new Intent(myCtx, sonicPrimeiroAcesso.class);
+        Intent i = new Intent(mContext, sonicPrimeiroAcesso.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mPref.Users.setEmpresaId(mList.get(0).getEmpresaId());
         mPref.Users.setEmpresaNome(mList.get(0).getEmpresa());
         mPref.Users.setUsuarioId(mList.get(0).getCodigo());
         mPref.Users.setUsuarioNome(mList.get(0).getNome());
         mPref.Users.setUsuarioCargo(mList.get(0).getCargo());
-        myCtx.startActivity(i);
-        ((AppCompatActivity) myCtx).finish();
+        mContext.startActivity(i);
+        ((AppCompatActivity) mContext).finish();
 
     }
 }

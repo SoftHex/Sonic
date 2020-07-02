@@ -25,6 +25,8 @@ public class sonicPreferences{
     private static final String USUARIO_ADMIN_ID = "usuarioAdminID";
     private static final String USUARIO_PRIMEIRO_ACESSO = "usuarioPrimeiroAcesso";
     private static final String USUARIO_CONFIRMADO = "usuarioConfirmado";
+    private static final String USUARIO_ULTIMA_SINC_ID = "usuarioUltimaSincID";
+    private static final String USUARIO_ULTIMA_SINC_NOME = "usuarioUltimaSincNome";
     private static final String FTP_DESCRICAO = "ftpDescricao";
     private static final String FTP_ENDERECO = "ftpEndereco";
     private static final String FTP_USUARIO = "ftpUsuario";
@@ -96,6 +98,7 @@ public class sonicPreferences{
     private static final String SINC_REFRESH = "sincRefresh";
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
+    private static final String SINC_FIRST = "sincFirst";
     private static final String ROTA_ID = "rotaId";
     private static final String ROTA_ITEM_POSITION = "rotaItemPosition";
     private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
@@ -726,6 +729,26 @@ public class sonicPreferences{
         public String getPicture(int empresa){
             return empresa+"_"+sharedpreferences.getInt(USUARIO_ID,0)+".JPG";
         }
+
+        public void setUltimaSincID(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(USUARIO_ULTIMA_SINC_ID, value);
+            editor.apply();
+        }
+
+        public int getUltimaSincID(){
+            return sharedpreferences.getInt(USUARIO_ULTIMA_SINC_ID, 0);
+        }
+
+        public void setUltimaSincNome(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(USUARIO_ULTIMA_SINC_NOME, value);
+            editor.apply();
+        }
+
+        public String getUltimaSincNome(){
+            return sharedpreferences.getString(USUARIO_ULTIMA_SINC_NOME, "");
+        }
     }
     public class Path{
         private void setEnvironment(){
@@ -888,7 +911,7 @@ public class sonicPreferences{
             editor.apply();
         }
         public boolean getFirstSinc(){
-            return sharedpreferences.getBoolean(GERAL_FIRST_SINC, false);
+            return sharedpreferences.getBoolean(GERAL_FIRST_SINC, true);
         }
     }
     public class Sincronizacao{

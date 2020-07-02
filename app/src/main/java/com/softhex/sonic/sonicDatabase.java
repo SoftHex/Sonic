@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by Administrador on 10/07/2017.
@@ -72,7 +72,10 @@ public class sonicDatabase extends SQLiteOpenHelper{
     // TABELAS PREENCHIDAS SEM SINCRONIZAÇÃO
     private static final String DB_BANCOS = sonicConstants.TB_BANCOS;
 
-    private Context myCtx;
+    private Context mContext;
+    private sonicPreferences mPrefs;
+    private sonicDatabaseLogCRUD mDataLog;
+    private sonicSystem mSystem;
 
     // INÍCIO TABELAS FUNDAMENTAIS/NECESSÁRIAS PARA INICIAR O APLICATIVO
 
@@ -582,7 +585,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
     public sonicDatabase(Context context) {
         //super(context, Environment.getExternalStorageDirectory().getPath()+sonicConstants.LOCAL_DATA+DATABASE+".db" , null, DB_VERSION);
         super(context, DATABASE , null, DB_VERSION);
-        this.myCtx = context;
+        this.mContext = context;
+        this.mPrefs = new sonicPreferences(context);
     }
 
     @Override
@@ -738,18 +742,19 @@ public class sonicDatabase extends SQLiteOpenHelper{
         super.finalize();
     }
 
-    public String exportDatabase() {
+    public boolean exportDatabase() {
 
-        String result = "";
+        Boolean result = false;
 
+        StackTraceElement el = Thread.currentThread().getStackTrace()[2];
         File externalStorageDirectory = Environment.getExternalStorageDirectory();
         File dataDirectory = Environment.getDataDirectory();
 
         FileChannel source = null;
         FileChannel destination = null;
-
-        String currentDBPath = "/data/" + myCtx.getApplicationInfo().packageName + "/databases/"+DATABASE;
-        String backupDBPath = sonicConstants.LOCAL_DATA_BACKUP+"Sonic-bkp-"+(new SimpleDateFormat("dd-MM-yyy-HHmm").format(new Date()))+".db";
+        Calendar mCalendar = Calendar.getInstance();
+        String currentDBPath = "/data/" + mContext.getApplicationInfo().packageName + "/databases/"+DATABASE;
+        String backupDBPath = sonicConstants.LOCAL_DATA_BACKUP+"Sonic-bkp-"+(new SimpleDateFormat("dd-MM-yyy-HHmm").format(mCalendar.getTime()))+".db";
         File currentDB = new File(dataDirectory, currentDBPath);
         File backupDB = new File(externalStorageDirectory, backupDBPath);
 
@@ -758,22 +763,23 @@ public class sonicDatabase extends SQLiteOpenHelper{
             destination = new FileOutputStream(backupDB).getChannel();
             destination.transferFrom(source, 0, source.size());
 
-           result = "Backup salvo em: "+backupDBPath;
+            result = true;
 
         } catch (IOException e) {
-            result = e.getMessage();
+            result = false;
+            mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
         } finally {
             try {
                 if (source != null) source.close();
             } catch (IOException e) {
-                result = e.getMessage();
+                mPrefs.Geral.setError(e.getMessage());
                 e.printStackTrace();
             }
             try {
                 if (destination != null) destination.close();
             } catch (IOException e) {
-                result = e.getMessage();
+                mPrefs.Geral.setError(e.getMessage());
                 e.printStackTrace();
             }
         }

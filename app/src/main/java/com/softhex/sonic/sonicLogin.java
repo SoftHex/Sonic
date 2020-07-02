@@ -38,10 +38,11 @@ public class sonicLogin extends AppCompatActivity {
     private TextView tvUsuario, tvCargo, tvEmpresa;
     private ImageView myImage;
     private LinearLayout llAdmin;
-    private Button btAcesse;
+    private Button btTrocarUsuario;
     private sonicPreferences mPrefs;
     private LinearLayout llSnackBar;
     private sonicDatabaseCRUD mData;
+    private Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +65,13 @@ public class sonicLogin extends AppCompatActivity {
         tvEmpresa.setText(pref.Users.getEmpresaNome());
         btEntrar = findViewById(R.id.btEntrar);
         llAdmin = findViewById(R.id.llAdmin);
-        btAcesse = findViewById(R.id.btAcesse);
+        btTrocarUsuario = findViewById(R.id.btTrocarUsuario);
         etSenha = findViewById(R.id.etSenha);
         llSnackBar = findViewById(R.id.llSnackBar);
 
         if(mPrefs.Users.getAdmin() && mPrefs.Users.getConfirmado()){
             llAdmin.setVisibility(View.VISIBLE);
-            btAcesse.setOnClickListener((View v)->{
+            btTrocarUsuario.setOnClickListener((View v)->{
                 exibirListaUsuarios();
             });
         }
@@ -91,26 +92,32 @@ public class sonicLogin extends AppCompatActivity {
 
         btEntrar.setOnClickListener((View v)-> {
 
-            mProgress = new ProgressDialog(mActivity);
-            mProgress.setCancelable(false);
-            mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgress.setMessage("Autenticando...");
-            mProgress.setIndeterminate(true);
-            mProgress.show();
-
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-
-                                        new mAsyncTask().execute(etSenha.getText().toString());
-
-                                    }
-                                }
-                    , 1000);
+            autenticarUsuario();
 
         });
+
+    }
+
+    private void autenticarUsuario(){
+
+        mProgress = new ProgressDialog(mActivity);
+        mProgress.setCancelable(false);
+        mProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgress.setMessage("Autenticando...");
+        mProgress.setIndeterminate(true);
+        mProgress.show();
+
+        Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    new mAsyncTask().execute(etSenha.getText().toString());
+
+                                }
+                            }
+                , 1000);
 
     }
 
@@ -135,7 +142,12 @@ public class sonicLogin extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(sonicLogin.this);
         builder.setItems(chars, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                finalizarTroca(cod.get(item));
+                if(cod.get(item)==mPrefs.Users.getUltimaSincID() || mPrefs.Geral.getFirstSinc()){
+                    finalizarTroca(cod.get(item));
+                }else{
+                    finalizarTrocaEApagar(cod.get(item));
+                }
+
             }
         }).setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
             @Override
@@ -146,10 +158,11 @@ public class sonicLogin extends AppCompatActivity {
 
     }
 
-    private void finalizarTroca(int cod){
+    private void finalizarTrocaEApagar(int cod){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(sonicLogin.this);
-        builder.setMessage("Se você trocar de usuário, todos os dados de "+mPrefs.Users.getUsuarioNome()+" serão apagados. Deseja prosseguir?")
+        builder.setTitle("Atenção!\n\n");
+        builder.setMessage("Existem dados gravados para o usuário "+mPrefs.Users.getUltimaSincNome()+".\n\nSe você prosseguir, todos os dados serão apagados.\n\nDeseja prosseguir?")
                 .setPositiveButton("PROSSEGUIR", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -159,6 +172,7 @@ public class sonicLogin extends AppCompatActivity {
                         mData.Database.truncateAllTablesNonNecessary();
                         mPrefs.Users.setAtivo(true);
                         mPrefs.Users.setLogado(true);
+                        mPrefs.Geral.setFirstSinc(true);
                         confirmarTroca();
 
                     }
@@ -170,6 +184,16 @@ public class sonicLogin extends AppCompatActivity {
                     }
                 })
                 .show();
+
+    }
+
+    private void finalizarTroca(int cod){
+
+        mData.Usuario.setAtivo(cod);
+        mData.Empresa.selecionarPrimeiraEmpresa();
+        mPrefs.Users.setAtivo(true);
+        mPrefs.Users.setLogado(true);
+        confirmarTroca();
 
     }
 
@@ -198,6 +222,34 @@ public class sonicLogin extends AppCompatActivity {
 
     }
 
+    private void checarUltimoUsuario(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(sonicLogin.this);
+        builder.setTitle("Atenção!\n\n");
+        builder.setMessage("Existem dados gravados para o usuário "+mPrefs.Users.getUltimaSincNome()+".\n\nSe você prosseguir, todos os dados serão apagados.\n\nDeseja prosseguir?")
+                .setPositiveButton("PROSSEGUIR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        mData.Empresa.selecionarPrimeiraEmpresa();
+                        mData.Database.truncateAllTablesNonNecessary();
+                        mPrefs.Users.setAtivo(true);
+                        mPrefs.Users.setLogado(true);
+                        mPrefs.Geral.setFirstSinc(true);
+                        confirmarTroca();
+
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
+
+    }
+
     public class mAsyncTask extends AsyncTask<String, Void, Boolean>{
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -210,15 +262,19 @@ public class sonicLogin extends AppCompatActivity {
             super.onPostExecute(aBoolean);
             mProgress.dismiss();
             if(aBoolean){
-                mPrefs.Users.setLogado(true);
-                Intent i = new Intent(sonicLogin.this, sonicMain.class);
-                startActivity(i);
-                sonicLogin.this.finish();
-            }else{
-                Snackbar snackbar = Snackbar.make(llSnackBar, "SENHA INCORRETA", Snackbar.LENGTH_LONG);
-                SnackbarHelper.configSnackbar(sonicLogin.this, snackbar);
-                llSnackBar.addView(snackbar.getView());
-                snackbar.show();
+                if(mPrefs.Users.getUsuarioNome().equals(mPrefs.Users.getUltimaSincNome()) || mPrefs.Geral.getFirstSinc()){
+                    mPrefs.Users.setLogado(true);
+                    Intent i = new Intent(sonicLogin.this, sonicMain.class);
+                    startActivity(i);
+                    sonicLogin.this.finish();
+                }else {
+                    checarUltimoUsuario();
+                }
+            }else {
+                mSnackbar = Snackbar.make(llSnackBar, "SENHA INCORRETA", Snackbar.LENGTH_LONG);
+                SnackbarHelper.configSnackbar(sonicLogin.this, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
+                llSnackBar.addView(mSnackbar.getView());
+                mSnackbar.show();
             }
 
         }

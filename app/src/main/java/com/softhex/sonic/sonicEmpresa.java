@@ -24,6 +24,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import zerobranch.androidremotedebugger.AndroidRemoteDebugger;
+
 public class sonicEmpresa extends sonicRuntimePermission {
 
     private static final int REQUEST_PERMISSION = 10;
@@ -37,6 +39,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
     private Button btSuporte;
     private LinearLayout llSnackBar;
     private sonicPreferences mPrefs;
+    private Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
         setContentView(R.layout.sonic_empresa);
 
         sonicAppearence.layoutWithStatusBarColorPrimary(this, getWindow());
+        AndroidRemoteDebugger.init(this);
 
         mContext = this;
         mToolbar = findViewById(R.id.mToolbar);
@@ -67,7 +71,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                     if ((myCode.getText().toString().length() < 11 || myCode.getText().toString().length() > 11 ||  myCode.getText().toString().equals(""))) {
 
-                        new sonicDialog(sonicEmpresa.this).showSnackBar(getWindow().getDecorView().getRootView(),"Código inválido...");
+                        mensagemErro("CÓDIGO INVÁLIDO...");
 
                     } else {
 
@@ -77,11 +81,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
                 }else{
 
-                    Snackbar snackbar = Snackbar.make(llSnackBar, "VERIFIQUE SUA CONEXAÕ COM A INTERNET...", Snackbar.LENGTH_LONG);
-                    SnackbarHelper.configSnackbar(mContext, snackbar);
-                    llSnackBar.addView(snackbar.getView());
-                    snackbar.show();
-                    //new sonicDialog(sonicEmpresa.this).showSnackBar(v,"Verifique sua conexão com a internet...");
+                    mensagemErro("VERIFIQUE SUA CONEXÃO...");
 
                 }
 
@@ -131,29 +131,39 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
     }
 
-    public void mensagemErro(){
+    public void mensagemErroDetalhe(boolean support){
 
-        Snackbar snackbar = Snackbar
+        llSnackBar.removeAllViews();
+        mSnackbar = Snackbar
                 .make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
                 .setAction("DETALHE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         new android.app.AlertDialog.Builder(mContext)
-                                .setTitle("Atenção!\n")
+                                .setTitle("Atenção!\n\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        llSnackBar.removeAllViews();
+                                        if(support)
                                         ativarSuporte();
                                     }
                                 }).show();
                     }
                 });
-        SnackbarHelper.configSnackbar(mContext, snackbar);
-        llSnackBar.addView(snackbar.getView());
-        snackbar.show();
+        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
+        llSnackBar.addView(mSnackbar.getView());
+        mSnackbar.show();
 
+    }
+
+    public void mensagemErro(String erro){
+        llSnackBar.removeAllViews();
+        mSnackbar = Snackbar
+                .make(llSnackBar, erro, Snackbar.LENGTH_LONG);
+        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
+        llSnackBar.addView(mSnackbar.getView());
+        mSnackbar.show();
     }
 
     public void ativarSuporte(){
@@ -177,7 +187,6 @@ public class sonicEmpresa extends sonicRuntimePermission {
                 if(!senha.getText().toString().equals("123456")){
                     senhaIncorreta();
                 }else{
-                    //TODO LISTAR USUARIOS PARA SER ESCOLHIDO
                     exibirListaUsuarios();
                 }
             }
@@ -195,8 +204,9 @@ public class sonicEmpresa extends sonicRuntimePermission {
 
     private void senhaIncorreta(){
 
+        llSnackBar.removeAllViews();
         Snackbar snackbar = Snackbar.make(llSnackBar, "SENHA INCORRETA", Snackbar.LENGTH_LONG);
-        SnackbarHelper.configSnackbar(mContext, snackbar);
+        SnackbarHelper.configSnackbar(mContext, snackbar, SnackbarHelper.SNACKBAR_WARNING);
         llSnackBar.addView(snackbar.getView());
         snackbar.show();
 

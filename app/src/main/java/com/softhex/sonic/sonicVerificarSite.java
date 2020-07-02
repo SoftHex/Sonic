@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import java.io.File;
 
@@ -82,9 +80,6 @@ public class sonicVerificarSite{
 
                     if(myFtp.downloadFile(strings[1], strings[2])){
 
-                        //File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + strings[0] + ".TXT");
-                        //File f = sonicFile.seachTxtFile(sonicConstants.LOCAL_TEMP, strings[0]);
-
                         if (sonicFile.checkTxtFile(sonicConstants.LOCAL_TEMP, strings[0])) {
 
                             publishProgress("Salvando configurações...");
@@ -101,17 +96,16 @@ public class sonicVerificarSite{
 
                         File delete = new File(Environment.getExternalStorageDirectory(), strings[2]);
                         delete.delete();
-                        myMessage.showMS("Atenção", "Empresa não encontrada.", myMessage.MSG_WARNING);
-                        //Snackbar snack = Snackbar.make(mAct.getParent().getWindow().getDecorView().getRootView(),"Empresa não encontrada",Snackbar.LENGTH_SHORT);
-                        //SnackbarHelper.configSnackbar(mAct, snack);
-                        //snack.show();
-                        //new sonicDialog(myCtx).showSnackBar(mAct.getParent().getWindow().getDecorView().getRootView(),"Empresa não enontrada");
+
+                        enviarErro("EMPRESA NÃO ENCONTRADA...");
+
                         res = false;
 
                     }
 
                 }
                 catch (Exception e){
+                    mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
                             e.getMessage(),
                             mySystem.System.getActivityName(),
@@ -122,8 +116,10 @@ public class sonicVerificarSite{
 
             }else{
 
-                myMessage.showMS("Erro...", "Não foi possível conectar ao servidor no momento. Tente novmente em alguns minutos.", myMessage.MSG_WRONG);
                 myProgress.dismiss();
+                mPrefs.Geral.setError("Não foi possível conectar ao servidor no momento. Tente novamente em alguns minutos.");
+                enviarErroDetalhe();
+
                 res = false;
 
             }
@@ -131,6 +127,26 @@ public class sonicVerificarSite{
             myFtp.ftpDisconnect();
 
             return res;
+        }
+
+        private void enviarErroDetalhe(){
+
+            mAct.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((sonicEmpresa)myCtx).mensagemErroDetalhe(false);
+                }
+            });
+        }
+
+        private void enviarErro(String erro){
+
+            mAct.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((sonicEmpresa)myCtx).mensagemErro(erro);
+                }
+            });
         }
 
         @Override
