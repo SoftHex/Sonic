@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class sonicPopularTabelas {
     private sonicSystem mySystem;
     private ProgressDialog myProgress;
     private String arquivo;
+    private List<String> mTablesSinc = new ArrayList<>();
     private String[][] mTables = {
 
             { "[SITE]", sonicConstants.TB_SITE, "Site", "save"},
@@ -158,6 +160,8 @@ public class sonicPopularTabelas {
 
                             if(line!=null && (line.contains(arr[0]) || arr[0].contains(line))){
 
+                                mTablesSinc.add(arr[1]);
+
                                 if(arr[3].equals("save")){
                                     DBC.Database.cleanData(arr[1]);
                                 }
@@ -224,38 +228,10 @@ public class sonicPopularTabelas {
                         mPref.Geral.setFirstSinc(false);
                         mPref.Users.setUltimaSincID(mPref.Users.getUsuarioId());
                         mPref.Users.setUltimaSincNome(mPref.Users.getUsuarioNome());
-                        new PromptDialog(mContext)
-                                .setDialogType(sonicDialog.MSG_SUCCESS)
-                                .setAnimationEnable(true)
-                                .setTitleText(R.string.headerSuccess)
-                                .setContentText(R.string.dadosSincronizados)
-                                .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
-                                    @Override
-                                    public void onClick(PromptDialog dialog) {
-                                        dialog.dismiss();
-                                        if(mPref.Sincronizacao.getSincRefresh()){
-                                            switch (mPref.Sincronizacao.getCalledActivity()){
-                                                case "sonicClientes":
-                                                    ((sonicClientes)mAct).refreshFragments();
-                                                    break;
-                                                case "sonicProdutos":
-                                                    ((sonicProdutos)mAct).refreshFragments();
-                                                    break;
-                                                case "sonicMain":
-                                                    ((sonicMain)mAct).refreshFragments();
-                                                    break;
-                                                case "sonicRota":
-                                                    ((sonicRota)mAct).refreshFragments();
-                                                    break;
-                                            }
-
-                                        }
-                                    }
-                                }).show();
+                        enviarMensagemSincronizacao();
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_TODAS, sonicConstants.TIPO_SINC_DADOS);
-                        List<String[]> list = Arrays.asList(mTables);
-                        for(String[] arr: list){
-                            mData.Sincronizacao.saveSincronizacao(arr[1], sonicConstants.TIPO_SINC_DADOS);
+                        for(String arr: mTablesSinc){
+                            mData.Sincronizacao.saveSincronizacao(arr, sonicConstants.TIPO_SINC_DADOS);
                         }
                         break;
                     case "ESTOQUE":
@@ -280,6 +256,30 @@ public class sonicPopularTabelas {
                 }
             }
         }
+    }
+
+    public void enviarMensagemSincronizacao(){
+
+        mAct.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (mPref.Sincronizacao.getCalledActivity()){
+                    case "sonicClientes":
+                        ((sonicClientes)mAct).refreshFragments();
+                        break;
+                    case "sonicProdutos":
+                        ((sonicProdutos)mAct).refreshFragments();
+                        break;
+                    case "sonicMain":
+                        ((sonicMain)mAct).mensagemOK("SINCRONIZADO.", true);
+                        break;
+                    case "sonicRota":
+                        ((sonicRota)mAct).refreshFragments();
+                        break;
+                }
+            }
+        });
+
     }
 
     public void primeiroAcesso(){

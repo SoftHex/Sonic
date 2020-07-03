@@ -267,8 +267,8 @@ public class sonicProdutosLista extends Fragment {
         tvTitle.setText("Ops, nenhum produto por enquanto...");
         tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
         btSinc.setOnClickListener((View v)->{
-            mPrefs.Geral.setHomeRefresh(true);
-            mPrefs.Geral.setDrawerRefresh(true);
+            mPrefs.Sincronizacao.setHomeRefresh(true);
+            mPrefs.Sincronizacao.setDrawerRefresh(true);
             mPrefs.Sincronizacao.setDownloadType("DADOS");
             mPrefs.Sincronizacao.setCalledActivity("sonicProdutos");
             mPrefs.Sincronizacao.setSincRefresh(true);

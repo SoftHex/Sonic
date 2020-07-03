@@ -63,7 +63,7 @@ public class sonicMainVendas extends Fragment {
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
         tvTitulo = myView.findViewById(R.id.tvTitulo);
         tvMensagem = myView.findViewById(R.id.tvMensagem);
-        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.INVISIBLE : View.VISIBLE);
+        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.VISIBLE : View.INVISIBLE);
         mList = mData.Venda.selectVendas();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -219,7 +219,7 @@ public class sonicMainVendas extends Fragment {
         ArrayList<ILineDataSet> dataSets = null;
         dataSets = new ArrayList<>();
         // TO OFFSET FIRST AND LAST VALUES
-        //valueSet.add(new Entry(0, 0f));
+        valueSet.add(new Entry(0, 0));
         xAxisLabel.add("");
         for(int i=1 ; i<=mList.size() ; i++){
             ano = mList.get(i-1).getAno().length()<4 ? mList.get(i-1).getAno() : mList.get(i-1).getAno().substring(2);
@@ -287,7 +287,7 @@ public class sonicMainVendas extends Fragment {
         }
         tvMaxValue.setText(maxValue==0f ? "R$ 0,00" : max);
         // TO OFFSET FIRST AND LAST VALUES
-        //valueSet.add(new Entry(7, 0f));
+        valueSet.add(new Entry(7, 0f));
         xAxisLabel.add("");
 
         LineDataSet lineDataSet = new LineDataSet(valueSet, "");
@@ -339,7 +339,7 @@ public class sonicMainVendas extends Fragment {
         // REMOVE BOTTOM LINE FROM LABEL AND CHART
         xAxis.setDrawAxisLine(false);
         mLineChart.invalidate();
-        sonicMainVendas.LabelFormatter formatter = new sonicMainVendas.LabelFormatter(xAxisLabel);
+        LabelFormatter formatter = new LabelFormatter(xAxisLabel);
         xAxis.setValueFormatter(formatter);
     }
 

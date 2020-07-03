@@ -263,8 +263,8 @@ public class sonicClientesCNPJ extends Fragment {
         tvTitle.setText("Ops, nenhum cliente por enquanto...");
         tvTexto.setText(R.string.noSincText);
         btSinc.setOnClickListener((View v)->{
-            mPrefs.Geral.setHomeRefresh(true);
-            mPrefs.Geral.setDrawerRefresh(true);
+            mPrefs.Sincronizacao.setHomeRefresh(true);
+            mPrefs.Sincronizacao.setDrawerRefresh(true);
             mPrefs.Sincronizacao.setDownloadType("DADOS");
             mPrefs.Sincronizacao.setCalledActivity(getActivity().getClass().getSimpleName());
             sonicFtp myFtp = new sonicFtp(getActivity());

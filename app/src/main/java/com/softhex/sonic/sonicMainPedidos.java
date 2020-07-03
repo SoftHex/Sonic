@@ -59,7 +59,7 @@ public class sonicMainPedidos extends Fragment {
         tvMaxValue = myView.findViewById(R.id.tvMaxValue);
         tvTitulo = myView.findViewById(R.id.tvTitulo);
         tvMensagem = myView.findViewById(R.id.tvMensagem);
-        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.INVISIBLE : View.VISIBLE);
+        tvMensagem.setVisibility(mPrefs.Geral.getFirstSinc() ? View.VISIBLE : View.INVISIBLE);
         mList = mData.Venda.selectPedidos();
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
@@ -214,7 +214,7 @@ public class sonicMainPedidos extends Fragment {
         ArrayList<ILineDataSet> dataSets = null;
         dataSets = new ArrayList<>();
         // TO OFFSET FIRST AND LAST VALUES
-        //valueSet.add(new Entry(0, 0f));
+        valueSet.add(new Entry(0, 0f));
         xAxisLabel.add("");
         for(int i=1 ; i<=mList.size() ; i++){
             ano = mList.get(i-1).getAno().length()<4 ? mList.get(i-1).getAno() : mList.get(i-1).getAno().substring(2);
@@ -280,7 +280,7 @@ public class sonicMainPedidos extends Fragment {
         }
         tvMaxValue.setText(maxValue==0 ? "  0  " : max);
         // TO OFFSET FIRST AND LAST VALUES
-        //valueSet.add(new Entry(7, 0f));
+        valueSet.add(new Entry(7, 0f));
         xAxisLabel.add("");
 
         LineDataSet lineDataSet = new LineDataSet(valueSet, "");

@@ -122,6 +122,7 @@ public class sonicMain extends AppCompatActivity{
     private List<sonicEmpresasHolder> listaEmpresa;
     private LinearLayout llGroupVendas;
     private LinearLayout llSnackBar;
+    private Snackbar mSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,7 +309,6 @@ public class sonicMain extends AppCompatActivity{
                 .withAlternativeProfileHeaderSwitching(true)
                 .withDividerBelowHeader(true)
                 .withTranslucentStatusBar(true)
-                //.withDrawer(new DrawerBuilder().withActivity(this).addDrawerItems(myDrawerClientes).build())
                 .withHeaderBackground(R.drawable.backhome)
                 .withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -317,23 +317,25 @@ public class sonicMain extends AppCompatActivity{
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
 
                         if(!currentProfile) {
+
                             lerDadosUsuario();
                             setTvEmpresa(profile.getIdentifier());
                             new myAssyncTask().execute(3);
                             new myAssyncTask().execute(4);
-                        }
+                            mPrefs.Users.setEmpresaNome(profile.getEmail().toString());
+                            mPrefs.Users.setEmpresaId((int)profile.getIdentifier());
+                            mData.Empresa.setSelecionada((int)profile.getIdentifier());
+                            usuarioMeta = listaUser.get(0).getMetaVenda();
+                            tvEmpresa.setText(profile.getEmail().toString());
+                            //tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
+                            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO + mPrefs.Users.getPicture((int)profile.getIdentifier()));
+                            String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
+                            sonicGlide.glideImageView(mActivity, myProgressProfile, picture, 100,100);
+                            calcularPercentual("2200000", usuarioMeta);
+                            lerDadosUsuario();
+                            refreshFragments();
 
-                        mPrefs.Users.setEmpresaNome(profile.getEmail().toString());
-                        mPrefs.Users.setEmpresaId((int)profile.getIdentifier());
-                        usuarioMeta = listaUser.get(0).getMetaVenda();
-                        tvEmpresa.setText(profile.getEmail().toString());
-                        //tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
-                        File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO + mPrefs.Users.getPicture((int)profile.getIdentifier()));
-                        String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
-                        sonicGlide.glideImageView(mActivity, myProgressProfile, picture, 100,100);
-                        calcularPercentual("2200000", usuarioMeta);
-                        lerDadosUsuario();
-                        refreshFragments();
+                        }
 
                         return true;
                     }
@@ -546,8 +548,8 @@ public class sonicMain extends AppCompatActivity{
                     @Override
                     public void onDrawerOpened(View drawerView) {
 
-                        if(mPrefs.Geral.getDrawerRefresh()){
-                            mPrefs.Geral.setDrawerRefresh(false);
+                        if(mPrefs.Sincronizacao.getDrawerRefresh()){
+                            mPrefs.Sincronizacao.setDrawerRefresh(false);
                             // CLIENTES
                             new myAssyncTask().execute(3);
                             // PRODUTOS
@@ -780,6 +782,7 @@ public class sonicMain extends AppCompatActivity{
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicMainVendas(), "Vendas");
         myAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
+        myAdapter.addFragment(new sonicMainDesempenhoDiario(), "Desempenho");
         //myAdapter.addFragment(new sonicMainVendas(), "Visitas");
         viewpager.addOnPageChangeListener(listener);
         viewpager.setAdapter(myAdapter);
@@ -985,42 +988,43 @@ public class sonicMain extends AppCompatActivity{
 
     public void mensagemErro(){
 
-        Snackbar snackbar = Snackbar
+        llSnackBar.removeAllViews();
+        mSnackbar = Snackbar
                 .make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
                 .setAction("DETALHE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         new android.app.AlertDialog.Builder(mContext)
-                                .setTitle("Atenção!\n")
+                                .setTitle("Atenção!\n\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
-                                        llSnackBar.removeAllViews();
                                     }
                                 }).show();
                     }
                 });
-        SnackbarHelper.configSnackbar(mContext, snackbar, SnackbarHelper.SNACKBAR_WARNING);
-        llSnackBar.addView(snackbar.getView());
-        snackbar.show();
+        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
+        llSnackBar.addView(mSnackbar.getView());
+        mSnackbar.show();
 
     }
 
-    public void mensagemOK(String msg){
+    public void mensagemOK(String msg, boolean refresh){
 
         llSnackBar.removeAllViews();
-        Snackbar snackbar = Snackbar
+        mSnackbar = Snackbar
                 .make(llSnackBar, msg, Snackbar.LENGTH_INDEFINITE)
                 .setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        if(refresh)
+                            refreshFragments();
                     }
                 });
-        SnackbarHelper.configSnackbar(mContext, snackbar, SnackbarHelper.SNACKBAR_SUCCESS);
-        llSnackBar.addView(snackbar.getView());
-        snackbar.show();
+        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_SUCCESS);
+        llSnackBar.addView(mSnackbar.getView());
+        mSnackbar.show();
 
     }
 
@@ -1087,8 +1091,8 @@ public class sonicMain extends AppCompatActivity{
                 return false;
             case R.id.itSincronizar:
                 mPrefs.Sincronizacao.setCalledActivity(this.getClass().getSimpleName());
-                mPrefs.Geral.setHomeRefresh(true);
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
+                mPrefs.Sincronizacao.setDrawerRefresh(true);
                 myFtp = new sonicFtp(mActivity);
                 myFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+mPrefs.Users.getArquivoSinc());
                 return false;
@@ -1132,9 +1136,9 @@ public class sonicMain extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(mPrefs.Geral.getHomeRefresh()){
+        if(mPrefs.Sincronizacao.getHomeRefresh()){
             refreshFragments();
-            mPrefs.Geral.setHomeRefresh(false);
+            mPrefs.Sincronizacao.setHomeRefresh(false);
         }
 
         if (resultCode != RESULT_CANCELED && data != null) {

@@ -85,8 +85,6 @@ public class sonicPreferences{
     private static final String MATRIZ_PICTURE = "matrizPicture";
     private static final String MATRIZ_PATH = "matrizPath";
     private static final String GERAL_LISTAGEM_COMPLETA = "listagemCompleta";
-    private static final String GERAL_HOME_REFRESH = "homeRefresh";
-    private static final String GERAL_DRAWER_REFRESH = "drawerRefresh";
     private static final String GERAL_HOME_CHART_TYPE = "homeChartType";
     private static final String GERAL_TIPO_HORA = "tipoHora";
     private static final String GERAL_SITE = "site";
@@ -99,6 +97,8 @@ public class sonicPreferences{
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
     private static final String SINC_FIRST = "sincFirst";
+    private static final String SINC_DRAWER_REFRESH = "sincDrawerRefresh";
+    private static final String SINC_HOME_REFRESH = "sincHomeRefresh";
     private static final String ROTA_ID = "rotaId";
     private static final String ROTA_ITEM_POSITION = "rotaItemPosition";
     private static final String ROTA_ADDRESS_MAP = "rotaAddressMap";
@@ -857,22 +857,7 @@ public class sonicPreferences{
         public String getTermSearch(){
             return sharedpreferences.getString(GERAL_TERM_SEARCH, "TUDO");
         }
-        public void setHomeRefresh(boolean value){
-            editor = sharedpreferences.edit();
-            editor.putBoolean(GERAL_HOME_REFRESH, value);
-            editor.apply();
-        }
-        public boolean getHomeRefresh(){
-            return sharedpreferences.getBoolean(GERAL_HOME_REFRESH ,false);
-        }
-        public void setDrawerRefresh(boolean value){
-            editor = sharedpreferences.edit();
-            editor.putBoolean(GERAL_DRAWER_REFRESH, value);
-            editor.apply();
-        }
-        public boolean getDrawerRefresh(){
-            return sharedpreferences.getBoolean(GERAL_DRAWER_REFRESH, false);
-        }
+
         public void setHomeChartType(String value){
             editor = sharedpreferences.edit();
             editor.putString(GERAL_HOME_CHART_TYPE, value);
@@ -938,6 +923,22 @@ public class sonicPreferences{
         }
         public String getCalledActivity(){
             return sharedpreferences.getString(SINC_CALLED_ACTIVITY, "");
+        }
+        public void setDrawerRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(SINC_DRAWER_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getDrawerRefresh(){
+            return sharedpreferences.getBoolean(SINC_DRAWER_REFRESH, false);
+        }
+        public void setHomeRefresh(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(SINC_HOME_REFRESH, value);
+            editor.apply();
+        }
+        public boolean getHomeRefresh(){
+            return sharedpreferences.getBoolean(SINC_HOME_REFRESH ,false);
         }
     }
     public class Rota{

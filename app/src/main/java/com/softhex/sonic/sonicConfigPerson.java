@@ -57,7 +57,7 @@ public class sonicConfigPerson extends PreferenceActivity{
         });
         mPreferenceHomeChartType.setOnPreferenceChangeListener((preference, newValue) -> {
             mPreferences.Geral.setHomeChartType(newValue.toString());
-            mPreferences.Geral.setHomeRefresh(!mPreferences.Geral.getHomeRefresh());
+            mPreferences.Sincronizacao.setHomeRefresh(!mPreferences.Sincronizacao.getHomeRefresh());
             return true;
         });
         mPreferenceTipoHora.setOnPreferenceChangeListener((preference, newValue) -> {
