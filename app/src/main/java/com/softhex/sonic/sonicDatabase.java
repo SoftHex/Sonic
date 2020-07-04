@@ -74,8 +74,6 @@ public class sonicDatabase extends SQLiteOpenHelper{
 
     private Context mContext;
     private sonicPreferences mPrefs;
-    private sonicDatabaseLogCRUD mDataLog;
-    private sonicSystem mSystem;
 
     // INÍCIO TABELAS FUNDAMENTAIS/NECESSÁRIAS PARA INICIAR O APLICATIVO
 
@@ -95,8 +93,8 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_EMPRESA = "CREATE TABLE IF NOT EXISTS "+DB_EMPRESA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo int NOT NULL, " +
-            "razao_social varchar NOT NULL, " +
-            "nome_fantasia varchar NOT NULL," +
+            "razao_social varchar(100) NOT NULL, " +
+            "nome_fantasia varchar(100) NOT NULL," +
             "selecionada int);";
     private static final String CREATE_INDEX_EMPRESA_CODIGO = "CREATE UNIQUE INDEX index_empresa_codigo ON "+DB_EMPRESA+" (codigo);";
 
@@ -104,17 +102,18 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_empresa int NOT NULL, " +
             "nome varchar NOT NULL, " +
-            "descricao varchar," +
-            "data_fundacao varchar," +
-            "endereco varchar," +
-            "bairro varchar," +
-            "municipio varchar," +
+            "descricao varchar(250)," +
+            "data_fundacao varchar(10)," +
+            "endereco varchar(50)," +
+            "bairro varchar(30)," +
+            "municipio varchar(30)," +
             "uf character(2)," +
             "cep character(10)," +
-            "fone varchar," +
-            "whatsapp varchar," +
-            "email varchar," +
-            "endereco_eletronico varchar);";
+            "fone varchar(20)," +
+            "whatsapp varchar(20)," +
+            "email varchar(40)," +
+			"endereco_eletronico varchar," +
+			"FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo));";
     private static final String CREATE_INDEX_GRUPO_EMPRESAS_CODIGO_EMPRESA = "CREATE UNIQUE INDEX index_grupo_empresas_codigo_empresa ON "+ DB_GRUPO_EMPRESAS +" (codigo_empresa);";
 
     private static final String CREATE_NIVEL_ACESSO = "CREATE TABLE IF NOT EXISTS "+DB_NIVEL_ACESSO+" (" +
