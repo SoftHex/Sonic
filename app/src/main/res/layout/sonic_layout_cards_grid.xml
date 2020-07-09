@@ -12,7 +12,7 @@
 
         <!-- IMAGEM NEW -->
         <LinearLayout
-            android:id="@+id/linearNew"
+            android:id="@+id/llNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -31,9 +31,30 @@
 
         </LinearLayout>
 
+        <!-- BUTTON DOWNLOAD -->
+        <LinearLayout
+            android:id="@+id/llDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:gravity="left"
+            android:elevation="0dp"
+            android:visibility="gone"
+            android:layout_marginTop="-2dp"
+            android:outlineProvider="none"
+            android:layout_alignParentLeft="true">
+
+            <ImageButton
+                android:id="@+id/ibDownloadImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_sync_grey600_18dp"/>
+
+        </LinearLayout>
+
         <!-- IMAGEM -->
         <RelativeLayout
-            android:id="@+id/relativeCatalogo"
+            android:id="@+id/rlCatalogo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="-1dp"
@@ -48,7 +69,6 @@
 
                 <ImageView
                     android:id="@+id/ivImagem"
-                    android:transitionName="imagemTransition"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:adjustViewBounds="true"

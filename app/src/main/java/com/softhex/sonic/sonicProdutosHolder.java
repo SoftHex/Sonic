@@ -23,46 +23,10 @@ public class sonicProdutosHolder {
     int multiplicidade;
     String codigo_ean;
     String codigo_ean_tributavel;
+    int foto;
 
 
     public sonicProdutosHolder(){
-
-    }
-    public sonicProdutosHolder( int codigo_produto,
-                                int codigo_empresa,
-                                String nome,
-                                String unidade_medida,
-                                String grupo_produto,
-                                String data_cadastro,
-                                String codigo_alternativo,
-                                String descricao,
-                                String ncm,
-                                String peso_bruto,
-                                String peso_liquido,
-                                int estoque,
-                                int estoque_minimo,
-                                int estoque_maximo,
-                                int multiplicidade,
-                                String codigo_ean,
-                                String codigo_ean_tributavel){
-
-        this.codigo_produto = codigo_produto;
-        this.codigo_empresa = codigo_empresa;
-        this.nome = nome;
-        this.unidade_medida = unidade_medida;
-        this.grupo_produto = grupo_produto;
-        this.data_cadastro = data_cadastro;
-        this.codigo_alternativo = codigo_alternativo;
-        this.descricao = descricao;
-        this.ncm = ncm;
-        this.peso_bruto = peso_bruto;
-        this.peso_liquido = peso_liquido;
-        this.estoque = estoque;
-        this.estoque_minimo = estoque_minimo;
-        this.estoque_maximo = estoque_maximo;
-        this.multiplicidade = multiplicidade;
-        this.codigo_ean = codigo_ean;
-        this.codigo_ean_tributavel = codigo_ean_tributavel;
 
     }
 
@@ -96,6 +60,10 @@ public class sonicProdutosHolder {
     public String getCodigoEan(){return this.codigo_ean;}
     public String getCodigoEanTributavel(){return this.codigo_ean_tributavel;}
 
+    public int getFoto() {
+        return foto;
+    }
+
     public void setCodigo(int codigo_produto){
         this.codigo_produto = codigo_produto;
     }
@@ -121,6 +89,10 @@ public class sonicProdutosHolder {
     public void setMultiplicidade(int multiplicidade){this.multiplicidade= multiplicidade;}
     public void setCodigoEan(String codigo_ean){this.codigo_ean = codigo_ean;}
     public void setCodigoEanTributavel(String codigo_ean_tributavel){this.codigo_ean_tributavel = codigo_ean_tributavel;}
+
+    public void setFoto(int foto) {
+        this.foto = foto;
+    }
 
     @Override
     public String toString(){

@@ -217,9 +217,21 @@ public class sonicUtils {
     * SOURCE
     * */
     public static String checkImageJpgPng(String path, String file, int placeholder){
-        File opt1 = new File(Environment.getExternalStorageDirectory(), path + file+".JPG");
-        File opt2 = new File(Environment.getExternalStorageDirectory(), path + file+".PNG");
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + file + ".JPG");
+        File opt2 = new File(Environment.getExternalStorageDirectory(), path + file + ".PNG");
         return opt1.exists() ? opt1.toString() : opt2.exists() ? opt2.toString() : sonicUtils.getURIForResource(placeholder);
+    }
+
+    public static String checkImageJpgPng(String path, String file){
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + file + ".JPG");
+        File opt2 = new File(Environment.getExternalStorageDirectory(), path + file + ".PNG");
+        return opt1.exists() ? opt1.toString() : opt2.toString();
+    }
+
+    public static boolean checkImage(String path, String file){
+        File opt1 = new File(Environment.getExternalStorageDirectory(), path + file + ".JPG");
+        File opt2 = new File(Environment.getExternalStorageDirectory(), path + file + ".PNG");
+        return (opt1.exists() || opt2.exists()) ? true : false;
     }
 
     public static Boolean checkImageJpg(String path, String optOne){

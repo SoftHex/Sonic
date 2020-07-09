@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -18,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrador on 26/07/2017.
@@ -37,6 +40,7 @@ public class sonicFtp {
     private sonicPopularTabelas myPopTable;
     private String arquivo;
     private sonicPreferences mPrefs;
+    private String mPath;
 
     public sonicFtp(Activity act){
         this.myCtx = act;
@@ -364,5 +368,118 @@ public class sonicFtp {
             }
 
         }
+
     }
+
+    public void downloadImages(String path, String file) {
+
+        mPath = path;
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+                myProgress = new ProgressDialog(myCtx);
+                myProgress.setCancelable(false);
+                myProgress.setMessage("Conectando...");
+                myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                myProgress.show();
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new mAsyncTaskDownloadImages().execute(file);
+                    }
+                }, sonicUtils.Randomizer.generate(500,1000));
+
+            }
+        });
+    }
+
+    class mAsyncTaskDownloadImages extends AsyncTask<String, String, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            boolean res = true;
+
+            if(sonicUtils.internetConnectionAvailable(3000)){
+
+                if(ftpConnect()){
+
+                    myProgress.dismiss();
+
+                    new Handler(Looper.getMainLooper()).post(()-> {
+
+                        myProgress2.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        myProgress2.setIndeterminate(true);
+                        myProgress2.setMessage("Fazendo download...");
+                        myProgress2.setCancelable(false);
+                        myProgress2.show();
+
+                    });
+
+                    try{
+
+                        List<String> l = new ArrayList<>();
+                        l.add(strings[0]+".JPG");
+                        l.add(strings[0]+".PNG");
+                        for(int i=1; i<sonicConstants.TOTAL_IMAGES_SLIDE; i++){
+                            l.add(strings[0]+"_"+i+".JPG");
+                            l.add(strings[0]+"_"+i+".PNG");
+                        }
+
+                        File destino;
+                        FileOutputStream file;
+                        for (int i=0; i < l.size(); i++){
+
+                            destino = new File(Environment.getExternalStorageDirectory()+mPath+l.get(i));
+                            file = new FileOutputStream(destino);
+                            Log.d("FILE", "ORIGEM="+l.get(i)+"/DESTINO="+destino);
+
+                            if(ftpClient.retrieveFile(l.get(i), file)){
+
+                                destino.createNewFile();
+
+                            }
+                            file.close();
+                        }
+
+                    }catch (Exception e){
+                        mPrefs.Geral.setError(e.getMessage());
+                        e.printStackTrace();
+                        DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                                e.getMessage(),
+                                mySystem.System.getActivityName(),
+                                mySystem.System.getClassName(el),
+                                mySystem.System.getMethodNames(el));
+                        res = false;
+                    }
+
+                } else {
+
+                    mPrefs.Geral.setError(myCtx.getResources().getString(R.string.failToConnect));
+                    exibirMensagemErro();
+                }
+
+            }else{
+                mPrefs.Geral.setError(myCtx.getResources().getString(R.string.networkError));
+                exibirMensagemErro();
+            }
+
+            ftpDisconnect();
+            return res;
+        }
+    }
+
+
+    private void exibirMensagemErro(){
+
+    }
+
+    private void exibirMensagemOK(){
+
+    }
+
 }

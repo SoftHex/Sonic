@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -54,6 +56,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     private LinearLayoutManager linearLayoutManager;
     private int dias, diasDiff;
     private GridLayoutManager mLayout;
+    private sonicFtp mFtp;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -67,19 +70,23 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         String dataCadastro;
         String tvDetalhe;
         LinearLayout llGroupDate;
+        ImageButton ibDownloadImage;
+        LinearLayout llDownload;
 
         public prodHolder(View view) {
             super(view);
 
-            rlCatalogo = view.findViewById(R.id.relativeCatalogo);
+            rlCatalogo = view.findViewById(R.id.rlCatalogo);
             linearItem = view.findViewById(R.id.linearItem);
-            linearNew = view.findViewById(R.id.linearNew);
+            linearNew = view.findViewById(R.id.llNew);
             llDescription = view.findViewById(R.id.llDescricao);
             tvNome = view.findViewById(R.id.tvNome);
             //tvGrupo = view.findViewById(R.id.tvGrupo);
             mImage = view.findViewById(R.id.ivImagem);
             ivNew = view.findViewById(R.id.ivNew);
             llGroupDate = view.findViewById(R.id.llGroupDate);
+            llDownload = view.findViewById(R.id.llDownload);
+            ibDownloadImage = view.findViewById(R.id.ibDownloadImage);
 
         }
     }
@@ -96,6 +103,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         this.mData = new sonicDatabaseCRUD(context);
         this.mLayout = layout;
         this.mDataAtual = mDateFormat.format(new Date());
+        this.mFtp = new sonicFtp((Activity)context);
 
         mPartialList = new ArrayList();
         mPartialList.add(0,null);
@@ -329,10 +337,21 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
         holder.linearNew.setVisibility(View.VISIBLE);
         holder.rlCatalogo.getLayoutParams().height = sonicUtils.intToDps(mContext,380/colunas);
 
-        String fileJpg = prod.getCodigo()+".JPG";
+        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpgPng(sonicConstants.LOCAL_IMG_CATALOGO, String.valueOf(prod.getCodigo()), R.drawable.nophoto), 900/colunas, 900/colunas);
+        if(!sonicUtils.checkImage(sonicConstants.LOCAL_IMG_CATALOGO, String.valueOf(prod.getCodigo())) && prod.getFoto()==1){
+            holder.llDownload.setVisibility(View.VISIBLE);
+            holder.ibDownloadImage.setOnClickListener((View v)->{
+                downloadImagens(String.valueOf(prod.getCodigo()));
+            });
+        }else{
+            holder.llDownload.setVisibility(View.GONE);
+        }
 
-        sonicGlide.glideImageView(mContext, holder.mImage, sonicUtils.checkImageJpg(sonicConstants.LOCAL_IMG_CATALOGO, fileJpg, R.drawable.nophoto), 900/colunas, 900/colunas);
+    }
 
+    private void downloadImagens(String codigo){
+
+        mFtp.downloadImages(sonicConstants.LOCAL_IMG_CATALOGO, codigo);
     }
 
     private void exibirFiltroExtra(List<sonicGrupoProdutosHolder> mListAuxiliar) {

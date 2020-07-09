@@ -1884,6 +1884,7 @@ public class sonicDatabaseCRUD {
                     "P.multiplicidade, " +
                     "P.codigo_ean, " +
                     "P.codigo_ean_tributavel, " +
+                    "P.foto, " +
                     "GP.nome AS grupo_produto, " +
                     " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
                     " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida " +
@@ -1920,6 +1921,7 @@ public class sonicDatabaseCRUD {
                         produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
                         produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
                         produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
+                        produtos.setFoto(cursor.getInt(cursor.getColumnIndex("foto")));
 
                         produto.add(produtos);
 
@@ -1959,6 +1961,7 @@ public class sonicDatabaseCRUD {
                     "p.multiplicidade, " +
                     "p.codigo_ean, " +
                     "p.codigo_ean_tributavel, " +
+                    "p.foto, " +
                     " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
                     " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
                     " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
@@ -1990,7 +1993,7 @@ public class sonicDatabaseCRUD {
                     produtos.setMultiplicidade(cursor.getInt(cursor.getColumnIndex("multiplicidade")));
                     produtos.setCodigoEan(cursor.getString(cursor.getColumnIndex("codigo_ean")));
                     produtos.setCodigoEanTributavel(cursor.getString(cursor.getColumnIndex("codigo_ean_tributavel")));
-
+                    produtos.setFoto(cursor.getInt(cursor.getColumnIndex("foto")));
                     produto.add(produtos);
 
                 }

@@ -231,6 +231,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "multiplicidade int, " +
             "codigo_ean varchar, " +
             "codigo_ean_tributavel varchar," +
+            "foto bit," +
             "FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo)," +
             "FOREIGN KEY (codigo_unidade) REFERENCES "+DB_UNIDADE_MEDIDA+"(codigo)," +
             "FOREIGN KEY (codigo_grupo) REFERENCES "+DB_GRUPO_PRODUTO+"(codigo));";
