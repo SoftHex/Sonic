@@ -38,8 +38,8 @@ public class sonicVerificarSite{
 
     public Boolean validar(String site){
 
-        String fileName = sonicConstants.FTP_SITES+ site +".TXT";
-        String fileFull = sonicConstants.LOCAL_TEMP + site +".TXT";
+        String fileName = sonicConstants.FTP_SITES+ site +".xml";
+        String fileFull = sonicConstants.LOCAL_TEMP + site +".xml";
 
         myProgress = new ProgressDialog(myCtx);
         myProgress.setCancelable(false);
@@ -80,16 +80,19 @@ public class sonicVerificarSite{
 
                     if(myFtp.downloadFile(strings[1], strings[2])){
 
-                        if (sonicFile.checkTxtFile(sonicConstants.LOCAL_TEMP, strings[0])) {
+                        if (sonicFile.checkXmlFile(sonicConstants.LOCAL_TEMP, strings[0])) {
 
                             publishProgress("Salvando configurações...");
 
                             mPrefs.Geral.setSite(strings[0]);
                             mPrefs.Sincronizacao.setDownloadType("SITE");
-                            new sonicPopularTabelas(mAct).gravarDados(strings[0]+".TXT");
+                            //new sonicPopularTabelas(mAct).gravarDados(strings[0]+".TXT");
+                            new sonicPopularTabelas(mAct).gravarDados(strings[0]+".xml");
 
                             res = true;
 
+                        }else{
+                            enviarErro("ARQUIVO NÃO ENCONTRADO...");
                         }
 
                     }else{

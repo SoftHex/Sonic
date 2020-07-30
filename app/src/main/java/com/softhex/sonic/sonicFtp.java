@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -18,7 +18,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ConnectException;
+import java.net.NoRouteToHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +89,7 @@ public class sonicFtp {
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
             }
 
-        } catch (ConnectException e) {
+        } catch (ConnectException | NoRouteToHostException e) {
             mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -153,7 +156,7 @@ public class sonicFtp {
             ftpClient.logout();
             ftpClient.disconnect();
 
-        }catch (Exception e){
+        }catch (IOException e){
             mPrefs.Geral.setError(e.getMessage());
             e.printStackTrace();
             DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
@@ -402,7 +405,7 @@ public class sonicFtp {
         @Override
         protected Boolean doInBackground(String... strings) {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            boolean res = true;
+            boolean res = false;
 
             if(sonicUtils.internetConnectionAvailable(3000)){
 
@@ -423,27 +426,26 @@ public class sonicFtp {
                     try{
 
                         List<String> l = new ArrayList<>();
-                        l.add(strings[0]+".JPG");
-                        l.add(strings[0]+".PNG");
+                        l.add(strings[0]+".jpg");
+                        l.add(strings[0]+".png");
                         for(int i=1; i<sonicConstants.TOTAL_IMAGES_SLIDE; i++){
-                            l.add(strings[0]+"_"+i+".JPG");
-                            l.add(strings[0]+"_"+i+".PNG");
+                            l.add(strings[0]+"_"+i+".jpg");
+                            l.add(strings[0]+"_"+i+".png");
                         }
 
-                        File destino;
-                        FileOutputStream file;
                         for (int i=0; i < l.size(); i++){
-
-                            destino = new File(Environment.getExternalStorageDirectory()+mPath+l.get(i));
-                            file = new FileOutputStream(destino);
-                            Log.d("FILE", "ORIGEM="+l.get(i)+"/DESTINO="+destino);
-
-                            if(ftpClient.retrieveFile(l.get(i), file)){
-
-                                destino.createNewFile();
-
+                            InputStream inputStream = ftpClient.retrieveFileStream(sonicConstants.FTP_IMAGENS + l.get(i));
+                            int returnCod = ftpClient.getReplyCode();
+                            if(!(inputStream == null || returnCod == 550)){
+                                ftpClient.completePendingCommand();
+                                byte[] buffer = new byte[inputStream.available()];
+                                inputStream.read(buffer);
+                                File destino = new File(Environment.getExternalStorageDirectory()+mPath+l.get(i));
+                                OutputStream out = new FileOutputStream(destino);
+                                out.write(buffer);
+                                out.close();
+                                res = true;
                             }
-                            file.close();
                         }
 
                     }catch (Exception e){
@@ -471,15 +473,27 @@ public class sonicFtp {
             ftpDisconnect();
             return res;
         }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            myProgress2.dismiss();
+            if(aBoolean){
+                exibirMensagemOK();
+            }else{
+                exibirMensagemErro();
+            }
+        }
     }
 
 
     private void exibirMensagemErro(){
-
+        Toast.makeText(myCtx, "OK", Toast.LENGTH_SHORT).show();
     }
 
     private void exibirMensagemOK(){
-
+        Toast.makeText(myCtx, "ERRO", Toast.LENGTH_SHORT).show();
+        //((sonicProdutos)myCtx).exi
     }
 
 }

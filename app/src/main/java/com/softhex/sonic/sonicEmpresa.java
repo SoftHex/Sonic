@@ -140,7 +140,7 @@ public class sonicEmpresa extends sonicRuntimePermission {
                     @Override
                     public void onClick(View view) {
                         new android.app.AlertDialog.Builder(mContext)
-                                .setTitle("Atenção!\n\n")
+                                //.setTitle("Atenção!\n\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {

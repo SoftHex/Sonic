@@ -683,7 +683,7 @@ public class sonicPreferences{
         }
         public void setArquivoSinc(int codigo){
             editor = sharedpreferences.edit();
-            editor.putString(USUARIO_ARQUIVO_SINC, String.format("%5s",codigo).replace(" ", "0")+".TXT");
+            editor.putString(USUARIO_ARQUIVO_SINC, String.format("%5s",codigo).replace(" ", "0")+".xml");
             editor.apply();
         }
         public String getArquivoSinc(){

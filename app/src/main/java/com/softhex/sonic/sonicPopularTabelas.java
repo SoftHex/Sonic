@@ -12,11 +12,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.text.Html;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.softhex.materialdialog.PromptDialog;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +32,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * Created by Administrador on 04/08/2017.
@@ -44,35 +53,35 @@ public class sonicPopularTabelas {
     private List<String> mTablesSinc = new ArrayList<>();
     private String[][] mTables = {
 
-            { "[SITE]", sonicConstants.TB_SITE, "Site", "save"},
-            { "[FTP]", sonicConstants.TB_FTP, "Ftp" ,"save" },
-            { "[EMPRESAS]", sonicConstants.TB_EMPRESA, "Empresas", "save" },
-            { "[NIVEL_ACESSO]", sonicConstants.TB_NIVEL_ACESSO, "Nível de Acesso", "save" },
-            { "[USUARIOS]", sonicConstants.TB_USUARIO, "Usuários" ,"save" },
-            { "[EMPRESAS_USUARIOS]", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
-            { "[MATRIZ]", sonicConstants.TB_GRUPO_EMPRESAS, "Grupo Empresas", "save"},
-            { "[CLIENTES]", sonicConstants.TB_CLIENTE, "Clientes", "save" },
-            { "[GRUPO_CLIENTES]", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "save" },
-            { "[EMPRESAS_CLIENTES]", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "save" },
-            { "[PRODUTOS]", sonicConstants.TB_PRODUTO, "Produtos", "save" },
-            { "[GRUPO_PRODUTOS]", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "save" },
-            { "[ESTOQUE_PRODUTOS]", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "save" },
-            { "[BLOQUEIO_PRODUTOS]", sonicConstants.TB_BLOQUEIO_PRODUTO, "Bloqueio de Produtos", "save" },
-            { "[TABELA_PRECO]", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "save" },
-            { "[TABELA_PRECO_EMPRESA]", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "save" },
-            { "[TABELA_PRECO_PRODUTO]", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "save" },
-            { "[TIPO_COBRANCA]", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "save" },
-            { "[TIPO_PEDIDO]", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "save" },
-            { "[AGENTE_COBRADOR]", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
-            { "[UNIDADE_MEDIDA]", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "save" },
-            { "[ROTA]", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
-            { "[CLIENTES_SEM_COMPRA]", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
-            { "[TITULOS]", sonicConstants.TB_TITULO, "Títulos", "save" },
-            { "[PRAZO]", sonicConstants.TB_PRAZO, "Prazo", "save" },
-            { "[ULTIMAS_COMPRAS]", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "save" },
-            { "[ULTIMAS_COMPRAS_ITENS]", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "save" },
-            { "[VENDAS]", sonicConstants.TB_VENDA, "Vendas", "save" },
-            { "[]", sonicConstants.TB_VENDA, "", "replace" }
+            { "SITE", sonicConstants.TB_SITE, "Site", "save"},
+            { "FTP", sonicConstants.TB_FTP, "Ftp" ,"save" },
+            { "EMPRESAS", sonicConstants.TB_EMPRESA, "Empresas", "save" },
+            { "NIVEL_ACESSO", sonicConstants.TB_NIVEL_ACESSO, "Nível de Acesso", "save" },
+            { "USUARIOS", sonicConstants.TB_USUARIO, "Usuários" ,"save" },
+            { "EMPRESAS_USUARIOS", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
+            { "MATRIZ", sonicConstants.TB_GRUPO_EMPRESAS, "Grupo Empresas", "save"},
+            { "CLIENTES", sonicConstants.TB_CLIENTE, "Clientes", "save" },
+            { "GRUPO_CLIENTES", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "save" },
+            { "EMPRESAS_CLIENTES", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "save" },
+            { "PRODUTOS", sonicConstants.TB_PRODUTO, "Produtos", "save" },
+            { "GRUPO_PRODUTOS", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "save" },
+            { "ESTOQUE_PRODUTOS", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "save" },
+            { "BLOQUEIO_PRODUTOS", sonicConstants.TB_BLOQUEIO_PRODUTO, "Bloqueio de Produtos", "save" },
+            { "TABELA_PRECO", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "save" },
+            { "TABELA_PRECO_EMPRESA", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "save" },
+            { "TABELA_PRECO_PRODUTO", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "save" },
+            { "TIPO_COBRANCA", sonicConstants.TB_TIPO_COBRANCA, "Tipo de Cobrança", "save" },
+            { "TIPO_PEDIDO", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "save" },
+            { "AGENTE_COBRADOR", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
+            { "UNIDADE_MEDIDA", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "save" },
+            { "ROTA", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
+            { "CLIENTES_SEM_COMPRA", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
+            { "TITULOS", sonicConstants.TB_TITULO, "Títulos", "save" },
+            { "PRAZO", sonicConstants.TB_PRAZO, "Prazo", "save" },
+            { "ULTIMAS_COMPRAS", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "save" },
+            { "ULTIMAS_COMPRAS_ITENS", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "save" },
+            { "VENDAS", sonicConstants.TB_VENDA, "Vendas", "save" },
+            { "", sonicConstants.TB_VENDA, "", "replace" }
 
     };
 
@@ -100,7 +109,8 @@ public class sonicPopularTabelas {
                 myProgress.setMessage("");
                 myProgress.setProgress(0);
                 myProgress.show();
-                new myAsyncTaskGravar().execute(arquivo);
+                //new myAsyncTaskGravar().execute(arquivo);
+                new myAsyncTaskGravarXml().execute(arquivo);
             });
 
         }else {
@@ -155,8 +165,8 @@ public class sonicPopularTabelas {
                     List<String[]> list = Arrays.asList(mTables);
 
                     while (line!=null){
+
                         for(String[] arr: list){
-                            //Log.d(Arrays.asList(arr).get(0), Arrays.asList(arr).get(1));
 
                             if(line!=null && (line.contains(arr[0]) || arr[0].contains(line))){
 
@@ -168,9 +178,9 @@ public class sonicPopularTabelas {
 
                                 line = reader.readLine();
 
-                                while (line != null && line.indexOf("[") != 0) {
+                                while (line != null && line.indexOf("->") != 0) {
 
-                                    if(line.indexOf("###")==0){
+                                    if(line.indexOf("<")==0){
 
                                         line = reader.readLine();
 
@@ -183,7 +193,9 @@ public class sonicPopularTabelas {
                                         int len = str.length();
                                         String str2 = str.substring(pos, len);
                                         List<String> data = Arrays.asList(str2.split(";", -1));
-                                        DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? sonicDatabaseCRUD.DB_MODE_SAVE : sonicDatabaseCRUD.DB_MODE_SAVE_UNIQUE);
+                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.SAVE : ModeSave.SAVE_UNIQUE)){
+                                            Log.d("ERRO", mPref.Geral.getError());
+                                        }
                                         line = reader.readLine();
                                     }
 
@@ -256,6 +268,133 @@ public class sonicPopularTabelas {
                 }
             }
         }
+    }
+
+    public class myAsyncTaskGravarXml extends AsyncTask<String, String, Boolean>{
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            arquivo = strings[0];
+
+            File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_TEMP + arquivo);
+
+            if(file.exists()){
+
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder;
+
+                try {
+
+                    int count=0;
+                    myProgress.setMax(sonicUtils.countFileLines(file));
+                    List<String[]> list = Arrays.asList(mTables);
+                    dBuilder = dbFactory.newDocumentBuilder();
+                    dbFactory.setIgnoringElementContentWhitespace(true);
+                    Document doc = dBuilder.parse(file);
+                    doc.getDocumentElement().normalize();
+                    NodeList nodeList = doc.getElementsByTagName("secao");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        NodeList childList = nodeList.item(i).getChildNodes();
+                        Element element = (Element)nodeList.item(i);
+                        for(String[] arr: list){
+                            if(arr[0].equals(element.getAttribute("nome")) || element.getAttribute("nome").equals(arr[0])){
+                                if(arr[3].equals("save")){
+                                    DBC.Database.cleanData(arr[1]);
+                                }
+                                mTablesSinc.add(arr[0]);
+                                for (int j = 0; j < childList.getLength(); j++) {
+
+                                    Node childNode = childList.item(j);
+                                    if ("valores".equals(childNode.getNodeName())) {
+                                        count +=1;
+                                        publishProgress("Gravando "+ arr[2], String.valueOf(count));
+                                        List<String> data = Arrays.asList(childNode.getTextContent().split("\\|", -1));
+                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.SAVE : ModeSave.SAVE_UNIQUE)){
+                                            return false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                    return false;
+                }
+
+                return true;
+
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            myProgress.setMessage(values[0]);
+            myProgress.setProgress(Integer.parseInt(values[1]));
+        }
+
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            myProgress.dismiss();
+            new sonicUtils(mContext).Arquivo.deleteFile(sonicConstants.LOCAL_TEMP+arquivo);
+            if(aBoolean){
+                sonicDatabaseCRUD mData = new sonicDatabaseCRUD(mContext);
+                switch (mPref.Sincronizacao.getDownloadType()){
+                    case "DADOS":
+                        mPref.Geral.setFirstSinc(false);
+                        mPref.Users.setUltimaSincID(mPref.Users.getUsuarioId());
+                        mPref.Users.setUltimaSincNome(mPref.Users.getUsuarioNome());
+                        enviarMensagemSincronizacao();
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_TODAS, sonicConstants.TIPO_SINC_DADOS);
+                        for(String arr: mTablesSinc){
+                            mData.Sincronizacao.saveSincronizacao(arr, sonicConstants.TIPO_SINC_DADOS);
+                        }
+                        break;
+                    case "ESTOQUE":
+                        new PromptDialog(mContext)
+                                .setDialogType(sonicDialog.MSG_SUCCESS)
+                                .setAnimationEnable(true)
+                                .setTitleText(R.string.headerSuccess)
+                                .setContentText(R.string.estoqueSincronizado)
+                                .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
+                                    @Override
+                                    public void onClick(PromptDialog dialog) {
+                                        dialog.dismiss();
+                                        ((sonicSincronizacao)mAct).refreshSincFragment();
+                                    }
+                                }).show();
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTO, sonicConstants.TIPO_SINC_DADOS);
+                        break;
+                    case "SITE":
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_SITE, sonicConstants.TIPO_SINC_DADOS);
+                        primeiroAcesso();
+                        break;
+                }
+            }else{
+                enviarMensagemErro(mPref.Sincronizacao.getDownloadType());
+            }
+        }
+    }
+
+    private void enviarMensagemErro(String type){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+
+                switch (type){
+                    case "SITE":
+                        ((sonicEmpresa)mAct).mensagemErroDetalhe(false);
+                        break;
+                }
+
+            }
+        });
     }
 
     public void enviarMensagemSincronizacao(){

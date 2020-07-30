@@ -782,7 +782,7 @@ public class sonicMain extends AppCompatActivity{
         myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         myAdapter.addFragment(new sonicMainVendas(), "Vendas");
         myAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
-        myAdapter.addFragment(new sonicMainDesempenhoDiario(), "Desempenho");
+        //myAdapter.addFragment(new sonicMainDesempenhoDiario(), "Desempenho");
         //myAdapter.addFragment(new sonicMainVendas(), "Visitas");
         viewpager.addOnPageChangeListener(listener);
         viewpager.setAdapter(myAdapter);

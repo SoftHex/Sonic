@@ -132,7 +132,7 @@ public class sonicSplash extends AppCompatActivity {
             mTotalList.add(codigoBancos[x]);
             mTotalList.add(nomeBancos[x]);
             mTotalList.add(nomeBancosFull[x]);
-            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, sonicDatabaseCRUD.DB_MODE_SAVE);
+            new sonicDatabaseCRUD(this).Database.saveData(sonicConstants.TB_BANCOS, mTotalList, ModeSave.SAVE);
         }
 
     }

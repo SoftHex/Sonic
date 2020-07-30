@@ -17,6 +17,11 @@ public class sonicFile {
         return x.exists() ? true : false;
     }
 
+    public static boolean checkXmlFile(String path, String filename){
+        File x = new File(Environment.getExternalStorageDirectory(), path + filename + ".xml");
+        return x.exists() ? true : false;
+    }
+
     public static File searchTxtFile(String path, String filename){
         return new File(Environment.getExternalStorageDirectory(), path + filename + ".TXT");
     }

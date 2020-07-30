@@ -207,7 +207,7 @@ public class sonicDatabaseCRUD {
         }
 
 
-        public Boolean saveData(String tabela, List<String> values, int type){
+        public Boolean saveData(String tabela, List<String> values, ModeSave m){
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             ContentValues cv = new ContentValues();
             Cursor cursor = DB.getWritableDatabase().query(tabela, null, null, null, null, null, null);
@@ -215,25 +215,42 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                if(type==DB_MODE_SAVE_UNIQUE){
+                if(m.equals(ModeSave.SAVE_UNIQUE)){
                         Cursor c = DB.getReadableDatabase().rawQuery("SELECT * FROM "+tabela+" WHERE "+cursor.getColumnNames()[1]+"=?", new String[]{values.get(0)});
                         if(c==null || c.getCount()==0){
-                            for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
-                                cv.put(cursor.getColumnNames()[i+1], values.get(i));
+
+                            try {
+                                for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                                    cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                                }
+
+                                result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+
+                            }catch (ArrayIndexOutOfBoundsException e){
+                                mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
+                                e.printStackTrace();
+                                return false;
                             }
-                            result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
-                        }else {
-                            result = false;
+
                         }
                 }else{
-                    for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
-                        cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                    try {
+
+                        for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                            cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                        }
+
+                    }catch (ArrayIndexOutOfBoundsException e){
+                        mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
+                        e.printStackTrace();
+                        return false;
                     }
+
                     result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
                 }
 
             }catch (SQLiteException e){
-                mPrefs.Geral.setError(e.getMessage());
+                mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
                 DBCL.Log.saveLog(
                         e.getStackTrace()[0].getLineNumber(),
                         e.getMessage(),
@@ -241,6 +258,7 @@ public class sonicDatabaseCRUD {
                         mySystem.System.getClassName(el),
                         mySystem.System.getMethodNames(el));
                 e.printStackTrace();
+                return false;
 
             }finally{
 				cursor.close();

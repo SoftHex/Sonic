@@ -57,6 +57,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
     private int dias, diasDiff;
     private GridLayoutManager mLayout;
     private sonicFtp mFtp;
+    private ImageView ivDownload;
 
     public class prodHolder extends RecyclerView.ViewHolder {
 
@@ -345,6 +346,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             });
         }else{
             holder.llDownload.setVisibility(View.GONE);
+            ivDownload = holder.mImage;
         }
 
     }
