@@ -994,8 +994,8 @@ public class sonicMain extends AppCompatActivity{
                 .setAction("DETALHE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new android.app.AlertDialog.Builder(mContext)
-                                .setTitle("Atenção!\n\n")
+                        new android.app.AlertDialog.Builder(mActivity, R.style.DialogTheme)
+                                //.setTitle("Atenção!\n\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1004,7 +1004,7 @@ public class sonicMain extends AppCompatActivity{
                                 }).show();
                     }
                 });
-        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
+        SnackbarHelper.configSnackbar(mActivity, mSnackbar, SnackbarHelper.SNACKBAR_WARNING);
         llSnackBar.addView(mSnackbar.getView());
         mSnackbar.show();
 
@@ -1022,7 +1022,7 @@ public class sonicMain extends AppCompatActivity{
                             refreshFragments();
                     }
                 });
-        SnackbarHelper.configSnackbar(mContext, mSnackbar, SnackbarHelper.SNACKBAR_SUCCESS);
+        SnackbarHelper.configSnackbar(mActivity, mSnackbar, SnackbarHelper.SNACKBAR_SUCCESS);
         llSnackBar.addView(mSnackbar.getView());
         mSnackbar.show();
 

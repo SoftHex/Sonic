@@ -1,8 +1,11 @@
 package com.softhex.sonic;
 
 import android.animation.LayoutTransition;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -23,6 +27,9 @@ public class sonicClientes extends AppCompatActivity {
 
     private ViewPagerAdapter mAdapter;
     private sonicPreferences mPrefs;
+    private LinearLayout llSnackBar;
+    private Snackbar mSnackBar;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,7 @@ public class sonicClientes extends AppCompatActivity {
         setContentView(R.layout.sonic_layout_padrao);
 
         mPrefs = new sonicPreferences(this);
+        mContext = this;
         createInterface();
 
     }
@@ -60,6 +68,8 @@ public class sonicClientes extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener((View v)-> {
                 onBackPressed();
         });
+
+        llSnackBar = findViewById(R.id.llSnackBar);
 
     }
 
@@ -131,6 +141,48 @@ public class sonicClientes extends AppCompatActivity {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.detach(mAdapter.getItem(position)).attach(mAdapter.getItem(position)).commit();
+
+    }
+
+    public void mensagemErro(){
+
+        llSnackBar.removeAllViews();
+        mSnackBar = Snackbar
+                .make(llSnackBar, "ERRO", Snackbar.LENGTH_INDEFINITE)
+                .setAction("DETALHE", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new android.app.AlertDialog.Builder(mContext)
+                                //.setTitle("Atenção!\n\n")
+                                .setMessage(mPrefs.Geral.getError())
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
+                });
+        SnackbarHelper.configSnackbar(mContext, mSnackBar, SnackbarHelper.SNACKBAR_WARNING);
+        llSnackBar.addView(mSnackBar.getView());
+        mSnackBar.show();
+
+    }
+
+    public void mensagemOK(String msg, boolean refresh){
+
+        llSnackBar.removeAllViews();
+        mSnackBar = Snackbar
+                .make(llSnackBar, msg, Snackbar.LENGTH_INDEFINITE)
+                .setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(refresh)
+                            refreshFragments();
+                    }
+                });
+        SnackbarHelper.configSnackbar(mContext, mSnackBar, SnackbarHelper.SNACKBAR_SUCCESS);
+        llSnackBar.addView(mSnackBar.getView());
+        mSnackBar.show();
 
     }
 

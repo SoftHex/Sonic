@@ -123,6 +123,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         LinearLayout linearItem;
         ProgressBar pbDuracao;
         LinearLayout llGroupDate;
+        LinearLayout llProgress;
 
         rotaHolder(View view) {
             super(view);
@@ -133,12 +134,13 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
             ivImagem = view.findViewById(R.id.ivImagem);
             tvAtendente = view.findViewById(R.id.tvAtendente);
             tvStatus = view.findViewById(R.id.tvStatus);
-            tvTempo = view.findViewById(R.id.tvTempo);
+            //tvTempo = view.findViewById(R.id.tvTempo);
             tvSituacao = view.findViewById(R.id.tvSituacao);
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
             pbDuracao = view.findViewById(R.id.pbDuracao);
             llGroupDate = view.findViewById(R.id.llGroupDate);
+            llProgress = view.findViewById(R.id.llProgress);
 
         }
     }
@@ -369,11 +371,11 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 holder.tvStatus.setText(StatusText.NAO_INICIADO);
                 break;
             case Status.EM_ATENDIMENTO:
-                holder.tvTempo.setVisibility(View.VISIBLE);
-                holder.pbDuracao.setVisibility(View.VISIBLE);
+                //holder.tvTempo.setVisibility(View.VISIBLE);
+                //holder.pbDuracao.setVisibility(View.VISIBLE);
+                holder.llProgress.setVisibility(View.VISIBLE);
                 holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_em_atendimento));
                 holder.tvStatus.setText(StatusText.EM_ATENDIMENTO);
-                holder.pbDuracao.setVisibility(View.VISIBLE);
                 timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
                 holder.pbDuracao.setMax(2 * 60);
                 holder.pbDuracao.setProgress((int) (timeInMilliseconds / (1000 * 60)));

@@ -65,7 +65,7 @@ public class sonicMainPedidos extends Fragment {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                tvTitulo.setText("Pedidos");
+                tvTitulo.setText("");
                 pbChart.setVisibility(View.GONE);
                 switch (mPrefs.Geral.getHomeChartType()){
                     case "Linhas":

@@ -124,6 +124,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private sonicPreferences mPrefs;
     private ProgressBar pbDuracao;
     private TextView tvTempo;
+    private LinearLayout llProgress;
+    private ProgressBar pbProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +166,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         tvDuracaoMini = findViewById(R.id.tvDuracaoMini);
         pbDuracao = findViewById(R.id.pbDuracao);
         tvTempo = findViewById(R.id.tvTempo);
+        llProgress = findViewById(R.id.llProgress);
+        pbProgress = findViewById(R.id.pbProgress);
 
         createInterface();
         slideImages();
@@ -228,7 +232,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 break;
             case Status.EM_ATENDIMENTO:
                 continueClock();
-                pbDuracao.setVisibility(View.VISIBLE);
+                llProgress.setVisibility(View.VISIBLE);
+                //pbDuracao.setVisibility(View.VISIBLE);
                 tvTempo.setVisibility(View.VISIBLE);
                 tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
                 llBotoes.setVisibility(View.VISIBLE);
@@ -597,7 +602,9 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         public void run() {
             timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
             pbDuracao.setMax(2*60);
+            pbProgress.setMax(2*60);
             pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
+            pbProgress.setProgress((int)(timeInMilliseconds/(1000*60)));
             tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
             customHandler.postDelayed(this, 1000);
         }

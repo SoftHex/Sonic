@@ -314,11 +314,11 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         bt1.setLayoutParams(p2);
         bt1.setPadding(30,0,30,0);
         holder.llGroupDate.addView(bt1);
-        List<sonicGrupoClientesHolder> grupoAuxiliar;
+        List<String> grupoAuxiliar;
         grupoAuxiliar = new ArrayList<>();
         for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
 
-            grupoAuxiliar.add(mGroupList.get(i));
+            grupoAuxiliar.add(mGroupList.get(i).getNome());
 
             if(!mGroupList.get(i).getNome().contains(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf())){
 
@@ -352,18 +352,19 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         }
 
-        Button bt3 = new Button(mContext);
+        if(mGroupList.size()>TOTAL_ITENS_FILTRO){
+            Button bt3 = new Button(mContext);
 
-        bt3.setOnClickListener((View v)-> {
-            exibirFiltroExtra(grupoAuxiliar);
-        });
-
-        bt3.setText("MAIS...");
-        bt3.setTextSize(12);
-        bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
-        bt3.setLayoutParams(p);
-        bt3.setPadding(30,0,30,0);
-        holder.llGroupDate.addView(bt3);
+            bt3.setOnClickListener((View v)-> {
+                exibirFiltroExtra(grupoAuxiliar);
+            });
+            bt3.setText("MAIS...");
+            bt3.setTextSize(12);
+            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+            bt3.setLayoutParams(p);
+            bt3.setPadding(30,0,30,0);
+            holder.llGroupDate.addView(bt3);
+        }
 
     }
 
@@ -416,7 +417,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     }
 
-    private void exibirFiltroExtra(List<sonicGrupoClientesHolder> mListAuxiliar) {
+    private void exibirFiltroExtra(List<String> mListAuxiliar) {
 
         List<sonicGrupoClientesHolder> grupo;
 
@@ -425,7 +426,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         List<String> l = new ArrayList<>();
 
         for(int i=0; i < grupo.size(); i++ ){
-            l.add(grupo.get(i).getNome());
+            if(!mListAuxiliar.contains(grupo.get(i).getNome())){
+                l.add(grupo.get(i).getNome());
+            }
         }
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);

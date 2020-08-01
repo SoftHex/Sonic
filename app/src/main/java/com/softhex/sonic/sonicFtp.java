@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -223,7 +222,7 @@ public class sonicFtp {
             @Override
             public void run() {
 
-                myProgress = new ProgressDialog(myCtx);
+                myProgress = new ProgressDialog(myCtx, R.style.ProgressTheme);
                 myProgress.setCancelable(false);
                 myProgress.setMessage("Conectando...");
                 myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -320,14 +319,13 @@ public class sonicFtp {
 
                     } else {
 
-                        new sonicDialog(myCtx).showMI(R.string.headerWrong, R.string.failToConnect, sonicDialog.MSG_WRONG);
-                        res = false;
+                        mPrefs.Geral.setError(myCtx.getResources().getString(R.string.failToConnect));
+                        return false;
                     }
 
                 }else{
-                    res = false;
-                    myProgress.dismiss();
-                    new sonicDialog(myCtx).showMI(R.string.headerWrong, R.string.networkError, sonicDialog.MSG_WRONG);
+                    mPrefs.Geral.setError(myCtx.getResources().getString(R.string.networkError));
+                    return false;
                 }
 
             ftpDisconnect();
@@ -368,6 +366,8 @@ public class sonicFtp {
 
                 }
 
+            }else{
+                exibirMensagemErro();
             }
 
         }
@@ -462,12 +462,12 @@ public class sonicFtp {
                 } else {
 
                     mPrefs.Geral.setError(myCtx.getResources().getString(R.string.failToConnect));
-                    exibirMensagemErro();
+                    return false;
                 }
 
             }else{
                 mPrefs.Geral.setError(myCtx.getResources().getString(R.string.networkError));
-                exibirMensagemErro();
+                return false;
             }
 
             ftpDisconnect();
@@ -488,12 +488,39 @@ public class sonicFtp {
 
 
     private void exibirMensagemErro(){
-        Toast.makeText(myCtx, "OK", Toast.LENGTH_SHORT).show();
+
+        myProgress.dismiss();
+
+        mAct.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (mPrefs.Sincronizacao.getCalledActivity()){
+                    case "sonicClientes":
+                        ((sonicClientes)mAct).mensagemErro();
+                        break;
+                    case "sonicProdutos":
+                        ((sonicProdutos)mAct).mensagemErro();
+                        break;
+                    case "sonicMain":
+                        ((sonicMain)mAct).mensagemErro();
+                        break;
+                    case "sonicRota":
+                        ((sonicRota)mAct).refreshFragments();
+                        break;
+                }
+            }
+        });
     }
 
     private void exibirMensagemOK(){
-        Toast.makeText(myCtx, "ERRO", Toast.LENGTH_SHORT).show();
-        //((sonicProdutos)myCtx).exi
+        switch (mPrefs.Sincronizacao.getCalledActivity()){
+            case "sonicMain":
+                ((sonicMain)mAct).mensagemErro();
+                break;
+            case "sonicClientes":
+                ((sonicClientes)mAct).mensagemErro();
+                break;
+        }
     }
 
 }

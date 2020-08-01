@@ -12,7 +12,26 @@
         <item name="android:itemTextAppearance">@color/colorTextDark</item>
         <item name="android:windowContentTransitions">true</item>
     </style>
-
+    <!-- PROGRESS THEME -->
+    <style name="ProgressTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlueDark</item>
+        <item name="colorAccent">@color/colorPrimaryBlueLightT</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+    <!-- DIALOG THEME -->
+    <style name="DialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryBlueDark</item>
+        <item name="colorAccent">@color/colorPrimaryBlueLightT</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+    <!-- TRANSLUCED APP THEME -->
+    <style name="TranslucedAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
     <style name="WineAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorWinePrimary</item>
         <item name="colorPrimaryDark">@color/colorWinePrimaryDark</item>

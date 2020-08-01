@@ -70,7 +70,7 @@ public class sonicMainVendas extends Fragment {
             @Override
             public void run() {
                 pbChart.setVisibility(View.GONE);
-                tvTitulo.setText("Vendas");
+                tvTitulo.setText("");
                 switch (mPrefs.Geral.getHomeChartType()){
                     case "Linhas":
                         mLineChart.setVisibility(View.VISIBLE);

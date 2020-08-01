@@ -304,7 +304,6 @@ public class sonicPopularTabelas {
                                 }
                                 mTablesSinc.add(arr[0]);
                                 for (int j = 0; j < childList.getLength(); j++) {
-
                                     Node childNode = childList.item(j);
                                     if ("valores".equals(childNode.getNodeName())) {
                                         count +=1;
