@@ -31,6 +31,7 @@ public class sonicClientesHolder {
      int titulos;
      int titulos_em_atraso;
      int compras;
+     int visitas;
      String tabela_preco;
      String status;
 
@@ -110,6 +111,14 @@ public class sonicClientesHolder {
         return titulos;
     }
     public int getTitulosEmAtraso(){return titulos_em_atraso;}
+
+    public int getVisitas() {
+        return visitas;
+    }
+
+    public void setVisitas(int visitas) {
+        this.visitas = visitas;
+    }
 
     public String getTabelaPreco(){
         return this.tabela_preco;

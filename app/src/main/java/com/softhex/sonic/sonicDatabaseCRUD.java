@@ -757,11 +757,9 @@ public class sonicDatabaseCRUD {
                         "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
                         "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
                         " FROM " + TABLE_CLIENTE +
-                        " C LEFT JOIN " + TABLE_EMPRESA_CLIENTE +
-                        " EC ON EC.codigo_cliente = C.codigo " +
-                        " LEFT JOIN " + TABLE_GRUPO_CLIENTE +
+                        " C LEFT JOIN " + TABLE_GRUPO_CLIENTE +
                         " GC ON GC.codigo = C.codigo_grupo " +
-                        " WHERE EC.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1)" +
+                        " WHERE ((SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1) IN (SELECT EC.codigo_empresa FROM "+ TABLE_EMPRESA_CLIENTE +" EC WHERE EC.codigo_cliente = C.codigo))" +
                         " AND C.tipo = ? " + (cnpj ? (mPrefs.GrupoCliente.getFiltroCnpj().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCnpj() + "'") : (mPrefs.GrupoCliente.getFiltroCpf().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCpf() + "'")) + " ORDER BY " + (mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? "C.nome_fantasia" : "C.razao_social");
 
                 try {
@@ -952,7 +950,8 @@ public class sonicDatabaseCRUD {
                                     "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTE +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo," +
                                     "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
                                     "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
-                                    "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras " +
+                                    "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
+                                    "(SELECT COUNT(R._id) FROM " + TABLE_ROTA + " R WHERE R.codigo_cliente = C.codigo) AS visitas " +
                                     " FROM " + TABLE_CLIENTE +
                                     " c WHERE c.codigo = "+id, null);
 
@@ -982,6 +981,7 @@ public class sonicDatabaseCRUD {
                         clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
                         clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
                         clientes.setCompras(cursor.getInt(cursor.getColumnIndex("compras")));
+                        clientes.setVisitas(cursor.getInt(cursor.getColumnIndex("visitas")));
                         cliente.add(clientes);
 
                     }
@@ -2188,43 +2188,66 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public List<sonicTitulosHolder> selectTitulosPorCliente(int cliente){
+        public List<sonicTitulosHolder> selectTitulosPorCliente(int codigo){
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             List<sonicTitulosHolder> titulos = new ArrayList<sonicTitulosHolder>();
 
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "T._id, " +
-                            "T.codigo, " +
-                            "T.numero, " +
-                            "T.data_emissao, " +
-                            "T.data_vencimento, " +
-                            "(SELECT AC.nome FROM "+ TABLE_AGENTE_COBRADOR +" AC WHERE AC.codigo = T.codigo_agente_cobrador) AS agente_cobrador, " +
-                            "(SELECT TC.nome FROM "+ TABLE_TIPO_COBRANCA +" TC WHERE TC.codigo = T.codigo_tipo_cobranca) AS tipo_cobranca, " +
-                            "T.numero, " +
-                            "T.codigo, " +
-                            "T.valor, " +
-                            "T.saldo, " +
-                            "T.situacao, " +
-                            "T.data_vencimento - strftime('%Y%m%d', date('now')) AS atraso, " +
-                            "T.juros, " +
-                            "T.situacao " +
-                            " FROM "+TABLE_TITULO+
-                            " T WHERE T.codigo_cliente=? AND T.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1)", new String[]{String.valueOf(cliente)});
+            try {
 
-            if(cursor!=null){
-                while(cursor.moveToNext()){
+                String query = "SELECT " +
+                        "T._id, " +
+                        "T.codigo, " +
+                        "T.numero, " +
+                        "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESA + " E WHERE E.codigo = T.codigo_empresa) AS nome_fantasia, " +
+                        "(SELECT E.razao_social FROM " + TABLE_EMPRESA + " E WHERE E.codigo = T.codigo_empresa) AS razao_social, " +
+                        "T.data_emissao, " +
+                        "T.data_vencimento, " +
+                        "(SELECT AC.nome FROM "+ TABLE_AGENTE_COBRADOR +" AC WHERE AC.codigo = T.codigo_agente_cobrador) AS agente_cobrador, " +
+                        "(SELECT TC.nome FROM "+ TABLE_TIPO_COBRANCA +" TC WHERE TC.codigo = T.codigo_tipo_cobranca) AS tipo_cobranca, " +
+                        "T.valor, " +
+                        "T.saldo, " +
+                        "(T.data_vencimento - strftime('%Y%m%d', date('now')))*-1 AS atraso, " +
+                        "T.juros, " +
+                        "T.situacao " +
+                        " FROM " + TABLE_TITULO +
+                        " T WHERE T.codigo_cliente=? ORDER BY T.data_emissao DESC";
 
-                    sonicTitulosHolder titulo = new sonicTitulosHolder();
+                Cursor cursor = DB.getReadableDatabase().rawQuery(query
+                        , new String[]{String.valueOf(codigo)});
 
-                    titulo.setNumero(cursor.getString(cursor.getColumnIndex("numero")));
-                    titulos.add(titulo);
+                Log.d("QUERY TITULO", query);
 
+                if(cursor!=null){
+
+                    while(cursor.moveToNext()){
+
+                        sonicTitulosHolder titulo = new sonicTitulosHolder();
+
+                        titulo.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                        titulo.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        titulo.setAgenteCobrador(cursor.getString(cursor.getColumnIndex("agente_cobrador")));
+                        titulo.setTipoCobranca(cursor.getString(cursor.getColumnIndex("tipo_cobranca")));
+                        titulo.setDataEmissao(cursor.getString(cursor.getColumnIndex("data_emissao")));
+                        titulo.setDataVencimento(cursor.getString(cursor.getColumnIndex("data_vencimento")));
+                        titulo.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                        titulo.setNumero(cursor.getString(cursor.getColumnIndex("numero")));
+                        titulo.setValor(cursor.getString(cursor.getColumnIndex("valor")));
+                        titulo.setSaldo(cursor.getString(cursor.getColumnIndex("saldo")));
+                        titulo.setJuros(cursor.getString(cursor.getColumnIndex("juros")));
+                        titulo.setDiasAtraso(cursor.getInt(cursor.getColumnIndex("atraso")));
+                        titulos.add(titulo);
+
+                    }
                 }
-            }
 
-            cursor.close();
+                cursor.close();
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
 
             return titulos;
         }
@@ -2380,6 +2403,7 @@ public class sonicDatabaseCRUD {
                         "R.status, " +
                         "R.data_agendamento, " +
                         "R.hora_agendamento, " +
+                        "R.proprietario, " +
                         "R.atendente, " +
                         "R.ordem, " +
                         "R.observacao, " +
@@ -2420,6 +2444,7 @@ public class sonicDatabaseCRUD {
                             rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
                             rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
                             rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
+                            rota.setProprietario(cursor.getInt(cursor.getColumnIndex("proprietario")));
                             rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
                             rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
                             rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
@@ -2453,6 +2478,100 @@ public class sonicDatabaseCRUD {
                             mySystem.System.getMethodNames(el));
                     e.printStackTrace();
                 }
+            return rotas;
+        }
+
+        public List<sonicRotaHolder> selectRotaPorCliente(int codigo){
+
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicRotaHolder> rotas = new ArrayList<>();
+
+            String query = "SELECT " +
+                    "R._id, " +
+                    "R.codigo, " +
+                    "R.codigo_empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
+                    "R.codigo_cliente, " +
+                    "R.tipo, " +
+                    "R.status, " +
+                    "R.data_agendamento, " +
+                    "R.hora_agendamento, " +
+                    "R.proprietario, " +
+                    "R.atendente, " +
+                    "R.ordem, " +
+                    "R.observacao, " +
+                    "R.data_inicio, " +
+                    "R.data_fim, " +
+                    "R.hora_inicio, " +
+                    "R.hora_fim, " +
+                    "R.situacao, " +
+                    "R.negativacao, " +
+                    "R.cancelamento, " +
+                    "C.razao_social, " +
+                    "C.nome_fantasia, " +
+                    "C.endereco, " +
+                    "C.bairro, " +
+                    "C.municipio, " +
+                    "C.uf, " +
+                    "C.cep " +
+                    " FROM " + TABLE_ROTA +
+                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
+                    " WHERE C.codigo=? ORDER BY R.data_agendamento DESC";
+
+            try{
+
+                Cursor cursor = DB.getReadableDatabase().rawQuery(
+                        query , new String[]{String.valueOf(codigo)});
+
+                Log.d("QUERY ROTA", query);
+
+                while(cursor.moveToNext()){
+
+                    sonicRotaHolder rota = new sonicRotaHolder();
+
+                    rota.setId(cursor.getInt(cursor.getColumnIndex("_id")));
+                    rota.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                    rota.setCodigoEmpresa(cursor.getInt(cursor.getColumnIndex("codigo_empresa")));
+                    rota.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
+                    rota.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
+                    rota.setTipo(cursor.getInt(cursor.getColumnIndex("tipo")));
+                    rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+                    rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
+                    rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
+                    rota.setProprietario(cursor.getInt(cursor.getColumnIndex("proprietario")));
+                    rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                    rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
+                    rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+                    rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
+                    rota.setDataFim(cursor.getString(cursor.getColumnIndex("data_fim")));
+                    rota.setHoraInicio(cursor.getString(cursor.getColumnIndex("hora_inicio")));
+                    rota.setHoraFim(cursor.getString(cursor.getColumnIndex("hora_fim")));
+                    rota.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
+                    rota.setNegativacao(cursor.getString(cursor.getColumnIndex("negativacao")));
+                    rota.setCancelamento(cursor.getString(cursor.getColumnIndex("cancelamento")));
+                    rota.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                    rota.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                    rota.setLogradouro(cursor.getString(cursor.getColumnIndex("endereco")));
+                    rota.setBairro(cursor.getString(cursor.getColumnIndex("bairro")));
+                    rota.setMunicipio(cursor.getString(cursor.getColumnIndex("municipio")));
+                    rota.setUf(cursor.getString(cursor.getColumnIndex("uf")));
+                    rota.setCep(cursor.getString(cursor.getColumnIndex("cep")));
+
+                    rotas.add(rota);
+
+                }
+                cursor.close();
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(
+                        e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
             return rotas;
         }
 
@@ -2560,7 +2679,7 @@ public class sonicDatabaseCRUD {
                 cv.put("codigo", sonicUtils.Randomizer.generate(100000000,999999999));
                 cv.put("codigo_usuario", mPrefs.Users.getUsuarioId());
                 cv.put("codigo_empresa", mPrefs.Users.getEmpresaId());
-                cv.put("codigo_cliente", mPrefs.Clientes.getId());
+                cv.put("codigo_cliente", mPrefs.Clientes.getCodigo());
                 cv.put("tipo", 1); // 1=PADRÃO, 2=AGENDAMENTO, 3=REAGENDAMENTO
                 cv.put("status", 1); // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
                 cv.put("data_agendamento", data);

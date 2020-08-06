@@ -61,7 +61,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         mPref = new sonicPreferences(this);
         mData = new sonicDatabaseCRUD(this);
-        mList = mData.Cliente.selectClienteByID(mPref.Clientes.getId());
+        mList = mData.Cliente.selectClienteByID(mPref.Clientes.getCodigo());
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
@@ -117,12 +117,14 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
     public void setUpViewPager(ViewPager viewpager){
         ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "GERAL");
         myAdapter.addFragment(new sonicClientesDetalheGeral(), "FINANCEIRO");
-        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
+        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0 ? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
         myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mList.get(0).getTitulos()>0 ? "TÍTULOS("+ mList.get(0).getTitulos()+")" : "TÍTULOS"));
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "VISITAS");
-        //viewpager.addOnPageChangeListener(viewListener);
+        myAdapter.addFragment(new sonicClientesDetalheVisitas(), (mList.get(0).getVisitas() > 0 ? "VISITAS(" + mList.get(0).getVisitas() + ")" : "VISITAS"));
+
+        viewpager.addOnPageChangeListener(viewListenerFragment);
         viewpager.setAdapter(myAdapter);
 
     }
@@ -237,7 +239,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPref.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
@@ -249,7 +251,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         for(int i = 0; i < count ; i++){
 
-            image = mPref.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPref.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             myImages[i] = file.toString();
@@ -267,7 +269,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
         mViewpager.setAdapter(myAdapter);
-        mViewpager.addOnPageChangeListener(viewListener);
+        mViewpager.addOnPageChangeListener(viewListenerImage);
         //addBottomDots(0);
         addCount(1);
 
@@ -301,7 +303,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
     }
 
-    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+    ViewPager.OnPageChangeListener viewListenerFragment = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
 
@@ -310,7 +312,25 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         @Override
         public void onPageSelected(int i) {
 
-            //addBottomDots(i);
+            fbMenu.setVisibility(i!=0 ? View.GONE : View.VISIBLE);
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    };
+
+    ViewPager.OnPageChangeListener viewListenerImage = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+
             addCount(i+1);
 
         }

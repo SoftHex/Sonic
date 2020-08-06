@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -38,7 +39,6 @@ public class sonicClientesDetalheTitulos extends Fragment {
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesDetalheTitulosAdapter myAdapter;
     private List<sonicTitulosHolder> myList;
-
     private CoordinatorLayout myCoordinatorLayout;
     private ShimmerFrameLayout myShimmer;
     private TextView tvTexto, tvTitle, tvSearch;
@@ -47,10 +47,12 @@ public class sonicClientesDetalheTitulos extends Fragment {
     private sonicDatabaseCRUD DBC;
     private Intent i;
     private sonicPreferences mPrefs;
+    private LinearLayout llNoResult;
+    private RelativeLayout rlDesert;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        myView = inflater.inflate(R.layout.sonic_recycler_layout_detalhe, container, false);
 
         mContext = getActivity();
 
@@ -72,17 +74,8 @@ public class sonicClientesDetalheTitulos extends Fragment {
 
     public void loadFragment(){
 
-        setHasOptionsMenu(true);
 
-        tvTexto = myView.findViewById(R.id.tvText);
-
-        tvTitle = myView.findViewById(R.id.tvTitle);
-
-        tvSearch = myView.findViewById(R.id.tvSearch);
-
-        myImage = myView.findViewById(R.id.ivImage);
-
-        myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
+        //myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
 
         myShimmer = myView.findViewById(R.id.mShimmerLayout);
 
@@ -94,8 +87,7 @@ public class sonicClientesDetalheTitulos extends Fragment {
 
         myRecycler.setLayoutManager(myLayout);
 
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        //rlDesert = myView.findViewById(R.id.rlDesert);
 
         myShimmer.startShimmer();
 
@@ -109,7 +101,7 @@ public class sonicClientesDetalheTitulos extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulosPorCliente(mPrefs.Clientes.getId());
+            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulosPorCliente(mPrefs.Clientes.getCodigo());
             return myList.size();
 
         }
@@ -158,58 +150,29 @@ public class sonicClientesDetalheTitulos extends Fragment {
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
 
-        myAdapter = new sonicClientesDetalheTitulosAdapter(mContext, myList, myRecycler, "CPF: ");
+        myAdapter = new sonicClientesDetalheTitulosAdapter(myList, mContext, myRecycler);
         if(!myAdapter.hasObservers()){
             myAdapter.setHasStableIds(true);
         }
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
-        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        //ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        //params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     }
 
     private void showNoResult(){
 
-        AlphaAnimation fadeIn;
-        fadeIn = new AlphaAnimation(0,1);
-        fadeIn.setDuration(500);
-        fadeIn.setFillAfter(true);
-
-        //myImage.setVisibility(VISIBLE);
-        tvTitle.setVisibility(VISIBLE);
-        tvTexto.setVisibility(VISIBLE);
-        tvTitle.startAnimation(fadeIn);
-        tvTexto.startAnimation(fadeIn);
-        tvTitle.setText(R.string.noClientesTitle);
-        tvTexto.setText(R.string.noClientesText);
-        /*Glide.with(mContext)
-                .load(R.drawable.nopeople)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                .into(myImage);*/
+        //ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        //params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        //rlDesert.setVisibility(VISIBLE);
 
     }
 
     public void refreshFragment(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("RESUME","");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("PAUSE","");
-
     }
 
     @Override

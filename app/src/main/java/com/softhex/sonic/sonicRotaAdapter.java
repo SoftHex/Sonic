@@ -47,19 +47,19 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({Status.NAO_INICIADO, Status.EM_ATENDIMENTO, Status.CONCLUIDO, Status.CANCELADO})
+    @IntDef({Status.NAO_INICIADO, Status.EM_ANDAMENTO, Status.CONCLUIDO, Status.CANCELADO})
     public @interface Status{
         int NAO_INICIADO = 1;
-        int EM_ATENDIMENTO = 2;
+        int EM_ANDAMENTO = 2;
         int CONCLUIDO = 3;
         int CANCELADO = 4;
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ATENDIMENTO, StatusText.CONCLUIDO, StatusText.CANCELADO})
+    @StringDef({StatusText.NAO_INICIADO, StatusText.EM_ANDAMENTO, StatusText.CONCLUIDO, StatusText.CANCELADO})
     public @interface StatusText{
         String NAO_INICIADO = "Não Iniciado";
-        String EM_ATENDIMENTO = "Em Atendimento";
+        String EM_ANDAMENTO = "Em Andamento";
         String CONCLUIDO = "Concluído";
         String CANCELADO = "Cancelado";
     }
@@ -86,7 +86,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         String CANCELAR = "Cancelar Atendimento";
     }
 
-    private static final int VIEW_HEADER= 1;
+    private static final int VIEW_FILTER = 1;
     private static final int VIEW_PROGRESS = 2;
     private static final int VIEW_ITEM = 3;
     private Context mContext;
@@ -122,7 +122,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         TextView tvLetra;
         LinearLayout linearItem;
         ProgressBar pbDuracao;
-        LinearLayout llGroupDate;
+        LinearLayout llGroupFilter;
         LinearLayout llProgress;
 
         rotaHolder(View view) {
@@ -139,7 +139,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
             tvEndereco = view.findViewById(R.id.tvEndereco);
             tvDataHora = view.findViewById(R.id.tvDataHora);
             pbDuracao = view.findViewById(R.id.pbDuracao);
-            llGroupDate = view.findViewById(R.id.llGroupDate);
+            llGroupFilter = view.findViewById(R.id.llGroupFilter);
             llProgress = view.findViewById(R.id.llProgress);
 
         }
@@ -201,8 +201,8 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     public rotaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=null;
         switch (viewType){
-            case VIEW_HEADER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
+            case VIEW_FILTER:
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_filter, parent, false);
                 break;
             case VIEW_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_rota_itens, parent, false);
@@ -221,7 +221,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         holder.setIsRecyclable(false);
 
         switch (holder.getItemViewType()){
-            case VIEW_HEADER:
+            case VIEW_FILTER:
                 criarFiltroBusca(holder);
                 break;
             case VIEW_ITEM:
@@ -240,7 +240,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+        return (position==0 && mTotalList.get(position)==null) ? VIEW_FILTER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
     @Override
@@ -290,7 +290,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     }
     private void criarFiltroBusca(rotaHolder holder){
 
-        holder.llGroupDate.removeAllViews();
+        holder.llGroupFilter.removeAllViews();
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         p.height = sonicUtils.convertDpToPixel(36, mContext);
@@ -304,7 +304,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
         bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
         bt1.setLayoutParams(p2);
         bt1.setPadding(30,0,30,0);
-        holder.llGroupDate.addView(bt1);
+        holder.llGroupFilter.addView(bt1);
         for (String s: values) {
             if(!s.contains(mPrefs.Rota.getTermSearch())){
                 Button bt2 = new Button(mContext);
@@ -328,7 +328,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
-                holder.llGroupDate.addView(bt2);
+                holder.llGroupFilter.addView(bt2);
             }
         }
 
@@ -370,12 +370,12 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_nao_iniciado));
                 holder.tvStatus.setText(StatusText.NAO_INICIADO);
                 break;
-            case Status.EM_ATENDIMENTO:
+            case Status.EM_ANDAMENTO:
                 //holder.tvTempo.setVisibility(View.VISIBLE);
                 //holder.pbDuracao.setVisibility(View.VISIBLE);
                 holder.llProgress.setVisibility(View.VISIBLE);
                 holder.tvStatus.setBackground(mContext.getResources().getDrawable(R.drawable.status_em_atendimento));
-                holder.tvStatus.setText(StatusText.EM_ATENDIMENTO);
+                holder.tvStatus.setText(StatusText.EM_ANDAMENTO);
                 timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
                 holder.pbDuracao.setMax(2 * 60);
                 holder.pbDuracao.setProgress((int) (timeInMilliseconds / (1000 * 60)));
@@ -418,7 +418,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                         .setDialogType(PromptDialog.DIALOG_TYPE_INFO)
                         .setAnimationEnable(true)
                         .setTitleText(R.string.msgAtencao)
-                        .setContentText("Existe um rota em atendimento para o cliente " + mPrefs.Rota.getEmAtendimentoCliente() + ". Finalize-a para iniciar a próxima.")
+                        .setContentText("Existe um visita em andamento para o cliente " + mPrefs.Rota.getEmAtendimentoCliente() + ". Finalize-a para iniciar a próxima.")
                         .setPositiveListener("OK", new PromptDialog.OnPositiveListener() {
                             @Override
                             public void onClick(PromptDialog dialog) {
@@ -429,16 +429,17 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
             } else {
 
-                mPrefs.Clientes.setId(rota.getCodigoCliente());
-                mPrefs.Clientes.setNome(cliNomeExibicao);
+                mPrefs.Rota.setPartidaDoCliente(false);
+                mPrefs.Clientes.setCodigo(rota.getCodigoCliente());
+                /*mPrefs.Clientes.setNome(cliNomeExibicao);
                 mPrefs.Clientes.setLogradouro(rota.getLogradrouro());
                 mPrefs.Clientes.setBairro(rota.getBairro());
                 mPrefs.Clientes.setMunicipio(rota.getMunicipio());
                 mPrefs.Clientes.setUf(rota.getUf());
                 mPrefs.Clientes.setCep(sonicUtils.stringToCep(rota.getCep()));
-                mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro() + ", " + rota.getBairro() + " - " + rota.getMunicipio() + "/" + rota.getUf());
+                mPrefs.Clientes.setEnderecoCompleto(rota.getLogradrouro() + ", " + rota.getBairro() + " - " + rota.getMunicipio() + "/" + rota.getUf());*/
                 mPrefs.Rota.setAddressMap(sonicUtils.addressToMapSearch(rota.getLogradrouro() + "+" + rota.getCep() + "+" + rota.getMunicipio()));
-                mPrefs.Rota.setCodigo(!rotaPessoal ? rota.getCodigo() : rota.getId());
+                mPrefs.Rota.setCodigo(rota.getProprietario()==1 ? rota.getCodigo() : rota.getId());
                 mPrefs.Rota.setPessoal(rotaPessoal);
                 mPrefs.Rota.setItemPosition(position);
                 mPrefs.Rota.setRefresh(false);

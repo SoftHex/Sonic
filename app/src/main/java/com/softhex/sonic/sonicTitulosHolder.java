@@ -11,33 +11,20 @@ public class sonicTitulosHolder {
     String nome_fantasia;
     String razao_social;
     String grupo;
+    String agente_cobrador;
+    String tipo_cobranca;
     String numero;
     String data_emissao;
     String data_vencimento;
     int dias_atraso;
     String valor;
     String saldo;
+    String juros;
     int situacao;
     String situacao_cor;
 
     sonicTitulosHolder(){
 
-    }
-
-    public sonicTitulosHolder(int id, int codigo_cliente, String nome_fantasia, String razao_social, String grupo, String numero, String data_emissao, String data_vencimento, int dias_atraso, String valor, String saldo, int situacao, String situacao_cor) {
-        this.id = id;
-        this.codigo_cliente = codigo_cliente;
-        this.nome_fantasia = nome_fantasia;
-        this.razao_social = razao_social;
-        this.grupo = grupo;
-        this.numero = numero;
-        this.data_emissao = data_emissao;
-        this.data_vencimento = data_vencimento;
-        this.dias_atraso = dias_atraso;
-        this.valor = valor;
-        this.saldo = saldo;
-        this.situacao = situacao;
-        this.situacao_cor = situacao_cor;
     }
 
     public int getCodigoCliente(){
@@ -54,6 +41,30 @@ public class sonicTitulosHolder {
 
     public String getGrupo() {
         return grupo;
+    }
+
+    public String getAgenteCobrador() {
+        return agente_cobrador;
+    }
+
+    public void setAgenteCobrador(String agente_cobrador) {
+        this.agente_cobrador = agente_cobrador;
+    }
+
+    public String getJuros() {
+        return juros;
+    }
+
+    public void setJuros(String juros) {
+        this.juros = juros;
+    }
+
+    public String getTipoCobranca() {
+        return tipo_cobranca;
+    }
+
+    public void setTipoCobranca(String tipo_cobranca) {
+        this.tipo_cobranca = tipo_cobranca;
     }
 
     public String getNumero(){

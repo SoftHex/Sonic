@@ -267,7 +267,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "tipo int NOT NULL, " +                 // 1=AGENDAMENTO, 2=REAGENDAMENTO
-            "status int NOT NULL, " +               // 1=NÃO INICIADO, 2=EM_ATENDIMENTO, 3=CONCLUIDO, 4=CANCELADO
+            "status int NOT NULL, " +               // 1=NÃO INICIADO, 2=EM ANDAMENTO, 3=CONCLUIDO, 4=CANCELADO
             "data_agendamento varchar NOT NULL, " +
             "hora_agendamento varchar NOT NULL, " +
             "proprietario INT NOT NULL, "  +        // 1=AGENDA, 2=PESSOAL
@@ -376,7 +376,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "valor varchar, " +
 			"saldo varchar, " +
             "juros varchar, " +
-            "situacao int, " +
+            "situacao int, " + // 1=A VENCER, 2=VENCIDO
             "FOREIGN KEY (codigo_usuario) REFERENCES "+DB_USUARIO+"(codigo)," +
             "FOREIGN KEY (codigo_cliente) REFERENCES "+DB_CLIENTE+"(codigo)," +
             "FOREIGN KEY (codigo_empresa) REFERENCES "+DB_EMPRESA+"(codigo));";

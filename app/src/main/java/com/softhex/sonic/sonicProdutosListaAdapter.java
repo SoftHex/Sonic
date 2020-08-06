@@ -35,7 +35,7 @@ import java.util.List;
 
 public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private static final int VIEW_HEADER = 1;
+    private static final int VIEW_FILTER = 1;
     private static final int VIEW_PROGRESS = 2;
     private static final int VIEW_ITEM = 3;
     private static final int TOTAL_ITENS_FILTRO = 6;
@@ -66,7 +66,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         TextView tvLetra;
         CardView card;
         LinearLayout linearItem, linearNew;
-        LinearLayout llGroupDate;
+        LinearLayout llGroupFilter;
 
         public prodHolder(View view) {
             super(view);
@@ -79,7 +79,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             tvLinha3 = view.findViewById(R.id.tvLinha3);
             tvLetra = view.findViewById(R.id.tvLetra);
             mImage = view.findViewById(R.id.ivImagem);
-            llGroupDate = view.findViewById(R.id.llGroupDate);
+            llGroupFilter = view.findViewById(R.id.llGroupFilter);
             linearItem = view.findViewById(R.id.linearItem);
 
         }
@@ -142,8 +142,8 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=null;
         switch (viewType){
-            case VIEW_HEADER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
+            case VIEW_FILTER:
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_filter, parent, false);
                 break;
             case VIEW_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens, parent, false);
@@ -162,7 +162,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         sonicProdutosHolder prod = mTotalList.get(position);
 
         switch (holder.getItemViewType()){
-            case VIEW_HEADER:
+            case VIEW_FILTER:
                 criarFiltroBusca(holder);
                 break;
             case VIEW_ITEM:
@@ -181,7 +181,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+        return (position==0 && mTotalList.get(position)==null) ? VIEW_FILTER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
     @Override
@@ -233,7 +233,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     private void criarFiltroBusca(prodHolder holder){
 
-        holder.llGroupDate.removeAllViews();
+        holder.llGroupFilter.removeAllViews();
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         p.height = sonicUtils.convertDpToPixel(36, mContext);
@@ -247,12 +247,13 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
         bt1.setLayoutParams(p2);
         bt1.setPadding(30,0,30,0);
-        holder.llGroupDate.addView(bt1);
-        List<sonicGrupoProdutosHolder> grupoAuxiliar;
+        holder.llGroupFilter.addView(bt1);
+        List<String> grupoAuxiliar;
         grupoAuxiliar = new ArrayList<>();
+        grupoAuxiliar.add(mPrefs.GrupoProduto.getFiltroLista());
         for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
 
-            grupoAuxiliar.add(mGroupList.get(i));
+            grupoAuxiliar.add(mGroupList.get(i).getDescricao());
 
             if(!mGroupList.get(i).getDescricao().contains(mPrefs.GrupoProduto.getFiltroLista())){
 
@@ -271,23 +272,24 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
-                holder.llGroupDate.addView(bt2);
+                holder.llGroupFilter.addView(bt2);
             }
 
         }
 
-        Button bt3 = new Button(mContext);
+        if(mGroupList.size()>TOTAL_ITENS_FILTRO){
+            Button bt3 = new Button(mContext);
 
-        bt3.setOnClickListener((View v)-> {
-            exibirFiltroExtra(grupoAuxiliar);
-        });
-
-        bt3.setText("MAIS...");
-        bt3.setTextSize(12);
-        bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
-        bt3.setLayoutParams(p);
-        bt3.setPadding(30,0,30,0);
-        holder.llGroupDate.addView(bt3);
+            bt3.setOnClickListener((View v)-> {
+                exibirFiltroExtra(grupoAuxiliar);
+            });
+            bt3.setText("MAIS...");
+            bt3.setTextSize(12);
+            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+            bt3.setLayoutParams(p);
+            bt3.setPadding(30,0,30,0);
+            holder.llGroupFilter.addView(bt3);
+        }
 
     }
 
@@ -300,7 +302,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             mPrefs.Produtos.setProdutoNome(prod.getNome());
             mPrefs.Produtos.setProdutoGrupo(prod.getGrupo());
             mPrefs.Produtos.setProdutoDataCadastro(prod.getDataCadastro());
-            mPrefs.Produtos.setDetalhe("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+            mPrefs.Produtos.setDetalhe("CÓD.: "+prod.getCodigo()+" / REF.: "+prod.getCodigoAlternativo());
             Intent i = new Intent(v.getContext(), sonicProdutosDetalhe.class);
             v.getContext().startActivity(i);
 
@@ -308,7 +310,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
         holder.tvLinha1.setText(prod.getNome());
         //holder.tvNome.setTextColor(Color.parseColor(prod.getSituacaoCor()));
-        holder.tvLinha3.setText("CÓD.: "+prod.getCodigo()+" / REFERÊNCIA: "+prod.getCodigoAlternativo());
+        holder.tvLinha3.setText("CÓD.: "+prod.getCodigo()+" / REF.: "+prod.getCodigoAlternativo());
         holder.codigo = prod.getCodigo();
         holder.tvLinha2.setText(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
         String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
@@ -347,7 +349,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
     }
 
-    private void exibirFiltroExtra(List<sonicGrupoProdutosHolder> mListAuxiliar) {
+    private void exibirFiltroExtra(List<String> mListAuxiliar) {
 
         List<sonicGrupoProdutosHolder> grupo;
 
@@ -356,7 +358,9 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         List<String> l = new ArrayList<>();
 
         for(int i=0; i < grupo.size(); i++ ){
-            l.add(grupo.get(i).getDescricao());
+            if(!mListAuxiliar.contains(grupo.get(i).getDescricao())){
+                l.add(grupo.get(i).getDescricao());
+            }
         }
 
         final CharSequence[] chars = l.toArray(new CharSequence[l.size()]);

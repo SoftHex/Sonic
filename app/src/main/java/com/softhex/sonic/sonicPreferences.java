@@ -44,7 +44,7 @@ public class sonicPreferences{
     private static final String EMPRESA_ID = "empresaId";
     private static final String EMPRESA_NOME = "empresaNome";
     private static final String ENVIRONMENT = "pathEnvironment";
-    private static final String CLIENTE_ID = "clienteId";
+    private static final String CLIENTE_CODIGO = "clienteCodigo";
     private static final String CLIENTE_NOME = "clienteNome";
     private static final String CLIENTE_FANTASIA = "clienteFantasia";
     private static final String CLIENTE_RAZAO = "clienteRazao";
@@ -120,6 +120,7 @@ public class sonicPreferences{
     private static final String ROTA_PESSOAL_DATA = "rotaPessoalData";
     private static final String ROTA_PESSOAL_HORA = "rotaPessoalHora";
     private static final String ROTA_TERM_SEARCH = "rotaTermSearch";
+    private static final String ROTA_PARTIDA_CLIENTE = "rotaPartidaCliente";
 
 
     Ftp Ftp = new Ftp();
@@ -378,14 +379,14 @@ public class sonicPreferences{
         }
     }
     public class Clientes{
-        public void setId(int value){
+        public void setCodigo(int value){
             editor = sharedpreferences.edit();
-            editor.putInt(CLIENTE_ID, value);
+            editor.putInt(CLIENTE_CODIGO, value);
             editor.apply();
 
         }
-        public int getId(){
-            return sharedpreferences.getInt(CLIENTE_ID, 0);
+        public int getCodigo(){
+            return sharedpreferences.getInt(CLIENTE_CODIGO, 0);
         }
         public void setNome(String value){
             editor = sharedpreferences.edit();
@@ -1066,6 +1067,15 @@ public class sonicPreferences{
         }
         public String getDataHora(){
             return sharedpreferences.getString(ROTA_DATA_HORA, "");
+        }
+
+        public void setPartidaDoCliente(boolean value){
+            editor = sharedpreferences.edit();
+            editor.putBoolean(ROTA_PARTIDA_CLIENTE, value);
+            editor.apply();
+        }
+        public boolean getPartidaDoCliente(){
+            return sharedpreferences.getBoolean(ROTA_PARTIDA_CLIENTE, false);
         }
 
     }

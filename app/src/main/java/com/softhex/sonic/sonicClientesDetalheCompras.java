@@ -76,7 +76,7 @@ public class sonicClientesDetalheCompras extends Fragment {
                 mPrefs.Produtos.setProdutoId(mItens.getCodigoProduto());
                 mPrefs.Produtos.setProdutoNome(mItens.getProduto());
                 mPrefs.Produtos.setProdutoGrupo(mItens.getGrupo());
-                mPrefs.Produtos.setDetalhe("CÓD.: "+mItens.getCodigoProduto()+" / REFERÊNCIA: "+mItens.getReferencia());
+                mPrefs.Produtos.setDetalhe("CÓD.: "+mItens.getCodigoProduto()+" / REF.: "+mItens.getReferencia());
                 Intent i = new Intent(mContext, sonicProdutosDetalhe.class);
                 mContext.startActivity(i);
 
@@ -92,7 +92,7 @@ public class sonicClientesDetalheCompras extends Fragment {
         @Override
         protected Void doInBackground(Void... voids) {
             headerData = new ArrayList<>();
-            mList = mData.Cliente.selectComprasPorCliente(mPrefs.Clientes.getId(), 100);
+            mList = mData.Cliente.selectComprasPorCliente(mPrefs.Clientes.getCodigo(), 100);
             mHash = new HashMap<>();
 
             for(int i=0; i < mList.size(); i++){

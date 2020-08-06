@@ -220,9 +220,9 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
     public void loadDetails(){
         mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
-        tvLogradrouro.setText(mPrefs.Clientes.getLogradouro());
-        tvEndCompleto.setText(mPrefs.Clientes.getBairro()+", "+mPrefs.Clientes.getMunicipio()+" - "+mPrefs.Clientes.getUf());
-        tvCep.setText("CEP: "+mPrefs.Clientes.getCep());
+        tvLogradrouro.setText(mList.get(0).getLogradrouro());
+        tvEndCompleto.setText(mList.get(0).getBairro()+", "+mList.get(0).getMunicipio()+" - "+mList.get(0).getUf());
+        tvCep.setText("CEP: "+sonicUtils.stringToCep(mList.get(0).getCep()));
         switch (mList.get(0).getStatus()){
             case Status.NAO_INICIADO:
                 llDetalhe.setVisibility(View.GONE);
@@ -232,7 +232,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 break;
             case Status.EM_ATENDIMENTO:
                 continueClock();
-                llProgress.setVisibility(View.VISIBLE);
+                //llProgress.setVisibility(View.VISIBLE);
                 //pbDuracao.setVisibility(View.VISIBLE);
                 tvTempo.setVisibility(View.VISIBLE);
                 tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
@@ -241,9 +241,13 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 llDetalhe.setVisibility(View.GONE);
                 btIniciar.setText("FINALIZAR ATENDIMENTO");
                 btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-                btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
-                btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
-                btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
+                if(mPrefs.Rota.getPartidaDoCliente()){
+                    btCancelar.setVisibility(View.GONE);
+                }else{
+                    btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
+                    btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
+                    btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
                 mPrefs.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
                 mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
                 mPrefs.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
@@ -324,24 +328,27 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                         tvTempo.animate();
                         tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
                         btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-                        btCancelar.animate()
-                                .translationX(btCancelar.getWidth()+100)
-                                .alpha(0.0f)
-                                .setDuration(300)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
-                                        btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
-                                        btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
-                                        btCancelar.animate()
-                                                .translationX(0)
-                                                .alpha(1f)
-                                                .setDuration(300);
+                        if(!mPrefs.Rota.getPartidaDoCliente()){
+                            btCancelar.animate()
+                                    .translationX(btCancelar.getWidth()+100)
+                                    .alpha(0.0f)
+                                    .setDuration(300)
+                                    .setListener(new AnimatorListenerAdapter() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            super.onAnimationEnd(animation);
+                                            btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
+                                            btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
+                                            btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
+                                            btCancelar.animate()
+                                                    .translationX(0)
+                                                    .alpha(1f)
+                                                    .setDuration(300);
 
-                                    }
-                                });
+                                        }
+                                    });
+                        }
+
                         new mAsyncTask().execute("INICIAR","","");
                     }
                 }
@@ -631,7 +638,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         for(int i = 0; i < myImages.length ; i++){
 
-            image = mPrefs.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPrefs.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
@@ -643,7 +650,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         for(int i = 0; i < count ; i++){
 
-            image = mPrefs.Clientes.getId()+(i==0? "" : "_"+i)+".JPG";
+            image = mPrefs.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             myImages[i] = file.toString();

@@ -36,7 +36,7 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private static final int VIEW_HEADER = 1;
+    private static final int VIEW_FILTER = 1;
     private static final int VIEW_PROGRESS = 2;
     private static final int VIEW_ITEM = 3;
     private static final int TOTAL_ITENS_FILTRO = 6;
@@ -75,7 +75,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         LinearLayout lineraNew;
         LinearLayout llExtra;
         TextView tvSemCompra, tvAtraso;
-        LinearLayout llGroupDate;
+        LinearLayout llGrouFilter;
 
 
         public cliHolder(View view) {
@@ -92,7 +92,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             llExtra = view.findViewById(R.id.llExtra);
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
-            llGroupDate = view.findViewById(R.id.llGroupDate);
+            llGrouFilter = view.findViewById(R.id.llGroupFilter);
 
         }
 
@@ -208,8 +208,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=null;
         switch (viewType){
-            case VIEW_HEADER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_header, parent, false);
+            case VIEW_FILTER:
+                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_filter, parent, false);
                 break;
             case VIEW_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens, parent, false);
@@ -228,7 +228,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             sonicClientesHolder cli = mTotalList.get(position);
 
             switch (holder.getItemViewType()){
-                case VIEW_HEADER:
+                case VIEW_FILTER:
                     criarFiltroBusca(holder);
                     break;
                 case VIEW_ITEM:
@@ -248,7 +248,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 && mTotalList.get(position)==null) ? VIEW_HEADER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+        return (position==0 && mTotalList.get(position)==null) ? VIEW_FILTER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
     @Override
@@ -299,7 +299,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     private void criarFiltroBusca(cliHolder holder){
 
-        holder.llGroupDate.removeAllViews();
+        holder.llGrouFilter.removeAllViews();
         LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         p.height = sonicUtils.convertDpToPixel(36, mContext);
@@ -313,9 +313,10 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
         bt1.setLayoutParams(p2);
         bt1.setPadding(30,0,30,0);
-        holder.llGroupDate.addView(bt1);
+        holder.llGrouFilter.addView(bt1);
         List<String> grupoAuxiliar;
         grupoAuxiliar = new ArrayList<>();
+        grupoAuxiliar.add(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf());
         for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
 
             grupoAuxiliar.add(mGroupList.get(i).getNome());
@@ -347,7 +348,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
-                holder.llGroupDate.addView(bt2);
+                holder.llGrouFilter.addView(bt2);
             }
 
         }
@@ -363,7 +364,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
             bt3.setLayoutParams(p);
             bt3.setPadding(30,0,30,0);
-            holder.llGroupDate.addView(bt3);
+            holder.llGrouFilter.addView(bt3);
         }
 
     }
@@ -374,7 +375,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         holder.linearItem.setOnClickListener((View v)-> {
 
-            mPrefs.Clientes.setId(cli.getCodigo());
+            mPrefs.Clientes.setCodigo(cli.getCodigo());
             mPrefs.Clientes.setNome(cliNomeExibicao);
             mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
             if(mPrefs.RotaPessoal.getAdding()){

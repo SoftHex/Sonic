@@ -54,7 +54,7 @@ public class sonicClientesDetalheGeral extends Fragment {
 
     private void loadDetails(){
 
-        mList = mData.Cliente.selectClienteByID(mPref.Clientes.getId());
+        mList = mData.Cliente.selectClienteByID(mPref.Clientes.getCodigo());
         tvNome = myView.findViewById(R.id.tvNome);
         tvNome.setText(mList.get(0).getNome());
         tvNome.setText(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
