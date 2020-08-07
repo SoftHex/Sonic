@@ -46,6 +46,8 @@
   <color name="colorTextWhiteLight">#F8F8FF</color>
   <color name="colorTextDark">#000</color>
   <color name="colorTextPrimary">#363636</color>
+  <color name="colorTextPrimaryLight">#757575</color>
+  <color name="colorTextPrimaryGreen">#3C9130</color>
   <color name="colorTextAccent">#A9A9A9</color>
   <color name="colorTextAccentDark">#696969</color>
   <color name="colorTextAccentLight">#C0C0C0</color>

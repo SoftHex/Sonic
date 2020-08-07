@@ -43,7 +43,7 @@ public class sonicClientesDetalheCompras extends Fragment {
     private HashMap<String, List<sonicClientesDetalheComprasItensHolder>> mHash;
     private List<String> headerData;
     private List<sonicClientesDetalheComprasItensHolder> childData;
-    private ProgressBar pbGroup;
+    private ProgressBar mProgressGroup;
     private ArrayList<Integer> groupClicked;
     //private TabLayout mTabLayout;
     private ShimmerFrameLayout mShimmer;
@@ -91,12 +91,15 @@ public class sonicClientesDetalheCompras extends Fragment {
         mExpandableList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                pbGroup = mAdapter.getGroupView(mExpandableList, groupPosition).findViewById(R.id.pbGroup);
+                mProgressGroup = mAdapter.getGroupView(mExpandableList, groupPosition).findViewById(R.id.pbGroup);
                 if(mExpandableList.isGroupExpanded(groupPosition)){
                     mExpandableList.collapseGroup(groupPosition);
+
                 }else{
                     if(!groupClicked.contains(groupPosition)){
-                        pbGroup.setVisibility(View.VISIBLE);
+                        mProgressGroup.setVisibility(View.VISIBLE);
+                    }else{
+                        mProgressGroup.setVisibility(GONE);
                     }
                     new mAsyncLoadItens().execute(groupPosition);
                 }
@@ -110,7 +113,7 @@ public class sonicClientesDetalheCompras extends Fragment {
                 mPrefs.Produtos.setProdutoId(mItens.getCodigoProduto());
                 mPrefs.Produtos.setProdutoNome(mItens.getProduto());
                 mPrefs.Produtos.setProdutoGrupo(mItens.getGrupo());
-                mPrefs.Produtos.setDetalhe("CÓD.: "+mItens.getCodigoProduto()+" / REF.: "+mItens.getReferencia());
+                mPrefs.Produtos.setDetalhe("Cód.: "+mItens.getCodigoProduto()+" / Ref.: "+mItens.getReferencia());
                 Intent i = new Intent(mContext, sonicProdutosDetalhe.class);
                 mContext.startActivity(i);
 
@@ -197,7 +200,7 @@ public class sonicClientesDetalheCompras extends Fragment {
                     mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
                     mExpandableList.setAdapter(mAdapter);
                     mExpandableList.expandGroup(result);
-                    pbGroup.setVisibility(View.INVISIBLE);
+                    mProgressGroup.setVisibility(View.INVISIBLE);
                 }
              },mListItens.size()*100);
         }else{

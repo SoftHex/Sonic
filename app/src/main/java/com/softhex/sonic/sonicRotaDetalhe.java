@@ -321,6 +321,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     if(mPrefs.Rota.getEmAtendimento()){
                         finalizarAtendimento();
                     }else {
+                        mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao());
                         btIniciar.setText("FINALIZAR ATENDIMENTO");
                         pbDuracao.setVisibility(View.VISIBLE);
                         pbDuracao.animate();

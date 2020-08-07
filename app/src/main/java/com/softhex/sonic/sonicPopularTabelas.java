@@ -74,7 +74,7 @@ public class sonicPopularTabelas {
             { "TIPO_PEDIDO", sonicConstants.TB_TIPO_PEDIDO, "Tipo de Pedido", "save" },
             { "AGENTE_COBRADOR", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
             { "UNIDADE_MEDIDA", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "save" },
-            { "ROTA", sonicConstants.TB_ROTA, "Agenda de Visitas", "replace" },
+            { "ROTA", sonicConstants.TB_ROTA, "Agenda de Visitas", "save" },
             { "CLIENTES_SEM_COMPRA", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
             { "TITULOS", sonicConstants.TB_TITULO, "Títulos", "save" },
             { "PRAZO", sonicConstants.TB_PRAZO, "Prazo", "save" },
@@ -193,7 +193,7 @@ public class sonicPopularTabelas {
                                         int len = str.length();
                                         String str2 = str.substring(pos, len);
                                         List<String> data = Arrays.asList(str2.split(";", -1));
-                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.SAVE : ModeSave.SAVE_UNIQUE)){
+                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.DELETE_AND_INSERT : ModeSave.INSERT)){
                                             Log.d("ERRO", mPref.Geral.getError());
                                         }
                                         line = reader.readLine();
@@ -309,7 +309,7 @@ public class sonicPopularTabelas {
                                         count +=1;
                                         publishProgress("Gravando "+ arr[2], String.valueOf(count));
                                         List<String> data = Arrays.asList(childNode.getTextContent().split("\\|", -1));
-                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.SAVE : ModeSave.SAVE_UNIQUE)){
+                                        if(!DBC.Database.saveData(arr[1], data, arr[3].equals("save") ? ModeSave.DELETE_AND_INSERT : ModeSave.INSERT)){
                                             return false;
                                         }
                                     }
@@ -376,19 +376,22 @@ public class sonicPopularTabelas {
                         break;
                 }
             }else{
-                enviarMensagemErro(mPref.Sincronizacao.getDownloadType());
+                enviarMensagemErro();
             }
         }
     }
 
-    private void enviarMensagemErro(String type){
+    private void enviarMensagemErro(){
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
 
-                switch (type){
-                    case "SITE":
+                switch (mPref.Sincronizacao.getCalledActivity()){
+                    case "sonicEmpresa":
                         ((sonicEmpresa)mAct).mensagemErroDetalhe(false);
+                        break;
+                    case "sonicMain":
+                        ((sonicMain)mAct).mensagemErro();
                         break;
                 }
 

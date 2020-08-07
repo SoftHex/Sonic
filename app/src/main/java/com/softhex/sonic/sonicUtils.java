@@ -1773,7 +1773,11 @@ public class sonicUtils {
                return stringAsNumber;
 
             }
-
+        /**
+         *
+         * @param number String com formato '000000'/'0000,00' sem espaço.
+         * @return R$ 00.000,00
+         */
         public String stringToMoeda(String number, boolean symbol, boolean decimal){
                 WITH_SYMBOL = symbol;
                 WITH_DECIMAL = decimal;
@@ -1785,7 +1789,7 @@ public class sonicUtils {
                 try{
 
                     format.setMaximumFractionDigits(symbol ? 2 : 0);
-                    v = (double)Float.valueOf(number)/(decimal ? 100 : 0);
+                    v = (double)Float.valueOf(number.replace(",",""))/(decimal ? 100 : 0);
 
                 }catch (Exception e){
                     DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
@@ -1799,6 +1803,11 @@ public class sonicUtils {
             return format.format(v).replace("R$", symbol ? "R$ " : "");
         }
 
+        /**
+         *
+         * @param number com formato '0000,00'..
+         * @return 00:00
+         */
         public String stringToMoeda(String number) {
 
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];

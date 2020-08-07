@@ -213,56 +213,58 @@ public class sonicDatabaseCRUD {
             Cursor cursor = DB.getWritableDatabase().query(tabela, null, null, null, null, null, null);
             boolean result = false;
 
-            try{
-
-                if(m.equals(ModeSave.SAVE_UNIQUE)){
-                        Cursor c = DB.getReadableDatabase().rawQuery("SELECT * FROM "+tabela+" WHERE "+cursor.getColumnNames()[1]+"=?", new String[]{values.get(0)});
-                        if(c==null || c.getCount()==0){
-
-                            try {
-                                for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
-                                    cv.put(cursor.getColumnNames()[i+1], values.get(i));
-                                }
-
-                                result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
-
-                            }catch (ArrayIndexOutOfBoundsException e){
-                                mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
-                                e.printStackTrace();
-                                return false;
-                            }
-
-                        }
-                }else{
+            switch (m){
+                case DELETE_AND_INSERT:
                     try {
 
                         for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
                             cv.put(cursor.getColumnNames()[i+1], values.get(i));
                         }
 
-                    }catch (ArrayIndexOutOfBoundsException e){
-                        mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
+                        result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+
+                    }catch (SQLiteException e){
                         e.printStackTrace();
+                        mPrefs.Geral.setError("Detalhe do erro: \n" + Log.getStackTraceString(e));
                         return false;
                     }
+                    break;
+                case UPDATE_OR_INSERT:
+                    Cursor c = DB.getReadableDatabase().rawQuery("SELECT * FROM "+tabela+" WHERE "+cursor.getColumnNames()[1]+"=?", new String[]{values.get(0)});
+                    // SE NAO EXISTIR VALOR, INSERE
+                    if(c==null || c.getCount()==0){
 
-                    result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+                        try {
+                            for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                                cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                            }
+
+                            result = DB.getWritableDatabase().insert(tabela, null, cv)>0;
+
+                        }catch (SQLiteException e){
+                            mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
+                            e.printStackTrace();
+                            return false;
+                        }
+                    // SE EXISTIR, ATUALIZA
+                    }else{
+
+                        try {
+                            for(int i = 0; i < cursor.getColumnNames().length-1; i++) {
+                                cv.put(cursor.getColumnNames()[i+1], values.get(i));
+                            }
+
+                            result = DB.getWritableDatabase().update(tabela, cv, values.get(0)+"=?", null)>0;
+
+                        }catch (SQLiteException e){
+                            mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
+                            e.printStackTrace();
+                            return false;
+                        }
+
+                    }
+                    break;
                 }
-
-            }catch (SQLiteException e){
-                mPrefs.Geral.setError("Detalhe do erro: \n" + e.getMessage());
-                DBCL.Log.saveLog(
-                        e.getStackTrace()[0].getLineNumber(),
-                        e.getMessage(),
-                        mySystem.System.getActivityName(),
-                        mySystem.System.getClassName(el),
-                        mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-                return false;
-
-            }finally{
-				cursor.close();
-			}
 			
             return result;
         }

@@ -215,6 +215,16 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
     }
 
     @Override
+    public void onBindViewHolder(@NonNull rotaHolder holder, int position, @NonNull List<Object> payloads) {
+        if(!payloads.isEmpty()){
+            sonicRotaHolder rota = mTotalList.get(position);
+            for(Object payload : payloads){
+            }
+        }
+        super.onBindViewHolder(holder, position, payloads);
+    }
+
+    @Override
     public void onBindViewHolder(rotaHolder holder, int position) {
 
         sonicRotaHolder rota = mTotalList.get(position);

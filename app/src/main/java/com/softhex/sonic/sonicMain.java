@@ -994,7 +994,7 @@ public class sonicMain extends AppCompatActivity{
                 .setAction("DETALHE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new android.app.AlertDialog.Builder(mActivity, R.style.DialogTheme)
+                        new android.app.AlertDialog.Builder(mActivity)
                                 //.setTitle("Atenção!\n\n")
                                 .setMessage(mPrefs.Geral.getError())
                                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -175,7 +175,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "situacao bit," +
             "FOREIGN KEY (codigo_usuario) REFERENCES "+DB_USUARIO+"(codigo_usuario)," +
             "FOREIGN KEY (codigo_grupo) REFERENCES "+DB_GRUPO_CLIENTE+"(codigo_grupo));" ;
-    private static final String CREATE_INDEX_CLIENTE_CODIGO_USUARIO = "CREATE UNIQUE INDEX index_cliente_codigo_usuario ON "+DB_CLIENTE+" (codigo_usuario);";
+    private static final String CREATE_INDEX_CLIENTE_CODIGO_USUARIO = "CREATE INDEX index_cliente_codigo_usuario ON "+DB_CLIENTE+" (codigo_usuario);";
     private static final String CREATE_INDEX_CLIENTE_CODIGO = "CREATE UNIQUE INDEX index_cliente_codigo ON "+DB_CLIENTE+" (codigo);";
     private static final String CREATE_INDEX_CLIENTE_CODIGO_GRUPO = "CREATE INDEX index_cliente_codigo_grupo ON "+DB_CLIENTE+" (codigo_grupo);";
     private static final String CREATE_INDEX_CLIENTE_SITUACAO = "CREATE INDEX index_cliente_situacao ON "+DB_CLIENTE+" (situacao);";
