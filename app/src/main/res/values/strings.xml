@@ -126,9 +126,11 @@
     <string name="networkSuccess">Conexão com a internet OK.</string>
 
     <!-- SINCRONIZAÇÃO MENSAGENS-->
-    <string name="go_cod_vend">Digite o código do vendedor...</string>
-    <string name="go_sure">Todos os dados serão apagados. Será necessário realizar um novo sincronismo. Tem certeza?!</string>
+    <string name="nenhumTitulo">Nenhum Título do tipo À Vencer/Vencido encontrado para este cliente. Quando existirem... eles aparecerão aqui.</string>
+    <string name="nenhumaVisita">Nenhuma Visita registrada para este cliente. Quando existirem... elas aparecerão aqui.</string>
+    <string name="nenhumaCompra">Nenhuma Compra realizada por este cliente nos últimos 6(seis) meses. Quando existirem... elas aparecerão aqui.</string>
     <string name="go_new_login">Este usuário é diferente do último login. Todos os dados serão apagados. Deseja continuar?</string>
+    <string name="redefinir">Todos os seus dados serão apagados. Deseja redefinir?</string>
     <string name="go_connecting">Conectando...</string>
     <string name="go_sinc">Sincronizado!</string>
     <string name="go_write_tabela">Gravando dados nas tabelas...</string>

@@ -498,6 +498,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "codigo_empresa int NOT NULL, " +
             "codigo_cliente int NOT NULL, " +
             "codigo_tipo_cobranca int NOT NULL, " +
+            "codigo_agente_cobrador int NOT NULL, " +
             "codigo_prazo int, " +
             "data varchar, " +
             "vendedor string, " +
@@ -508,6 +509,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_EMPRESA = "CREATE INDEX index_ultimas_compras_codigo_empresa ON "+DB_ULTIMAS_COMPRAS+" (codigo_empresa);";
     private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_CLIENTE = "CREATE INDEX index_ultimas_compras_codigo_cliente ON "+DB_ULTIMAS_COMPRAS+" (codigo_cliente);";
     private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_TIPO_COBRANCA = "CREATE INDEX index_ultimas_compras_codigo_tipo_cobranca ON "+DB_ULTIMAS_COMPRAS+" (codigo_tipo_cobranca);";
+    private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_AGENTE_COBRADOR = "CREATE INDEX index_ultimas_compras_codigo_agente_cobrador ON "+DB_ULTIMAS_COMPRAS+" (codigo_agente_cobrador);";
     private static final String CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_PRAZO = "CREATE INDEX index_ultimas_compras_codigo_prazo ON "+DB_ULTIMAS_COMPRAS+" (codigo_prazo);";
 
     private static final String CREATE_ULTIMAS_COMPRAS_ITENS = "CREATE TABLE IF NOT EXISTS "+DB_ULTIMAS_COMPRAS_ITENS+" (" +
@@ -672,6 +674,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_CLIENTE);
         DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_EMPRESA);
         DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_TIPO_COBRANCA);
+        DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_AGENTE_COBRADOR);
         DB.execSQL(CREATE_INDEX_ULTIMAS_COMPRAS_CODIGO_PRAZO);
         DB.execSQL(CREATE_RANKING_PRODUTO);
         // TABELA ULTIMAS XOMPRAS ITENS

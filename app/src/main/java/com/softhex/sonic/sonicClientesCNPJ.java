@@ -42,16 +42,16 @@ import static android.view.View.VISIBLE;
 
 public class sonicClientesCNPJ extends Fragment {
 
-    private View myView;
-    private RecyclerView myRecycler;
-    private RecyclerView.LayoutManager myLayout;
-    private sonicClientesAdapter myAdapter;
+    private View mView;
+    private RecyclerView mRecycler;
+    private RecyclerView.LayoutManager mLayout;
+    private sonicClientesAdapter mAdapter;
     private List<sonicClientesHolder> mList;
-    private MenuItem mySearch;
-    private Toolbar myToolBar;
-    private TabLayout myTabLayout;
-    private CoordinatorLayout myCoordinatorLayout;
-    private ShimmerFrameLayout myShimmer;
+    private MenuItem mSearch;
+    private Toolbar mToolBar;
+    private TabLayout mTabLayout;
+    private CoordinatorLayout mCoordinatorLayout;
+    private ShimmerFrameLayout mShimmer;
     private TextView tvTexto, tvTitle, tvSearch;
     private sonicConstants myCons;
     private boolean allowSearch;
@@ -65,13 +65,13 @@ public class sonicClientesCNPJ extends Fragment {
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
+        mView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         mContext = getActivity();
         mPrefs = new sonicPreferences(getActivity());
         loadFragment();
 
-        return myView;
+        return mView;
 
     }
 
@@ -81,42 +81,45 @@ public class sonicClientesCNPJ extends Fragment {
 
         myCons = new sonicConstants();
 
-        myToolBar = getActivity().findViewById(R.id.mToolbar);
+        mToolBar = getActivity().findViewById(R.id.mToolbar);
 
-        myTabLayout = getActivity().findViewById(R.id.mTabs);
+        mTabLayout = getActivity().findViewById(R.id.mTabs);
 
-        llNoResult = myView.findViewById(R.id.llNoResult);
+        llNoResult = mView.findViewById(R.id.llNoResult);
 
-        rlDesert = myView.findViewById(R.id.rlDesert);
+        rlDesert = mView.findViewById(R.id.rlDesert);
 
-        btSinc = myView.findViewById(R.id.btSinc);
+        btSinc = mView.findViewById(R.id.btSinc);
 
-        tvTexto = myView.findViewById(R.id.tvText);
+        tvTexto = mView.findViewById(R.id.tvText);
 
-        tvTitle = myView.findViewById(R.id.tvTitle);
+        tvTitle = mView.findViewById(R.id.tvTitle);
 
-        tvSearch = myView.findViewById(R.id.tvSearch);
+        tvSearch = mView.findViewById(R.id.tvSearch);
 
-        myImage = myView.findViewById(R.id.ivImage);
+        myImage = mView.findViewById(R.id.ivImage);
 
-        myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
+        mCoordinatorLayout = mView.findViewById(R.id.layoutMain);
 
-        myShimmer = myView.findViewById(R.id.mShimmerLayout);
+        mShimmer = mView.findViewById(R.id.mShimmerLayout);
 
-        myRecycler =  myView.findViewById(R.id.recyclerList);
+        mRecycler =  mView.findViewById(R.id.recyclerList);
 
-        myRecycler.setHasFixedSize(true);
+        mRecycler.setHasFixedSize(true);
+        mRecycler.setItemViewCacheSize(20);
+        mRecycler.setDrawingCacheEnabled(true);
+        mRecycler.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        mLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
-        myRecycler.setLayoutManager(myLayout);
+        mRecycler.setLayoutManager(mLayout);
 
-        fbUp = myView.findViewById(R.id.fbUp);
+        fbUp = mView.findViewById(R.id.fbUp);
 
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        ViewGroup.LayoutParams params = mCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        myShimmer.startShimmer();
+        mShimmer.startShimmer();
 
         bindRecyclerView();
 
@@ -132,9 +135,9 @@ public class sonicClientesCNPJ extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.sonic_clientes, menu);
-        mySearch = menu.findItem(R.id.itemSearch);
+        mSearch = menu.findItem(R.id.itemSearch);
 
-        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mySearch);
+        final androidx.appcompat.widget.SearchView searchView = (androidx.appcompat.widget.SearchView) MenuItemCompat.getActionView(mSearch);
         searchView.setQueryHint("Pesquisar...");
         searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
@@ -149,7 +152,7 @@ public class sonicClientesCNPJ extends Fragment {
                         @Override
                         public void onFilterComplete(int count) {
                             if (allowSearch) {
-                                if (myAdapter.getItemCount()==0) {
+                                if (mAdapter.getItemCount()==0) {
                                     tvSearch.setVisibility(VISIBLE);
                                     tvSearch.setText("Nenhum resultado para '"+newText+"'");
                                 } else {
@@ -158,7 +161,7 @@ public class sonicClientesCNPJ extends Fragment {
                             }
                         }
                     };
-                    myAdapter.getFilter().filter(newText, listener);
+                    mAdapter.getFilter().filter(newText, listener);
                 }
                 return false;
             }
@@ -167,15 +170,15 @@ public class sonicClientesCNPJ extends Fragment {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-                myTabLayout.setVisibility(GONE);
-                sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,true,true);
+                mTabLayout.setVisibility(GONE);
+                sonicAppearence.searchAppearence(getActivity(),searchView, mToolBar,5,true,true);
             }
 
             @Override
             public void onViewDetachedFromWindow(View view) {
-                myTabLayout.setVisibility(VISIBLE);
+                mTabLayout.setVisibility(VISIBLE);
                 if(!mPrefs.RotaPessoal.getAdding()){
-                    sonicAppearence.searchAppearence(getActivity(),searchView,myToolBar,5,false,false);
+                    sonicAppearence.searchAppearence(getActivity(),searchView, mToolBar,5,false,false);
                 }
             }
         });
@@ -220,8 +223,8 @@ public class sonicClientesCNPJ extends Fragment {
 
                         }
 
-                        myShimmer.stopShimmer();
-                        myShimmer.setVisibility(GONE);
+                        mShimmer.stopShimmer();
+                        mShimmer.setVisibility(GONE);
 
                     }
                     ,mList.size()>1000 ? mList.size() : 500);
@@ -239,11 +242,11 @@ public class sonicClientesCNPJ extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        myAdapter = new sonicClientesAdapter(mList, mContext, myRecycler, fbUp, true);
-        myRecycler.setVisibility(VISIBLE);
-        myRecycler.setAdapter(myAdapter);
-        myRecycler.startAnimation(fadeIn);
-        ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
+        mAdapter = new sonicClientesAdapter(mList, mContext, mRecycler, fbUp, true);
+        mRecycler.setVisibility(VISIBLE);
+        mRecycler.setAdapter(mAdapter);
+        mRecycler.startAnimation(fadeIn);
+        ViewGroup.LayoutParams params = mCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     }

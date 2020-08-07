@@ -1,7 +1,6 @@
 package com.softhex.sonic;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,9 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,35 +31,31 @@ import static android.view.View.VISIBLE;
 
 public class sonicClientesDetalheTitulos extends Fragment {
 
-    private View myView;
+    private View mView;
     private RecyclerView myRecycler;
     private RecyclerView.LayoutManager myLayout;
     private sonicClientesDetalheTitulosAdapter myAdapter;
-    private List<sonicTitulosHolder> myList;
+    private List<sonicTitulosHolder> mList;
     private CoordinatorLayout myCoordinatorLayout;
     private ShimmerFrameLayout myShimmer;
-    private TextView tvTexto, tvTitle, tvSearch;
     private Context mContext;
-    private ImageView myImage;
-    private sonicDatabaseCRUD DBC;
-    private Intent i;
     private sonicPreferences mPrefs;
-    private LinearLayout llNoResult;
-    private RelativeLayout rlDesert;
+    private LinearLayout llMensagem;
+    private TextView tvTitle;
+    private TextView tvMensagem;
+
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_recycler_layout_detalhe, container, false);
+        mView = inflater.inflate(R.layout.sonic_recycler_layout_detalhe, container, false);
 
         mContext = getActivity();
-
-        DBC = new sonicDatabaseCRUD(mContext);
 
         mPrefs = new sonicPreferences(getActivity());
 
         loadFragment();
 
-        return myView;
+        return mView;
 
     }
 
@@ -74,20 +67,23 @@ public class sonicClientesDetalheTitulos extends Fragment {
 
     public void loadFragment(){
 
+        //myCoordinatorLayout = mView.findViewById(R.id.layoutMain);
 
-        //myCoordinatorLayout = myView.findViewById(R.id.layoutMain);
+        llMensagem = mView.findViewById(R.id.llMensagem);
 
-        myShimmer = myView.findViewById(R.id.mShimmerLayout);
+        tvTitle = mView.findViewById(R.id.tvTitle);
 
-        myRecycler =  myView.findViewById(R.id.recyclerList);
+        tvMensagem = mView.findViewById(R.id.tvMensagem);
+
+        myShimmer = mView.findViewById(R.id.mShimmerLayout);
+
+        myRecycler =  mView.findViewById(R.id.recyclerList);
 
         myRecycler.setHasFixedSize(true);
 
         myLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         myRecycler.setLayoutManager(myLayout);
-
-        //rlDesert = myView.findViewById(R.id.rlDesert);
 
         myShimmer.startShimmer();
 
@@ -101,8 +97,8 @@ public class sonicClientesDetalheTitulos extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulosPorCliente(mPrefs.Clientes.getCodigo());
-            return myList.size();
+            mList =  new sonicDatabaseCRUD(mContext).Titulo.selectTitulosPorCliente(mPrefs.Clientes.getCodigo());
+            return mList.size();
 
         }
 
@@ -137,7 +133,7 @@ public class sonicClientesDetalheTitulos extends Fragment {
 
                                     }
                                 }
-                    , 700);
+                    , mList.size()>1000 ? mList.size() : 500);
 
 
         }
@@ -150,23 +146,26 @@ public class sonicClientesDetalheTitulos extends Fragment {
         fadeIn.setDuration(500);
         fadeIn.setFillAfter(true);
 
-        myAdapter = new sonicClientesDetalheTitulosAdapter(myList, mContext, myRecycler);
+        myAdapter = new sonicClientesDetalheTitulosAdapter(mList, mContext, myRecycler);
         if(!myAdapter.hasObservers()){
             myAdapter.setHasStableIds(true);
         }
         myRecycler.setVisibility(VISIBLE);
         myRecycler.setAdapter(myAdapter);
         myRecycler.startAnimation(fadeIn);
-        //ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
-        //params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
     }
 
     private void showNoResult(){
 
-        //ViewGroup.LayoutParams params = myCoordinatorLayout.getLayoutParams();
-        //params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        //rlDesert.setVisibility(VISIBLE);
+        AlphaAnimation fadeIn;
+        fadeIn = new AlphaAnimation(0,1);
+        fadeIn.setDuration(500);
+        fadeIn.setFillAfter(true);
+        llMensagem.setVisibility(VISIBLE);
+        llMensagem.startAnimation(fadeIn);
+        tvTitle.setText("TITULOS");
+        tvMensagem.setText(R.string.nenhumTitulo);
 
     }
 

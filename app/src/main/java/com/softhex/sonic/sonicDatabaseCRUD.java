@@ -823,6 +823,7 @@ public class sonicDatabaseCRUD {
                                 "UC.codigo, " +
                                 "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESA + " E WHERE E.codigo = UC.codigo_empresa) AS empresa, " +
                                 "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = UC.codigo_tipo_cobranca) AS tipo_cobranca, " +
+                                "(SELECT AC.nome FROM " + TABLE_AGENTE_COBRADOR + " AC WHERE AC.codigo = UC.codigo_agente_cobrador) AS agente_cobrador, " +
                                 "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = UC.codigo_prazo) AS prazo, " +
                                 "UC.data, " +
                                 "UC.valor, " +
@@ -841,6 +842,7 @@ public class sonicDatabaseCRUD {
                             compras.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
                             compras.setEmpresa(cursor.getString(cursor.getColumnIndex("empresa")));
                             compras.setTipoCobranca(cursor.getString(cursor.getColumnIndex("tipo_cobranca")));
+                            compras.setAgenteCobrador(cursor.getString(cursor.getColumnIndex("agente_cobrador")));
                             compras.setPrazo(cursor.getString(cursor.getColumnIndex("prazo")));
                             compras.setData(cursor.getString(cursor.getColumnIndex("data")));
                             compras.setValor(cursor.getString(cursor.getColumnIndex("valor")));

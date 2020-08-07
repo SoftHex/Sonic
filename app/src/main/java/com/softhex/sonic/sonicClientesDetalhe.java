@@ -116,16 +116,17 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     }
 
     public void setUpViewPager(ViewPager viewpager){
-        ViewPagerAdapter myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "GERAL");
-        myAdapter.addFragment(new sonicClientesDetalheGeral(), "FINANCEIRO");
-        myAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0 ? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
-        myAdapter.addFragment(new sonicClientesDetalheTitulos(), (mList.get(0).getTitulos()>0 ? "TÍTULOS("+ mList.get(0).getTitulos()+")" : "TÍTULOS"));
-        myAdapter.addFragment(new sonicClientesDetalheVisitas(), (mList.get(0).getVisitas() > 0 ? "VISITAS(" + mList.get(0).getVisitas() + ")" : "VISITAS"));
+        mAdapter.addFragment(new sonicClientesDetalheGeral(), "GERAL");
+        mAdapter.addFragment(new sonicClientesDetalheGeral(), "FINANCEIRO");
+        mAdapter.addFragment(new sonicClientesDetalheCompras(), (mList.get(0).getCompras()>0 ? "COMPRAS("+ mList.get(0).getCompras()+")" : "COMPRAS"));
+        mAdapter.addFragment(new sonicClientesDetalheTitulos(), (mList.get(0).getTitulos()>0 ? "TÍTULOS("+ mList.get(0).getTitulos()+")" : "TÍTULOS"));
+        mAdapter.addFragment(new sonicClientesDetalheVisitas(), (mList.get(0).getVisitas() > 0 ? "VISITAS(" + mList.get(0).getVisitas() + ")" : "VISITAS"));
 
         viewpager.addOnPageChangeListener(viewListenerFragment);
-        viewpager.setAdapter(myAdapter);
+        viewpager.setAdapter(mAdapter);
+        viewpager.setOffscreenPageLimit((mAdapter.getCount() > 1 ? mAdapter.getCount() - 1 : 1));
 
     }
 

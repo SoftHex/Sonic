@@ -8,6 +8,7 @@ public class sonicClientesDetalheComprasHolder {
     String empresa;
     int codigo;
     String tipo_cobranca;
+    String agente_cobrador;
     String prazo;
     String codigo_mobile;
     int situacao;
@@ -16,35 +17,6 @@ public class sonicClientesDetalheComprasHolder {
     String valor_desc;
 
     public sonicClientesDetalheComprasHolder(){
-
-    }
-
-    public sonicClientesDetalheComprasHolder(
-                                            int id,
-                                            String usuario,
-                                            String vendedor,
-                                            String empresa,
-                                            int codigo,
-                                            String tipo_cobranca,
-                                            String prazo,
-                                            String codigo_mobile,
-                                            int situacao,
-                                            String data,
-                                            String valor,
-                                            String valor_desc){
-
-        this.id = id;
-        this.usuario = usuario;
-        this.vendedor = vendedor;
-        this.empresa = empresa;
-        this.codigo = codigo;
-        this.tipo_cobranca = tipo_cobranca;
-        this.prazo = prazo;
-        this.codigo_mobile = codigo_mobile;
-        this.situacao = situacao;
-        this.data = data;
-        this.valor = valor;
-        this.valor_desc = valor_desc;
 
     }
 
@@ -94,6 +66,14 @@ public class sonicClientesDetalheComprasHolder {
 
     public void setTipoCobranca(String tipo_cobranca) {
         this.tipo_cobranca = tipo_cobranca;
+    }
+
+    public String getAgenteCobrador() {
+        return agente_cobrador;
+    }
+
+    public void setAgenteCobrador(String agente_cobrador) {
+        this.agente_cobrador = agente_cobrador;
     }
 
     public String getPrazo() {

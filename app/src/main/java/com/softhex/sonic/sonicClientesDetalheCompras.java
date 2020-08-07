@@ -8,17 +8,23 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.tabs.TabLayout;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by Administrador on 21/07/2017.
@@ -26,7 +32,7 @@ import java.util.List;
 
 public class sonicClientesDetalheCompras extends Fragment {
 
-    private View myView;
+    private View mView;
     private Context mContext;
     private sonicClientesDetalheComprasAdapter mAdapter;
     private ExpandableListView mExpandableList;
@@ -39,20 +45,48 @@ public class sonicClientesDetalheCompras extends Fragment {
     private List<sonicClientesDetalheComprasItensHolder> childData;
     private ProgressBar pbGroup;
     private ArrayList<Integer> groupClicked;
-    private TabLayout mTabLayout;
+    //private TabLayout mTabLayout;
+    private ShimmerFrameLayout mShimmer;
+    private LinearLayout llMensagem;
+    private TextView tvTitle;
+    private TextView tvMensagem;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.sonic_clientes_detalhe_compras, container, false);
+        mView = inflater.inflate(R.layout.sonic_clientes_detalhe_compras, container, false);
+
+        // TO AVOID FRAGMENT REFRESH ON SWIPE TABS/PAGES
+        //setRetainInstance(true);
 
         mContext = getContext();
         mPrefs = new sonicPreferences(mContext);
         mData = new sonicDatabaseCRUD(mContext);
-        mTabLayout = getActivity().findViewById(R.id.mTabs);
-        mExpandableList = myView.findViewById(R.id.mExpandableList);
-        groupClicked = new ArrayList<>();
+
+        loadFragment();
+
+        bindRecyclerView();
+
+        return mView;
+
+    }
+
+    public void bindRecyclerView(){
 
         new mAsyncLoadGroups().execute();
+
+    }
+
+    private void loadFragment(){
+
+        //mTabLayout = getActivity().findViewById(R.id.mTabs);
+        llMensagem = mView.findViewById(R.id.llMensagem);
+        tvTitle = mView.findViewById(R.id.tvTitle);
+        tvMensagem = mView.findViewById(R.id.tvMensagem);
+        mShimmer = mView.findViewById(R.id.mShimmerLayout);
+        mExpandableList = mView.findViewById(R.id.mExpandableList);
+        groupClicked = new ArrayList<>();
+
+        mShimmer.startShimmer();
 
         mExpandableList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -84,13 +118,11 @@ public class sonicClientesDetalheCompras extends Fragment {
             }
         });
 
-        return myView;
-
     }
 
-    class mAsyncLoadGroups extends AsyncTask<Void, Void, Void>{
+    class mAsyncLoadGroups extends AsyncTask<Void, Void, Integer>{
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Integer doInBackground(Void... voids) {
             headerData = new ArrayList<>();
             mList = mData.Cliente.selectComprasPorCliente(mPrefs.Clientes.getCodigo(), 100);
             mHash = new HashMap<>();
@@ -101,13 +133,35 @@ public class sonicClientesDetalheCompras extends Fragment {
                 mHash.put(headerData.get(i),childData);
             }
 
-            return null;
+            return mList.size();
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            checkResultGroup();
+        protected void onPostExecute(Integer result) {
+            super.onPostExecute(result);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        if(result>0){
+
+                                            showResult();
+
+                                        }else{
+
+                                            showNoResult();
+
+                                        }
+
+                                        mShimmer.stopShimmer();
+                                        mShimmer.setVisibility(GONE);
+
+                                    }
+                                }
+                    , mList.size()>1000 ? mList.size() : 500);
+
         }
     }
 
@@ -133,14 +187,6 @@ public class sonicClientesDetalheCompras extends Fragment {
         }
     }
 
-    public void checkResultGroup(){
-        if(mList.size()>0){
-            mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
-            mExpandableList.setAdapter(mAdapter);
-
-        }
-    }
-
     public void checkResultItem(Integer result){
 
         Handler handler = new Handler();
@@ -160,6 +206,33 @@ public class sonicClientesDetalheCompras extends Fragment {
             mExpandableList.expandGroup(result);
         }
         groupClicked.add(result);
+    }
+
+    private void showResult(){
+
+        AlphaAnimation fadeIn;
+        fadeIn = new AlphaAnimation(0,1);
+        fadeIn.setDuration(500);
+        fadeIn.setFillAfter(true);
+
+        mAdapter = new sonicClientesDetalheComprasAdapter(mContext, headerData, mList, mHash);
+        mExpandableList.setAdapter(mAdapter);
+        mExpandableList.setVisibility(VISIBLE);
+        mExpandableList.startAnimation(fadeIn);
+
+    }
+
+    private void showNoResult(){
+
+        AlphaAnimation fadeIn;
+        fadeIn = new AlphaAnimation(0,1);
+        fadeIn.setDuration(500);
+        fadeIn.setFillAfter(true);
+        llMensagem.setVisibility(VISIBLE);
+        llMensagem.startAnimation(fadeIn);
+        tvTitle.setText("COMPRAS");
+        tvMensagem.setText(R.string.nenhumaCompra);
+
     }
 
 }

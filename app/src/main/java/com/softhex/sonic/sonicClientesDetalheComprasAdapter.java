@@ -99,10 +99,10 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
 
         holder.tvC2L1.setText(mUtils.Data.dataFotmatadaBR(mList.get(groupPosition).getData()));
         holder.tvC1L1.setText(mList.get(groupPosition).getTipoCobranca());
-        holder.tvC1L3.setText("#" + (mList.get(groupPosition).getCodigo())+" / VEND.: "+mList.get(groupPosition).getVendedor());
-        holder.tvC1L2.setText("PRAZO: "+mList.get(groupPosition).getPrazo());
+        holder.tvC1L3.setText("#" + (mList.get(groupPosition).getCodigo())+" / Vend.: "+mList.get(groupPosition).getVendedor());
+        holder.tvC1L2.setText(mList.get(groupPosition).getAgenteCobrador() + " / Prazo: "+mList.get(groupPosition).getPrazo());
         holder.tvC2L2.setText("R$ "+mList.get(groupPosition).getValor());
-        holder.tvEmpresa.setText("EMP.: "+mList.get(groupPosition).getEmpresa());
+        holder.tvEmpresa.setText(mList.get(groupPosition).getEmpresa());
 
          if(mList.get(groupPosition).getValorDesc().equals("0,00")){
              holder.tvC2L3.setVisibility(View.INVISIBLE);
@@ -177,8 +177,8 @@ public class sonicClientesDetalheComprasAdapter extends BaseExpandableListAdapte
             holder.tvLetra.setText(mItens.getLetra());
         }
         holder.tvNomeProduto.setText(mItens.getProduto());
-        holder.tvCodigoUnidade.setText("#"+mItens.getCodigoProduto()+ " / UNID.: " + mItens.getUnidadeMedidaSigla());
-        holder.tvQtdPrecoValor.setText("QTD.: "+mItens.getQuantidade()+ " / PREÇO: R$ " + mItens.getPrecoUnitario()+ " / TOTAL: R$ "+mItens.getValorGeral());
+        holder.tvCodigoUnidade.setText("#"+mItens.getCodigoProduto()+ " / Unid.: " + mItens.getUnidadeMedidaSigla());
+        holder.tvQtdPrecoValor.setText("Qtd.: "+mItens.getQuantidade()+ " / Preço: R$ " + mItens.getPrecoUnitario()+ " / Total: R$ "+mItens.getValorGeral());
         if(mItens.getDesconto().equals("0,00")){
             holder.tvDesconto.setVisibility(View.GONE);
         }else{

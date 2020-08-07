@@ -1104,7 +1104,7 @@ public class sonicMain extends AppCompatActivity{
 
     public void dialogRedefinir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.go_sure).setPositiveButton("REDEFINIR", dialogClickListener).setNegativeButton("CANCELAR", dialogClickListener).show();
+        builder.setMessage(R.string.redefinir).setPositiveButton("REDEFINIR", dialogClickListener).setNegativeButton("CANCELAR", dialogClickListener).show();
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {

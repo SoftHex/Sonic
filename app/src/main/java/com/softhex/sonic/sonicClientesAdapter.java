@@ -117,6 +117,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
         this.mData = new sonicDatabaseCRUD(mContext);
         this.fbUp = fbup;
+        //this.setHasStableIds(true);
 
         mPartialList = new ArrayList();
         mPartialList.add(0,null);

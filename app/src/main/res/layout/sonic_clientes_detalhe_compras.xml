@@ -1,26 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="12dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.softhex.sonic.NoScrollExpandableListView
-            android:id="@+id/mExpandableList"
+        <LinearLayout
+            android:id="@+id/llMensagem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@drawable/expandable_divider"
-            android:groupIndicator="@null"
-            android:transcriptMode="alwaysScroll"
-            android:childDivider="@android:color/transparent">
+            android:layout_margin="26dp"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-        </com.softhex.sonic.NoScrollExpandableListView>
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text="TITULO"/>
+
+            <TextView
+                android:id="@+id/tvMensagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:text="Nenhum dado para ser exibido."/>
+
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/mShimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shimmer_duration="1000"
+            app:shimmer_tilt="0"
+            app:shimmer_direction="left_to_right">
+
+            <include layout="@layout/layout_shimmer_default"/>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
+
+            <com.softhex.sonic.NoScrollExpandableListView
+                android:id="@+id/mExpandableList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/expandable_divider"
+                android:groupIndicator="@null"
+                android:transcriptMode="alwaysScroll"
+                android:childDivider="@android:color/transparent"
+                android:visibility="gone">
+
+            </com.softhex.sonic.NoScrollExpandableListView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
