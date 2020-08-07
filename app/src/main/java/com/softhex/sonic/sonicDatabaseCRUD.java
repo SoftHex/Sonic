@@ -757,6 +757,7 @@ public class sonicDatabaseCRUD {
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
                         "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
                         "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
+                        "(SELECT COUNT(R._id) FROM " + TABLE_ROTA + " R WHERE R.codigo_cliente = C.codigo AND R.status=1) AS visitas, " +
                         "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
                         " FROM " + TABLE_CLIENTE +
                         " C LEFT JOIN " + TABLE_GRUPO_CLIENTE +
@@ -796,6 +797,7 @@ public class sonicDatabaseCRUD {
                             clientes.setTitulos(cursor.getInt(cursor.getColumnIndex("titulos")));
                             clientes.setTitulosEmAtraso(cursor.getInt(cursor.getColumnIndex("titulos_em_atraso")));
                             clientes.setCompras(cursor.getInt(cursor.getColumnIndex("compras")));
+                            clientes.setVisitas(cursor.getInt(cursor.getColumnIndex("visitas")));
                             clientes.setSituacao(cursor.getInt(cursor.getColumnIndex("situacao")));
                             clientes.setCliSemCompra(cursor.getInt(cursor.getColumnIndex("cli_sem_compra")));
                             cliente.add(clientes);
@@ -2520,7 +2522,7 @@ public class sonicDatabaseCRUD {
                     "C.cep " +
                     " FROM " + TABLE_ROTA +
                     " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
-                    " WHERE C.codigo=? ORDER BY R.data_agendamento DESC";
+                    " WHERE C.codigo=? ORDER BY R.status, R.data_agendamento DESC";
 
             try{
 
