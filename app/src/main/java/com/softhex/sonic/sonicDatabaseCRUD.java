@@ -36,9 +36,11 @@ public class sonicDatabaseCRUD {
     private final String TABLE_GRUPO_CLIENTE = sonicConstants.TB_GRUPO_CLIENTE;
     private final String TABLE_RANKING_CLIENTE = sonicConstants.TB_RANKING_CLIENTE;
     private final String TABLE_CLIENTE_SEM_COMPRA = sonicConstants.TB_CLIENTE_SEM_COMPRA;
+    private final String TABLE_ACESSO_CLIENTE = sonicConstants.TB_ACESSO_CLIENTE;
     private final String TABLE_PRODUTO = sonicConstants.TB_PRODUTO;
     private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTO;
     private final String TABLE_BLOQUEIO_PRODUTO = sonicConstants.TB_BLOQUEIO_PRODUTO;
+    private final String TABLE_ACESSO_PRODUTO = sonicConstants.TB_ACESSO_PRODUTO;
     private final String TABLE_ROTA = sonicConstants.TB_ROTA;
     private final String TABLE_ROTA_PESSOAL = sonicConstants.TB_ROTA_PESSOAL;
     private final String TABLE_ESTOQUE_PRODUTO = sonicConstants.TB_ESTOQUE_PRODUTO;
@@ -160,7 +162,10 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN ('sqlite_master', 'sqlite_sequence')", null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN (" +
+                        "'sqlite_master', 'sqlite_sequence', '" +
+                        TABLE_ACESSO_CLIENTE +"','"+
+                        TABLE_ACESSO_PRODUTO +"')", null);
                 List<String> tables = new ArrayList<>();
 
                 while (cursor.moveToNext()){
@@ -186,7 +191,17 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN ('sqlite_master', 'sqlite_sequence','"+TABLE_SITE+"','"+TABLE_FTP+"','"+TABLE_EMPRESA+"','"+TABLE_NIVEL_ACESSO+"','"+TABLE_USUARIO+"','"+TABLE_EMPRESA_USUARIO+"','"+TABLE_GRUPO_EMPRESAS+"')", null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN (" +
+                        "'sqlite_master', " +
+                        "'sqlite_sequence','"+
+                        TABLE_SITE+"','"+
+                        TABLE_FTP+"','"+
+                        TABLE_EMPRESA+"','"+
+                        TABLE_NIVEL_ACESSO+"','"+
+                        TABLE_USUARIO+"','"+
+                        TABLE_EMPRESA_USUARIO+"','"+
+                        TABLE_GRUPO_EMPRESAS+"','"+
+                        TABLE_GRUPO_EMPRESAS+"')", null);
                 List<String> tables = new ArrayList<>();
 
                 while (cursor.moveToNext()){
@@ -1008,6 +1023,86 @@ public class sonicDatabaseCRUD {
 
             }
 
+            public void addAcesso(int codigo){
+                StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+                mCalendar = Calendar.getInstance();
+                Cursor c;
+
+                try {
+                    c = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_ACESSO_CLIENTE+" WHERE codigo_cliente=?", new String[]{String.valueOf(codigo)});
+                    // SE NAO EXISTIR VALOR, INSERE
+                    if(c==null || c.getCount()==0) {
+
+                        ContentValues cv = new ContentValues();
+                        cv.put("codigo_cliente", codigo);
+                        cv.put("acessos", 1);
+                        cv.put("data", data.format(mCalendar.getTime()));
+                        cv.put("hora", hora.format(mCalendar.getTime()));
+
+                        DB.getWritableDatabase().insert(TABLE_ACESSO_CLIENTE, null, cv);
+
+                    }else{
+
+                        DB.getWritableDatabase().execSQL("UPDATE " + TABLE_ACESSO_CLIENTE + " SET acessos=acessos+1, data=?, hora=? WHERE codigo_cliente=?", new String[]{data.format(mCalendar.getTime()),hora.format(mCalendar.getTime()), String.valueOf(codigo)});
+
+                    }
+                }
+                catch (SQLiteException e){
+                    mPrefs.Geral.setError(e.getMessage());
+                    DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                            e.getMessage(),
+                            mySystem.System.getActivityName(),
+                            mySystem.System.getClassName(el),
+                            mySystem.System.getMethodNames(el));
+                    e.printStackTrace();
+                    }
+
+            }
+
+        public List<sonicClientesHolder> selectAccessos(boolean cnpj){
+            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
+            List<sonicClientesHolder> cliente = new ArrayList<sonicClientesHolder>();
+            String query = "SELECT " +
+                    "C.codigo," +
+                    "C.razao_social," +
+                    "C.nome_fantasia," +
+                    "C.cpf_cnpj," +
+                    "C.endereco," +
+                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTE +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo" +
+                    " FROM " + TABLE_ACESSO_CLIENTE +
+                    " AC JOIN "+ TABLE_CLIENTE + " C ON AC.codigo_cliente = C.codigo " +
+                    " WHERE C.tipo=? ORDER BY AC.data DESC, AC.hora DESC, AC._id DESC, AC.acessos DESC LIMIT 6";
+            try {
+                Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{cnpj ? "J" : "F"});
+                if(cursor!=null){
+                    while (cursor.moveToNext()){
+                        sonicClientesHolder clientes = new sonicClientesHolder();
+                        clientes.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
+                        clientes.setRazaoSocial(cursor.getString(cursor.getColumnIndex("razao_social")));
+                        clientes.setNomeFantasia(cursor.getString(cursor.getColumnIndex("nome_fantasia")));
+                        clientes.setCpfCnpj(cursor.getString(cursor.getColumnIndex("cpf_cnpj")));
+                        clientes.setEndereco(cursor.getString(cursor.getColumnIndex("endereco")));
+                        clientes.setGrupo(cursor.getString(cursor.getColumnIndex("grupo")));
+                        cliente.add(clientes);
+                    }
+                }
+
+                Log.d("QUERY ACESSOS", query);
+
+                cursor.close();
+
+            }catch (SQLiteException e){
+                mPrefs.Geral.setError(e.getMessage());
+                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),
+                        e.getMessage(),
+                        mySystem.System.getActivityName(),
+                        mySystem.System.getClassName(el),
+                        mySystem.System.getMethodNames(el));
+                e.printStackTrace();
+            }
+
+            return cliente;
+        }
 
     }
 

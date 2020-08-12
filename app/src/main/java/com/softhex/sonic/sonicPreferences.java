@@ -93,6 +93,7 @@ public class sonicPreferences{
     private static final String GERAL_DATA_RANGE = "geralDataRange";
     private static final String GERAL_DATA_SEARCH = "geralDataSearch";
     private static final String GERAL_TERM_SEARCH = "geralTermSearch";
+    private static final String GERAL_CALL_ACTIVITY = "geralCallActivity";
     private static final String SINC_REFRESH = "sincRefresh";
     private static final String SINC_DOWNLOAD_TYPE = "sincDownloadType";
     private static final String SINC_CALLED_ACTIVITY = "sincCalledActivity";
@@ -898,6 +899,14 @@ public class sonicPreferences{
         }
         public boolean getFirstSinc(){
             return sharedpreferences.getBoolean(GERAL_FIRST_SINC, true);
+        }
+        public void setCallActivity(String value){
+            editor = sharedpreferences.edit();
+            editor.putString(GERAL_CALL_ACTIVITY, value);
+            editor.apply();
+        }
+        public String getCallActivity(){
+            return sharedpreferences.getString(GERAL_CALL_ACTIVITY, "");
         }
     }
     public class Sincronizacao{

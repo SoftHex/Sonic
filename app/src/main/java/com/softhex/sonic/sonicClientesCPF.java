@@ -1,5 +1,6 @@
 package com.softhex.sonic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -29,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.github.clans.fab.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -48,6 +48,7 @@ public class sonicClientesCPF extends Fragment {
     private RecyclerView.LayoutManager mLayout;
     private sonicClientesAdapter mAdapter;
     private List<sonicClientesHolder> mList;
+    private List<sonicClientesHolder> mRecentList;
     private MenuItem mSearch;
     private Toolbar mToolBar;
     private TabLayout mTabLayout;
@@ -64,13 +65,14 @@ public class sonicClientesCPF extends Fragment {
     private LinearLayout llNoResult;
     private RelativeLayout rlDesert;
     private Button btSinc;
-    private FloatingActionButton fbUp;
+    private Activity mAct;
 
     @Nullable
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.sonic_recycler_layout_list, container, false);
 
         mContext = getActivity();
+        mAct = getActivity();
         mPrefs = new sonicPreferences(getActivity());
         DBC = new sonicDatabaseCRUD(mContext);
 
@@ -118,8 +120,6 @@ public class sonicClientesCPF extends Fragment {
         mLayout = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
 
         mRecycler.setLayoutManager(mLayout);
-
-        fbUp = mView.findViewById(R.id.fbUp);
 
         ViewGroup.LayoutParams params = mCoordinatorLayout.getLayoutParams();
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -207,6 +207,7 @@ public class sonicClientesCPF extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
+            mRecentList = new sonicDatabaseCRUD(mContext).Cliente.selectAccessos(false);
             mList =  new sonicDatabaseCRUD(mContext).Cliente.selectClienteTipo(false);
             return mList.size();
 
@@ -247,7 +248,7 @@ public class sonicClientesCPF extends Fragment {
         llNoResult.setVisibility(GONE);
         rlDesert.setVisibility(GONE);
         allowSearch = true;
-        mAdapter = new sonicClientesAdapter(mList, mContext, mRecycler, fbUp, false);
+        mAdapter = new sonicClientesAdapter(mList, mContext, mRecycler, mView, mAct, false);
         mRecycler.setVisibility(VISIBLE);
         mRecycler.setAdapter(mAdapter);
         mRecycler.startAnimation(fadeIn);

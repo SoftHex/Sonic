@@ -3,10 +3,12 @@ package com.softhex.sonic;
 import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -191,5 +193,19 @@ public class sonicClientes extends AppCompatActivity {
         super.onDestroy();
         mPrefs.GrupoCliente.setFiltroCpf("TODOS");
         mPrefs.GrupoCliente.setFiltroCnpj("TODOS");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (mPrefs.Geral.getCallActivity()){
+
+            case "sonicClientesCNPJ":
+                ((sonicClientesCNPJ)getSupportFragmentManager().getFragments().get(0)).atualizarItensRecentes();
+                break;
+            case "sonicClientesCPF":
+                break;
+        }
+
     }
 }

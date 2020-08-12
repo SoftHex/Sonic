@@ -4,26 +4,31 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,11 +41,11 @@ import java.util.List;
 
 public class sonicClientesAdapter extends RecyclerView.Adapter implements Filterable{
 
-    private static final int VIEW_FILTER = 1;
+    private static final int VIEW_ITEM = 1;
     private static final int VIEW_PROGRESS = 2;
-    private static final int VIEW_ITEM = 3;
     private static final int TOTAL_ITENS_FILTRO = 6;
     private Context mContext;
+    private Activity mAct;
     private List<sonicClientesHolder> mTotalList;
     private List<sonicClientesHolder> mFilteredList;
     private List<sonicClientesHolder> mPartialList;
@@ -55,7 +60,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private LinearLayoutManager linearLayoutManager;
     private boolean cnpj;
     private sonicDatabaseCRUD mData;
-    private FloatingActionButton fbUp;
+    private Fragment mFragment;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -76,7 +81,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         LinearLayout llExtra;
         TextView tvSemCompra, tvAtraso;
         LinearLayout llGrouFilter;
-
+        LinearLayout llRootView;
+        LinearLayout llParentView;
+        RelativeLayout rlChildView;
 
         public cliHolder(View view) {
             super(view);
@@ -93,22 +100,24 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
             llGrouFilter = view.findViewById(R.id.llGroupFilter);
+            llRootView = view.findViewById(R.id.llRootView);
+            llParentView = view.findViewById(R.id.llParentView);
+            rlChildView = view.findViewById(R.id.rlChildView);
 
         }
 
     }
-
 
     @Override
     public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
     }
 
-    public sonicClientesAdapter(List<sonicClientesHolder> cliente, Context context, RecyclerView recycler, FloatingActionButton fbup, boolean cnpj) {
+    public sonicClientesAdapter(List<sonicClientesHolder> fullList, Context context, RecyclerView recycler, View rootView, Activity act, boolean cnpj) {
 
         this.myCons = new sonicConstants();
-        this.mTotalList = cliente;
-        this.mFilteredList = cliente;
+        this.mTotalList = fullList;
+        this.mFilteredList = fullList;
         this.mContext = context;
         this.mPrefs = new sonicPreferences(mContext);
         this.mRecycler = recycler;
@@ -116,63 +125,41 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.nFantasia =  mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? true : false;
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
         this.mData = new sonicDatabaseCRUD(mContext);
-        this.fbUp = fbup;
+        this.mAct = act;
+        //this.fbUp = fbup;
         //this.setHasStableIds(true);
 
         mPartialList = new ArrayList();
-        mPartialList.add(0,null);
-        mTotalList.add(0,null);
+        //mPartialList.add(0,null);
+        // ADD ITEM FILTER
+        //mTotalList.add(0,null);
 
         if(mPrefs.Geral.getListagemCompleta()){
 
-            for(int i=0;i<cliente.size();i++){
-                mPartialList.add(cliente.get(i));
+            for(int i=0;i<fullList.size();i++){
+                mPartialList.add(fullList.get(i));
             }
 
         }else{
 
-            if(cliente.size()< sonicConstants.TOTAL_ITENS_LOAD){
-                for(int i = 0; i < cliente.size(); i++){
-                    mPartialList.add(cliente.get(i));
+            if(fullList.size()< sonicConstants.TOTAL_ITENS_LOAD){
+                for(int i = 0; i < fullList.size(); i++){
+                    mPartialList.add(fullList.get(i));
                 }
             }else{
                 for(int i = 0; i<sonicConstants.TOTAL_ITENS_LOAD-1; i++){
-                    mPartialList.add(cliente.get(i));
+                    mPartialList.add(fullList.get(i));
                 }
             }
 
             linearLayoutManager = (LinearLayoutManager) mRecycler.getLayoutManager();
 
-            /*mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
-                    if(!isLoading){
-                        if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
-                            if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
-                                loadMore();
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                    switch (newState){
-                        case RecyclerView.SCROLL_STATE_IDLE:
-                            mRecycler.removeOnScrollListener(this);
-                            break;
-                    }
-                }
-            });*/
-
             RecyclerView.OnScrollListener mListener = new RecyclerView.OnScrollListener() {
+                int y;
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
+                    //super.onScrolled(recyclerView, dx, dy);
+                    y = dy;//fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
                     if(!isLoading){
                         if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
                             if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
@@ -185,33 +172,27 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    switch (newState){
-                        case RecyclerView.SCROLL_STATE_IDLE:
-                            if(linearLayoutManager.findFirstCompletelyVisibleItemPosition()<sonicConstants.TOTAL_ITENS_LOAD*2)
-                                mRecycler.smoothScrollToPosition(0);
-                            break;
+                    View v = rootView.findViewById(R.id.llRootView);
+                    if(newState==mRecycler.SCROLL_STATE_SETTLING){
+                        if(y<=0){
+                            if(v.getVisibility()==View.GONE)
+                            expand(v);
+                        }else{
+                            y=0;
+                            collapse(v);
+                        }
                     }
                 }
             };
 
             mRecycler.addOnScrollListener(mListener);
         }
-
-        fbUp.setOnClickListener((View v)->{
-            mRecycler.scrollToPosition(sonicConstants.TOTAL_ITENS_LOAD);
-        });
-
     }
-
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=null;
         switch (viewType){
-            case VIEW_FILTER:
-                view = LayoutInflater.from(mContext).inflate(R.layout.layout_cards_filter, parent, false);
-                break;
             case VIEW_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens, parent, false);
                 break;
@@ -229,9 +210,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             sonicClientesHolder cli = mTotalList.get(position);
 
             switch (holder.getItemViewType()){
-                case VIEW_FILTER:
-                    criarFiltroBusca(holder);
-                    break;
                 case VIEW_ITEM:
                     exibirItemLista(holder, cli, position);
                     break;
@@ -249,7 +227,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     @Override
     public int getItemViewType(int position) {
-        return (position==0 && mTotalList.get(position)==null) ? VIEW_FILTER : mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
+        return mTotalList.get(position) == null ? VIEW_PROGRESS : VIEW_ITEM;
     }
 
     @Override
@@ -376,15 +354,16 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         holder.linearItem.setOnClickListener((View v)-> {
 
+            new mAsyncTaskRecentAdd().execute(cli.getCodigo());
             mPrefs.Clientes.setCodigo(cli.getCodigo());
             mPrefs.Clientes.setNome(cliNomeExibicao);
-            mPrefs.Clientes.setClienteNuncaComprou(cli.getCliSemCompra() > 0 ? true : false);
+            mPrefs.Geral.setCallActivity("sonicClientes"+(cnpj ? "CNPJ" : "CPF"));
             if(mPrefs.RotaPessoal.getAdding()){
                 mPrefs.RotaPessoal.setClientePicked(true);
                 ((Activity)mContext).finish();
             }else{
                 Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
-                mContext.startActivity(i);
+                ((Activity)mContext).startActivityForResult(i,1);
             }
         });
 
@@ -393,7 +372,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         holder.tvLinha1.setText(cliNomeExibicao);
         holder.tvSemCompra.setVisibility((cliSemCompra && cli.getCliSemCompra()>0) ? View.VISIBLE : View.GONE);
         holder.tvAtraso.setVisibility(cli.getTitulosEmAtraso()>0 ? View.VISIBLE : View.GONE);
-        holder.tvLinha2.setText(cli.getGrupo());
+        holder.tvLinha2.setText(sonicUtils.stringToCnpjCpf(cli.getCpfCnpj()) + " / " + cli.getGrupo());
         holder.tvLinha3.setText(cli.getEnderecoCompleto());
 
         File f = sonicFile.searchImage(myCons.LOCAL_IMG_CLIENTES, cli.getCodigo());
@@ -467,29 +446,67 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     }
 
-    public void marcarFiltroPadrao(String filtro) {
+    class mAsyncTaskRecentAdd extends AsyncTask<Integer, Void, Void>{
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
-        alertDialogBuilder.setTitle("Filtro Padrão");
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            new sonicDatabaseCRUD(mContext).Cliente.addAcesso(integers[0]);
+            return null;
+        }
+    }
 
-        alertDialogBuilder
-                .setMessage("Deseja marcar esse filtro como padrão? Será apenas para a tela de clientes.")
-                .setCancelable(false)
-                .setPositiveButton("SIM",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        mPrefs.GrupoCliente.setFiltroPadrao(filtro);
-                    }
-                })
-                .setNegativeButton("CANCELAR",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        dialog.cancel();
-                    }
-                });
+    public static void expand(final View v) {
+        v.measure(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        final int targetHeight = v.getMeasuredHeight();
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.getLayoutParams().height = 1;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? WindowManager.LayoutParams.WRAP_CONTENT
+                        : (int)(targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
 
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
 
+        // 1dp/ms
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+
+    public static void collapse(final View v) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    v.setVisibility(View.GONE);
+                }else{
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
     }
 
     private class UserFilter extends Filter {

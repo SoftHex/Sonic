@@ -32,11 +32,13 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String DB_GRUPO_CLIENTE = sonicConstants.TB_GRUPO_CLIENTE;
     private static final String DB_RANKING_CLIENTE = sonicConstants.TB_RANKING_CLIENTE;
     private static final String DB_CLIENTE_SEM_COMPRA = sonicConstants.TB_CLIENTE_SEM_COMPRA;
+    private static final String DB_ACESSO_CLIENTE = sonicConstants.TB_ACESSO_CLIENTE;
     private static final String DB_PRODUTO = sonicConstants.TB_PRODUTO;
     private static final String DB_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTO;
     private static final String DB_RANKING_PRODUTO = sonicConstants.TB_RANKING_PRODUTO;
     private static final String DB_ESTOQUE_PRODUTO = sonicConstants.TB_ESTOQUE_PRODUTO;
     private static final String DB_BLOQUEIO_PRODUTO = sonicConstants.TB_BLOQUEIO_PRODUTO;
+    private static final String DB_ACESSO_PRODUTO = sonicConstants.TB_ACESSO_PRODUTO;
     private static final String DB_ROTA = sonicConstants.TB_ROTA;
     private static final String DB_ROTA_PESSOAL = sonicConstants.TB_ROTA_PESSOAL;
     private static final String DB_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
@@ -209,6 +211,15 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_RANKING_CLIENTE_CODIGO_CLIENTE = "CREATE INDEX index_ranking_cliente_codigo_cliente ON "+DB_RANKING_CLIENTE+" (codigo_cliente);";
     private static final String CREATE_INDEX_RANKING_CLIENTE_CODIGO_EMPRESA = "CREATE INDEX index_ranking_cliente_codigo_empresa ON "+DB_RANKING_CLIENTE+" (codigo_empresa);";
 
+    private static final String CREATE_TABLE_ACESSO_CLIENTE = "CREATE TABLE IF NOT EXISTS "+DB_ACESSO_CLIENTE+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo_cliente int NOT NULL, " +
+            "acessos int NOT NULL DEFAULT 0," +
+            "data varchar," +
+            "hora varchar," +
+            "FOREIGN KEY (codigo_cliente) REFERENCES "+DB_CLIENTE+"(codigo));";
+    private static final String CREATE_INDEX_ACESSO_CLIENTE_CODIGO_CLIENTE = "CREATE INDEX index_acesso_cliente_codigo_cliente ON "+DB_ACESSO_CLIENTE+" (codigo_cliente);";
+
     private static final String CREATE_CLIENTE_SEM_COMPRA = "CREATE TABLE IF NOT EXISTS "+DB_CLIENTE_SEM_COMPRA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
             "codigo_usuario int, " +
@@ -259,6 +270,16 @@ public class sonicDatabase extends SQLiteOpenHelper{
     private static final String CREATE_INDEX_BLOQUEIO_PRODUTO_CODIGO_USUARIO = "CREATE INDEX index_bloqueio_produto_codigo_usuario ON "+DB_BLOQUEIO_PRODUTO+" (codigo_usuario);";
     private static final String CREATE_INDEX_BLOQUEIO_PRODUTO_CODIGO_EMPRESA = "CREATE INDEX index_bloqueio_produto_codigo_empresa ON "+DB_BLOQUEIO_PRODUTO+" (codigo_empresa);";
     private static final String CREATE_INDEX_BLOQUEIO_PRODUTO_CODIGO_PRODUTO = "CREATE INDEX index_bloqueio_produto_codigo_produto ON "+DB_BLOQUEIO_PRODUTO+" (codigo_produto);";
+
+    private static final String CREATE_TABLE_ACESSO_PRODUTO = "CREATE TABLE IF NOT EXISTS "+DB_ACESSO_PRODUTO+" (" +
+            "_id integer PRIMARY KEY AUTOINCREMENT, " +
+            "codigo_produto int NOT NULL, " +
+            "acessos int NOT NULL DEFAULT 0," +
+            "data varchar," +
+            "hora varchar," +
+            "FOREIGN KEY (codigo_produto) REFERENCES "+DB_PRODUTO+"(codigo));";
+    private static final String CREATE_INDEX_ACESSO_PRODUTO_CODIGO_PRODUTO = "CREATE INDEX index_acesso_produto_codigo_produto ON "+DB_ACESSO_PRODUTO+" (codigo_produto);";
+
 
     private static final String CREATE_ROTA = "CREATE TABLE IF NOT EXISTS "+DB_ROTA+" (" +
             "_id integer PRIMARY KEY AUTOINCREMENT, " +
@@ -624,6 +645,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_CLIENTE_CODIGO_USUARIO);
         DB.execSQL(CREATE_INDEX_CLIENTE_CODIGO_GRUPO);
         DB.execSQL(CREATE_INDEX_CLIENTE_SITUACAO);
+        // TABELA ACESSO CLIENTE
+        DB.execSQL(CREATE_TABLE_ACESSO_CLIENTE);
+        DB.execSQL(CREATE_INDEX_ACESSO_CLIENTE_CODIGO_CLIENTE);
         // TABELA EMPRESA_CLIENTE
         DB.execSQL(CREATE_EMPRESA_CLIENTE);
         DB.execSQL(CREATE_INDEX_EMPRESA_CLIENTE_CODIGO_USUARIO);
@@ -697,6 +721,9 @@ public class sonicDatabase extends SQLiteOpenHelper{
         DB.execSQL(CREATE_INDEX_TABELA_PRECO_PRODUTO_CODIGO_EMPRESA);
         DB.execSQL(CREATE_INDEX_TABELA_PRECO_PRODUTO_CODIGO_PRODUTO);
         DB.execSQL(CREATE_INDEX_TABELA_PRECO_PRODUTO_CODIGO_UNIDADE);
+        // TABELA ACESSO_PRODUTO
+        DB.execSQL(CREATE_TABLE_ACESSO_PRODUTO);
+        DB.execSQL(CREATE_INDEX_ACESSO_PRODUTO_CODIGO_PRODUTO);
         // TABELA VENDAS
         DB.execSQL(CREATE_VENDAS);
         DB.execSQL(CREATE_INDEX_VENDAS_CODIGO_USUARIO);
