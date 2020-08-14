@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -23,10 +22,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -60,7 +59,8 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
     private LinearLayoutManager linearLayoutManager;
     private boolean cnpj;
     private sonicDatabaseCRUD mData;
-    private Fragment mFragment;
+    private String cliNomeExibicao;
+    private int cliCodigo;
 
     public class cliHolder extends RecyclerView.ViewHolder {
 
@@ -104,6 +104,20 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             llParentView = view.findViewById(R.id.llParentView);
             rlChildView = view.findViewById(R.id.rlChildView);
 
+            /*linearItem.setOnClickListener((View v)->{
+                new mAsyncTaskRecentAdd().execute(cliCodigo);
+                mPrefs.Clientes.setCodigo(cliCodigo);
+                mPrefs.Clientes.setNome(cliNomeExibicao);
+                mPrefs.Geral.setCallActivity("sonicClientes"+(cnpj ? "CNPJ" : "CPF"));
+                if(mPrefs.RotaPessoal.getAdding()){
+                    mPrefs.RotaPessoal.setClientePicked(true);
+                    ((Activity)mContext).finish();
+                }else{
+                    Intent i = new Intent(v.getContext(), sonicClientesDetalhe.class);
+                    ((Activity)mContext).startActivityForResult(i,1);
+                }
+            });*/
+
         }
 
     }
@@ -126,13 +140,9 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         this.cliSemCompra = mPrefs.Clientes.getClienteSemCompra();
         this.mData = new sonicDatabaseCRUD(mContext);
         this.mAct = act;
-        //this.fbUp = fbup;
-        //this.setHasStableIds(true);
+        this.mRecycler.setHasFixedSize(true);
 
         mPartialList = new ArrayList();
-        //mPartialList.add(0,null);
-        // ADD ITEM FILTER
-        //mTotalList.add(0,null);
 
         if(mPrefs.Geral.getListagemCompleta()){
 
@@ -159,7 +169,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     //super.onScrolled(recyclerView, dx, dy);
-                    y = dy;//fbUp.setVisibility(linearLayoutManager.findLastCompletelyVisibleItemPosition()>sonicConstants.TOTAL_ITENS_LOAD ? View.VISIBLE : View.GONE);
+                    y = dy;
                     if(!isLoading){
                         if(linearLayoutManager !=null && linearLayoutManager.findLastVisibleItemPosition()==mPartialList.size()-1){
                             if(mPartialList.size()>=sonicConstants.TOTAL_ITENS_LOAD-1){
@@ -168,7 +178,6 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                         }
                     }
                 }
-
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
@@ -194,12 +203,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
         View view=null;
         switch (viewType){
             case VIEW_ITEM:
-                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sonic_layout_cards_itens, parent, false);
                 break;
             case VIEW_PROGRESS:
-                view = LayoutInflater.from(mContext).inflate(R.layout.sonic_layout_cards_itens_shimmer, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sonic_layout_cards_itens_shimmer, parent, false);
                 break;
         }
+
         return new cliHolder(view);
     }
 
@@ -215,6 +225,13 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                     break;
             }
 
+    }
+
+    @Override
+    public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
+        //return super.onFailedToRecycleView(holder);
+        holder.itemView.clearAnimation();
+        return true;
     }
 
     @Override
@@ -276,81 +293,10 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
     }
 
-    private void criarFiltroBusca(cliHolder holder){
-
-        holder.llGrouFilter.removeAllViews();
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        p.height = sonicUtils.convertDpToPixel(36, mContext);
-        p2.height = sonicUtils.convertDpToPixel(36, mContext);
-        p.setMargins(0,0, sonicUtils.convertDpToPixel(6, mContext), 0);
-        p2.setMargins(sonicUtils.convertDpToPixel(12, mContext),0, sonicUtils.convertDpToPixel(6, mContext), 0);
-        mGroupList = mData.GrupoCliente.selectGrupoCliente(cnpj ? "J" : "F");
-        Button bt1 = new Button(mContext);
-        bt1.setText(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf());
-        bt1.setTextSize(12);
-        bt1.setBackground(mContext.getResources().getDrawable(R.drawable.botao_selecionado));
-        bt1.setLayoutParams(p2);
-        bt1.setPadding(30,0,30,0);
-        holder.llGrouFilter.addView(bt1);
-        List<String> grupoAuxiliar;
-        grupoAuxiliar = new ArrayList<>();
-        grupoAuxiliar.add(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf());
-        for(int i=0; i < (mGroupList.size()<TOTAL_ITENS_FILTRO ? mGroupList.size() : TOTAL_ITENS_FILTRO) ;i++){
-
-            grupoAuxiliar.add(mGroupList.get(i).getNome());
-
-            if(!mGroupList.get(i).getNome().contains(cnpj ? mPrefs.GrupoCliente.getFiltroCnpj() : mPrefs.GrupoCliente.getFiltroCpf())){
-
-                Button bt2 = new Button(mContext);
-
-                bt2.setOnClickListener((View v)-> {
-
-                    if(cnpj){
-                        mPrefs.GrupoCliente.setFiltroCnpj(bt2.getText().toString());
-                    }else{
-                        mPrefs.GrupoCliente.setFiltroCpf(bt2.getText().toString());
-                    }
-
-                ((sonicClientes)mContext).refreshFragments(cnpj ? 0 : 1);
-
-                });
-
-                bt2.setOnLongClickListener((View v)->{
-                    //marcarFiltroPadrao(bt2.getText().toString());
-                    return false;
-                });
-
-                bt2.setText(mGroupList.get(i).getNome());
-                bt2.setTextSize(12);
-                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
-                bt2.setLayoutParams(p);
-
-                bt2.setPadding(30,0,30,0);
-                holder.llGrouFilter.addView(bt2);
-            }
-
-        }
-
-        if(mGroupList.size()>TOTAL_ITENS_FILTRO){
-            Button bt3 = new Button(mContext);
-
-            bt3.setOnClickListener((View v)-> {
-                exibirFiltroExtra(grupoAuxiliar);
-            });
-            bt3.setText("MAIS...");
-            bt3.setTextSize(12);
-            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
-            bt3.setLayoutParams(p);
-            bt3.setPadding(30,0,30,0);
-            holder.llGrouFilter.addView(bt3);
-        }
-
-    }
-
     private void exibirItemLista(cliHolder holder, sonicClientesHolder cli, int position){
 
-        String cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
+        cliNomeExibicao = nFantasia ? cli.getNomeFantasia() : cli.getRazaoSocial();
+        cliCodigo = cli.getCodigo();
 
         holder.linearItem.setOnClickListener((View v)-> {
 
@@ -381,12 +327,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
             holder.mImage.setVisibility(View.VISIBLE);
             holder.letra.setVisibility(View.GONE);
-            Glide.with(mContext)
-                    .load(f)
-                    .circleCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(holder.mImage);
+            carregarImagemCliente(holder.mImage, f);
 
         }else{
 
@@ -396,6 +337,29 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
 
         }
 
+    }
+
+    private void carregarImagemCliente(ImageView image, File file){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                mAct.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Glide.with(mContext).clear(image);
+                        Glide.with(mContext)
+                                .load(file)
+                                .circleCrop()
+                                .transition(GenericTransitionOptions.with(R.anim.fade_in))
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .dontAnimate()
+                                .into(image);
+
+                    }
+                });
+            }
+        }).start();
     }
 
     private void exibirFiltroExtra(List<String> mListAuxiliar) {

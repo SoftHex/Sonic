@@ -33,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -378,7 +379,10 @@ public class sonicClientesCNPJ extends Fragment {
     private void exibirItensRecentes(){
 
         if(mRecentList.size()>0){
-            llRecenteRootView.setVisibility(View.VISIBLE);
+            if(llRecenteRootView.getVisibility()!=VISIBLE){
+                llRecenteRootView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.push_down_in));
+                llRecenteRootView.setVisibility(VISIBLE);
+            }
             llParentView.removeAllViews();
             LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             p.setMargins(sonicUtils.convertDpToPixel(4, mContext),0, 0, 0);
@@ -400,6 +404,7 @@ public class sonicClientesCNPJ extends Fragment {
                     Glide.with(mContext)
                             .load(f)
                             .circleCrop()
+                            .transition(GenericTransitionOptions.with(R.anim.fade_in))
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .skipMemoryCache(true)
                             .into(imagem);
@@ -432,9 +437,13 @@ public class sonicClientesCNPJ extends Fragment {
                 });
                 //@SuppressLint("ResourceType") Transition t = TransitionInflater.from(mContext).inflateTransition(R.transition.teste);
                 //TransitionManager.beginDelayedTransition(llParentView, t);
-                Animation a = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_right);
+
+                Animation a = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_left);
                 llParentView.addView(child);
-                child.startAnimation(a);
+                if(llRecenteRootView.getVisibility()==VISIBLE){
+                    child.startAnimation(a);
+                }
+
             }
         }
     }

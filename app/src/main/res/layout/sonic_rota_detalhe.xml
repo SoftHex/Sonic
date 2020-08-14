@@ -3,9 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:animateLayoutChanges="true"
     tools:context="com.softhex.sonic.sonicRotaDetalhe">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -23,8 +25,10 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
             android:fitsSystemWindows="true"
-            app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
-            app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance"
+            app:expandedTitleMarginStart="20dp"
+            app:maxLines="3"
+            app:expandedTitleTextAppearance="@style/ExpandedTitlePrimary"
+            app:collapsedTitleTextAppearance="@style/CollapsedTitleWhite"
             app:title="">
 
             <androidx.viewpager.widget.ViewPager
@@ -49,13 +53,16 @@
             </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
-                android:id="@+id/layoutDots"
+                android:id="@+id/llDots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal"
+                android:gravity="right"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="60dp"
                 app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
-                android:layout_gravity="bottom|center"
-                android:orientation="horizontal">
+                android:layout_gravity="top|center"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvCount"
@@ -67,7 +74,6 @@
                     android:paddingBottom="4dp"
                     android:layout_margin="10dp"
                     android:textSize="14sp"
-                    android:visibility="gone"
                     android:textColor="@color/colorPrimaryWhite"
                     android:background="@drawable/counter_images"
                     android:text="1/1"/>
@@ -76,386 +82,110 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/mTabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="false"
-            app:behavior_autoHide="true"
-            app:layout_scrollFlags="scroll"
-            app:tabIndicator="@drawable/tab_indicator_primary"
-            android:background="@color/colorPrimaryWhite"
-            app:tabIndicatorFullWidth="false"
-            style="@style/DetailTabsTheme"
-            android:theme="@style/Theme.MaterialComponents"
-            app:tabMode="auto"
-            app:tabGravity="fill"
-            android:visibility="gone"/>
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
+        android:id="@+id/llEndereco"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryWhite"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
 
-        <!-- LAYOUT CONTAINER -->
+        <!-- LOGRADROURO E ENDEREÇO-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="20dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <!-- LOGRADROURO E ENDEREÇO-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="20dp">
-
-                    <TextView
-                        android:id="@+id/tvLogradouro"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="LOGRADOURO">
-
-                    </TextView>
-
-                    <TextView
-                        android:id="@+id/tvEnderecoCompleto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:text="ENDEREÇO"/>
-
-                    <TextView
-                        android:id="@+id/tvCep"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:text="CEP"/>
-
-                </LinearLayout>
-
-                <!-- SEPARADOR -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1px"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/colorSeparador" />
-
-                <!-- DETALHE DO ATENDIMENTO -->
-                <LinearLayout
-                    android:id="@+id/llDataHora"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/tvDuracao"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="40sp"
-                                android:text="00:00:00"/>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0">
-
-                            <ProgressBar
-                                android:id="@+id/pbProgress"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                style="?android:progressBarStyleHorizontal"
-                                android:progressDrawable="@drawable/progress_rota" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llTime"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginBottom="8dp"
-                        android:animateLayoutChanges="true"
-                        android:gravity="center">
-
-
-                        <ProgressBar
-                            android:id="@+id/pbDuracao"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:indeterminate="false"
-                            android:maxHeight="8dip"
-                            android:minHeight="8dip"
-                            android:progress="50"
-
-                            android:progressDrawable="@drawable/progress_rota_detalhe" />
-
-                        <TextView
-                            android:id="@+id/tvTempo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:layout_marginTop="12dp"
-                            android:textColor="@color/colorAccent"
-                            android:textAlignment="center"
-                            android:text="Você tem no máximo 08:00 Hs entre o início e o fim de um atendimento."/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llTime2"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:orientation="horizontal"
-                        android:layout_margin="20dp"
-                        android:visibility="gone"
-                        android:animateLayoutChanges="true"
-                        android:gravity="center">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_weight="2">
-
-                            <TextView
-                                android:id="@+id/tvData"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textStyle="italic"
-                                android:textColor="@color/colorAccent"
-                                android:text="Data: 00/00/0000"/>
-
-                            <TextView
-                                android:id="@+id/tvTextoInicio"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textStyle="italic"
-                                android:textColor="@color/colorAccent"
-                                android:text="Iniciado às 00:00"/>
-
-                            <TextView
-                                android:id="@+id/tvTextoFim"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textStyle="italic"
-                                android:textColor="@color/colorAccent"
-                                android:text="Concluído às 00:00"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center|bottom"
-                            android:layout_gravity="bottom"
-                            android:layout_weight="3">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="14sp"
-                                android:textStyle="italic"
-                                android:textColor="@color/colorAccent"
-                                android:text="Duração"/>
-
-                            <TextView
-                                android:id="@+id/tvDuracaoMini"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="26sp"
-                                android:textStyle="italic"
-                                android:text="00:00:00"/>
-
-                        </LinearLayout>
-
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-                <!-- SEPARADOR -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1px"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@color/colorSeparador" />
-
-                <!-- BOTÕES DE AÇÃO -->
-                <LinearLayout
-                    android:id="@+id/llBotoes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dp"
-                    android:gravity="center">
-
-                    <Button
-                        android:id="@+id/btIniciar"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_margin="10dp"
-                        android:textColor="@color/colorPrimaryWhite"
-                        android:background="@drawable/status_nao_iniciado"
-                        android:text="INICIAR ATENDIMENTO"/>
-
-                    <Button
-                        android:id="@+id/btCancelar"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_margin="10dp"
-                        android:textColor="@color/colorPrimaryWhite"
-                        android:background="@drawable/status_cancelado"
-                        android:text="CANCELAR ATENDIMENTO"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvLogradouro"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:textSize="20sp"
+                android:text="LOGRADOURO">
 
-                <!-- SITUAÇÃO -->
-                <LinearLayout
-                    android:id="@+id/llSituacao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:layout_margin="20dp">
+            </TextView>
 
-                    <TextView
-                        android:id="@+id/tvPositivado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorAccent"
-                        android:background="@drawable/flat_regular_left"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Positivado"/>
+            <TextView
+                android:id="@+id/tvEnderecoCompleto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="ENDEREÇO"/>
 
-                    <TextView
-                        android:id="@+id/tvNegativado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorAccent"
-                        android:background="@drawable/flat_regular_middle"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Negativado"/>
-
-                    <TextView
-                        android:id="@+id/tvCancelado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorAccent"
-                        android:background="@drawable/flat_regular_right"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Cancelado"/>
-
-                </LinearLayout>
-
-                <!--DETALHE -->
-                <LinearLayout
-                    android:id="@+id/llDetalhe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvNegCancTitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="Negativado/Cancelado por:"/>
-
-                        <TextView
-                            android:id="@+id/tvNegCanc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:textColor="@color/colorTextAccent"
-                            android:text="Negativado/Cancelado"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvObservacaoTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="Observação:"/>
-
-                        <TextView
-                            android:id="@+id/tvObservacao"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:textColor="@color/colorTextAccent"
-                            android:text="Observação"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvCep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="CEP"/>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        <!-- SEPARADOR -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorSeparador" />
+
+        <LinearLayout
+            android:id="@+id/llContador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvContador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="30sp"
+                android:text="00:00:00"/>
+
+
+        </LinearLayout>
+
+        <!-- SEPARADOR -->
+        <View
+            android:id="@+id/vSeparador"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorSeparador" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:layout_marginTop="160dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:scrollbars="none">
+
+            <ScrollView
+                android:id="@+id/svRootView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/llParentView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -463,10 +193,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        app:borderWidth="0dp"
         app:layout_anchor="@id/appBar"
         android:background="@color/colorPrimaryBlueLight"
         android:backgroundTint="@color/colorPrimaryBlueLight"
-        app:layout_anchorGravity="bottom|end"
+        app:layout_anchorGravity="right|bottom"
         android:src="@mipmap/ic_navigation_white_36dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

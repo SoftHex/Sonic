@@ -16,6 +16,7 @@
   <color name="colorAccentLightT">#90D8D8D8</color>
   <color name="colorPrimaryLight">#A4A4A4</color>
   <color name="colorPrimaryLightT">#90A4A4A4</color>
+  <color name="colorPrimaryExtraLight">#F8F8FF</color>
   <color name="colorPrimaryOrangeDark">#DD4D0F</color>
   <color name="colorPrimaryOrange">#FF8C00</color>
   <color name="colorPrimaryOrangeLight">#FFD700</color>

@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -34,6 +33,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +44,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.transition.ChangeBounds;
+import androidx.transition.TransitionManager;
+import androidx.transition.TransitionSet;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -81,6 +86,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     private static final int REQUEST_PERMISSION = 10;
+    private CoordinatorLayout layoutMain;
     private Context mContex;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -126,6 +132,14 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private TextView tvTempo;
     private LinearLayout llProgress;
     private ProgressBar pbProgress;
+    private int totalImagens;
+    private AppBarLayout mAppBar;
+    private ScrollView svRootView;
+    private NestedScrollView nsvContent;
+    private LinearLayout llEndereco;
+    private LinearLayout llDots;
+    private LinearLayout llContador;
+    private TextView tvContador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +151,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         mContex = this;
         mPrefs = new sonicPreferences(this);
         mUtils = new sonicUtils(mContex);
+        layoutMain = findViewById(R.id.layoutMain);
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
         dotsLayout = findViewById(R.id.layoutDots);
@@ -144,35 +159,41 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         fbNavegar = findViewById(R.id.fbNavegar);
         tvLogradrouro = findViewById(R.id.tvLogradouro);
         tvEndCompleto = findViewById(R.id.tvEnderecoCompleto);
-        tvData = findViewById(R.id.tvData);
-        tvNegCanc = findViewById(R.id.tvNegCanc);
-        tvNegCancTitle = findViewById(R.id.tvNegCancTitle);
+        //tvData = findViewById(R.id.tvData);
+        //tvNegCanc = findViewById(R.id.tvNegCanc);
+        //tvNegCancTitle = findViewById(R.id.tvNegCancTitle);
         tvCep = findViewById(R.id.tvCep);
-        tvDuracao = findViewById(R.id.tvDuracao);
+        //tvDuracao = findViewById(R.id.tvDuracao);
         btIniciar = findViewById(R.id.btIniciar);
         btCancelar = findViewById(R.id.btCancelar);
-        llDetalhe = findViewById(R.id.llDetalhe);
-        llBotoes = findViewById(R.id.llBotoes);
-        llSituacao = findViewById(R.id.llSituacao);
-        llTime = findViewById(R.id.llTime);
-        llTime2 = findViewById(R.id.llTime2);
+        //llDetalhe = findViewById(R.id.llDetalhe);
+        //llBotoes = findViewById(R.id.llBotoes);
+        //llSituacao = findViewById(R.id.llSituacao);
+        //llTime = findViewById(R.id.llTime);
+        //llTime2 = findViewById(R.id.llTime2);
         tvObservacao = findViewById(R.id.tvObservacao);
-        tvObservacaoTitle = findViewById(R.id.tvObservacaoTitle);
-        tvPositivado = findViewById(R.id.tvPositivado);
-        tvNegativado = findViewById(R.id.tvNegativado);
-        tvCancelado = findViewById(R.id.tvCancelado);
-        tvTextoInicio = findViewById(R.id.tvTextoInicio);
-        tvTextoFim = findViewById(R.id.tvTextoFim);
-        tvDuracaoMini = findViewById(R.id.tvDuracaoMini);
-        pbDuracao = findViewById(R.id.pbDuracao);
-        tvTempo = findViewById(R.id.tvTempo);
+       // tvObservacaoTitle = findViewById(R.id.tvObservacaoTitle);
+        //tvPositivado = findViewById(R.id.tvPositivado);
+        //tvNegativado = findViewById(R.id.tvNegativado);
+        //tvCancelado = findViewById(R.id.tvCancelado);
+        //tvTextoInicio = findViewById(R.id.tvTextoInicio);
+        //tvTextoFim = findViewById(R.id.tvTextoFim);
+        //tvDuracaoMini = findViewById(R.id.tvDuracaoMini);
+        //pbDuracao = findViewById(R.id.pbDuracao);
+        //tvTempo = findViewById(R.id.tvTempo);
         llProgress = findViewById(R.id.llProgress);
         pbProgress = findViewById(R.id.pbProgress);
+        svRootView = findViewById(R.id.svRootView);
+        nsvContent = findViewById(R.id.nsvContent);
+        llEndereco = findViewById(R.id.llEndereco);
+        llDots = findViewById(R.id.llDots);
+        llContador = findViewById(R.id.llContador);
+        tvContador = findViewById(R.id.tvContador);
 
-        createInterface();
         slideImages();
+        createInterface();
         loadDetails();
-        loadActions();
+        //loadActions();
 
     }
 
@@ -186,14 +207,15 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         myActionBar.setDisplayHomeAsUpEnabled(true);
         myActionBar.setDisplayShowHomeEnabled(true);
-
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        AppBarLayout mAppBar = findViewById(R.id.appBar);
+        mAppBar = findViewById(R.id.appBar);
         mAppBar.setLayoutTransition(transition);
 
-        mCollapsingToolbar.setTitle("");
+        mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome()+"\nCÓD.: #"+mPrefs.Rota.getCodigo());
+
+        mCollapsingToolbar.setExpandedTitleTextAppearance(totalImagens==0 ? R.style.ExpandedTitlePrimary : R.style.ExpandedTitleWhite);
 
         mToolbar.setNavigationOnClickListener((View v)-> {
             onBackPressed();
@@ -204,14 +226,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                    dotsLayout.setVisibility(View.INVISIBLE);
-                    //fbNavegar.setVisibility(View.INVISIBLE);
-                    mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome());
+                    llDots.setVisibility(View.INVISIBLE);
+                    mCollapsingToolbar.setTitle("#" + mPrefs.Rota.getCodigo() +" - " + mPrefs.Clientes.getNome());
                 }else {
                     mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                    dotsLayout.setVisibility(View.VISIBLE);
-                    //fbNavegar.setVisibility(View.VISIBLE);
-                    mCollapsingToolbar.setTitle("");
+                    llDots.setVisibility(totalImagens > 0 ? View.VISIBLE : View.GONE);
+                    mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome()+"\nCÓD.: #"+mPrefs.Rota.getCodigo());
                 }
             }
         });
@@ -219,11 +239,90 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     public void loadDetails(){
+
         mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
         tvLogradrouro.setText(mList.get(0).getLogradrouro());
         tvEndCompleto.setText(mList.get(0).getBairro()+", "+mList.get(0).getMunicipio()+" - "+mList.get(0).getUf());
         tvCep.setText("CEP: "+sonicUtils.stringToCep(mList.get(0).getCep()));
-        switch (mList.get(0).getStatus()){
+
+        llEndereco.post(new Runnable() {
+            @Override
+            public void run() {
+                CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams)nsvContent.getLayoutParams();
+                p.topMargin=llEndereco.getHeight();
+                nsvContent.setLayoutParams(p);
+                LinearLayout llParentView = (LinearLayout)svRootView.getChildAt(0);
+                View viewNaoIniciado = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+                LinearLayout llBotoesAcao = viewNaoIniciado.findViewById(R.id.llBotoesAcao);
+                TextView tvDescricao = viewNaoIniciado.findViewById(R.id.tvDescricao);
+                TextView tvObservacao = viewNaoIniciado.findViewById(R.id.tvObservacao);
+                View dots = viewNaoIniciado.findViewById(R.id.dotStatus);
+                Button btIniciar = viewNaoIniciado.findViewById(R.id.btIniciar);
+                switch (mList.get(0).getStatus()){
+                    case Status.NAO_INICIADO:
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
+                        tvDescricao.setText("Agendado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
+                        llBotoesAcao.setVisibility(View.GONE);
+                        tvObservacao.setVisibility(View.GONE);
+                        btCancelar.setVisibility(View.VISIBLE);
+                        llParentView.addView(viewNaoIniciado);
+                        break;
+                    case Status.EM_ATENDIMENTO:
+                        llContador.setVisibility(View.VISIBLE);
+                        llEndereco.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                p.topMargin=llEndereco.getHeight();
+                                nsvContent.setLayoutParams(p);
+                                TransitionManager.beginDelayedTransition(layoutMain, new TransitionSet()
+                                        .addTransition(new ChangeBounds()));
+
+                            }
+                        });
+                        // ITEM NAO INICIADO
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
+                        tvDescricao.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
+                        llBotoesAcao.setVisibility(View.GONE);
+                        tvObservacao.setVisibility(View.GONE);
+                        btIniciar.setVisibility(View.GONE);
+                        llParentView.addView(viewNaoIniciado);
+                        // ITEM EM ATENDIMENTO
+                        continueClock();
+                        View viewEmAtendimento = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+                        View dotsEmAtendimento = viewEmAtendimento.findViewById(R.id.dotStatus);
+                        dotsEmAtendimento.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
+                        TextView tvDescEmAten = viewEmAtendimento.findViewById(R.id.tvDescricao);
+                        tvDescEmAten.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                        LinearLayout llBotoesAcaoEmAten = viewEmAtendimento.findViewById(R.id.llBotoesAcao);
+                        llBotoesAcaoEmAten.setVisibility(View.VISIBLE);
+                        viewEmAtendimento.findViewById(R.id.btIniciar).setVisibility(View.GONE);
+                        Button b  = viewEmAtendimento.findViewById(R.id.btFinalizar);
+                        b.setVisibility(View.VISIBLE);
+                        llParentView.addView(viewEmAtendimento);
+                        break;
+                    case Status.CONCLUIDO:
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
+                        tvDescricao.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
+                        btIniciar.setVisibility(View.GONE);
+                        llParentView.addView(viewNaoIniciado);
+                        View viewConcluido = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+                        View dotsConcluido = viewConcluido.findViewById(R.id.dotStatus);
+                        dotsConcluido.setBackground(mContex.getResources().getDrawable(R.drawable.dots_concluido));
+                        viewConcluido.findViewById(R.id.btIniciar).setVisibility(View.GONE);
+                        llParentView.addView(viewConcluido);
+                        break;
+                    case Status.CANCELADO:
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_cancelado));
+                        btIniciar.setVisibility(View.GONE);
+                        llParentView.addView(viewNaoIniciado);
+                        break;
+                }
+
+            }
+        });
+
+
+        /*switch (mList.get(0).getStatus()){
             case Status.NAO_INICIADO:
                 llDetalhe.setVisibility(View.GONE);
                 llBotoes.setVisibility(View.VISIBLE);
@@ -294,7 +393,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 tvObservacao.setText(mList.get(0).getObservacao());
                 llBotoes.setVisibility(View.GONE);
                 break;
-        }
+        }*/
     }
 
     public void loadActions(){
@@ -321,6 +420,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                     if(mPrefs.Rota.getEmAtendimento()){
                         finalizarAtendimento();
                     }else {
+                        mPrefs.Rota.setEmAtendimento(true);
+                        //mPrefs.Rota.setEmAtendimentoCodigo(mPrefs.Rota.getCodigo());
                         mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao());
                         btIniciar.setText("FINALIZAR ATENDIMENTO");
                         pbDuracao.setVisibility(View.VISIBLE);
@@ -609,11 +710,11 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private Runnable updateTimerThread = new Runnable() {
         public void run() {
             timeInMilliseconds = SystemClock.uptimeMillis() - mPrefs.Rota.getStartTime();
-            pbDuracao.setMax(2*60);
-            pbProgress.setMax(2*60);
-            pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
-            pbProgress.setProgress((int)(timeInMilliseconds/(1000*60)));
-            tvDuracao.setText(getDateFromMillis(timeInMilliseconds));
+            //pbDuracao.setMax(2*60);
+            //pbProgress.setMax(2*60);
+            //pbDuracao.setProgress((int)(timeInMilliseconds/(1000*60)));
+            //pbProgress.setProgress((int)(timeInMilliseconds/(1000*60)));
+            tvContador.setText(getDateFromMillis(timeInMilliseconds));
             customHandler.postDelayed(this, 1000);
         }
     };
@@ -633,7 +734,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
     public void slideImages(){
 
-        int count = 0;
+        totalImagens = 0;
         File file;
         String image = "";
 
@@ -643,13 +744,13 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
-                count++;
+                totalImagens++;
             }
         }
 
-        myImages = new String[count];
+        myImages = new String[totalImagens];
 
-        for(int i = 0; i < count ; i++){
+        for(int i = 0; i < totalImagens ; i++){
 
             image = mPrefs.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
@@ -659,12 +760,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         }
 
 
-        if(count==0){
+        if(totalImagens==0){
             myImages = new String[1];
             myImages[0] = sonicUtils.getURIForResource(R.drawable.nophoto);
         }
 
-        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
+        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, totalImagens==0 ? false : true);
         mViewpager.setAdapter(myAdapter);
         mViewpager.addOnPageChangeListener(viewListener);
         //addBottomDots(0);
@@ -674,7 +775,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
     private void addCount(int position){
         if(myImages.length>1){
-            tvCount.setVisibility(View.VISIBLE);
+            llDots.setVisibility(View.VISIBLE);
             tvCount.setText(position+"/"+myImages.length);
         }
     }

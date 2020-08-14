@@ -186,14 +186,21 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="CollapsedTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="CollapsedTitleWhite" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@color/colorPrimaryWhite</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
-
-    <style name="ExpandedTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="CollapsedTitlePrimary" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="ExpandedTitleWhite" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimaryWhite</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="ExpandedTitlePrimary" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="FullScreenTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">

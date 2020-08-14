@@ -2617,7 +2617,7 @@ public class sonicDatabaseCRUD {
                     "C.cep " +
                     " FROM " + TABLE_ROTA +
                     " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
-                    " WHERE C.codigo=? ORDER BY R.status, R.data_agendamento DESC";
+                    " WHERE C.codigo=? ORDER BY R.data_inicio DESC, R.hora_inicio DESC, R.status DESC";
 
             try{
 

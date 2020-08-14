@@ -106,6 +106,7 @@ public class sonicPreferences{
     private static final String ROTA_START_TIME = "rotaStartTime";
     private static final String ROTA_REFRESH = "rotaRefresh";
     private static final String ROTA_EM_ATENDIMENTO = "rotaEmAtendimento";
+    private static final String ROTA_EM_ATENDIMENTO_CODIGO = "rotaEmAtendimentoCodigo";
     private static final String ROTA_EM_ATENDIMENTO_CLIENTE = "rotaEmAtendimentoCliente";
     private static final String ROTA_EM_ATENDIMENTO_EMPRESA = "rotaEmAtendimentoEmpresa";
     private static final String ROTA_CANCELADA = "rotaCancelada";
@@ -1021,6 +1022,15 @@ public class sonicPreferences{
         }
         public boolean getEmAtendimento(){
             return sharedpreferences.getBoolean(ROTA_EM_ATENDIMENTO, false);
+        }
+
+        public void setEmAtendimentoCodigo(int value){
+            editor = sharedpreferences.edit();
+            editor.putInt(ROTA_EM_ATENDIMENTO_CODIGO, value);
+            editor.apply();
+        }
+        public int getEmAtendimentoCodigo(){
+            return sharedpreferences.getInt(ROTA_EM_ATENDIMENTO_CODIGO, 0);
         }
 
         public void setEmAtendimentoCliente(String value){
