@@ -350,7 +350,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
 
         holder.tvCodigo.setText("#" + (!rotaPessoal ? rota.getCodigo() : rota.getId()));
         holder.tvNome.setText(cliNomeExibicao);
-        holder.tvAtendente.setText(rota.getAtendente());
+        holder.tvAtendente.setText(rota.getResponsavel());
         holder.tvEndereco.setText(rota.getEnderecoCompleto());
         holder.tvDataHora.setText(mUtils.Data.dataFotmatadaBR(rota.getDataAgendamento())+" às "+mUtils.Data.horaFotmatadaSemSegundoBR(rota.getHoraAgendamento()));
 

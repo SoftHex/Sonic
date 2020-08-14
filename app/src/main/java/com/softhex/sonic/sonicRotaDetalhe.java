@@ -254,17 +254,28 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 LinearLayout llParentView = (LinearLayout)svRootView.getChildAt(0);
                 View viewNaoIniciado = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
                 LinearLayout llBotoesAcao = viewNaoIniciado.findViewById(R.id.llBotoesAcao);
-                TextView tvDescricao = viewNaoIniciado.findViewById(R.id.tvDescricao);
+                TextView tvData = viewNaoIniciado.findViewById(R.id.tvData);
+                TextView tvResponsavel = viewNaoIniciado.findViewById(R.id.tvResponsavel);
+                TextView tvDataLimite = viewNaoIniciado.findViewById(R.id.tvDataLimite);
                 TextView tvObservacao = viewNaoIniciado.findViewById(R.id.tvObservacao);
                 View dots = viewNaoIniciado.findViewById(R.id.dotStatus);
                 Button btIniciar = viewNaoIniciado.findViewById(R.id.btIniciar);
+                Button btCancelar = viewNaoIniciado.findViewById(R.id.btCancelar);
                 switch (mList.get(0).getStatus()){
                     case Status.NAO_INICIADO:
                         dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvDescricao.setText("Agendado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
-                        llBotoesAcao.setVisibility(View.GONE);
+                        tvData.setText("Agendado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
+                        tvResponsavel.setText("RESPONSÁVEL");
+                        tvDataLimite.setVisibility(View.VISIBLE);
+                        tvDataLimite.setText("DATA LIMITE");
+                        llBotoesAcao.setVisibility(View.VISIBLE);
                         tvObservacao.setVisibility(View.GONE);
-                        btCancelar.setVisibility(View.VISIBLE);
+                        btIniciar.setOnClickListener((View v)->{
+                            iniciarAtendimento();
+                        });
+                        btCancelar.setOnClickListener((View v)->{
+
+                        });
                         llParentView.addView(viewNaoIniciado);
                         break;
                     case Status.EM_ATENDIMENTO:
@@ -281,7 +292,10 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                         });
                         // ITEM NAO INICIADO
                         dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvDescricao.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
+                        tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
+                        tvResponsavel.setText("RESPONSÁVEL");
+                        tvDataLimite.setVisibility(View.VISIBLE);
+                        tvDataLimite.setText("DATA LIMITE");
                         llBotoesAcao.setVisibility(View.GONE);
                         tvObservacao.setVisibility(View.GONE);
                         btIniciar.setVisibility(View.GONE);
@@ -291,25 +305,43 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                         View viewEmAtendimento = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
                         View dotsEmAtendimento = viewEmAtendimento.findViewById(R.id.dotStatus);
                         dotsEmAtendimento.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
-                        TextView tvDescEmAten = viewEmAtendimento.findViewById(R.id.tvDescricao);
-                        tvDescEmAten.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                        TextView tvDataEmAten = viewEmAtendimento.findViewById(R.id.tvData);
+                        tvDataEmAten.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                        viewEmAtendimento.findViewById(R.id.tvResponsavel).setVisibility(View.GONE);
                         LinearLayout llBotoesAcaoEmAten = viewEmAtendimento.findViewById(R.id.llBotoesAcao);
                         llBotoesAcaoEmAten.setVisibility(View.VISIBLE);
                         viewEmAtendimento.findViewById(R.id.btIniciar).setVisibility(View.GONE);
+                        viewEmAtendimento.findViewById(R.id.btCancelar).setVisibility(View.GONE);
                         Button b  = viewEmAtendimento.findViewById(R.id.btFinalizar);
                         b.setVisibility(View.VISIBLE);
+                        b.setOnClickListener((View v)->{
+                            finalizarAtendimento();
+                        });
                         llParentView.addView(viewEmAtendimento);
                         break;
                     case Status.CONCLUIDO:
+                        // ITEM NAO INICIADO
                         dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvDescricao.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
-                        btIniciar.setVisibility(View.GONE);
+                        tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
+                        llBotoesAcao.setVisibility(View.GONE);
                         llParentView.addView(viewNaoIniciado);
                         View viewConcluido = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
                         View dotsConcluido = viewConcluido.findViewById(R.id.dotStatus);
                         dotsConcluido.setBackground(mContex.getResources().getDrawable(R.drawable.dots_concluido));
                         viewConcluido.findViewById(R.id.btIniciar).setVisibility(View.GONE);
                         llParentView.addView(viewConcluido);
+                        // ITEM ATENDIDO
+                        View viewAtendido = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+                        View dotsAtendido = viewAtendido.findViewById(R.id.dotStatus);
+                        dotsAtendido.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
+                        TextView tvDataAtendido = viewAtendido.findViewById(R.id.tvData);
+                        tvDataAtendido.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                        viewAtendido.findViewById(R.id.tvResponsavel).setVisibility(View.GONE);
+                        LinearLayout llBotoesAcaoAtendido = viewAtendido.findViewById(R.id.llBotoesAcao);
+                        llBotoesAcaoAtendido.setVisibility(View.VISIBLE);
+                        viewAtendido.findViewById(R.id.btIniciar).setVisibility(View.GONE);
+                        viewAtendido.findViewById(R.id.btCancelar).setVisibility(View.GONE);
+                        llParentView.addView(viewAtendido);
                         break;
                     case Status.CANCELADO:
                         dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_cancelado));
@@ -396,6 +428,25 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         }*/
     }
 
+    private void iniciarAtendimento(){
+
+        myProgress = new ProgressDialog(mContex);
+        myProgress.setCancelable(false);
+        myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        myProgress.setIndeterminate(true);
+        myProgress.setTitle("Processando...");
+        myProgress.show();
+        mPrefs.Rota.setEmAtendimento(true);
+        mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao());
+        Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new mAsyncTask().execute("INICIAR","","");
+            }
+        },500);
+    }
+
     public void loadActions(){
 
         Handler h = new Handler();
@@ -477,87 +528,107 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     private void finalizarAtendimento(){
-        Rect displayRectangle = new Rect();
+
+        myProgress = new ProgressDialog(mContex);
+        myProgress.setCancelable(false);
+        myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        myProgress.setIndeterminate(true);
+        myProgress.setTitle("Processando...");
+        myProgress.show();
+
         Window window = this.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this, R.style.FullDialog);
-        ViewGroup viewGroup = findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_rota_confirmada, viewGroup, false);
-        dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
-        dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
-        dialogBuilder.setView(dialogView);
-        final AlertDialog alertDialog = dialogBuilder.create();
 
-        TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
-        TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
-        tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
-        TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
-        tvDataHora.setText(mPrefs.Rota.getDataHora());
-        RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
-        RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
-        EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
-        Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
-        LinearLayout llSpinner = dialogView.findViewById(R.id.llSpinner);
-        View vsSpinner = dialogView.findViewById(R.id.vsSpinner);
-        Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
-        TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
+        Handler h = new Handler();
 
-        List<String> mList = new ArrayList<>();
-        String[] s = getResources().getStringArray(R.array.rotaNegativadaOptions);
-        for (String item: s) {
-            mList.add(item);
-        }
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mList);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spMotivo.setAdapter(mAdapter);
-
-        btConfirmar.setOnClickListener((View v) -> {
-            myProgress = new ProgressDialog(mContex);
-            myProgress.setCancelable(false);
-            myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            myProgress.setIndeterminate(true);
-            myProgress.setTitle("Salvando...");
-            Handler h = new Handler();
-            if(rbNegativar.isChecked() && spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
-                Toast.makeText(v.getContext(), "Escolha uma opção para negativação.", Toast.LENGTH_SHORT).show();
-                spMotivo.requestFocus();
-            }else if(rbNegativar.isChecked() && !spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
-                myProgress.show();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        alertDialog.dismiss();
-                        new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
-                    }
-                }, 1000);
-            }else{
-                alertDialog.dismiss();
-                myProgress.show();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
-                    }
-                }, 1000);
-            }
-
-        });
-
-        tvFechar.setOnClickListener((View v)-> {
-            alertDialog.dismiss();
-        });
-
-        rbPositivar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        h.postDelayed(new Runnable() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
-            }
-        });
+            public void run() {
 
-        alertDialog.show();
+                Rect displayRectangle = new Rect();
+                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContex, R.style.FullDialog);
+                ViewGroup viewGroup = findViewById(android.R.id.content);
+                View dialogView = LayoutInflater.from(mContex).inflate(R.layout.dialog_rota_confirmada, viewGroup, false);
+                dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
+                dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
+                dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
+
+                TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
+                tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
+                TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
+                tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
+                TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
+                tvDataHora.setText(mPrefs.Rota.getDataHora());
+                RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
+                RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
+                EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
+                Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
+                LinearLayout llSpinner = dialogView.findViewById(R.id.llSpinner);
+                View vsSpinner = dialogView.findViewById(R.id.vsSpinner);
+                Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
+                TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
+
+                List<String> mList = new ArrayList<>();
+                String[] s = getResources().getStringArray(R.array.rotaNegativadaOptions);
+                for (String item: s) {
+                    mList.add(item);
+                }
+                ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(mContex, android.R.layout.simple_spinner_item, mList);
+                mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spMotivo.setAdapter(mAdapter);
+
+                btConfirmar.setOnClickListener((View v) -> {
+                    myProgress = new ProgressDialog(mContex);
+                    myProgress.setCancelable(false);
+                    myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    myProgress.setIndeterminate(true);
+                    myProgress.setTitle("Salvando...");
+                    Handler h = new Handler();
+                    if(rbNegativar.isChecked() && spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
+                        Toast.makeText(v.getContext(), "Escolha uma opção para negativação.", Toast.LENGTH_SHORT).show();
+                        spMotivo.requestFocus();
+                    }else if(rbNegativar.isChecked() && !spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
+                        myProgress.show();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                alertDialog.dismiss();
+                                new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
+                            }
+                        }, 1000);
+                    }else{
+                        alertDialog.dismiss();
+                        myProgress.show();
+                        h.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
+                            }
+                        }, 1000);
+                    }
+
+                });
+
+                tvFechar.setOnClickListener((View v)-> {
+                    alertDialog.dismiss();
+                });
+
+                rbPositivar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                        vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                        btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
+                    }
+                });
+
+                myProgress.dismiss();
+                alertDialog.show();
+
+            }
+        },500);
+
 
     }
 
@@ -664,8 +735,8 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 myProgress.dismiss();
             }
             if(aBoolean){
-                mPrefs.Rota.setRefresh(true);
-                if(!clockCounting && !mPrefs.Rota.getCancelada()){
+                loadDetails();
+                if(!clockCounting){
                     startClock();
                 }else{
                     stopClock();

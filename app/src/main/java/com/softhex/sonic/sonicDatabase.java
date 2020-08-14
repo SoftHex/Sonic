@@ -292,7 +292,7 @@ public class sonicDatabase extends SQLiteOpenHelper{
             "data_agendamento varchar NOT NULL, " +
             "hora_agendamento varchar NOT NULL, " +
             "proprietario INT NOT NULL, "  +        // 1=AGENDA, 2=PESSOAL
-            "atendente string, " +
+            "responsavel string, " +
             "ordem int, " +
             "observacao string, " +
             "data_inicio varchar, " +

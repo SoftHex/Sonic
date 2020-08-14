@@ -2505,7 +2505,7 @@ public class sonicDatabaseCRUD {
                         "R.data_agendamento, " +
                         "R.hora_agendamento, " +
                         "R.proprietario, " +
-                        "R.atendente, " +
+                        "R.responsavel, " +
                         "R.ordem, " +
                         "R.observacao, " +
                         "R.data_inicio, " +
@@ -2546,7 +2546,7 @@ public class sonicDatabaseCRUD {
                             rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
                             rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
                             rota.setProprietario(cursor.getInt(cursor.getColumnIndex("proprietario")));
-                            rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                            rota.setResponsavel(cursor.getString(cursor.getColumnIndex("responsavel")));
                             rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
                             rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
                             rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
@@ -2598,7 +2598,7 @@ public class sonicDatabaseCRUD {
                     "R.data_agendamento, " +
                     "R.hora_agendamento, " +
                     "R.proprietario, " +
-                    "R.atendente, " +
+                    "R.responsavel, " +
                     "R.ordem, " +
                     "R.observacao, " +
                     "R.data_inicio, " +
@@ -2640,7 +2640,7 @@ public class sonicDatabaseCRUD {
                     rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
                     rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
                     rota.setProprietario(cursor.getInt(cursor.getColumnIndex("proprietario")));
-                    rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                    rota.setResponsavel(cursor.getString(cursor.getColumnIndex("responsavel")));
                     rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
                     rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
                     rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
@@ -2691,7 +2691,7 @@ public class sonicDatabaseCRUD {
                     "R.status, " +
                     "R.data_agendamento, " +
                     "R.hora_agendamento, " +
-                    "R.atendente, " +
+                    "R.responsavel, " +
                     "R.ordem, " +
                     "R.observacao, " +
                     "R.data_inicio, " +
@@ -2731,7 +2731,7 @@ public class sonicDatabaseCRUD {
                         rota.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
                         rota.setDataAgendamento(cursor.getString(cursor.getColumnIndex("data_agendamento")));
                         rota.setHoraAgendamento(cursor.getString(cursor.getColumnIndex("hora_agendamento")));
-                        rota.setAtendente(cursor.getString(cursor.getColumnIndex("atendente")));
+                        rota.setResponsavel(cursor.getString(cursor.getColumnIndex("responsavel")));
                         rota.setOrdem(cursor.getInt(cursor.getColumnIndex("ordem")));
                         rota.setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
                         rota.setDataInicio(cursor.getString(cursor.getColumnIndex("data_inicio")));
@@ -2786,7 +2786,7 @@ public class sonicDatabaseCRUD {
                 cv.put("data_agendamento", data);
                 cv.put("hora_agendamento", hora);
                 cv.put("proprietario", 2); //1=AGENDA, 2=PESSOAL
-                cv.put("atendente", mPrefs.Users.getUsuarioNome());
+                cv.put("responsavel", mPrefs.Users.getUsuarioNome());
 
                 result = DB.getWritableDatabase().insertOrThrow(TABLE_ROTA, null, cv)>0;
 
@@ -2813,7 +2813,6 @@ public class sonicDatabaseCRUD {
             Boolean result = false;
             ContentValues cv = new ContentValues();
             cv.put("status", 2);
-            cv.put("situacao", 1);
             cv.put("data_inicio", data.format(mCalendar.getTime()));
             cv.put("hora_inicio", hora.format(mCalendar.getTime()));
             try{

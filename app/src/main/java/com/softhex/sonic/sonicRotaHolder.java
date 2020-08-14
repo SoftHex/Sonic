@@ -21,7 +21,7 @@ public class sonicRotaHolder{
     String data_agendamento;
     String hora_agendamento;
     int proprietario;
-    String atendente;
+    String responsavel;
     int ordem;
     String observacao;
     String data_inicio;
@@ -106,8 +106,8 @@ public class sonicRotaHolder{
         return proprietario;
     }
 
-    public String getAtendente() {
-        return atendente;
+    public String getResponsavel() {
+        return responsavel;
     }
 
     public int getOrdem() {
@@ -202,8 +202,8 @@ public class sonicRotaHolder{
         this.proprietario = proprietario;
     }
 
-    public void setAtendente(String atendente) {
-        this.atendente = atendente;
+    public void setResponsavel(String responsavel) {
+        this.responsavel = responsavel;
     }
 
     public void setOrdem(int ordem) {
