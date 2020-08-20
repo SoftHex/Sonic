@@ -84,106 +84,139 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/llEndereco"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryWhite"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:orientation="vertical">
-
-        <!-- LOGRADROURO E ENDEREÇO-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="20dp">
-
-            <TextView
-                android:id="@+id/tvLogradouro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="LOGRADOURO">
-
-            </TextView>
-
-            <TextView
-                android:id="@+id/tvEnderecoCompleto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="ENDEREÇO"/>
-
-            <TextView
-                android:id="@+id/tvCep"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="CEP"/>
-
-        </LinearLayout>
-
-        <!-- SEPARADOR -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorSeparador" />
-
-        <LinearLayout
-            android:id="@+id/llContador"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvContador"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textSize="30sp"
-                android:text="00:00:00"/>
-
-
-        </LinearLayout>
-
-        <!-- SEPARADOR -->
-        <View
-            android:id="@+id/vSeparador"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorSeparador" />
-
-    </LinearLayout>
-
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nsvContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            android:layout_marginTop="160dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="none">
 
-            <ScrollView
-                android:id="@+id/svRootView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none">
+                android:orientation="vertical">
 
+                <!-- CABEÇALHO -->
                 <LinearLayout
-                    android:id="@+id/llParentView"
+                    android:id="@+id/llCabecalho"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+
                     android:orientation="vertical">
+
+                    <!-- LOGRADROURO E ENDEREÇO-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="20dp">
+
+                        <TextView
+                            android:id="@+id/tvLogradouro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:text="LOGRADOURO">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/tvEnderecoCompleto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="ENDEREÇO"/>
+
+                        <TextView
+                            android:id="@+id/tvCep"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:text="CEP"/>
+
+                    </LinearLayout>
+
+                    <!-- SEPARADOR -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/colorSeparador" />
+
+                    <!-- CONTADOR -->
+                    <LinearLayout
+                        android:id="@+id/llContador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:visibility="gone"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvContador"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:textSize="30sp"
+                            android:text="00:00:00"/>
+
+                    </LinearLayout>
+
+                    <!-- MENSAGEM -->
+                    <LinearLayout
+                        android:id="@+id/llMensagem"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginTop="-10dp"
+                        android:visibility="gone"
+                        android:background="@color/colorPrimaryGreenLightT"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvMensagem"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:text="MENSAGEM"/>
+
+                    </LinearLayout>
+
+                    <!-- SEPARADOR -->
+                    <View
+                        android:id="@+id/vSeparador"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:visibility="gone"
+                        android:background="@color/colorSeparador" />
 
                 </LinearLayout>
 
-            </ScrollView>
+                <!-- ITENS -->
+                <ScrollView
+                    android:id="@+id/svRootView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/llParentView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:layout_marginTop="4dp"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 

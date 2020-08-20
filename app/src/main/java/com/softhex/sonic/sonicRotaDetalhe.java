@@ -1,8 +1,6 @@
 package com.softhex.sonic;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -26,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -47,10 +47,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.ViewCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.transition.ChangeBounds;
-import androidx.transition.TransitionManager;
-import androidx.transition.TransitionSet;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -83,6 +79,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         int EM_ATENDIMENTO = 2;
         int CONCLUIDO = 3;
         int CANCELADO = 4;
+    }
+
+    @IntDef({Situacao.POSITIVADO, Situacao.NEGATIVADO})
+    public @interface Situacao{
+        int POSITIVADO = 1;
+        int NEGATIVADO = 2;
     }
 
     private static final int REQUEST_PERMISSION = 10;
@@ -135,11 +137,12 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     private int totalImagens;
     private AppBarLayout mAppBar;
     private ScrollView svRootView;
-    private NestedScrollView nsvContent;
-    private LinearLayout llEndereco;
+    private LinearLayout llCabecalho;
     private LinearLayout llDots;
     private LinearLayout llContador;
     private TextView tvContador;
+    private LinearLayout llMensagem;
+    private TextView tvMensagem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,15 +187,17 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         llProgress = findViewById(R.id.llProgress);
         pbProgress = findViewById(R.id.pbProgress);
         svRootView = findViewById(R.id.svRootView);
-        nsvContent = findViewById(R.id.nsvContent);
-        llEndereco = findViewById(R.id.llEndereco);
         llDots = findViewById(R.id.llDots);
+        llCabecalho = findViewById(R.id.llCabecalho);
         llContador = findViewById(R.id.llContador);
         tvContador = findViewById(R.id.tvContador);
+        llMensagem = findViewById(R.id.llMensagem);
+        tvMensagem = findViewById(R.id.tvMensagem);
 
         slideImages();
         createInterface();
-        loadDetails();
+        loadAddress();
+        loadItens();
         //loadActions();
 
     }
@@ -236,399 +241,293 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             }
         });
 
+        fbNavegar.setOnClickListener((View v)->{
+            mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
+            addItem(Status.EM_ATENDIMENTO, mList);
+        });
+
     }
 
-    public void loadDetails(){
+    private void loadAddress(){
 
         mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
         tvLogradrouro.setText(mList.get(0).getLogradrouro());
         tvEndCompleto.setText(mList.get(0).getBairro()+", "+mList.get(0).getMunicipio()+" - "+mList.get(0).getUf());
         tvCep.setText("CEP: "+sonicUtils.stringToCep(mList.get(0).getCep()));
+        mPrefs.Clientes.setEnderecoCompleto(mList.get(0).getLogradrouro()+", "+mList.get(0).getBairro()+", "+mList.get(0).getMunicipio()+" - "+mList.get(0).getUf());
+    }
 
-        llEndereco.post(new Runnable() {
-            @Override
-            public void run() {
-                CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams)nsvContent.getLayoutParams();
-                p.topMargin=llEndereco.getHeight();
-                nsvContent.setLayoutParams(p);
-                LinearLayout llParentView = (LinearLayout)svRootView.getChildAt(0);
-                View viewNaoIniciado = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
-                LinearLayout llBotoesAcao = viewNaoIniciado.findViewById(R.id.llBotoesAcao);
-                TextView tvData = viewNaoIniciado.findViewById(R.id.tvData);
-                TextView tvResponsavel = viewNaoIniciado.findViewById(R.id.tvResponsavel);
-                TextView tvDataLimite = viewNaoIniciado.findViewById(R.id.tvDataLimite);
-                TextView tvObservacao = viewNaoIniciado.findViewById(R.id.tvObservacao);
-                View dots = viewNaoIniciado.findViewById(R.id.dotStatus);
-                Button btIniciar = viewNaoIniciado.findViewById(R.id.btIniciar);
-                Button btCancelar = viewNaoIniciado.findViewById(R.id.btCancelar);
-                switch (mList.get(0).getStatus()){
-                    case Status.NAO_INICIADO:
-                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvData.setText("Agendado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
-                        tvResponsavel.setText("RESPONSÁVEL");
-                        tvDataLimite.setVisibility(View.VISIBLE);
-                        tvDataLimite.setText("DATA LIMITE");
-                        llBotoesAcao.setVisibility(View.VISIBLE);
-                        tvObservacao.setVisibility(View.GONE);
-                        btIniciar.setOnClickListener((View v)->{
-                            iniciarAtendimento();
-                        });
-                        btCancelar.setOnClickListener((View v)->{
+    private void loadItens(){
+        mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
+        LinearLayout llParentView = (LinearLayout)svRootView.getChildAt(0);
+        View view = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+        View dots = view.findViewById(R.id.dotStatus);
+        TextView tvData = view.findViewById(R.id.tvData);
+        TextView tvDataLimite = view.findViewById(R.id.tvDataLimite);
+        LinearLayout llBotoesAcao = view.findViewById(R.id.llBotoesAcao);
+        Button btIniciar = view.findViewById(R.id.btIniciar);
+        Button btFinalizar = view.findViewById(R.id.btFinalizar);
+        Button btCancelar = view.findViewById(R.id.btCancelar);
+        llParentView.removeAllViews();
 
-                        });
-                        llParentView.addView(viewNaoIniciado);
-                        break;
-                    case Status.EM_ATENDIMENTO:
-                        llContador.setVisibility(View.VISIBLE);
-                        llEndereco.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                p.topMargin=llEndereco.getHeight();
-                                nsvContent.setLayoutParams(p);
-                                TransitionManager.beginDelayedTransition(layoutMain, new TransitionSet()
-                                        .addTransition(new ChangeBounds()));
-
-                            }
-                        });
-                        // ITEM NAO INICIADO
-                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
-                        tvResponsavel.setText("RESPONSÁVEL");
-                        tvDataLimite.setVisibility(View.VISIBLE);
-                        tvDataLimite.setText("DATA LIMITE");
-                        llBotoesAcao.setVisibility(View.GONE);
-                        tvObservacao.setVisibility(View.GONE);
-                        btIniciar.setVisibility(View.GONE);
-                        llParentView.addView(viewNaoIniciado);
-                        // ITEM EM ATENDIMENTO
-                        continueClock();
-                        View viewEmAtendimento = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
-                        View dotsEmAtendimento = viewEmAtendimento.findViewById(R.id.dotStatus);
-                        dotsEmAtendimento.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
-                        TextView tvDataEmAten = viewEmAtendimento.findViewById(R.id.tvData);
-                        tvDataEmAten.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
-                        viewEmAtendimento.findViewById(R.id.tvResponsavel).setVisibility(View.GONE);
-                        LinearLayout llBotoesAcaoEmAten = viewEmAtendimento.findViewById(R.id.llBotoesAcao);
-                        llBotoesAcaoEmAten.setVisibility(View.VISIBLE);
-                        viewEmAtendimento.findViewById(R.id.btIniciar).setVisibility(View.GONE);
-                        viewEmAtendimento.findViewById(R.id.btCancelar).setVisibility(View.GONE);
-                        Button b  = viewEmAtendimento.findViewById(R.id.btFinalizar);
-                        b.setVisibility(View.VISIBLE);
-                        b.setOnClickListener((View v)->{
-                            finalizarAtendimento();
-                        });
-                        llParentView.addView(viewEmAtendimento);
-                        break;
-                    case Status.CONCLUIDO:
-                        // ITEM NAO INICIADO
-                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
-                        tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()) );
-                        llBotoesAcao.setVisibility(View.GONE);
-                        llParentView.addView(viewNaoIniciado);
-                        View viewConcluido = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
-                        View dotsConcluido = viewConcluido.findViewById(R.id.dotStatus);
-                        dotsConcluido.setBackground(mContex.getResources().getDrawable(R.drawable.dots_concluido));
-                        viewConcluido.findViewById(R.id.btIniciar).setVisibility(View.GONE);
-                        llParentView.addView(viewConcluido);
-                        // ITEM ATENDIDO
-                        View viewAtendido = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
-                        View dotsAtendido = viewAtendido.findViewById(R.id.dotStatus);
-                        dotsAtendido.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
-                        TextView tvDataAtendido = viewAtendido.findViewById(R.id.tvData);
-                        tvDataAtendido.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
-                        viewAtendido.findViewById(R.id.tvResponsavel).setVisibility(View.GONE);
-                        LinearLayout llBotoesAcaoAtendido = viewAtendido.findViewById(R.id.llBotoesAcao);
-                        llBotoesAcaoAtendido.setVisibility(View.VISIBLE);
-                        viewAtendido.findViewById(R.id.btIniciar).setVisibility(View.GONE);
-                        viewAtendido.findViewById(R.id.btCancelar).setVisibility(View.GONE);
-                        llParentView.addView(viewAtendido);
-                        break;
-                    case Status.CANCELADO:
-                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_cancelado));
-                        btIniciar.setVisibility(View.GONE);
-                        llParentView.addView(viewNaoIniciado);
-                        break;
-                }
-
-            }
-        });
-
-
-        /*switch (mList.get(0).getStatus()){
+        switch (mList.get(0).getStatus()){
             case Status.NAO_INICIADO:
-                llDetalhe.setVisibility(View.GONE);
-                llBotoes.setVisibility(View.VISIBLE);
-                btIniciar.setText("INICIAR ATENDIMENTO");
-                btIniciar.setBackground(getResources().getDrawable(R.drawable.status_nao_iniciado));
-                break;
-            case Status.EM_ATENDIMENTO:
-                continueClock();
-                //llProgress.setVisibility(View.VISIBLE);
-                //pbDuracao.setVisibility(View.VISIBLE);
-                tvTempo.setVisibility(View.VISIBLE);
-                tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
-                llBotoes.setVisibility(View.VISIBLE);
-                llSituacao.setVisibility(View.GONE);
-                llDetalhe.setVisibility(View.GONE);
-                btIniciar.setText("FINALIZAR ATENDIMENTO");
-                btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-                if(mPrefs.Rota.getPartidaDoCliente()){
-                    btCancelar.setVisibility(View.GONE);
-                }else{
-                    btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
-                    btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
-                    btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
-                mPrefs.Rota.setDataHora("Iniciado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
-                mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getNomeFantasia() : mList.get(0).getRazaoSocial());
-                mPrefs.Rota.setEmAtendimentoEmpresa(mList.get(0).getEmpresa());
-                break;
-            case Status.CONCLUIDO:
-                llTime.setVisibility(View.GONE);
-                llTime2.setVisibility(View.VISIBLE);
-                tvData.setText("Data: "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio()));
-                tvTextoInicio.setText("Iniciado às "+mList.get(0).getHoraInicio());
-                tvTextoFim.setText("Concluído às "+mList.get(0).getHoraFim());
-                tvDuracaoMini.setText(sonicUtils.getDifferenceTime(mList.get(0).getHoraInicio(), mList.get(0).getHoraFim()));
-                llBotoes.setVisibility(View.GONE);
-                llSituacao.setVisibility(View.VISIBLE);
-                llDetalhe.setVisibility(View.VISIBLE);
-                tvObservacaoTitle.setVisibility((mList.get(0).getObservacao().equals(null) || mList.get(0).getObservacao().equals("")) ? View.GONE : View.VISIBLE);
-                tvObservacao.setVisibility((mList.get(0).getObservacao().equals(null) || mList.get(0).getObservacao().equals(""))  ? View.GONE : View.VISIBLE);
-                tvObservacao.setText(mList.get(0).getObservacao());
-                switch (mList.get(0).getSituacao()){
-                    case 1: //POSITIVADO
-                        tvNegCancTitle.setVisibility(View.GONE);
-                        tvNegCanc.setVisibility(View.GONE);
-                        tvPositivado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
-                        tvPositivado.setBackground(getResources().getDrawable(R.drawable.flat_selected_green_left));
-                        break;
-                    case 2: //NEGATIVADO
-                        tvNegativado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
-                        tvNegativado.setBackground(getResources().getDrawable(R.drawable.flat_selected_orange_middle));
-                        tvNegCancTitle.setText("Negativado por:");
-                        tvNegCanc.setText(mList.get(0).getNegativacao());
-                        break;
-                }
-                break;
-            case Status.CANCELADO:
-                llDetalhe.setVisibility(View.VISIBLE);
-                llSituacao.setVisibility(View.VISIBLE);
-                tvDuracao.setTextSize(14f);
-                tvDuracao.setTypeface(tvDuracao.getTypeface(), Typeface.ITALIC);
-                tvDuracao.setText("Cancelado em "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+mList.get(0).getHoraInicio());
-                tvCancelado.setTextColor(getResources().getColor(R.color.colorPrimaryWhite));
-                tvCancelado.setBackground(getResources().getDrawable(R.drawable.flat_selected_red_right));
-                tvNegCancTitle.setText("Cancelado por:");
-                tvNegCanc.setText(mList.get(0).getCancelamento());
-                tvObservacaoTitle.setVisibility(mList.get(0).getObservacao().equals("") ? View.GONE : View.VISIBLE);
-                tvObservacao.setText(mList.get(0).getObservacao());
-                llBotoes.setVisibility(View.GONE);
-                break;
-        }*/
-    }
-
-    private void iniciarAtendimento(){
-
-        myProgress = new ProgressDialog(mContex);
-        myProgress.setCancelable(false);
-        myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        myProgress.setIndeterminate(true);
-        myProgress.setTitle("Processando...");
-        myProgress.show();
-        mPrefs.Rota.setEmAtendimento(true);
-        mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao());
-        Handler h = new Handler();
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new mAsyncTask().execute("INICIAR","","");
-            }
-        },500);
-    }
-
-    public void loadActions(){
-
-        Handler h = new Handler();
-        myProgress = new ProgressDialog(mContex);
-        myProgress.setCancelable(false);
-        myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        myProgress.setIndeterminate(true);
-        myProgress.setTitle("Processando...");
-
-        // NAVEGAR VIA GOOGLE GPS
-        fbNavegar.setOnClickListener((View v)->{
-            startNavigation();
-        });
-
-        // BOTÃO DE INICIAR/CONCLUIR ATENDIMENTO
-        btIniciar.setOnClickListener((View v)->{
-            myProgress.show();
-            h.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    myProgress.dismiss();
-                    if(mPrefs.Rota.getEmAtendimento()){
-                        finalizarAtendimento();
-                    }else {
-                        mPrefs.Rota.setEmAtendimento(true);
-                        //mPrefs.Rota.setEmAtendimentoCodigo(mPrefs.Rota.getCodigo());
-                        mPrefs.Rota.setEmAtendimentoCliente(mPrefs.Clientes.getClienteExibicao());
-                        btIniciar.setText("FINALIZAR ATENDIMENTO");
-                        pbDuracao.setVisibility(View.VISIBLE);
-                        pbDuracao.animate();
-                        tvTempo.setVisibility(View.VISIBLE);
-                        tvTempo.animate();
-                        tvTempo.setText(getString(R.string.rotaTime, "2 horas"));
-                        btIniciar.setBackground(getResources().getDrawable(R.drawable.status_em_atendimento));
-                        if(!mPrefs.Rota.getPartidaDoCliente()){
-                            btCancelar.animate()
-                                    .translationX(btCancelar.getWidth()+100)
-                                    .alpha(0.0f)
-                                    .setDuration(300)
-                                    .setListener(new AnimatorListenerAdapter() {
-                                        @Override
-                                        public void onAnimationEnd(Animator animation) {
-                                            super.onAnimationEnd(animation);
-                                            btCancelar.setText("IR PARA O CADASTRO DO CLIENTE");
-                                            btCancelar.setBackground(getResources().getDrawable(R.drawable.botao_neutro));
-                                            btCancelar.setTextColor(getResources().getColor(R.color.colorPrimary));
-                                            btCancelar.animate()
-                                                    .translationX(0)
-                                                    .alpha(1f)
-                                                    .setDuration(300);
-
-                                        }
-                                    });
-                        }
-
-                        new mAsyncTask().execute("INICIAR","","");
-                    }
-                }
-            },500);
-
-        });
-
-        //BOTÃO DE CANCELAR ATENDIMENTO/IR PARA O CADASTRO DO CLIENTE
-        btCancelar.setOnClickListener((View v)->{
-            if(mPrefs.Rota.getEmAtendimento()){
-                Intent i = new Intent(mContex, sonicClientesDetalhe.class);
-                startActivityForResult(i, 1);
-            }else{
-                myProgress.show();
-                h.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        myProgress.dismiss();
-                        cancelarAtendimento();
-                    }
-                },1000);
-            }
-        });
-    }
-
-    private void finalizarAtendimento(){
-
-        myProgress = new ProgressDialog(mContex);
-        myProgress.setCancelable(false);
-        myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        myProgress.setIndeterminate(true);
-        myProgress.setTitle("Processando...");
-        myProgress.show();
-
-        Window window = this.getWindow();
-
-        Handler h = new Handler();
-
-        h.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                Rect displayRectangle = new Rect();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContex, R.style.FullDialog);
-                ViewGroup viewGroup = findViewById(android.R.id.content);
-                View dialogView = LayoutInflater.from(mContex).inflate(R.layout.dialog_rota_confirmada, viewGroup, false);
-                dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
-                dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
-                dialogBuilder.setView(dialogView);
-                final AlertDialog alertDialog = dialogBuilder.create();
-
-                TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
-                tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
-                TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
-                tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
-                TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
-                tvDataHora.setText(mPrefs.Rota.getDataHora());
-                RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
-                RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
-                EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
-                Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
-                LinearLayout llSpinner = dialogView.findViewById(R.id.llSpinner);
-                View vsSpinner = dialogView.findViewById(R.id.vsSpinner);
-                Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
-                TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
-
-                List<String> mList = new ArrayList<>();
-                String[] s = getResources().getStringArray(R.array.rotaNegativadaOptions);
-                for (String item: s) {
-                    mList.add(item);
-                }
-                ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(mContex, android.R.layout.simple_spinner_item, mList);
-                mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spMotivo.setAdapter(mAdapter);
-
-                btConfirmar.setOnClickListener((View v) -> {
+                dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
+                tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
+                llBotoesAcao.setVisibility(View.VISIBLE);
+                btIniciar.setVisibility(View.VISIBLE);
+                btIniciar.setOnClickListener((View v)->{
+                    Handler h = new Handler();
                     myProgress = new ProgressDialog(mContex);
                     myProgress.setCancelable(false);
                     myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     myProgress.setIndeterminate(true);
-                    myProgress.setTitle("Salvando...");
+                    myProgress.setTitle("Processando...");
+                    myProgress.show();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startClock();
+                            myProgress.dismiss();
+                            llBotoesAcao.setVisibility(View.GONE);
+                            new mAsyncTask().execute("INICIAR","","");
+                        }
+                    },500);
+
+                });
+                btCancelar.setVisibility(View.VISIBLE);
+                llParentView.addView(view);
+                break;
+            case Status.EM_ATENDIMENTO:
+                continueClock();
+                Animation a = AnimationUtils.loadAnimation(mContex, R.anim.slide_in_left);
+                a.setStartOffset(0);
+                llContador.startAnimation(a);
+                llContador.setVisibility(View.VISIBLE);
+                llMensagem.startAnimation(a);
+                llMensagem.setVisibility(View.VISIBLE);
+                tvMensagem.setText(getString(R.string.rotaTime, "2 horas"));
+                llCabecalho.findViewById(R.id.vSeparador).setVisibility(View.VISIBLE);
+                addItem(Status.NAO_INICIADO, mList);
+                dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
+                tvData.setText("Iniciado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                tvData.setTextColor(getResources().getColor(R.color.colorPrimaryBlue));
+                llBotoesAcao.setVisibility(View.VISIBLE);
+                btFinalizar.setVisibility(View.VISIBLE);
+                btFinalizar.setOnClickListener((View v)->{
                     Handler h = new Handler();
-                    if(rbNegativar.isChecked() && spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
-                        Toast.makeText(v.getContext(), "Escolha uma opção para negativação.", Toast.LENGTH_SHORT).show();
-                        spMotivo.requestFocus();
-                    }else if(rbNegativar.isChecked() && !spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
-                        myProgress.show();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                alertDialog.dismiss();
-                                new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
-                            }
-                        }, 1000);
-                    }else{
-                        alertDialog.dismiss();
-                        myProgress.show();
-                        h.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
-                            }
-                        }, 1000);
-                    }
+                    myProgress = new ProgressDialog(mContex);
+                    myProgress.setCancelable(false);
+                    myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    myProgress.setIndeterminate(true);
+                    myProgress.setTitle("Processando...");
+                    myProgress.show();
+                    h.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            stopClock();
+                            myProgress.dismiss();
+                            finalizarAtendimento();
+                        }
+                    },500);
 
                 });
+                llParentView.addView(view);
+                break;
+            case Status.CONCLUIDO:
+                llMensagem.setVisibility(View.GONE);
+                llCabecalho.findViewById(R.id.vSeparador).setVisibility(View.VISIBLE);
+                addItem(Status.NAO_INICIADO, mList);
+                addItem(Status.EM_ATENDIMENTO, mList);
+                addItem(Status.CONCLUIDO, mList);
+                Animation b = AnimationUtils.loadAnimation(mContex, R.anim.fade_in);
+                b.setStartOffset(0);
+                llContador.startAnimation(b);
+                llContador.setVisibility(View.VISIBLE);
+                tvContador.setText(sonicUtils.getDifferenceTime(mList.get(0).getHoraInicio(), mList.get(0).getHoraFim()));
 
-                tvFechar.setOnClickListener((View v)-> {
-                    alertDialog.dismiss();
-                });
+                break;
+            case Status.CANCELADO:
+                llMensagem.setVisibility(View.GONE);
+                llCabecalho.findViewById(R.id.vSeparador).setVisibility(View.VISIBLE);
+                addItem(Status.NAO_INICIADO, mList);
+                addItem(Status.CANCELADO, mList);
+                break;
+        }
 
-                rbPositivar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                        vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                        btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
-                    }
-                });
+        llParentView.post(new Runnable() {
+            @Override
+            public void run() {
 
-                myProgress.dismiss();
-                alertDialog.show();
+                Animation animation = AnimationUtils.loadAnimation(getBaseContext(), R.anim.slide_in_left);
+                animation.setStartOffset(0);
+                view.startAnimation(animation);
 
             }
-        },500);
+        });
 
+    }
+
+    private void addItem(int tipo, List<sonicRotaHolder> mList){
+        LinearLayout llParentView = (LinearLayout)svRootView.getChildAt(0);
+        View view = LayoutInflater.from(mContex).inflate(R.layout.layout_cards_rota_detalhe_itens, null, false);
+        View dots = view.findViewById(R.id.dotStatus);
+        TextView tvData = view.findViewById(R.id.tvData);
+        TextView tvMotivoNegativacao = view.findViewById(R.id.tvMotivoNegativacao);
+        TextView tvMotivoCancelamento = view.findViewById(R.id.tvMotivoCancelamento);
+        TextView tvObservacao = view.findViewById(R.id.tvObservacao);
+
+        switch (tipo){
+            case Status.NAO_INICIADO:
+                dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_nao_iniciado));
+                tvData.setText("Agendado para "+mUtils.Data.dataFotmatadaBR(mList.get(0).getDataAgendamento()));
+                llParentView.addView(view);
+                break;
+            case Status.EM_ATENDIMENTO:
+                dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_em_atendimento));
+                tvData.setText("Iniciado em " + mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                tvData.setTextColor(getResources().getColor(R.color.colorPrimaryBlue));
+                llParentView.addView(view);
+                break;
+            case Status.CONCLUIDO:
+                switch (mList.get(0).getSituacao()){
+                    case Situacao.POSITIVADO:
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_concluido_positivado));
+                        tvData.setText("Positivado às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraFim()));
+                        tvData.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
+                        tvObservacao.setVisibility(View.VISIBLE);
+                        tvObservacao.setText("Observação: " + mList.get(0).getObservacao());
+                        llParentView.addView(view);
+                        break;
+                    case Situacao.NEGATIVADO:
+                        dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_concluido_negativado));
+                        tvData.setText("Negativado às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraFim()));
+                        tvData.setTextColor(getResources().getColor(R.color.colorPrimaryOrange));
+                        tvMotivoNegativacao.setVisibility(View.VISIBLE);
+                        tvMotivoNegativacao.setText("Motivo: " + mList.get(0).getNegativacao());
+                        tvObservacao.setVisibility(View.VISIBLE);
+                        tvObservacao.setText("Observação: " + mList.get(0).getObservacao());
+                        llParentView.addView(view);
+                        break;
+                }
+                break;
+            case Status.CANCELADO:
+                dots.setBackground(mContex.getResources().getDrawable(R.drawable.dots_cancelado));
+                tvData.setText("Cancelado em "+ mUtils.Data.dataFotmatadaBR(mList.get(0).getDataInicio())+" às "+ mUtils.Data.horaFotmatadaBR(mList.get(0).getHoraInicio()));
+                tvData.setTextColor(getResources().getColor(R.color.colorPrimaryRed));
+                tvMotivoCancelamento.setVisibility(View.VISIBLE);
+                tvMotivoCancelamento.setText(mList.get(0).getCancelamento());
+                tvObservacao.setVisibility(View.VISIBLE);
+                tvObservacao.setText("Observação: " + mList.get(0).getObservacao());
+                llParentView.addView(view);
+                break;
+        }
+
+        llParentView.post(new Runnable() {
+            @Override
+            public void run() {
+
+                Animation animation = AnimationUtils.loadAnimation(mContex, R.anim.slide_in_left);
+                animation.setStartOffset(0);
+                view.startAnimation(animation);
+
+            }
+        });
+
+
+    }
+
+    private void finalizarAtendimento(){
+
+        Window window = this.getWindow();
+
+        Rect displayRectangle = new Rect();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContex, R.style.FullDialog);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(mContex).inflate(R.layout.dialog_rota_confirmada, viewGroup, false);
+        dialogView.setMinimumWidth((int)(displayRectangle.width() * 1f));
+        dialogView.setMinimumHeight((int)(displayRectangle.height() * 1f));
+        dialogBuilder.setView(dialogView);
+        final AlertDialog alertDialog = dialogBuilder.create();
+
+        TextView tvTitulo = dialogView.findViewById(R.id.tvTitulo);
+        tvTitulo.setText("Atendimento #" + mPrefs.Rota.getCodigo());
+        TextView tvDescricao = dialogView.findViewById(R.id.tvDescricao);
+        tvDescricao.setText(mPrefs.Clientes.getNome()+" - "+mPrefs.Clientes.getEnderecoCompleto());
+        TextView tvDataHora = dialogView.findViewById(R.id.tvDataHora);
+        tvDataHora.setText(mPrefs.Rota.getDataHora());
+        RadioButton rbPositivar = dialogView.findViewById(R.id.rbPositivar);
+        RadioButton rbNegativar = dialogView.findViewById(R.id.rbNegativar);
+        EditText etObservacao = dialogView.findViewById(R.id.etObservacao);
+        Spinner spMotivo = dialogView.findViewById(R.id.spMotivo);
+        LinearLayout llSpinner = dialogView.findViewById(R.id.llSpinner);
+        View vsSpinner = dialogView.findViewById(R.id.vsSpinner);
+        Button btConfirmar = dialogView.findViewById(R.id.btConfirmar);
+        TextView tvFechar = dialogView.findViewById(R.id.tvFechar);
+
+        List<String> mList = new ArrayList<>();
+        String[] s = getResources().getStringArray(R.array.rotaNegativadaOptions);
+        for (String item: s) {
+            mList.add(item);
+        }
+
+        ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(mContex, android.R.layout.simple_spinner_item, mList);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMotivo.setAdapter(mAdapter);
+
+        btConfirmar.setOnClickListener((View v) -> {
+            myProgress = new ProgressDialog(mContex);
+            myProgress.setCancelable(false);
+            myProgress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            myProgress.setIndeterminate(true);
+            myProgress.setTitle("Salvando...");
+            Handler h = new Handler();
+            if(rbNegativar.isChecked() && spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
+                new android.app.AlertDialog.Builder(mContex)
+                        .setMessage("Escolha uma opção para negativação...")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                        spMotivo.requestFocus();
+            }else if(rbNegativar.isChecked() && !spMotivo.getSelectedItem().toString().equals("ESCOLHA UMA OPÇÃO...")){
+                myProgress.show();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        alertDialog.dismiss();
+                        new mAsyncTask().execute("NEGATIVAR", spMotivo.getSelectedItem().toString(), etObservacao.getText().toString());
+                    }
+                }, 1000);
+            }else{
+                alertDialog.dismiss();
+                myProgress.show();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new mAsyncTask().execute("POSITIVAR", etObservacao.getText().toString(), "");
+                    }
+                }, 1000);
+            }
+
+        });
+
+        tvFechar.setOnClickListener((View v)-> {
+            alertDialog.dismiss();
+        });
+
+        rbPositivar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
+            }
+        });
+
+        alertDialog.show();
 
     }
 
@@ -706,6 +605,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             Boolean result = false;
             switch (strings[0]){
                 case "INICIAR":
+                    startClock();
                     result = mData.Rota.iniciarRota(codigo);
                     mPrefs.Rota.setEmAtendimento(true);
                     mPrefs.Rota.setCancelada(false);
@@ -735,12 +635,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
                 myProgress.dismiss();
             }
             if(aBoolean){
-                loadDetails();
-                if(!clockCounting){
-                    startClock();
-                }else{
-                    stopClock();
-                }
+                loadItens();
             }else{
                 Snackbar snackbar = Snackbar
                         .make(getWindow().getDecorView().getRootView(), "ERRO", Snackbar.LENGTH_INDEFINITE)
@@ -770,12 +665,10 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
     public void startClock(){
         mPrefs.Rota.setStartTime(SystemClock.uptimeMillis());
-        clockCounting = true;
         customHandler.postDelayed(updateTimerThread, 0);
 
     }
     public void continueClock(){
-        clockCounting = true;
         customHandler.postDelayed(updateTimerThread, 0);
     }
     private Runnable updateTimerThread = new Runnable() {
@@ -797,10 +690,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     }
 
     public void stopClock() {
-        clockCounting = false;
         customHandler.removeCallbacks(updateTimerThread);
-        loadDetails();
-
     }
 
     public void slideImages(){

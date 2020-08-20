@@ -24,6 +24,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.renderscript.Allocation;
@@ -32,6 +33,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.EditText;
@@ -135,6 +137,10 @@ public class sonicUtils {
     public static boolean contains(CharSequence sequence)
     {
         return String.valueOf(sequence).indexOf(sequence.toString()) > -1;
+    }
+
+    public static String dataSocial(){
+        return DateUtils.isToday(SystemClock.uptimeMillis()) ? "hoje às" : "";
     }
 
     /*
@@ -603,7 +609,7 @@ public class sonicUtils {
     public static String getDifferenceTime(final String first, final String last)
     {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HHmmss");
         long second = 1000l;
         long minute = 60l * second;
         long hour = 60l * minute;

@@ -64,6 +64,7 @@
   <color name="colorPrimaryBlueDarkT">#90002A73</color>
   <color name="colorPrimaryBlueT">#901850AE</color>
   <color name="colorPrimaryBlueLightT">#904688F7</color>
+  <color name="colorPrimaryBlueExtraLightT">#904688F7</color>
   <color name="colorPrimaryRedDark">#8B0000</color>
   <color name="colorPrimaryRed">#FF0000</color>
   <color name="colorPrimaryRedLight">#FF6347</color>
