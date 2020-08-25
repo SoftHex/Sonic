@@ -147,7 +147,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sonic_rota_detalhe);
+        setContentView(R.layout.sonic_visita_detalhe);
 
         mData = new sonicDatabaseCRUD(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -222,24 +222,13 @@ public class sonicRotaDetalhe extends AppCompatActivity {
 
         mCollapsingToolbar.setExpandedTitleTextAppearance(totalImagens==0 ? R.style.ExpandedTitlePrimary : R.style.ExpandedTitleWhite);
 
+        //mAppBar.setExpanded(totalImagens==0 ? false : true);
+
         mToolbar.setNavigationOnClickListener((View v)-> {
             onBackPressed();
         });
 
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
-                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                    llDots.setVisibility(View.INVISIBLE);
-                    mCollapsingToolbar.setTitle("#" + mPrefs.Rota.getCodigo() +" - " + mPrefs.Clientes.getNome());
-                }else {
-                    mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                    llDots.setVisibility(totalImagens > 0 ? View.VISIBLE : View.GONE);
-                    mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome()+"\nCÓD.: #"+mPrefs.Rota.getCodigo());
-                }
-            }
-        });
+        mAppBar.addOnOffsetChangedListener(appBarListener);
 
         fbNavegar.setOnClickListener((View v)->{
             mList = mData.Rota.selectRotaPorID(mPrefs.Rota.getCodigo());
@@ -247,6 +236,19 @@ public class sonicRotaDetalhe extends AppCompatActivity {
         });
 
     }
+
+    private AppBarLayout.OnOffsetChangedListener appBarListener = new AppBarLayout.OnOffsetChangedListener() {
+        @Override
+        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+            if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
+                mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
+                mCollapsingToolbar.setTitle("#" + mPrefs.Rota.getCodigo() +" - " + mPrefs.Clientes.getNome());
+            }else {
+                mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
+                mCollapsingToolbar.setTitle(mPrefs.Clientes.getNome()+"\nCÓD.: #"+mPrefs.Rota.getCodigo());
+            }
+        }
+    };
 
     private void loadAddress(){
 

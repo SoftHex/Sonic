@@ -20,6 +20,9 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:contentScrim="@color/colorPrimary"
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginStart="12dp"
+            app:maxLines="3"
             app:expandedTitleTextAppearance="@style/ExpandedTitleAppearance"
             app:collapsedTitleTextAppearance="@style/CollapsedTitleAppearance"
             app:title="">
@@ -40,18 +43,26 @@
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/AppTheme.AppBarOverlay"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                app:contentInsetEnd="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp">
 
             </androidx.appcompat.widget.Toolbar>
 
             <LinearLayout
-                android:id="@+id/layoutDots"
+                android:id="@+id/llDots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center|center_horizontal"
+                android:gravity="right"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="40dp"
                 app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed"
-                android:layout_gravity="bottom|center"
-                android:orientation="horizontal">
+                android:layout_gravity="top|center"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvCount"
@@ -63,7 +74,6 @@
                     android:paddingBottom="4dp"
                     android:layout_margin="10dp"
                     android:textSize="14sp"
-                    android:visibility="gone"
                     android:textColor="@color/colorPrimaryWhite"
                     android:background="@drawable/counter_images"
                     android:text="1/1"/>

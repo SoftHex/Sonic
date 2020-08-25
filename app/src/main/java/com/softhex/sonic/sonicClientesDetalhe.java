@@ -41,7 +41,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private ViewPager mViewpager;
     private TextView[] dots;
     private TextView tvCount;
-    private LinearLayout dotsLayout;
+
     private sonicDatabaseCRUD mData;
     private CollapsingToolbarLayout mCollapsingToolbar;
     private String[] myImages = new String[sonicConstants.TOTAL_IMAGES_SLIDE];
@@ -54,6 +54,9 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private FloatingActionButton fbAddPedido;
     private FloatingActionButton fbAddVisita;
     private List<sonicClientesHolder> mList;
+    private AppBarLayout mAppBar;
+    private int totalImagens;
+    private LinearLayout llDots;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +65,10 @@ public class sonicClientesDetalhe extends AppCompatActivity{
 
         mPref = new sonicPreferences(this);
         mData = new sonicDatabaseCRUD(this);
+        mContex = this;
         mList = mData.Cliente.selectClienteByID(mPref.Clientes.getCodigo());
         mViewpager = findViewById(R.id.pagerSlide);
         mCollapsingToolbar = findViewById(R.id.mCollapsingToolbar);
-        dotsLayout = findViewById(R.id.layoutDots);
         tvCount = findViewById(R.id.tvCount);
         fbMenu = findViewById(R.id.fbMenu);
         fbTelefone = findViewById(R.id.fbTelefone);
@@ -73,9 +76,10 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         fbWhatsApp = findViewById(R.id.fbWhatsApp);
         fbAddPedido = findViewById(R.id.fbAddPedido);
         fbAddVisita = findViewById(R.id.fbAddVisita);
+        llDots = findViewById(R.id.llDots);
 
-        createInterface();
         slideImages();
+        createInterface();
         handlerFloatMenu(false);
         loadAction();
 
@@ -135,7 +139,6 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
         private final List<Integer> mIcon = new ArrayList<>();
-        private int mScrollingX, mScrollingY;
         private CustomOnScrollChangeListener mListener;
 
         public void setCustomScrollChangeListener(CustomOnScrollChangeListener listener){
@@ -205,10 +208,15 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         LayoutTransition transition = new LayoutTransition();
         transition.setDuration(100);
 
-        AppBarLayout mAppBar = findViewById(R.id.appBar);
+        mAppBar = findViewById(R.id.appBar);
         mAppBar.setLayoutTransition(transition);
 
-        mCollapsingToolbar.setTitle("");
+        mAppBar.setExpanded(totalImagens==0 ? false : true);
+
+        mCollapsingToolbar.setTitle(mPref.Clientes.getNome());
+
+        mCollapsingToolbar.setExpandedTitleTextAppearance(totalImagens==0 ? R.style.ExpandedTitlePrimaryLarge : R.style.ExpandedTitleWhiteLarge);
+
 
         mToolbar.setNavigationOnClickListener((View v)-> {
                 onBackPressed();
@@ -223,19 +231,17 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
             if((mCollapsingToolbar.getHeight()+verticalOffset)<(2 * ViewCompat.getMinimumHeight(mCollapsingToolbar))){
                 mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryWhite), PorterDuff.Mode.SRC_ATOP);
-                dotsLayout.setVisibility(View.INVISIBLE);
-                mCollapsingToolbar.setTitle(mPref.Clientes.getClienteExibicao().equals("Nome Fantasia") ? mList.get(0).getRazaoSocial() : mList.get(0).getNomeFantasia());
+                //llDots.setVisibility(View.INVISIBLE);
             }else {
                 mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryBlack), PorterDuff.Mode.SRC_ATOP);
-                dotsLayout.setVisibility(View.VISIBLE);
-                mCollapsingToolbar.setTitle("");
+                //llDots.setVisibility(View.VISIBLE);
             }
         }
     };
 
     public void slideImages(){
 
-        int count = 0;
+        totalImagens = 0;
         File file;
         String image = "";
 
@@ -245,13 +251,13 @@ public class sonicClientesDetalhe extends AppCompatActivity{
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
 
             if(file.exists()){
-                count++;
+                totalImagens++;
             }
         }
 
-        myImages = new String[count];
+        myImages = new String[totalImagens];
 
-        for(int i = 0; i < count ; i++){
+        for(int i = 0; i < totalImagens ; i++){
 
             image = mPref.Clientes.getCodigo()+(i==0? "" : "_"+i)+".JPG";
             file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_CLIENTES+image);
@@ -261,7 +267,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         }
 
 
-        if(count==0){
+        if(totalImagens==0){
             myImages = new String[1];
             myImages[0] = sonicUtils.getURIForResource(R.drawable.nophoto);
         }
@@ -269,7 +275,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
         linearNew = findViewById(R.id.linearNew);
         //linearNew.setVisibility(clienteStatus.equals("NOVO") ? View.VISIBLE : View.INVISIBLE);
 
-        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, count==0 ? false : true);
+        sonicSlideImageAdapter myAdapter = new sonicSlideImageAdapter(this, myImages, totalImagens==0 ? false : true);
         mViewpager.setAdapter(myAdapter);
         mViewpager.addOnPageChangeListener(viewListenerImage);
         //addBottomDots(0);
@@ -278,8 +284,8 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     }
 
     private void addCount(int position){
-        if(myImages.length>1){
-            tvCount.setVisibility(View.VISIBLE);
+        if(totalImagens>1){
+            llDots.setVisibility(View.VISIBLE);
             tvCount.setText(position+"/"+myImages.length);
         }
     }
@@ -287,7 +293,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
     private void addBottomDots(int position){
 
         dots = new TextView[myImages.length];
-        dotsLayout.removeAllViews();
+        llDots.removeAllViews();
         if(myImages.length>1){
             for(int i=0; i < dots.length; i++)
             {
@@ -295,7 +301,7 @@ public class sonicClientesDetalhe extends AppCompatActivity{
                 dots[i].setText(Html.fromHtml("&#8226;"));
                 dots[i].setTextSize(30);
                 dots[i].setTextColor(getResources().getColor(R.color.dotSlideInactive));
-                dotsLayout.addView(dots[i]);
+                llDots.addView(dots[i]);
             }
             if(dots.length>1){
                 dots[position].setTextColor(getResources().getColor(R.color.dotSlideActive));

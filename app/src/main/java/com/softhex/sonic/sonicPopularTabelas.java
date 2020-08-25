@@ -55,18 +55,18 @@ public class sonicPopularTabelas {
 
             { "SITE", sonicConstants.TB_SITE, "Site", "save"},
             { "FTP", sonicConstants.TB_FTP, "Ftp" ,"save" },
-            { "EMPRESAS", sonicConstants.TB_EMPRESA, "Empresas", "save" },
+            { "EMPRESAS", sonicConstants.TB_EMPRESAS, "Empresas", "save" },
             { "NIVEL_ACESSO", sonicConstants.TB_NIVEL_ACESSO, "Nível de Acesso", "save" },
-            { "USUARIOS", sonicConstants.TB_USUARIO, "Usuários" ,"save" },
-            { "EMPRESAS_USUARIOS", sonicConstants.TB_EMPRESA_USUARIO, "Usuários por Empresa", "save" },
+            { "USUARIOS", sonicConstants.TB_USUARIOS, "Usuários" ,"save" },
+            { "EMPRESAS_USUARIOS", sonicConstants.TB_EMPRESAS_USUARIOS, "Usuários por Empresa", "save" },
             { "MATRIZ", sonicConstants.TB_GRUPO_EMPRESAS, "Grupo Empresas", "save"},
-            { "CLIENTES", sonicConstants.TB_CLIENTE, "Clientes", "save" },
-            { "GRUPO_CLIENTES", sonicConstants.TB_GRUPO_CLIENTE, "Grupo de Clientes", "save" },
-            { "EMPRESAS_CLIENTES", sonicConstants.TB_EMPRESA_CLIENTE, "Clientes por Empresa", "save" },
-            { "PRODUTOS", sonicConstants.TB_PRODUTO, "Produtos", "save" },
-            { "GRUPO_PRODUTOS", sonicConstants.TB_GRUPO_PRODUTO, "Grupo de Produtos", "save" },
-            { "ESTOQUE_PRODUTOS", sonicConstants.TB_ESTOQUE_PRODUTO, "Estoque de Produtos", "save" },
-            { "BLOQUEIO_PRODUTOS", sonicConstants.TB_BLOQUEIO_PRODUTO, "Bloqueio de Produtos", "save" },
+            { "CLIENTES", sonicConstants.TB_CLIENTES, "Clientes", "save" },
+            { "GRUPO_CLIENTES", sonicConstants.TB_GRUPO_CLIENTES, "Grupo de Clientes", "save" },
+            { "EMPRESAS_CLIENTES", sonicConstants.TB_EMPRESAS_CLIENTES, "Clientes por Empresa", "save" },
+            { "PRODUTOS", sonicConstants.TB_PRODUTOS, "Produtos", "save" },
+            { "GRUPO_PRODUTOS", sonicConstants.TB_GRUPO_PRODUTOS, "Grupo de Produtos", "save" },
+            { "ESTOQUE_PRODUTOS", sonicConstants.TB_ESTOQUE_PRODUTOS, "Estoque de Produtos", "save" },
+            { "BLOQUEIO_PRODUTOS", sonicConstants.TB_BLOQUEIO_PRODUTOS, "Bloqueio de Produtos", "save" },
             { "TABELA_PRECO", sonicConstants.TB_TABELA_PRECO, "Tabela de Preços", "save" },
             { "TABELA_PRECO_EMPRESA", sonicConstants.TB_TABELA_PRECO_EMPRESA, "Tabela de Preço por Empresa", "save" },
             { "TABELA_PRECO_PRODUTO", sonicConstants.TB_TABELA_PRECO_PRODUTO, "Tabela de Preço por Produto", "save" },
@@ -75,13 +75,13 @@ public class sonicPopularTabelas {
             { "AGENTE_COBRADOR", sonicConstants.TB_AGENTE_COBRADOR, "Agente Cobrador", "save" },
             { "UNIDADE_MEDIDA", sonicConstants.TB_UNIDADE_MEDIDA, "Unidade de Medida", "save" },
             { "ROTA", sonicConstants.TB_ROTA, "Agenda de Visitas", "save" },
-            { "CLIENTES_SEM_COMPRA", sonicConstants.TB_CLIENTE_SEM_COMPRA, "Clientes sem Compra", "save" },
-            { "TITULOS", sonicConstants.TB_TITULO, "Títulos", "save" },
+            { "CLIENTES_SEM_COMPRA", sonicConstants.TB_CLIENTES_SEM_COMPRA, "Clientes sem Compra", "save" },
+            { "TITULOS", sonicConstants.TB_TITULOS, "Títulos", "save" },
             { "PRAZO", sonicConstants.TB_PRAZO, "Prazo", "save" },
             { "ULTIMAS_COMPRAS", sonicConstants.TB_ULTIMAS_COMPRAS, "Últimas Compras", "save" },
             { "ULTIMAS_COMPRAS_ITENS", sonicConstants.TB_ULTIMAS_COMPRAS_ITENS, "Últimas Compras - Itens", "save" },
-            { "VENDAS", sonicConstants.TB_VENDA, "Vendas", "save" },
-            { "", sonicConstants.TB_VENDA, "", "replace" }
+            { "VENDAS", sonicConstants.TB_VENDAS, "Vendas", "save" },
+            { "", sonicConstants.TB_VENDAS, "", "replace" }
 
     };
 
@@ -259,7 +259,7 @@ public class sonicPopularTabelas {
                                         ((sonicSincronizacao)mAct).refreshSincFragment();
                                     }
                                 }).show();
-                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTO, sonicConstants.TIPO_SINC_DADOS);
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTOS, sonicConstants.TIPO_SINC_DADOS);
                         break;
                     case "SITE":
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_SITE, sonicConstants.TIPO_SINC_DADOS);
@@ -368,7 +368,7 @@ public class sonicPopularTabelas {
                                         ((sonicSincronizacao)mAct).refreshSincFragment();
                                     }
                                 }).show();
-                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTO, sonicConstants.TIPO_SINC_DADOS);
+                        mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_ESTOQUE_PRODUTOS, sonicConstants.TIPO_SINC_DADOS);
                         break;
                     case "SITE":
                         mData.Sincronizacao.saveSincronizacao(sonicConstants.TB_SITE, sonicConstants.TIPO_SINC_DADOS);

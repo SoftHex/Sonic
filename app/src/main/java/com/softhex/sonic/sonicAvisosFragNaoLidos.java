@@ -98,9 +98,9 @@ public class sonicAvisosFragNaoLidos extends Fragment {
         @Override
         protected Integer doInBackground(Integer... integers) {
 
-            myAvisos =  new sonicDatabaseCRUD(_this).Aviso.selectAviso();
-            return myAvisos.size();
-
+            //myAvisos =  new sonicDatabaseCRUD(_this).Aviso.selectAviso();
+            //return myAvisos.size();
+            return null;
         }
 
         @Override

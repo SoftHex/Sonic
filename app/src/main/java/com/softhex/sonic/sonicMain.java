@@ -136,7 +136,6 @@ public class sonicMain extends AppCompatActivity{
         mContext = getApplicationContext();
         mData = new sonicDatabaseCRUD(mActivity);
         mPrefs = new sonicPreferences(mActivity);
-        sonicConstants.BACK = back;
 
         myToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(myToolbar);
@@ -887,7 +886,7 @@ public class sonicMain extends AppCompatActivity{
             switch (integers[0]){
                 case 2:
                     result[0] = integers[0];
-                    result[1] = mData.Aviso.countNaoLido();
+                    //result[1] = mData.Aviso.countNaoLido();
                     break;
                 case 3:
                     result[0] = integers[0];

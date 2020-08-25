@@ -354,11 +354,11 @@ public class sonicFtp {
                         break;
                     case "CATALOGO":
                         new sonicUtils(mAct).Arquivo.unzipFile(arquivo);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_PRODUTO, sonicConstants.TIPO_SINC_IMAGENS);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_PRODUTOS, sonicConstants.TIPO_SINC_IMAGENS);
                         break;
                     case "CLIENTES":
                         new sonicUtils(mAct).Arquivo.unzipFile(arquivo);
-                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_CLIENTE, sonicConstants.TIPO_SINC_IMAGENS);
+                        new sonicDatabaseCRUD(myCtx).Sincronizacao.saveSincronizacao(sonicConstants.TB_CLIENTES, sonicConstants.TIPO_SINC_IMAGENS);
                         break;
                     case "ESTOQUE":
                         new sonicPopularTabelas(mAct).gravarDados(arquivo);

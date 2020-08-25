@@ -26,28 +26,27 @@ public class sonicDatabaseCRUD {
     private final String DB_NAME = sonicConstants.DATABASE;
     private final String TABLE_SITE = sonicConstants.TB_SITE;
     private final String TABLE_FTP = sonicConstants.TB_FTP;
-    private final String TABLE_EMPRESA = sonicConstants.TB_EMPRESA;
+    private final String TABLE_EMPRESAS = sonicConstants.TB_EMPRESAS;
     private final String TABLE_GRUPO_EMPRESAS = sonicConstants.TB_GRUPO_EMPRESAS;
     private final String TABLE_NIVEL_ACESSO = sonicConstants.TB_NIVEL_ACESSO;
-    private final String TABLE_USUARIO = sonicConstants.TB_USUARIO;
-    private final String TABLE_EMPRESA_USUARIO = sonicConstants.TB_EMPRESA_USUARIO;
-    private final String TABLE_CLIENTE = sonicConstants.TB_CLIENTE;
-    private final String TABLE_EMPRESA_CLIENTE = sonicConstants.TB_EMPRESA_CLIENTE;
-    private final String TABLE_GRUPO_CLIENTE = sonicConstants.TB_GRUPO_CLIENTE;
-    private final String TABLE_RANKING_CLIENTE = sonicConstants.TB_RANKING_CLIENTE;
-    private final String TABLE_CLIENTE_SEM_COMPRA = sonicConstants.TB_CLIENTE_SEM_COMPRA;
+    private final String TABLE_USUARIOS = sonicConstants.TB_USUARIOS;
+    private final String TABLE_EMPRESAS_USUARIOS = sonicConstants.TB_EMPRESAS_USUARIOS;
+    private final String TABLE_CLIENTES = sonicConstants.TB_CLIENTES;
+    private final String TABLE_EMPRESAS_CLIENTES = sonicConstants.TB_EMPRESAS_CLIENTES;
+    private final String TABLE_GRUPO_CLIENTES = sonicConstants.TB_GRUPO_CLIENTES;
+    private final String TABLE_RANKING_CLIENTES = sonicConstants.TB_RANKING_CLIENTES;
+    private final String TABLE_CLIENTES_SEM_COMPRA = sonicConstants.TB_CLIENTES_SEM_COMPRA;
     private final String TABLE_ACESSO_CLIENTE = sonicConstants.TB_ACESSO_CLIENTE;
-    private final String TABLE_PRODUTO = sonicConstants.TB_PRODUTO;
-    private final String TABLE_GRUPO_PRODUTO = sonicConstants.TB_GRUPO_PRODUTO;
-    private final String TABLE_BLOQUEIO_PRODUTO = sonicConstants.TB_BLOQUEIO_PRODUTO;
+    private final String TABLE_PRODUTOS = sonicConstants.TB_PRODUTOS;
+    private final String TABLE_GRUPO_PRODUTOS = sonicConstants.TB_GRUPO_PRODUTOS;
+    private final String TABLE_BLOQUEIO_PRODUTOS = sonicConstants.TB_BLOQUEIO_PRODUTOS;
     private final String TABLE_ACESSO_PRODUTO = sonicConstants.TB_ACESSO_PRODUTO;
     private final String TABLE_ROTA = sonicConstants.TB_ROTA;
-    private final String TABLE_ROTA_PESSOAL = sonicConstants.TB_ROTA_PESSOAL;
-    private final String TABLE_ESTOQUE_PRODUTO = sonicConstants.TB_ESTOQUE_PRODUTO;
+    private final String TABLE_ESTOQUE_PRODUTOS = sonicConstants.TB_ESTOQUE_PRODUTOS;
     private final String TABLE_FINANCEIRO = sonicConstants.TB_FINANCEIRO;
-    private final String TABLE_TITULO = sonicConstants.TB_TITULO;
+    private final String TABLE_TITULOS = sonicConstants.TB_TITULOS;
     private final String TABLE_RETORNO_PEDIDO = sonicConstants.TB_RETORNO_PEDIDO;
-    private final String TABLE_RETORNO_PEDIDO_ITEM = sonicConstants.TB_RETORNO_PEDIDO_ITEM;
+    private final String TABLE_RETORNO_PEDIDO_ITENS = sonicConstants.TB_RETORNO_PEDIDO_ITENS;
     private final String TABLE_TIPO_COBRANCA = sonicConstants.TB_TIPO_COBRANCA;
     private final String TABLE_AGENTE_COBRADOR = sonicConstants.TB_AGENTE_COBRADOR;
     private final String TABLE_CONDICAO_PAGAMENTO = sonicConstants.TB_CONDICAO_PAGAMENTO;
@@ -55,9 +54,9 @@ public class sonicDatabaseCRUD {
     private final String TABLE_TABELA_PRECO = sonicConstants.TB_TABELA_PRECO;
     private final String TABLE_ULTIMAS_COMPRAS = sonicConstants.TB_ULTIMAS_COMPRAS;
     private final String TABLE_ULTIMAS_COMPRAS_ITENS = sonicConstants.TB_ULTIMAS_COMPRAS_ITENS;
-    private final String TABLE_VENDA = sonicConstants.TB_VENDA;
-    private final String TABLE_VENDA_ITEM = sonicConstants.TB_VENDA_ITEM;
-    private final String TABLE_RANKING_PRODUTO = sonicConstants.TB_RANKING_PRODUTO;
+    private final String TABLE_VENDAS = sonicConstants.TB_VENDAS;
+    private final String TABLE_VENDAS_ITENS = sonicConstants.TB_VENDAS_ITENS;
+    private final String TABLE_RANKING_PRODUTOS = sonicConstants.TB_RANKING_PRODUTOS;
     private final String TABLE_TRANSPORTADORA = sonicConstants.TB_TRANSPORTADORA;
     private final String TABLE_UNIDADE_MEDIDA = sonicConstants.TB_UNIDADE_MEDIDA;
     private final String TABLE_TIPO_PEDIDO = sonicConstants.TB_TIPO_PEDIDO;
@@ -67,8 +66,6 @@ public class sonicDatabaseCRUD {
     private final String TABLE_PRAZO = sonicConstants.TB_PRAZO;
     private final String TABLE_TABELA_PRECO_CLIENTE = sonicConstants.TB_TABELA_PRECO_CLIENTE;
     private final String TABLE_FRETE = sonicConstants.TB_FRETE;
-    private final String TABLE_AVISO = sonicConstants.TB_AVISO;
-    private final String TABLE_AVISO_LIDO = sonicConstants.TB_AVISO_LIDO;
     private final String TABLE_SINCRONIZACAO = sonicConstants.TB_SINCRONIZACAO;
     private final String TABLE_LOCALIZACAO = sonicConstants.TB_LOCALIZACAO;
     private final String TABLE_LOG_ERRO = sonicConstants.TB_LOG_ERRO;
@@ -122,7 +119,6 @@ public class sonicDatabaseCRUD {
     TipoPedido TipoPedido = new TipoPedido();
     TipoCobranca TipoCobranca = new TipoCobranca();
     Prazo Prazo = new Prazo();
-    Aviso Aviso = new Aviso();
 
     class Database{
 
@@ -137,13 +133,13 @@ public class sonicDatabaseCRUD {
                     result = result && cursor.moveToFirst();
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_FTP , null);
                     result = result && cursor.moveToFirst();
-                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA , null);
+                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_EMPRESAS, null);
                     result = result && cursor.moveToFirst();
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_NIVEL_ACESSO , null);
                     result = result && cursor.moveToFirst();
-                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_USUARIO , null);
+                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_USUARIOS, null);
                     result = result && cursor.moveToFirst();
-                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA_USUARIO , null);
+                    cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_EMPRESAS_USUARIOS, null);
                     result = result &&  cursor.moveToFirst();
                     cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_GRUPO_EMPRESAS , null);
                     result = result &&  cursor.moveToFirst();
@@ -196,10 +192,10 @@ public class sonicDatabaseCRUD {
                         "'sqlite_sequence','"+
                         TABLE_SITE+"','"+
                         TABLE_FTP+"','"+
-                        TABLE_EMPRESA+"','"+
+                        TABLE_EMPRESAS +"','"+
                         TABLE_NIVEL_ACESSO+"','"+
-                        TABLE_USUARIO+"','"+
-                        TABLE_EMPRESA_USUARIO+"','"+
+                        TABLE_USUARIOS +"','"+
+                        TABLE_EMPRESAS_USUARIOS +"','"+
                         TABLE_GRUPO_EMPRESAS+"','"+
                         TABLE_GRUPO_EMPRESAS+"')", null);
                 List<String> tables = new ArrayList<>();
@@ -345,7 +341,7 @@ public class sonicDatabaseCRUD {
             try{
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT nome_fantasia FROM "+TABLE_EMPRESA+" LIMIT 1 " , null);
+                        "SELECT nome_fantasia FROM "+ TABLE_EMPRESAS +" LIMIT 1 " , null);
 
                 if(cursor.moveToFirst()) {
                     empresa = cursor.getString(cursor.getColumnIndex("nome_fantasia"));
@@ -368,7 +364,7 @@ public class sonicDatabaseCRUD {
             try{
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(
-                        "SELECT e.codigo FROM "+TABLE_EMPRESA+" e LIMIT 1 " , null);
+                        "SELECT e.codigo FROM "+ TABLE_EMPRESAS +" e LIMIT 1 " , null);
 
                 if(cursor.moveToFirst()) {
                     empresa = cursor.getInt(cursor.getColumnIndex("codigo"));
@@ -389,7 +385,7 @@ public class sonicDatabaseCRUD {
             boolean result = false;
 
             try{
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA, null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_EMPRESAS, null);
                 if(cursor!=null && cursor.getCount()>0){
                     result = true;
                 }
@@ -409,7 +405,7 @@ public class sonicDatabaseCRUD {
             boolean result = false;
 
             try{
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+TABLE_EMPRESA+" e WHERE e.selecionada=1  ", null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT * FROM "+ TABLE_EMPRESAS +" e WHERE e.selecionada=1  ", null);
                 if(cursor!=null && cursor.getCount()>0){
                     result = true;
                 }
@@ -427,7 +423,7 @@ public class sonicDatabaseCRUD {
             List<sonicEmpresasHolder> empresas = new ArrayList<sonicEmpresasHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT * FROM "+TABLE_EMPRESA , null);
+                    "SELECT * FROM "+ TABLE_EMPRESAS, null);
 
             if(cursor!=null){
                 while(cursor.moveToNext()){
@@ -451,10 +447,10 @@ public class sonicDatabaseCRUD {
                     "e.nome_fantasia, " +
                     "e.razao_social, " +
                     "e.codigo " +
-                    "FROM " + TABLE_EMPRESA + " e " +
-                    "JOIN " + TABLE_EMPRESA_USUARIO + " eu " +
+                    "FROM " + TABLE_EMPRESAS + " e " +
+                    "JOIN " + TABLE_EMPRESAS_USUARIOS + " eu " +
                     "ON eu.codigo_empresa = e.codigo " +
-                    "JOIN " + TABLE_USUARIO + " u " +
+                    "JOIN " + TABLE_USUARIOS + " u " +
                     "ON u.codigo = eu.codigo_usuario " +
                     "WHERE u.ativo = 1 ORDER BY e.selecionada DESC";
 
@@ -487,8 +483,8 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
-                DB.getWritableDatabase().update(TABLE_EMPRESA, args2, "_id=(SELECT MIN(_id) FROM " + TABLE_EMPRESA + ")", null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, null, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args2, "_id=(SELECT MIN(_id) FROM " + TABLE_EMPRESAS + ")", null);
 
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -507,7 +503,7 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, null, null);
 
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -528,8 +524,8 @@ public class sonicDatabaseCRUD {
 
             try {
 
-                DB.getWritableDatabase().update(TABLE_EMPRESA, args, null, null);
-                DB.getWritableDatabase().update(TABLE_EMPRESA, args2, "codigo="+codigo, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args, null, null);
+                DB.getWritableDatabase().update(TABLE_EMPRESAS, args2, "codigo="+codigo, null);
 
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -585,7 +581,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_EMPRESA_CLIENTE);
+                count = DatabaseUtils.queryNumEntries(db, TABLE_EMPRESAS_CLIENTES);
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
@@ -605,104 +601,6 @@ public class sonicDatabaseCRUD {
     class NivelAcesso {
     }
 
-    class Aviso {
-
-        public long count() {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            long count = 0;
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_AVISO);
-            } catch (SQLiteException e) {
-                mPrefs.Geral.setError(e.getMessage());
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public int countNaoLido() {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            int count = 0;
-
-            SQLiteDatabase db = DB.getReadableDatabase();
-            try {
-                Cursor cursor = db.rawQuery("SELECT _id FROM "+TABLE_AVISO+" WHERE codigo NOT IN (SELECT DISTINCT(codigo) FROM "+TABLE_AVISO_LIDO+")", null);;
-                count = cursor.getCount();
-            } catch (SQLiteException e) {
-                mPrefs.Geral.setError(e.getMessage());
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-            }
-
-            return count;
-        }
-
-        public List<sonicAvisosHolder> selectAviso(){
-            List<sonicAvisosHolder> avisos = new ArrayList<sonicAvisosHolder>();
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "a.codigo," +
-                            "a.prioridade," +
-                            "a.autor," +
-                            "a.data," +
-                            "a.hora," +
-                            "a.titulo," +
-                            "a.mensagem," +
-                            "CASE WHEN EXISTS(SELECT DISTINCT(al.codigo) FROM "+TABLE_AVISO_LIDO+" al WHERE al.codigo = a.codigo) THEN 1 ELSE 0 END AS status" +
-                            " FROM " + TABLE_AVISO + " a ORDER BY a.data DESC" , null);
-
-            if(cursor!=null){
-                while(cursor.moveToNext()){
-
-                    sonicAvisosHolder aviso = new sonicAvisosHolder();
-
-                    aviso.setCodigo(cursor.getInt(cursor.getColumnIndex("codigo")));
-                    aviso.setPrioridade(cursor.getInt(cursor.getColumnIndex("prioridade")));
-                    aviso.setAutor(cursor.getString(cursor.getColumnIndex("autor")));
-                    aviso.setData(cursor.getString(cursor.getColumnIndex("data")));
-                    aviso.setHora(cursor.getString(cursor.getColumnIndex("hora")));
-                    aviso.setTitulo(cursor.getString(cursor.getColumnIndex("titulo")));
-                    aviso.setMensagem(cursor.getString(cursor.getColumnIndex("dialogRedefinir")));
-                    aviso.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-
-                    avisos.add(aviso);
-
-                }
-            }
-
-            cursor.close();
-            return avisos;
-        }
-
-        public boolean saveAvisoLido(int id) {
-
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            Boolean result = false;
-            ContentValues cv = new ContentValues();
-
-            try {
-
-                    cv.put("codigo", id);
-
-                result = DB.getWritableDatabase().insert(TABLE_AVISO_LIDO, null, cv) > 0;
-
-            } catch (SQLiteException e) {
-                mPrefs.Geral.setError(e.getMessage());
-                DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
-                e.printStackTrace();
-
-            }
-
-            return result;
-        }
-
-        }
-
     class Cliente {
 
             public long count() {
@@ -711,7 +609,7 @@ public class sonicDatabaseCRUD {
                 long count = 0;
                 SQLiteDatabase db = DB.getReadableDatabase();
                 try {
-                    count = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTE);
+                    count = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES);
                 } catch (SQLiteException e) {
                     mPrefs.Geral.setError(e.getMessage());
                     DBCL.Log.saveLog(
@@ -734,7 +632,7 @@ public class sonicDatabaseCRUD {
                 SQLiteDatabase db = DB.getReadableDatabase();
 
                 try {
-                    Cursor cursor = db.rawQuery("SELECT c.codigo FROM " + TABLE_CLIENTE + " c WHERE c.codigo IN (SELECT ec.codigo_cliente FROM " + TABLE_EMPRESA_CLIENTE + " ec WHERE ec.codigo_empresa = (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1))", null);
+                    Cursor cursor = db.rawQuery("SELECT c.codigo FROM " + TABLE_CLIENTES + " c WHERE c.codigo IN (SELECT ec.codigo_cliente FROM " + TABLE_EMPRESAS_CLIENTES + " ec WHERE ec.codigo_empresa = (SELECT e.codigo FROM "+ TABLE_EMPRESAS +" e WHERE e.selecionada = 1))", null);
                     count = cursor.getCount();
                 } catch (SQLiteException e) {
                     mPrefs.Geral.setError(e.getMessage());
@@ -769,15 +667,15 @@ public class sonicDatabaseCRUD {
                         "C.data_cadastro AS cadastro, " +
                         "C.situacao AS situacao, " +
                         "GC.nome AS grupo," +
-                        "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
-                        "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
+                        "(SELECT COUNT(T._id) FROM " + TABLE_TITULOS + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
+                        "(SELECT COUNT(T._id) FROM " + TABLE_TITULOS + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
                         "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
                         "(SELECT COUNT(R._id) FROM " + TABLE_ROTA + " R WHERE R.codigo_cliente = C.codigo AND R.status=1) AS visitas, " +
-                        "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTE_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
-                        " FROM " + TABLE_CLIENTE +
-                        " C LEFT JOIN " + TABLE_GRUPO_CLIENTE +
+                        "(SELECT CASE WHEN COUNT(CSC._id) > 0 THEN 1 ELSE 0 END FROM " + TABLE_CLIENTES_SEM_COMPRA + " CSC WHERE CSC.codigo_cliente = C.codigo) AS cli_sem_compra " +
+                        " FROM " + TABLE_CLIENTES +
+                        " C LEFT JOIN " + TABLE_GRUPO_CLIENTES +
                         " GC ON GC.codigo = C.codigo_grupo " +
-                        " WHERE ((SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada = 1) IN (SELECT EC.codigo_empresa FROM "+ TABLE_EMPRESA_CLIENTE +" EC WHERE EC.codigo_cliente = C.codigo))" +
+                        " WHERE ((SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada = 1) IN (SELECT EC.codigo_empresa FROM "+ TABLE_EMPRESAS_CLIENTES +" EC WHERE EC.codigo_cliente = C.codigo))" +
                         " AND C.tipo = ? " + (cnpj ? (mPrefs.GrupoCliente.getFiltroCnpj().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCnpj() + "'") : (mPrefs.GrupoCliente.getFiltroCpf().equals("TODOS") ? "" : " AND GC.nome = '" + mPrefs.GrupoCliente.getFiltroCpf() + "'")) + " ORDER BY " + (mPrefs.Clientes.getClienteExibicao().equals("Nome Fantasia") ? "C.nome_fantasia" : "C.razao_social");
 
                 try {
@@ -840,7 +738,7 @@ public class sonicDatabaseCRUD {
                                 "UC._id, " +
                                 "UC.vendedor, " +
                                 "UC.codigo, " +
-                                "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESA + " E WHERE E.codigo = UC.codigo_empresa) AS empresa, " +
+                                "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESAS + " E WHERE E.codigo = UC.codigo_empresa) AS empresa, " +
                                 "(SELECT TP.nome FROM " + TABLE_TIPO_COBRANCA + " TP WHERE TP.codigo = UC.codigo_tipo_cobranca) AS tipo_cobranca, " +
                                 "(SELECT AC.nome FROM " + TABLE_AGENTE_COBRADOR + " AC WHERE AC.codigo = UC.codigo_agente_cobrador) AS agente_cobrador, " +
                                 "(SELECT P.nome FROM " + TABLE_PRAZO + " P WHERE P.codigo = UC.codigo_prazo) AS prazo, " +
@@ -892,7 +790,7 @@ public class sonicDatabaseCRUD {
 
                 String query = "SELECT * FROM (SELECT " +
                         "UCI._id, " +
-                        "(SELECT IFNULL(P.nome,'--') FROM " + TABLE_PRODUTO + " P WHERE P.codigo = UCI.codigo_produto) AS produto, " +
+                        "(SELECT IFNULL(P.nome,'--') FROM " + TABLE_PRODUTOS + " P WHERE P.codigo = UCI.codigo_produto) AS produto, " +
                         "UCI.codigo_produto AS codigo_produto, " +
                         "UCI.codigo AS codigo_venda, " +
                         "(SELECT UM.nome FROM " + TABLE_UNIDADE_MEDIDA + " UM WHERE UM.codigo = UCI.codigo_unidade) AS unidade_medida, " +
@@ -968,12 +866,12 @@ public class sonicDatabaseCRUD {
                                     "c.observacao," +
                                     "c.data_cadastro," +
                                     "c.situacao," +
-                                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTE +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo," +
-                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
-                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULO + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
+                                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTES +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo," +
+                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULOS + " T WHERE T.codigo_cliente = C.codigo) AS titulos, " +
+                                    "(SELECT COUNT(T._id) FROM " + TABLE_TITULOS + " T WHERE T.codigo_cliente = C.codigo AND T.situacao = 2) AS titulos_em_atraso, " +
                                     "(SELECT COUNT(UC._id) FROM " + TABLE_ULTIMAS_COMPRAS + " UC WHERE UC.codigo_cliente = C.codigo) AS compras, " +
                                     "(SELECT COUNT(R._id) FROM " + TABLE_ROTA + " R WHERE R.codigo_cliente = C.codigo) AS visitas " +
-                                    " FROM " + TABLE_CLIENTE +
+                                    " FROM " + TABLE_CLIENTES +
                                     " c WHERE c.codigo = "+id, null);
 
                     while (cursor.moveToNext()) {
@@ -1068,9 +966,9 @@ public class sonicDatabaseCRUD {
                     "C.nome_fantasia," +
                     "C.cpf_cnpj," +
                     "C.endereco," +
-                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTE +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo" +
+                    "(SELECT GC.nome FROM "+ TABLE_GRUPO_CLIENTES +" GC WHERE GC.codigo = C.codigo_grupo) AS grupo" +
                     " FROM " + TABLE_ACESSO_CLIENTE +
-                    " AC JOIN "+ TABLE_CLIENTE + " C ON AC.codigo_cliente = C.codigo " +
+                    " AC JOIN "+ TABLE_CLIENTES + " C ON AC.codigo_cliente = C.codigo " +
                     " WHERE C.tipo=? ORDER BY AC.data DESC, AC.hora DESC, AC._id DESC, AC.acessos DESC LIMIT 6";
             try {
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{cnpj ? "J" : "F"});
@@ -1113,7 +1011,7 @@ public class sonicDatabaseCRUD {
             long count = 0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_VENDA);
+                count = DatabaseUtils.queryNumEntries(db, TABLE_VENDAS);
             } catch (SQLiteException e) {
                 e.printStackTrace();
             }
@@ -1135,42 +1033,42 @@ public class sonicDatabaseCRUD {
                         "strftime('%m', date('now', 'start of month')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
                         "UNION " +
                         "SELECT " +
                         "4 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-1 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-1 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "3 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-2 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-2 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "2 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-3 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-3 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "1 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-4 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-4 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "0 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-5 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-5 months')) AS ano, " +
                         "IFNULL(SUM(v.valor),0) AS valor " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -1213,42 +1111,42 @@ public class sonicDatabaseCRUD {
                         "strftime('%m', date('now', 'start of month')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data >= strftime('%Y%m%d', date('now', 'start of month')) " +
                         "UNION " +
                         "SELECT " +
                         "4 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-1 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-1 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-1 months')) AND strftime('%Y%m%d', date('now', 'start of month','0 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "3 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-2 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-2 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-2 months')) AND strftime('%Y%m%d', date('now', 'start of month','-1 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "2 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-3 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-3 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-3 months')) AND strftime('%Y%m%d', date('now', 'start of month','-2 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "1 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-4 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-4 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-4 months')) AND strftime('%Y%m%d', date('now', 'start of month','-3 months', '-1 day')) " +
                         "UNION " +
                         "SELECT " +
                         "0 AS sequencial, "+
                         "strftime('%m', date('now', 'start of month', '-5 months')) AS mes, " +
                         "strftime('%Y', date('now', 'start of month', '-5 months')) AS ano, " +
                         "IFNULL(COUNT(v._id),0) AS total " +
-                        "FROM " + TABLE_VENDA + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
+                        "FROM " + TABLE_VENDAS + " v WHERE v.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) AND v.data BETWEEN strftime('%Y%m%d', date('now', 'start of month', '-6 months')) AND strftime('%Y%m%d', date('now', 'start of month','-5 months', '-1 day')));";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
 
@@ -1289,7 +1187,7 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT " +
                         "substr(V.data, 7, 9) AS dia, " +
                         "SUM(V.valor) AS valor " +
-                        "FROM " + TABLE_VENDA + " V " +
+                        "FROM " + TABLE_VENDAS + " V " +
                         "WHERE V.data >=  strftime('%Y%m%d', date('now', 'start of month','-4 months')) GROUP BY V.data ORDER BY V.data";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query, null);
@@ -1328,7 +1226,7 @@ public class sonicDatabaseCRUD {
             long count = 0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                count = DatabaseUtils.queryNumEntries(db, TABLE_VENDA_ITEM);
+                count = DatabaseUtils.queryNumEntries(db, TABLE_VENDAS_ITENS);
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1348,7 +1246,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_GRUPO_CLIENTE);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_GRUPO_CLIENTES);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1368,12 +1266,12 @@ public class sonicDatabaseCRUD {
                 String query = "SELECT " +
                         "GC._id, " +
                         "GC.codigo, " +
-                        "GC.nome FROM " + TABLE_GRUPO_CLIENTE + " GC " +
-                        " JOIN " + TABLE_CLIENTE + " C " +
+                        "GC.nome FROM " + TABLE_GRUPO_CLIENTES + " GC " +
+                        " JOIN " + TABLE_CLIENTES + " C " +
                         " ON C.codigo_grupo = GC.codigo " +
-                        " JOIN " + TABLE_EMPRESA_CLIENTE + " EC " +
+                        " JOIN " + TABLE_EMPRESAS_CLIENTES + " EC " +
                         " ON EC.codigo_cliente = C.codigo " +
-                        " JOIN " + TABLE_EMPRESA + " E " +
+                        " JOIN " + TABLE_EMPRESAS + " E " +
                         " ON E.codigo = EC.codigo_empresa " +
                         " WHERE E.selecionada=1 AND C.tipo = ? GROUP BY GC.nome ";
 
@@ -1415,7 +1313,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_CLIENTE);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_CLIENTES);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1425,50 +1323,7 @@ public class sonicDatabaseCRUD {
             return count;
         }
 
-        public List<sonicRankingClientesHolder> selectRankingCLIENTE(){
 
-            StackTraceElement el = Thread.currentThread().getStackTrace()[2];
-            List<sonicRankingClientesHolder> CLIENTE = new ArrayList<sonicRankingClientesHolder>();
-
-            String where = "";
-
-            if(myCons.GRUPO_CLIENTES_RANKING != "TODOS"){
-                where+= " AND gp.nome = '"+ myCons.GRUPO_CLIENTES_RANKING+"'";
-            }
-
-            Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT " +
-                            "c.codigo_cliente as codigo_cliente," +
-                            "c.nome_fantasia as cliente," +
-                            "gp.nome as grupo," +
-                            "rc.valor as valor," +
-                            "rc.pedidos as pedidos," +
-                            "rc.atuacao as atuacao," +
-                            "rc.codigo_empresa as empresa" +
-                            " FROM " + TABLE_RANKING_CLIENTE +
-                            " rc JOIN " + TABLE_CLIENTE +
-                            " c ON c.codigo_cliente = rc.codigo_cliente " +
-                            " JOIN " + TABLE_GRUPO_CLIENTE +
-                            " gp ON gp.codigo_grupo = c.codigo_grupo " +
-                            " WHERE rc.codigo_empresa IN (SELECT e.codigo_empresa FROM "+ TABLE_EMPRESA +" e WHERE e.selecionado = 1) " + where + " ORDER BY rc._id ", null);
-
-            while(cursor.moveToNext()){
-
-                sonicRankingClientesHolder cliente = new sonicRankingClientesHolder();
-
-                cliente.setCodigoCliente(cursor.getInt(cursor.getColumnIndex("codigo_cliente")));
-                cliente.setCliente(cursor.getString(cursor.getColumnIndex("cliente")));
-                cliente.setGrupoCliente(cursor.getString(cursor.getColumnIndex("grupo")));
-                cliente.setValor(cursor.getString(cursor.getColumnIndex("valor")));
-                cliente.setPedidos(cursor.getInt(cursor.getColumnIndex("pedidos")));
-                cliente.setAtuacao(cursor.getString(cursor.getColumnIndex("atuacao")));
-
-                CLIENTE.add(cliente);
-
-            }
-            cursor.close();
-            return CLIENTE;
-        }
     }
 
     class ClientesSemCompra {
@@ -1479,7 +1334,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTE_SEM_COMPRA);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_CLIENTES_SEM_COMPRA);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1495,7 +1350,7 @@ public class sonicDatabaseCRUD {
             List<sonicClientesSemCompraHolder> CLIENTE = new ArrayList<sonicClientesSemCompraHolder>();
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(
-                    "SELECT * FROM " + TABLE_CLIENTE_SEM_COMPRA , null);
+                    "SELECT * FROM " + TABLE_CLIENTES_SEM_COMPRA, null);
 
             while(cursor.moveToNext()){
 
@@ -1521,7 +1376,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_USUARIO);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_USUARIOS);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
@@ -1541,7 +1396,7 @@ public class sonicDatabaseCRUD {
             StackTraceElement el = Thread.currentThread().getStackTrace()[2];
             Cursor cursor;
             boolean res = false;
-            String query = "SELECT * FROM " + TABLE_USUARIO + " WHERE codigo = "+usuario+" AND senha = '"+senha+"'";
+            String query = "SELECT * FROM " + TABLE_USUARIOS + " WHERE codigo = "+usuario+" AND senha = '"+senha+"'";
             try{
 
                 cursor = DB.getReadableDatabase().rawQuery(query, null);
@@ -1578,11 +1433,11 @@ public class sonicDatabaseCRUD {
                     "EU.meta_visita, " +
                     "E.nome_fantasia AS empresa, " +
                     "E.codigo AS empresa_id, " +
-                    "(SELECT U2.nome FROM " + TABLE_USUARIO + " U2 WHERE U2.codigo = U.usuario_superior) AS usuario_superior, " +
+                    "(SELECT U2.nome FROM " + TABLE_USUARIOS + " U2 WHERE U2.codigo = U.usuario_superior) AS usuario_superior, " +
                     "(SELECT NA.nome FROM " + TABLE_NIVEL_ACESSO + " NA WHERE NA.codigo = U.nivel_acesso) AS cargo " +
-                    " FROM " + TABLE_USUARIO + " U " +
-                    " JOIN " + TABLE_EMPRESA_USUARIO + " EU ON EU.codigo_usuario = U.codigo " +
-                    " JOIN " + TABLE_EMPRESA + " E ON E.codigo = EU.codigo_empresa AND U.ativo = 1 ORDER BY E.selecionada DESC";
+                    " FROM " + TABLE_USUARIOS + " U " +
+                    " JOIN " + TABLE_EMPRESAS_USUARIOS + " EU ON EU.codigo_usuario = U.codigo " +
+                    " JOIN " + TABLE_EMPRESAS + " E ON E.codigo = EU.codigo_empresa AND U.ativo = 1 ORDER BY E.selecionada DESC";
 
 
             try{
@@ -1631,7 +1486,7 @@ public class sonicDatabaseCRUD {
                     "U.codigo, " +
                     "U.nome, " +
                     "U.login " +
-                    " FROM " + TABLE_USUARIO + " U ";
+                    " FROM " + TABLE_USUARIOS + " U ";
 
             try{
 
@@ -1675,9 +1530,9 @@ public class sonicDatabaseCRUD {
                                 "e.nome_fantasia AS empresa, " +
                                 "e.codigo AS empresa_id, " +
                                 "(SELECT na.nome FROM "+TABLE_NIVEL_ACESSO+" na WHERE na.codigo = u.nivel_acesso) AS cargo " +
-                                " FROM " + TABLE_USUARIO + " u " +
-                                " JOIN " + TABLE_EMPRESA_USUARIO + " eu ON eu.codigo_usuario=u.codigo " +
-                                " JOIN " + TABLE_EMPRESA + " e ON e.codigo=eu.codigo_empresa WHERE e.selecionada = 1 AND u.imei = '"+imei+"'", null);
+                                " FROM " + TABLE_USUARIOS + " u " +
+                                " JOIN " + TABLE_EMPRESAS_USUARIOS + " eu ON eu.codigo_usuario=u.codigo " +
+                                " JOIN " + TABLE_EMPRESAS + " e ON e.codigo=eu.codigo_empresa WHERE e.selecionada = 1 AND u.imei = '"+imei+"'", null);
 
                 while(cursor.moveToNext()){
 
@@ -1713,7 +1568,7 @@ public class sonicDatabaseCRUD {
             Boolean result = false;
 
             try {
-                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT u.codigo FROM "+TABLE_USUARIO+" u WHERE u.ativo = 1", null);
+                Cursor cursor = DB.getReadableDatabase().rawQuery("SELECT u.codigo FROM "+ TABLE_USUARIOS +" u WHERE u.ativo = 1", null);
                 result = cursor.moveToFirst();
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -1734,8 +1589,8 @@ public class sonicDatabaseCRUD {
 
             try{
 
-                DB.getWritableDatabase().update(TABLE_USUARIO, args, null, null);
-                DB.getWritableDatabase().update(TABLE_USUARIO, args2, " codigo = ?", new String[]{String.valueOf(codigo)});
+                DB.getWritableDatabase().update(TABLE_USUARIOS, args, null, null);
+                DB.getWritableDatabase().update(TABLE_USUARIOS, args2, " codigo = ?", new String[]{String.valueOf(codigo)});
 
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
@@ -1753,7 +1608,7 @@ public class sonicDatabaseCRUD {
             args.put("ativo", 0);
 
             try{
-                DB.getWritableDatabase().update(TABLE_USUARIO, args, null, null);
+                DB.getWritableDatabase().update(TABLE_USUARIOS, args, null, null);
 
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
@@ -1934,7 +1789,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_PRODUTO);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_PRODUTOS);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -1951,7 +1806,7 @@ public class sonicDatabaseCRUD {
 
             SQLiteDatabase db = DB.getReadableDatabase();
             try {
-                Cursor cursor = db.rawQuery("SELECT P._id FROM " + TABLE_PRODUTO + " P WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1)", null);
+                Cursor cursor = db.rawQuery("SELECT P._id FROM " + TABLE_PRODUTOS + " P WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTOS +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                 mPrefs.Geral.setError(e.getMessage());
@@ -1968,7 +1823,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getReadableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_PRODUTO);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_RANKING_PRODUTOS);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(
@@ -2005,11 +1860,11 @@ public class sonicDatabaseCRUD {
                     "P.codigo_ean_tributavel, " +
                     "P.foto, " +
                     "GP.nome AS grupo_produto, " +
-                    " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
+                    " (SELECT EP.estoque FROM " + TABLE_ESTOQUE_PRODUTOS + " EP WHERE EP.codigo_produto = P.codigo) AS estoque, " +
                     " (SELECT UN.nome FROM " + TABLE_UNIDADE_MEDIDA + " UN WHERE UN.codigo = P.codigo_unidade) AS unidade_medida " +
-                    " FROM " + TABLE_PRODUTO + " P " +
-                    " JOIN " + TABLE_GRUPO_PRODUTO + " GP ON GP.codigo = P.codigo_grupo " +
-                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESA + " E WHERE E.selecionada=1) " + (lista ? (mPrefs.GrupoProduto.getFiltroLista().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroLista() +"'") : (mPrefs.GrupoProduto.getFiltroGrid().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroGrid() +"'"))+" ORDER BY P.nome ";
+                    " FROM " + TABLE_PRODUTOS + " P " +
+                    " JOIN " + TABLE_GRUPO_PRODUTOS + " GP ON GP.codigo = P.codigo_grupo " +
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTOS +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND P.codigo_empresa = (SELECT E.codigo FROM " + TABLE_EMPRESAS + " E WHERE E.selecionada=1) " + (lista ? (mPrefs.GrupoProduto.getFiltroLista().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroLista() +"'") : (mPrefs.GrupoProduto.getFiltroGrid().equals("TODOS") ? "" : " AND GP.nome = '"+ mPrefs.GrupoProduto.getFiltroGrid() +"'"))+" ORDER BY P.nome ";
 
             Log.d("QUERY", query);
 
@@ -2081,11 +1936,11 @@ public class sonicDatabaseCRUD {
                     "p.codigo_ean, " +
                     "p.codigo_ean_tributavel, " +
                     "p.foto, " +
-                    " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTO + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
+                    " (SELECT ep.estoque FROM " + TABLE_ESTOQUE_PRODUTOS + " ep WHERE ep.codigo_produto = p.codigo) AS estoque, " +
                     " (SELECT un.nome FROM " + TABLE_UNIDADE_MEDIDA + " un WHERE un.codigo = p.codigo_unidade) AS unidade_medida, " +
-                    " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTO + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
-                    " FROM " + TABLE_PRODUTO + " p " +
-                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTO +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESA + " emp WHERE emp.selecionada=1) AND p.codigo=?";
+                    " (SELECT gp.nome FROM " + TABLE_GRUPO_PRODUTOS + " gp WHERE gp.codigo = p.codigo_grupo) AS grupo_produto " +
+                    " FROM " + TABLE_PRODUTOS + " p " +
+                    " WHERE P.codigo NOT IN(SELECT BP.codigo_produto FROM "+ TABLE_BLOQUEIO_PRODUTOS +" BP WHERE BP.codigo_empresa = P.codigo_empresa) AND p.codigo_empresa = (SELECT emp.codigo FROM " + TABLE_EMPRESAS + " emp WHERE emp.selecionada=1) AND p.codigo=?";
 
             Cursor cursor = DB.getReadableDatabase().rawQuery(query, new String[]{String.valueOf(codigo)});
 
@@ -2149,12 +2004,12 @@ public class sonicDatabaseCRUD {
                             "rp.quantidade_anterior as quantidade_anterior," +
                             "rp.pedidos as pedidos," +
                             "rp.atuacao as atuacao" +
-                            " FROM " + TABLE_PRODUTO +
-                            " p JOIN " + TABLE_GRUPO_PRODUTO +
+                            " FROM " + TABLE_PRODUTOS +
+                            " p JOIN " + TABLE_GRUPO_PRODUTOS +
                             " gp ON gp.codigo_grupo = p.codigo_grupo" +
-                            " JOIN " + TABLE_EMPRESA +
+                            " JOIN " + TABLE_EMPRESAS +
                             " e ON e.codigo_empresa = p.codigo_empresa" +
-                            " JOIN " + TABLE_RANKING_PRODUTO +
+                            " JOIN " + TABLE_RANKING_PRODUTOS +
                             " rp ON rp.codigo_produto = p.codigo_produto WHERE e.selecionada = 1 " + where +
                             " ORDER BY rp._id", null);
 
@@ -2188,11 +2043,11 @@ public class sonicDatabaseCRUD {
                             "SUM(rp.quantidade_anterior) as quantidade_anterior, " +
                             "SUM(rp.pedidos) as pedidos, " +
                             "SUM(rp.atuacao) as atuacao, " +
-                            "(SELECT p.codigo_empresa FROM " + TABLE_PRODUTO + " p WHERE p.codigo_grupo = gp.codigo_grupo LIMIT 1) as empresa" +
-                            " FROM " + TABLE_RANKING_PRODUTO +
-                            " rp JOIN " + TABLE_GRUPO_PRODUTO +
+                            "(SELECT p.codigo_empresa FROM " + TABLE_PRODUTOS + " p WHERE p.codigo_grupo = gp.codigo_grupo LIMIT 1) as empresa" +
+                            " FROM " + TABLE_RANKING_PRODUTOS +
+                            " rp JOIN " + TABLE_GRUPO_PRODUTOS +
                             " gp ON gp.codigo_grupo = rp.codigo_grupo " +
-                            " GROUP BY gp.nome) T WHERE T.empresa = (SELECT e.codigo_empresa FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1) ORDER BY T.quantidade DESC", null);
+                            " GROUP BY gp.nome) T WHERE T.empresa = (SELECT e.codigo_empresa FROM "+ TABLE_EMPRESAS +" e WHERE e.selecionada = 1) ORDER BY T.quantidade DESC", null);
 
             while(cursor.moveToNext()){
 
@@ -2246,7 +2101,7 @@ public class sonicDatabaseCRUD {
                             "f.ultima_compra, " +
                             "f.data_ultima_compra " +
                             " FROM "+TABLE_FINANCEIRO+
-                            " f JOIN "+TABLE_CLIENTE+" c ON c.codigo_cliente = f.codigo_cliente WHERE c.selecionado = 1", null);
+                            " f JOIN "+ TABLE_CLIENTES +" c ON c.codigo_cliente = f.codigo_cliente WHERE c.selecionado = 1", null);
 
             while(cursor.moveToNext()){
 
@@ -2279,7 +2134,7 @@ public class sonicDatabaseCRUD {
             long count=0;
             SQLiteDatabase db = DB.getWritableDatabase();
             try{
-                count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULO);
+                count  = DatabaseUtils.queryNumEntries(db, TABLE_TITULOS);
             }catch (SQLiteException e){
                 mPrefs.Geral.setError(e.getMessage());
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(),e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -2300,8 +2155,8 @@ public class sonicDatabaseCRUD {
                         "T._id, " +
                         "T.codigo, " +
                         "T.numero, " +
-                        "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESA + " E WHERE E.codigo = T.codigo_empresa) AS nome_fantasia, " +
-                        "(SELECT E.razao_social FROM " + TABLE_EMPRESA + " E WHERE E.codigo = T.codigo_empresa) AS razao_social, " +
+                        "(SELECT E.nome_fantasia FROM " + TABLE_EMPRESAS + " E WHERE E.codigo = T.codigo_empresa) AS nome_fantasia, " +
+                        "(SELECT E.razao_social FROM " + TABLE_EMPRESAS + " E WHERE E.codigo = T.codigo_empresa) AS razao_social, " +
                         "T.data_emissao, " +
                         "T.data_vencimento, " +
                         "(SELECT AC.nome FROM "+ TABLE_AGENTE_COBRADOR +" AC WHERE AC.codigo = T.codigo_agente_cobrador) AS agente_cobrador, " +
@@ -2311,7 +2166,7 @@ public class sonicDatabaseCRUD {
                         "(T.data_vencimento - strftime('%Y%m%d', date('now')))*-1 AS atraso, " +
                         "T.juros, " +
                         "T.situacao " +
-                        " FROM " + TABLE_TITULO +
+                        " FROM " + TABLE_TITULOS +
                         " T WHERE T.codigo_cliente=? ORDER BY T.data_emissao DESC";
 
                 Cursor cursor = DB.getReadableDatabase().rawQuery(query
@@ -2362,7 +2217,7 @@ public class sonicDatabaseCRUD {
                     "SELECT " +
                             "c.codigo_cliente as codigo," +
                             "c.nome_fantasia as fantasia," +
-                            "(SELECT g.nome FROM "+ TABLE_GRUPO_CLIENTE + " g WHERE g.codigo_grupo = c.codigo_grupo) as grupo," +
+                            "(SELECT g.nome FROM "+ TABLE_GRUPO_CLIENTES + " g WHERE g.codigo_grupo = c.codigo_grupo) as grupo," +
                             "t.numero as numero," +
                             "t.data_emissao as emissao," +
                             "t.data_vencimento as vencimento," +
@@ -2370,8 +2225,8 @@ public class sonicDatabaseCRUD {
                             "t.valor as valor," +
                             "t.saldo as saldo," +
                             "t.situacao as situacao" +
-                            " FROM "+ TABLE_TITULO +
-                            " t JOIN "+ TABLE_CLIENTE +
+                            " FROM "+ TABLE_TITULOS +
+                            " t JOIN "+ TABLE_CLIENTES +
                             " c ON c.codigo_cliente = t.codigo_cliente" +
                             " WHERE c.selecionado = 1 ORDER BY t.data_vencimento" , null);
 
@@ -2413,10 +2268,10 @@ public class sonicDatabaseCRUD {
                                 "G._id as id," +
                                 "G.codigo as codigo," +
                                 "G.nome as nome" +
-                                " FROM " + TABLE_GRUPO_PRODUTO +
-                                " G JOIN " + TABLE_PRODUTO +
+                                " FROM " + TABLE_GRUPO_PRODUTOS +
+                                " G JOIN " + TABLE_PRODUTOS +
                                 " P ON P.codigo_grupo = G.codigo" +
-                                " JOIN " + TABLE_EMPRESA +
+                                " JOIN " + TABLE_EMPRESAS +
                                 " E ON E.codigo = P.codigo_empresa " +
                                 " WHERE E.selecionada = 1 GROUP BY G.nome " , null);
 
@@ -2479,7 +2334,7 @@ public class sonicDatabaseCRUD {
             SQLiteDatabase db = DB.getReadableDatabase();
 
             try {
-                Cursor cursor = db.rawQuery("SELECT R._id FROM " + TABLE_ROTA + " R WHERE R.codigo_empresa IN (SELECT e.codigo FROM "+ TABLE_EMPRESA +" e WHERE e.selecionada = 1)", null);
+                Cursor cursor = db.rawQuery("SELECT R._id FROM " + TABLE_ROTA + " R WHERE R.codigo_empresa IN (SELECT e.codigo FROM "+ TABLE_EMPRESAS +" e WHERE e.selecionada = 1)", null);
                 count = cursor.getCount();
             } catch (SQLiteException e) {
                 DBCL.Log.saveLog(e.getStackTrace()[0].getLineNumber(), e.getMessage(), mySystem.System.getActivityName(), mySystem.System.getClassName(el), mySystem.System.getMethodNames(el));
@@ -2498,7 +2353,7 @@ public class sonicDatabaseCRUD {
                         "R._id, " +
                         "R.codigo, " +
                         "R.codigo_empresa, " +
-                        "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
+                        "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESAS +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                         "R.codigo_cliente, " +
                         "R.tipo, " +
                         "R.status, " +
@@ -2523,8 +2378,8 @@ public class sonicDatabaseCRUD {
                         "C.uf, " +
                         "C.cep " +
                         " FROM " + TABLE_ROTA +
-                        " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
-                        " WHERE R.proprietario=? AND R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESA +" E WHERE E.selecionada=1) ORDER BY "+ (pessoal ? "R._id" : "R.codigo") +" DESC";
+                        " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente" +
+                        " WHERE R.proprietario=? AND R.codigo_empresa IN (SELECT E.codigo FROM "+ TABLE_EMPRESAS +" E WHERE E.selecionada=1) ORDER BY "+ (pessoal ? "R._id" : "R.codigo") +" DESC";
 
                 try{
 
@@ -2591,7 +2446,7 @@ public class sonicDatabaseCRUD {
                     "R._id, " +
                     "R.codigo, " +
                     "R.codigo_empresa, " +
-                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESAS +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                     "R.codigo_cliente, " +
                     "R.tipo, " +
                     "R.status, " +
@@ -2616,7 +2471,7 @@ public class sonicDatabaseCRUD {
                     "C.uf, " +
                     "C.cep " +
                     " FROM " + TABLE_ROTA +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente" +
+                    " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente" +
                     " WHERE C.codigo=? ORDER BY R.data_inicio DESC, R.hora_inicio DESC, R.status DESC";
 
             try{
@@ -2685,7 +2540,7 @@ public class sonicDatabaseCRUD {
                     "R._id, " +
                     "R.codigo, " +
                     "R.codigo_empresa, " +
-                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESA +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
+                    "(SELECT E.nome_fantasia FROM "+ TABLE_EMPRESAS +" E WHERE E.codigo = R.codigo_empresa) AS empresa, " +
                     "R.codigo_cliente, " +
                     "R.tipo, " +
                     "R.status, " +
@@ -2709,7 +2564,7 @@ public class sonicDatabaseCRUD {
                     "C.uf, " +
                     "C.cep " +
                     " FROM " + TABLE_ROTA +
-                    " R JOIN " + TABLE_CLIENTE + " C ON C.codigo = R.codigo_cliente WHERE "+ (mPrefs.Rota.getPessoal() ? "R._id=?" : "R.codigo=?");
+                    " R JOIN " + TABLE_CLIENTES + " C ON C.codigo = R.codigo_cliente WHERE "+ (mPrefs.Rota.getPessoal() ? "R._id=?" : "R.codigo=?");
 
             try{
 

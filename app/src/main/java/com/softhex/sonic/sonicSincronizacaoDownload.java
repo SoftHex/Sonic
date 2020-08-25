@@ -39,9 +39,9 @@ public class sonicSincronizacaoDownload extends Fragment {
     private sonicDatabaseCRUD mData;
     private String[][] mSincs = {
             {"DADOS GERAIS","Clientes, Produtos, Estoque.", sonicConstants.TB_TODAS, "dados"},
-            {"CATÁLOGO","Imagem dos Produtos.", sonicConstants.TB_PRODUTO, "imagens"},
-            {"IMAGENS","Imagem das Lojas dos Clientes.", sonicConstants.TB_CLIENTE ,"imagens"},
-            {"ESTOQUE","Estoque dos Produtos.", sonicConstants.TB_ESTOQUE_PRODUTO,  "dados"}
+            {"CATÁLOGO","Imagem dos Produtos.", sonicConstants.TB_PRODUTOS, "imagens"},
+            {"IMAGENS","Imagem das Lojas dos Clientes.", sonicConstants.TB_CLIENTES ,"imagens"},
+            {"ESTOQUE","Estoque dos Produtos.", sonicConstants.TB_ESTOQUE_PRODUTOS,  "dados"}
     };
     private Integer[] mImages = {R.mipmap.dados, R.mipmap.catalogo, R.mipmap.lojas, R.mipmap.estoque};
 

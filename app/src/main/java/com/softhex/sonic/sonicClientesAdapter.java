@@ -100,7 +100,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
             tvSemCompra = view.findViewById(R.id.tvSemCompra);
             tvAtraso = view.findViewById(R.id.tvAtraso);
             llGrouFilter = view.findViewById(R.id.llGroupFilter);
-            llRootView = view.findViewById(R.id.llRootView);
+            llRootView = view.findViewById(R.id.llRecenteRootView);
             llParentView = view.findViewById(R.id.llParentView);
             rlChildView = view.findViewById(R.id.rlChildView);
 
@@ -181,7 +181,7 @@ public class sonicClientesAdapter extends RecyclerView.Adapter implements Filter
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-                    View v = rootView.findViewById(R.id.llRootView);
+                    View v = rootView.findViewById(R.id.llRecenteRootView);
                     if(newState==mRecycler.SCROLL_STATE_SETTLING){
                         if(y<=0){
                             if(v.getVisibility()==View.GONE)

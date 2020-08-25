@@ -56,7 +56,7 @@ public class sonicAvisosAdapter extends RecyclerView.Adapter implements Filterab
                 public void onClick(View view) {
 
                     if(status==0){
-                        new sonicDatabaseCRUD(view.getContext()).Aviso.saveAvisoLido(codigo);
+                        //new sonicDatabaseCRUD(view.getContext()).Aviso.saveAvisoLido(codigo);
                     }
 
                     TextView dados[] = {autor, titulo, mensagem, data};

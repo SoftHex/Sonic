@@ -110,7 +110,7 @@ public class sonicClientesCNPJ extends Fragment {
 
         llGroupFilter = mView.findViewById(R.id.llGroupFilter);
 
-        llRecenteRootView = mView.findViewById(R.id.llRootView);
+        llRecenteRootView = mView.findViewById(R.id.llRecenteRootView);
 
         llParentView = mView.findViewById(R.id.llParentView);
 
@@ -380,10 +380,12 @@ public class sonicClientesCNPJ extends Fragment {
 
         if(mRecentList.size()>0){
             if(llRecenteRootView.getVisibility()!=VISIBLE){
-                llRecenteRootView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.push_down_in));
+                llRecenteRootView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.fade_in));
                 llRecenteRootView.setVisibility(VISIBLE);
             }
+            llParentView.setVisibility(VISIBLE);
             llParentView.removeAllViews();
+            llRecenteRootView.findViewById(R.id.vSeparador).setVisibility(VISIBLE);
             LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             p.setMargins(sonicUtils.convertDpToPixel(4, mContext),0, 0, 0);
             for(int x=0; x < mRecentList.size(); x++){
