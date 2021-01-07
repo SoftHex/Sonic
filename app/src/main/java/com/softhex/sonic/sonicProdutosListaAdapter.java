@@ -315,13 +315,16 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.tvLinha2.setText(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
         String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
         diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
-                mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
-                        mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
-                                mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
-                                        mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 : 90;
+        if(!prod.getDataCadastro().equals(null) || !prod.getDataCadastro().equals("")){
+            dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
+                    mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
+                            mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
+                                    mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
+                                            mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 :
+                                                    mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 : 0;
 
-        holder.linearNew.setVisibility(diasDiff<=dias ? View.VISIBLE : View.GONE);
+            holder.linearNew.setVisibility(dias==0 ? View.GONE : diasDiff<=dias ?  View.VISIBLE : View.GONE);
+        }
 
         File f = sonicFile.searchImage(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());
 
