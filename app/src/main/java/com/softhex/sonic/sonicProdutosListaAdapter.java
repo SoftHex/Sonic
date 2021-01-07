@@ -321,7 +321,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
                             mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
                                     mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
                                             mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 :
-                                                    mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 : 0;
+                                                    mPrefs.Produtos.getDiasNovo().equals(array[5]) ? 0 : 90;
 
             holder.linearNew.setVisibility(dias==0 ? View.GONE : diasDiff<=dias ?  View.VISIBLE : View.GONE);
         }
