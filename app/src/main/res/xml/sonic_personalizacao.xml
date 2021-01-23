@@ -52,12 +52,11 @@
             android:entries="@array/prefProdutoCatalogoOptions"
             android:entryValues="@array/prefProdutoCatalogoValues" />
 
-        <ListPreference     android:title="@string/prefProdutoNovoNome"
-            android:summary="@string/prefProdutoNovoDescription"
-            android:key="@string/produtoNovoDias"
-            android:defaultValue="@string/prefProdutoNovoDefault"
-            android:entries="@array/prefProdutoNovoOptions"
-            android:entryValues="@array/prefProdutoNovoValues" />
+        <SwitchPreference
+            android:summary="@string/produtoNovoDescription"
+            android:title="@string/produtoNovoNome"
+            android:defaultValue="@bool/produtoNovoDefault"
+            android:key="@string/produtoNovo"/>
 
     </PreferenceCategory>
 

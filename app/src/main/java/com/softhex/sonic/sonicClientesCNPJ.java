@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -293,7 +296,10 @@ public class sonicClientesCNPJ extends Fragment {
         rlDesert.startAnimation(fadeIn);
         allowSearch = false;
         myImage.setVisibility(GONE);
-        tvTitle.setText("Ops, nenhum cliente por enquanto...");
+        String text = "** Nenhum cliente CNPJ **";
+        SpannableString sp = new SpannableString(text);
+        sp.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimaryGreen)),18,22, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        tvTitle.setText(sp);
         tvTexto.setText(R.string.noSincText);
         btSinc.setOnClickListener((View v)->{
             mPrefs.Sincronizacao.setHomeRefresh(true);
@@ -351,7 +357,7 @@ public class sonicClientesCNPJ extends Fragment {
 
                 bt2.setText(mGroupList.get(i).getNome());
                 bt2.setTextSize(12);
-                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
@@ -368,7 +374,7 @@ public class sonicClientesCNPJ extends Fragment {
             });
             bt3.setText("MAIS...");
             bt3.setTextSize(12);
-            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
             bt3.setLayoutParams(p);
             bt3.setPadding(30,0,30,0);
             llGroupFilter.addView(bt3);

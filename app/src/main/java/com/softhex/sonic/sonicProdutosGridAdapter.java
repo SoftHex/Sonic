@@ -278,7 +278,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
 
                 bt2.setText(mGroupList.get(i).getDescricao());
                 bt2.setTextSize(12);
-                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
@@ -295,7 +295,7 @@ public class sonicProdutosGridAdapter extends RecyclerView.Adapter implements Fi
             });
             bt3.setText("MAIS...");
             bt3.setTextSize(12);
-            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
             bt3.setLayoutParams(p);
             bt3.setPadding(30,0,30,0);
             holder.llGroupFilter.addView(bt3);

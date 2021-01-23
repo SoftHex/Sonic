@@ -233,12 +233,12 @@ public class sonicPreferences{
         public String getProdutoDataCadastro(){
             return sharedpreferences.getString(PRODUTO_DATA_CADASTRO, "");
         }
-        public void setProdutoNovo(Boolean value){
+        public void setDestacarNovo(Boolean value){
             editor = sharedpreferences.edit();
             editor.putBoolean(PRODUTO_NOVO, value);
             editor.apply();
         }
-        public Boolean getProdutoNovo(){
+        public Boolean getDestacarNovo(){
             return sharedpreferences.getBoolean(PRODUTO_NOVO , false);
         }
         public String getCatalogoColunas(){

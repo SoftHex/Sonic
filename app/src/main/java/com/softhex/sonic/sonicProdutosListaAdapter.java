@@ -268,7 +268,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
 
                 bt2.setText(mGroupList.get(i).getDescricao());
                 bt2.setTextSize(12);
-                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
@@ -285,7 +285,7 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
             });
             bt3.setText("MAIS...");
             bt3.setTextSize(12);
-            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+            bt3.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
             bt3.setLayoutParams(p);
             bt3.setPadding(30,0,30,0);
             holder.llGroupFilter.addView(bt3);
@@ -313,17 +313,24 @@ public class sonicProdutosListaAdapter extends RecyclerView.Adapter implements F
         holder.tvLinha3.setText("CÓD.: "+prod.getCodigo()+" / REF.: "+prod.getCodigoAlternativo());
         holder.codigo = prod.getCodigo();
         holder.tvLinha2.setText(prod.getGrupo() == null ? "GRUPO: --" : "GRUPO: "+prod.getGrupo());
-        String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
-        diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
-        if(!prod.getDataCadastro().equals(null) || !prod.getDataCadastro().equals("")){
-            dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
-                    mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
-                            mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
-                                    mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
-                                            mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 360 :
-                                                    mPrefs.Produtos.getDiasNovo().equals(array[5]) ? 0 : 90;
+        if(mPrefs.Produtos.getDestacarNovo()){
 
-            holder.linearNew.setVisibility(dias==0 ? View.GONE : diasDiff<=dias ?  View.VISIBLE : View.GONE);
+            if(!prod.getDataCadastro().equals(null) || !prod.getDataCadastro().equals("") || !"".equals(prod.getDataCadastro())){
+
+                diasDiff = mUtil.Data.dateDiffDay(prod.getDataCadastro(), mDataAtual);
+
+                String[] array = mContext.getResources().getStringArray(R.array.prefProdutoNovoOptions);
+
+                dias = mPrefs.Produtos.getDiasNovo().equals(array[0]) ? 30 :
+                        mPrefs.Produtos.getDiasNovo().equals(array[1]) ? 60 :
+                                mPrefs.Produtos.getDiasNovo().equals(array[2]) ? 90 :
+                                        mPrefs.Produtos.getDiasNovo().equals(array[3]) ? 180 :
+                                                mPrefs.Produtos.getDiasNovo().equals(array[4]) ? 365  : 0;
+
+                holder.linearNew.setVisibility(dias==0 ? View.GONE : diasDiff<=dias ?  View.VISIBLE : View.GONE);
+
+            }
+
         }
 
         File f = sonicFile.searchImage(myCons.LOCAL_IMG_CATALOGO, prod.getCodigo());

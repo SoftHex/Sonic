@@ -115,7 +115,7 @@
                 android:layout_margin="25dp"
                 android:textColor="@color/colorPrimaryWhite"
                 android:text="REGISTRAR"
-                android:background="@drawable/button_login"
+                android:background="@drawable/botao_cinza_rect"
                 android:textStyle="bold"/>
 
 

@@ -241,7 +241,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/botao_positivar"
+                android:background="@drawable/botao_verde_round"
                 android:textColor="@color/colorPrimaryWhite"
                 android:textStyle="bold"
                 android:text="CONFIRMAR">

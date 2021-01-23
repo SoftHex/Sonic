@@ -525,7 +525,7 @@ public class sonicRotaDetalhe extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 llSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
                 vsSpinner.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_positivar) : getResources().getDrawable(R.drawable.botao_negativar));
+                btConfirmar.setBackground(isChecked ? getResources().getDrawable(R.drawable.botao_verde_round) : getResources().getDrawable(R.drawable.botao_laranja_round));
             }
         });
 

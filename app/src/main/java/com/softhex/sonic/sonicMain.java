@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,6 +17,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.text.Html;
+import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +36,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -74,27 +80,27 @@ public class sonicMain extends AppCompatActivity{
     static final int IMAGE_GALLERY_REQUEST = 20;
     private sonicDatabaseCRUD mData;
     private Intent i;
-    private TabLayout myTabLayout;
+    private TabLayout mTabLayout;
     private Toolbar myToolbar;
-    private ActionBar myActionBar;
-    private ViewPager myViewPager;
-    private ViewPagerAdapter myAdapter;
-    private AccountHeader myHeader;
+    private ActionBar mActionBar;
+    private ViewPager mViewPager;
+    private ViewPagerAdapter mAdapter;
+    private AccountHeader mHeader;
     private Activity mActivity;
-    private sonicUtils myUtil;
-    private Drawer myDrawer;
+    private sonicUtils mUtil;
+    private Drawer mDrawer;
     private String usuarioMeta;
-    private PrimaryDrawerItem myDrawerSincronizar;
-    private PrimaryDrawerItem myDrawerAvisos;
-    private PrimaryDrawerItem myDrawerClientes;
-    private PrimaryDrawerItem myDrawerProdutos;
-    private PrimaryDrawerItem myDrawerPedidos;
-    private PrimaryDrawerItem myDrawerRetorno;
-    private PrimaryDrawerItem myDrawerTitulos;
-    private PrimaryDrawerItem myDrawerRota;
-    private PrimaryDrawerItem myDrawerVendedores;
-    private ExpandableDrawerItem myDrawerRelatorios;
-    private ExpandableDrawerItem myDrawerSistema;
+    private PrimaryDrawerItem mDrawerSincronizar;
+    private PrimaryDrawerItem mDrawerAvisos;
+    private PrimaryDrawerItem mDrawerClientes;
+    private PrimaryDrawerItem mDrawerProdutos;
+    private PrimaryDrawerItem mDrawerPedidos;
+    private PrimaryDrawerItem mDrawerRetorno;
+    private PrimaryDrawerItem mDrawerTitulos;
+    private PrimaryDrawerItem mDrawerRota;
+    private PrimaryDrawerItem mDrawerVendedores;
+    private ExpandableDrawerItem mDrawerRelatorios;
+    private ExpandableDrawerItem mDrawerSistema;
     private SecondaryDrawerItem myDrawerRedefinir;
     private SecondaryDrawerItem myDrawerExportar;
     private SwitchDrawerItem myDrawerLock;
@@ -102,19 +108,19 @@ public class sonicMain extends AppCompatActivity{
     private SecondaryDrawerItem myDrawerRankingProdutos;
     private SecondaryDrawerItem myDrawerClientesSemCompraa;
     private SecondaryDrawerItem myDrawerPremiacoes;
-    private PrimaryDrawerItem myDrawerItemSair;
+    private PrimaryDrawerItem mDrawerItemSair;
     private LinearLayout llDetail;
     private TextView tvEmpresa, tvSaudacao, tvUsuario, tvPedidos, tvDesemprenho, tvVendas, tvMeta;
-    private ProgressProfileView myProgressProfile;
+    private ProgressProfileView mProgressProfile;
     private ProgressBar pbEmpresa, pbSaudacaoUsuario, pbPedidos, pbDesempenho, pbVendido, pbMeta;
     private String  vendido;
-    private sonicFtp myFtp;
+    private sonicFtp mFtp;
     private int back = sonicUtils.Randomizer.generate(0,1);
     private sonicPreferences mPrefs;
     private Context mContext;
     private TextView[] dots;
-    private Locale meuLocal = new Locale( "pt", "BR" );
-    private NumberFormat nfVal = NumberFormat.getCurrencyInstance( meuLocal );
+    private Locale mLocal = new Locale( "pt", "BR" );
+    private NumberFormat nfVal = NumberFormat.getCurrencyInstance(mLocal);
     private Calendar mCalendar;
     private SimpleDateFormat data = new SimpleDateFormat("yyyyMMdd");
     private LinearLayout dotsLayout;
@@ -139,8 +145,8 @@ public class sonicMain extends AppCompatActivity{
 
         myToolbar = findViewById(R.id.mToolbar);
         setSupportActionBar(myToolbar);
-        myActionBar = getSupportActionBar();
-        myActionBar.setTitle(R.string.appName);
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle(R.string.appName);
 
         // INSTANCIANDO OS OBJETOS
         llSnackBar = findViewById(R.id.llSnackBar);
@@ -163,7 +169,7 @@ public class sonicMain extends AppCompatActivity{
         //pbMeta = findViewById(R.id.pbMeta);
         //llStar = findViewById(R.id.llStar);
         //llChecked = findViewById(R.id.llChecked);
-        myProgressProfile = findViewById(R.id.myProgressProfile);
+        mProgressProfile = findViewById(R.id.myProgressProfile);
 
         // CARREGAR FOTO DO PERFIL
         File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_IMG_USUARIO+mPrefs.Users.getPicture(mPrefs.Users.getEmpresaId()));
@@ -177,13 +183,13 @@ public class sonicMain extends AppCompatActivity{
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                    .into(myProgressProfile);
+                    .into(mProgressProfile);
         }
 
-        myViewPager = findViewById(R.id.mViewPager);
-        setUpViewPager(myViewPager);
+        mViewPager = findViewById(R.id.mViewPager);
+        setUpViewPager(mViewPager);
 
-        myTabLayout = findViewById(R.id.mTabs);
+        mTabLayout = findViewById(R.id.mTabs);
 
         addBottomDots(0);
 
@@ -265,9 +271,9 @@ public class sonicMain extends AppCompatActivity{
             tvMeta.setTextColor(getResources().getColor(R.color.colorPrimaryGreen));
         }*/
         //progress = mActivity.getResources().getIntArray(R.array.progressProfile75to100);
-        myProgressProfile.setProgressGradient(mActivity.getResources().getIntArray(R.array.progressProfile25t050));
-        myProgressProfile.setProgress(70f);
-        myProgressProfile.startAnimation();
+        mProgressProfile.setProgressGradient(mActivity.getResources().getIntArray(R.array.progressProfile25t050));
+        mProgressProfile.setProgress(70f);
+        mProgressProfile.startAnimation();
     }
 
     public void lerDadosUsuario(){
@@ -303,7 +309,7 @@ public class sonicMain extends AppCompatActivity{
         listaEmpresa = mData.Empresa.empresaUsuario();
         listaUser = mData.Usuario.selectUsuarioAtivo();
 
-        myHeader = new AccountHeaderBuilder()
+        mHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withAlternativeProfileHeaderSwitching(true)
                 .withDividerBelowHeader(true)
@@ -329,7 +335,7 @@ public class sonicMain extends AppCompatActivity{
                             //tvMeta.setText(new sonicUtils(getBaseContext()).Number.stringToMoeda2(usuarioMeta));
                             File file = new File(Environment.getExternalStorageDirectory(), sonicConstants.LOCAL_IMG_USUARIO + mPrefs.Users.getPicture((int)profile.getIdentifier()));
                             String picture = file.exists() ? file.toString() : sonicUtils.getURIForResource(R.drawable.no_profile);
-                            sonicGlide.glideImageView(mActivity, myProgressProfile, picture, 100,100);
+                            sonicGlide.glideImageView(mActivity, mProgressProfile, picture, 100,100);
                             calcularPercentual("2200000", usuarioMeta);
                             lerDadosUsuario();
                             refreshFragments();
@@ -369,7 +375,7 @@ public class sonicMain extends AppCompatActivity{
             File file = new File(Environment.getExternalStorageDirectory(),sonicConstants.LOCAL_IMG_USUARIO + mPrefs.Users.getPicture(listaEmpresa.get(x).getCodigo()));
 
             if(file.exists()){
-                myHeader.addProfiles(
+                mHeader.addProfiles(
                         new ProfileDrawerItem()
                                  //.withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                                 .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
@@ -379,7 +385,7 @@ public class sonicMain extends AppCompatActivity{
                 );
             }else{
 
-                myHeader.addProfiles(
+                mHeader.addProfiles(
                         new ProfileDrawerItem()
                                  //.withTextColor(getResources().getColor(R.color.colorPrimaryWhite))
                                 .withName(mPrefs.Users.getUsuarioNome() +" ("+ mPrefs.Users.getUsuarioCargo() +")")
@@ -391,14 +397,14 @@ public class sonicMain extends AppCompatActivity{
             }
 
         }
-        myDrawerSincronizar = new PrimaryDrawerItem()
+        mDrawerSincronizar = new PrimaryDrawerItem()
                 .withIdentifier(1)
                 .withName(R.string.sincronizarTitulo)
                 .withDescription(R.string.sincronizarSubTitulo)
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_sync_grey600_24dp));
 
-        myDrawerAvisos = new PrimaryDrawerItem()
+        mDrawerAvisos = new PrimaryDrawerItem()
                 .withIdentifier(2)
                 .withName(R.string.avisosTitulo)
                 .withDescription(R.string.avisosSubTitulo)
@@ -407,7 +413,7 @@ public class sonicMain extends AppCompatActivity{
                 //.withBadge("100")//.withBadgeStyle(new BadgeStyle().withColor(sonicMain.this.getResources().getColor( R.color.chart_red)).withCornersDp(15).withPadding(2))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_message_text_grey600_24dp));
 
-        myDrawerClientes = new PrimaryDrawerItem()
+        mDrawerClientes = new PrimaryDrawerItem()
                 .withIdentifier(3)
                 .withName(R.string.clientesTitulo)
                 .withDescription(R.string.clientesSubTitulo)
@@ -415,7 +421,7 @@ public class sonicMain extends AppCompatActivity{
                 .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_account_multiple_grey600_24dp));
 
-        myDrawerProdutos = new PrimaryDrawerItem()
+        mDrawerProdutos = new PrimaryDrawerItem()
                 .withIdentifier(4)
                 .withName(R.string.produtosTitulo)
                 .withDescription(R.string.produtosSubTitulo)
@@ -423,7 +429,7 @@ public class sonicMain extends AppCompatActivity{
                 .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cube_grey600_24dp));
 
-        myDrawerPedidos = new PrimaryDrawerItem()
+        mDrawerPedidos = new PrimaryDrawerItem()
                 .withIdentifier(5)
                 .withName(R.string.pedidosTitulo)
                 .withDescription(R.string.pedidosSubTitulo)
@@ -431,38 +437,38 @@ public class sonicMain extends AppCompatActivity{
                 .withBadge("0").withBadgeStyle(new BadgeStyle().withTextColor(getResources().getColor(R.color.colorPrimary)))
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cart_grey600_24dp));
 
-        myDrawerRetorno = new PrimaryDrawerItem()
+        mDrawerRetorno = new PrimaryDrawerItem()
                 .withIdentifier(6)
                 .withName(R.string.retornoTitulo)
                 .withDescription(R.string.relatoriosSubTitulo)
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_rotate_3d_grey600_24dp));
 
-        myDrawerTitulos = new PrimaryDrawerItem()
+        mDrawerTitulos = new PrimaryDrawerItem()
                 .withIdentifier(7)
                 .withName(R.string.titulosTitulo)
                 .withDescription(R.string.titulosSubTitulo)
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable( R.mipmap.ic_coin_grey600_24dp));
 
-        myDrawerRota = new PrimaryDrawerItem()
+        mDrawerRota = new PrimaryDrawerItem()
                 .withIdentifier(8)
                 .withName(R.string.rotaTitulo)
                 .withDescription(R.string.rotaSubTitulo)
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_map_marker_radius_grey600_24dp));
 
-        myDrawerVendedores = new PrimaryDrawerItem()
+        mDrawerVendedores = new PrimaryDrawerItem()
                 .withIdentifier(9)
                 .withName(R.string.vendedoresTitulo)
                 .withDescription(R.string.vendedoresSubTitulo)
                 .withSelectable(false)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_account_tie_grey600_24dp));
 
-        myDrawerRelatorios = new ExpandableDrawerItem()
+        mDrawerRelatorios = new ExpandableDrawerItem()
                 .withIdentifier(10)
                 .withName(R.string.relatoriosTitulo)
-                .withDescription(R.string.relatoriosSubTitulo)
+                //.withDescription(R.string.relatoriosSubTitulo)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_finance_grey600_24dp))
                 .withIsExpanded(false)
                 .withSelectable(false)
@@ -489,15 +495,22 @@ public class sonicMain extends AppCompatActivity{
                                 .withIcon(R.mipmap.ic_chart_line_variant_grey600_24dp)
                         /*.withIcon(getResources().getDrawable(R.mipmap.ic_settings_black_24dp))*/
                 );
+        DrawerBuilder drawerBuilder = new DrawerBuilder();
 
-
-        myDrawerSistema = new ExpandableDrawerItem()
+        mDrawerSistema = new ExpandableDrawerItem()
                 .withIdentifier(20)
                 .withName(R.string.sistemaTitulo)
-                .withDescription(R.string.sistemaSubTitulo)
+                //.withDescription(R.string.sistemaSubTitulo)
                 .withIcon(getResources().getDrawable(R.mipmap.ic_cogs))
                 .withIsExpanded(false)
                 .withSelectable(false)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        //mDrawer.getRecyclerView().smoothScrollToPosition(mDrawer.getRecyclerView().getAdapter().getItemCount()-1);
+                        return false;
+                    }
+                })
                 .withSubItems(
                         myDrawerRedefinir = new SecondaryDrawerItem()
                                 .withIdentifier(21)
@@ -517,7 +530,7 @@ public class sonicMain extends AppCompatActivity{
 
                                 );
 
-        myDrawerItemSair = new PrimaryDrawerItem()
+        mDrawerItemSair = new PrimaryDrawerItem()
                 .withIdentifier(30)
                 .withName("Sair")
                 .withSelectable(false)
@@ -536,143 +549,150 @@ public class sonicMain extends AppCompatActivity{
                     }
         });*/
 
-        myDrawer = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(myToolbar)
-                .withAccountHeader(myHeader)
-                .withSelectedItem(-1)
-                .withHeaderDivider(true)
-                .withShowDrawerUntilDraggedOpened(false)
-                .withOnDrawerListener(new Drawer.OnDrawerListener() {
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
 
-                        if(mPrefs.Sincronizacao.getDrawerRefresh()){
-                            mPrefs.Sincronizacao.setDrawerRefresh(false);
-                            // CLIENTES
-                            new myAssyncTask().execute(3);
-                            // PRODUTOS
-                            new myAssyncTask().execute(4);
-                        }
-                    }
+        //drawerBuilder.withDrawerGravity(Gravity.BOTTOM);
+        //drawerBuilder.withKeepStickyItemsVisible(true);
+        drawerBuilder.withShowDrawerOnFirstLaunch(false);
+        drawerBuilder.withActivity(this);
+        drawerBuilder.withToolbar(myToolbar);
+        drawerBuilder.withAccountHeader(mHeader);
+        drawerBuilder.withSelectedItem(-1);
+        drawerBuilder.withHeaderDivider(true);
+        drawerBuilder.withCloseOnClick(false);
+        drawerBuilder.withShowDrawerUntilDraggedOpened(false);
+        //drawerBuilder.withShowDrawerUntilDraggedOpened(false);
+        drawerBuilder.withOnDrawerListener(new Drawer.OnDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
 
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
+                if (mPrefs.Sincronizacao.getDrawerRefresh()) {
+                    mPrefs.Sincronizacao.setDrawerRefresh(false);
+                    // CLIENTES
+                    new myAssyncTask().execute(3);
+                    // PRODUTOS
+                    new myAssyncTask().execute(4);
+                }
+            }
 
-                    }
+            @Override
+            public void onDrawerClosed(View drawerView) {
 
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
 
-                    }
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
 
-                })
-                .addStickyDrawerItems(
-                    myDrawerItemSair
-                )
-                .addDrawerItems(
-                        myDrawerSincronizar,
-                        myDrawerAvisos,
-                        new SectionDrawerItem().withName(R.string.inicioTitulo),
-                        myDrawerClientes,
-                        myDrawerProdutos,
-                        myDrawerPedidos,
-                        myDrawerRetorno,
-                        myDrawerTitulos,
-                        myDrawerRota,
-                        myDrawerVendedores,
-                        new SectionDrawerItem().withName(R.string.relatoriosTitulo),
-                        myDrawerRelatorios,
-                        //new SectionDrawerItem().withName("Segurança"),
-                        myDrawerLock,
-                        new SectionDrawerItem().withName(R.string.sistemaTitulo),
-                        myDrawerSistema
-                        //myDrawerRedefinir,
-                        //myDrawerExportar
-                )
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+            }
 
-                        switch (view.getId()){
-                            case 0:
-                                break;
-                            case 1:
-                                i = new Intent(sonicMain.this, sonicSincronizacao.class);
-                                startActivityForResult(i,1);
-                                break;
-                            case 2:
-                                new myAsyncStartActivity().execute(sonicAvisos.class);
-                                break;
-                            case 3:
-                                new myAsyncStartActivity().execute(sonicClientes.class);
-                                break;
-                            case 4:
-                                new myAsyncStartActivity().execute(sonicProdutos.class);
-                                break;
-                            case 5:
-                                new myAsyncStartActivity().execute(sonicLogin.class);
-                                //i = new Intent(sonicMain.this, go_pedido.class);
-                                //startActivity(i);
-                                break;
-                            case 6:
-                                //i = new Intent(sonicMain.this, sonicRetorno.class);
-                                //startActivity(i);
-                                break;
-                            case 7:
-                                //i = new Intent(sonicMain.this, sonicTitulos.class);
-                                //startActivity(i);
-                                break;
-                            case 8:
-                                i = new Intent(sonicMain.this, sonicRota.class);
-                                startActivity(i);
-                                break;
-                            case 9:
-                                //i = new Intent(sonicMain.this, sonicVendedores.class);
-                                //startActivity(i);
-                                //normalListDialogNoTitle("MENU");
-                                //mActivity.getSharedPreferences("PREFERENCE_DATA",0).edit().clear().apply();
-                                mPrefs.Util.deleteCache();
-                                mPrefs.Util.clearPreferences();
-                                break;
-                            case 21:
-                                new myAsyncStartActivity().execute(sonicSistema.class);
-                                //i = new Intent(sonicMain.this, sonicSistema.class);
-                                //startActivity(i);
-                                //border_bottom();
-                                break;
-                            case 22:
-                                dialogRedefinir();
-                                //normalListDialogNoTitle("MENU");
-                                break;
-                            case 13:
-                                break;
-                            case 14:
-                                //i = new Intent(sonicMain.this, sonicRankingClientes.class);
-                                //startActivity(i);
-                                break;
-                            case 15:
-                                //i = new Intent(sonicMain.this, sonicRankingProdutos.class);
-                                //startActivity(i);
-                                break;
-                            case 16:
-                                //i = new Intent(sonicMain.this, sonicClientesSemCompra.class);
-                                //startActivity(i);
-                                break;
-                            case 23:
-                                dialogBackup();
-                                break;
-                            case 30:
-                                logout();
-                                break;
-                            default:
-                                break;
-                        }
-                        return false;
-                    }
 
-                })
-                .build();
+
+        });
+        drawerBuilder.addStickyDrawerItems(
+                mDrawerItemSair
+        );
+        drawerBuilder.addDrawerItems(
+                mDrawerSincronizar,
+                mDrawerAvisos,
+                new SectionDrawerItem().withName(R.string.inicioTitulo),
+                mDrawerClientes,
+                mDrawerProdutos,
+                mDrawerPedidos,
+                mDrawerRetorno,
+                mDrawerTitulos,
+                mDrawerRota,
+                mDrawerVendedores,
+                new SectionDrawerItem().withName("Extras"),
+                mDrawerRelatorios,
+                //new SectionDrawerItem().withName("Segurança"),
+                myDrawerLock,
+                //new SectionDrawerItem(),
+                mDrawerSistema
+                //myDrawerRedefinir,
+                //myDrawerExportar
+        );
+        drawerBuilder.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+                switch (view.getId()) {
+                    case 0:
+                        break;
+                    case 1:
+                        i = new Intent(sonicMain.this, sonicSincronizacao.class);
+                        startActivityForResult(i, 1);
+                        break;
+                    case 2:
+                        new myAsyncStartActivity().execute(sonicAvisos.class);
+                        break;
+                    case 3:
+                        new myAsyncStartActivity().execute(sonicClientes.class);
+                        break;
+                    case 4:
+                        new myAsyncStartActivity().execute(sonicProdutos.class);
+                        break;
+                    case 5:
+                        new myAsyncStartActivity().execute(sonicLogin.class);
+                        //i = new Intent(sonicMain.this, go_pedido.class);
+                        //startActivity(i);
+                        break;
+                    case 6:
+                        //i = new Intent(sonicMain.this, sonicRetorno.class);
+                        //startActivity(i);
+                        break;
+                    case 7:
+                        //i = new Intent(sonicMain.this, sonicTitulos.class);
+                        //startActivity(i);
+                        break;
+                    case 8:
+                        i = new Intent(sonicMain.this, sonicRota.class);
+                        startActivity(i);
+                        break;
+                    case 9:
+                        //i = new Intent(sonicMain.this, sonicVendedores.class);
+                        //startActivity(i);
+                        //normalListDialogNoTitle("MENU");
+                        //mActivity.getSharedPreferences("PREFERENCE_DATA",0).edit().clear().apply();
+                        mPrefs.Util.deleteCache();
+                        mPrefs.Util.clearPreferences();
+                        break;
+                    case 21:
+                        new myAsyncStartActivity().execute(sonicSistema.class);
+                        //i = new Intent(sonicMain.this, sonicSistema.class);
+                        //startActivity(i);
+                        //border_bottom();
+                        break;
+                    case 22:
+                        dialogRedefinir();
+                        //normalListDialogNoTitle("MENU");
+                        break;
+                    case 13:
+                        break;
+                    case 14:
+                        //i = new Intent(sonicMain.this, sonicRankingClientes.class);
+                        //startActivity(i);
+                        break;
+                    case 15:
+                        //i = new Intent(sonicMain.this, sonicRankingProdutos.class);
+                        //startActivity(i);
+                        break;
+                    case 16:
+                        //i = new Intent(sonicMain.this, sonicClientesSemCompra.class);
+                        //startActivity(i);
+                        break;
+                    case 23:
+                        dialogBackup();
+                        break;
+                    case 30:
+                        logout();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+
+        });
+        mDrawer = drawerBuilder.build();
 
     }
 
@@ -778,13 +798,13 @@ public class sonicMain extends AppCompatActivity{
     }
 
     public void setUpViewPager(ViewPager viewpager){
-        myAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new sonicMainVendas(), "Vendas");
-        myAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
+        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mAdapter.addFragment(new sonicMainVendas(), "Vendas");
+        mAdapter.addFragment(new sonicMainPedidos(), "Pedidos");
         //myAdapter.addFragment(new sonicMainDesempenhoDiario(), "Desempenho");
         //myAdapter.addFragment(new sonicMainVendas(), "Visitas");
         viewpager.addOnPageChangeListener(listener);
-        viewpager.setAdapter(myAdapter);
+        viewpager.setAdapter(mAdapter);
 
     }
 
@@ -800,9 +820,9 @@ public class sonicMain extends AppCompatActivity{
         @Override
         public Fragment getItem(int position) {
             if(mIcon.get(position)!=null){
-                myTabLayout.getTabAt(position).setIcon(mIcon.get(position));
-                if(myTabLayout.getTabAt(position).isSelected()){
-                    myTabLayout.getTabAt(position).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
+                mTabLayout.getTabAt(position).setIcon(mIcon.get(position));
+                if(mTabLayout.getTabAt(position).isSelected()){
+                    mTabLayout.getTabAt(position).getIcon().setColorFilter(getResources().getColor(R.color.iconTabSelected), PorterDuff.Mode.SRC_ATOP);
                 }
             }
             return mFragmentList.get(position);
@@ -870,7 +890,7 @@ public class sonicMain extends AppCompatActivity{
             @Override
             public void run() {
 
-                myDrawer.updateBadge(id, new StringHolder(badge));
+                mDrawer.updateBadge(id, new StringHolder(badge));
 
             }
         });
@@ -1045,9 +1065,9 @@ public class sonicMain extends AppCompatActivity{
 
     private void addBottomDots(int position){
 
-        dots = new TextView[myAdapter.getCount()];
+        dots = new TextView[mAdapter.getCount()];
         dotsLayout.removeAllViews();
-        if(myAdapter.getCount()>1){
+        if(mAdapter.getCount()>1){
             for(int i=0; i < dots.length; i++)
             {
                 dots[i] = new TextView(this);
@@ -1092,8 +1112,8 @@ public class sonicMain extends AppCompatActivity{
                 mPrefs.Sincronizacao.setCalledActivity(this.getClass().getSimpleName());
                 mPrefs.Sincronizacao.setDownloadType("DADOS");
                 mPrefs.Sincronizacao.setDrawerRefresh(true);
-                myFtp = new sonicFtp(mActivity);
-                myFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+mPrefs.Users.getArquivoSinc());
+                mFtp = new sonicFtp(mActivity);
+                mFtp.downloadFile2(sonicConstants.FTP_USUARIOS + mPrefs.Users.getArquivoSinc() , sonicConstants.LOCAL_TEMP+mPrefs.Users.getArquivoSinc());
                 return false;
 
         }
@@ -1146,15 +1166,15 @@ public class sonicMain extends AppCompatActivity{
 
                 Uri imageUri = data.getData();
 
-                myUtil = new sonicUtils(mActivity);
+                mUtil = new sonicUtils(mActivity);
 
-                myUtil.Arquivo.saveUriFile(imageUri, mPrefs.Path.getProfilePath(), mPrefs.Users.getEmpresaId(), mPrefs.Users.getUsuarioId());
+                mUtil.Arquivo.saveUriFile(imageUri, mPrefs.Path.getProfilePath(), mPrefs.Users.getEmpresaId(), mPrefs.Users.getUsuarioId());
 
                 String url = Environment.getExternalStorageDirectory().getPath() + mPrefs.Path.getProfilePath() + mPrefs.Users.getEmpresaId() + "_" + mPrefs.Users.getUsuarioId() + ".JPG";
 
-                myHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
+                mHeader.getActiveProfile().withIcon(sonicUtils.centerAndCropBitmap(BitmapFactory.decodeFile(url)));
 
-                myHeader.updateProfile(myHeader.getActiveProfile());
+                mHeader.updateProfile(mHeader.getActiveProfile());
 
                 Glide.with(getBaseContext())
                         .load(url)
@@ -1163,7 +1183,7 @@ public class sonicMain extends AppCompatActivity{
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .transition(GenericTransitionOptions.with(android.R.anim.fade_in))
-                        .into(myProgressProfile);
+                        .into(mProgressProfile);
 
 
             }
@@ -1171,16 +1191,53 @@ public class sonicMain extends AppCompatActivity{
         }
     }
 
+    public class SpeedyLinearLayoutManager extends LinearLayoutManager {
+
+        private static final float MILLISECONDS_PER_INCH = 100f; //default is 25f (bigger = slower)
+
+        public SpeedyLinearLayoutManager(Context context) {
+            super(context);
+        }
+
+        public SpeedyLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+        }
+
+        public SpeedyLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+
+            final LinearSmoothScroller linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
+
+                @Override
+                public PointF computeScrollVectorForPosition(int targetPosition) {
+                    return super.computeScrollVectorForPosition(targetPosition);
+                }
+
+                @Override
+                protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+                    return MILLISECONDS_PER_INCH / displayMetrics.densityDpi;
+                }
+            };
+
+            linearSmoothScroller.setTargetPosition(position);
+            startSmoothScroll(linearSmoothScroller);
+        }
+    }
+
     public void refreshFragments(){
-        for(int i=0; i<myAdapter.getCount();i++){
+        for(int i = 0; i< mAdapter.getCount(); i++){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(myAdapter.getItem(i)).attach(myAdapter.getItem(i)).commit();
+            ft.detach(mAdapter.getItem(i)).attach(mAdapter.getItem(i)).commit();
         }
     }
 
     public void refreshHomeFragments(int position){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.detach(myAdapter.getItem(position)).attach(myAdapter.getItem(position)).commit();
+            ft.detach(mAdapter.getItem(position)).attach(mAdapter.getItem(position)).commit();
     }
 
     @Override

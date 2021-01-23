@@ -109,7 +109,21 @@
                     android:layout_margin="25dp"
                     android:textColor="@color/colorPrimaryWhite"
                     android:text="CONFIRMAR"
-                    android:background="@drawable/button_login"
+                    android:background="@drawable/botao_cinza_rect"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/btTrocar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="TROCAR USUÁRIO"
+                    android:visibility="gone"
+                    android:background="@drawable/botao_branco_rect"
                     android:textStyle="bold"/>
 
             </LinearLayout>

@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -269,7 +272,10 @@ public class sonicClientesCPF extends Fragment {
         rlDesert.startAnimation(fadeIn);
         allowSearch = false;
         myImage.setVisibility(GONE);
-        tvTitle.setText("Ops, nenhum cliente por enquanto...");
+        String text = "** Nenhum cliente CPF **";
+        SpannableString sp = new SpannableString(text);
+        sp.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimaryGreen)),18,21, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        tvTitle.setText(sp);
         tvTexto.setText("Se você ainda não sincronizou, pode fazê-lo clicando no botão abaixo.");
         btSinc.setOnClickListener((View v)->{
             mPrefs.Sincronizacao.setHomeRefresh(true);

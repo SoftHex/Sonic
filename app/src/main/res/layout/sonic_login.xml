@@ -134,7 +134,7 @@
                     android:layout_margin="25dp"
                     android:textColor="@color/colorPrimaryWhite"
                     android:text="ENTRAR"
-                    android:background="@drawable/button_login"/>
+                    android:background="@drawable/botao_cinza_rect"/>
 
             </LinearLayout>
 
@@ -155,7 +155,7 @@
                     android:elevation="10dp"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimaryWhite"
-                    android:background="@drawable/botao_trocar_usuario"/>
+                    android:background="@drawable/botao_verde"/>
 
             </LinearLayout>
 

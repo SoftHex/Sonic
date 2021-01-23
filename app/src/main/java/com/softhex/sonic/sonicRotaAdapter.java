@@ -334,7 +334,7 @@ public class sonicRotaAdapter extends RecyclerView.Adapter<sonicRotaAdapter.rota
                 });
                 bt2.setText(s);
                 bt2.setTextSize(12);
-                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_neutro));
+                bt2.setBackground(mContext.getResources().getDrawable(R.drawable.botao_branco_round));
                 bt2.setLayoutParams(p);
 
                 bt2.setPadding(30,0,30,0);
